@@ -20,67 +20,67 @@ public class Customer implements Serializable{
 		@Id
 	 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 		@Column(name = "customer_id")
-	    private Long customerId;
+	    private Long customer_id;
 
 	    @Column(name = "full_name")
-	    private String fullName;
+	    private String full_name;
 	    
 	    @Column(name = "phone")
-	    private String Phone;
+	    private String phone;
 	    
 	    @Column(name="email")
-	    private String Email;
+	    private String email;
 	    
 	    @Column(name="address")
-	    private int Address;
+	    private int address;
 	    
 	    @Column(name="points")
-	    private int Points;
+	    private int points;
 
 		public Long getCustomerId() {
-			return customerId;
+			return customer_id;
 		}
 
-		public String getFullName() {
-			return fullName;
+		public String getFull_name() {
+			return full_name;
 		}
 
-		public void setFullName(String fullName) {
-			this.fullName = fullName;
+		public void setFull_name(String FullName) {
+			this.full_name = FullName;
 		}
 
 		public String getPhone() {
-			return Phone;
+			return phone;
 		}
 
-		public void setPhone(String phone) {
-			Phone = phone;
+		public void setPhone(String Phone) {
+			phone = Phone;
 		}
 
 		public String getEmail() {
-			return Email;
+			return email;
 		}
 
-		public void setEmail(String email) {
-			Email = email;
+		public void setEmail(String Email) {
+			email = Email;
 		}
 
 		public int getAddress() {
-			return Address;
+			return address;
 		}
 
-		public void setAddress(Integer address) {
-			if(address == null) return;
-			Address = address;
+		public void setAddress(Integer Address) {
+			if(Address == null) return;
+			address = Address;
 		}
 
 		public int getPoints() {
-			return Points;
+			return points;
 		}
 
-		public void setPoints(Integer points) {
-			if(points == null) return;
-			Points = points;
+		public void setPoints(Integer Points) {
+			if(Points == null) return;
+			points = Points;
 		}
 	    
 	    
