@@ -35,7 +35,18 @@ public class Customer implements Serializable{
 	    private int address;
 	    
 	    @Column(name="points")
-	    private int points;
+	    private int Points;
+	    
+	    @Column(name = "status")
+	    private boolean Status;
+
+		public boolean isStatus() {
+			return Status;
+		}
+
+		public void setStatus(boolean status) {
+			Status = status;
+		}
 
 		public Long getCustomerId() {
 			return customer_id;

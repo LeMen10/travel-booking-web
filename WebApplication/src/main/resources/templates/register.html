@@ -1,0 +1,32 @@
+<!-- src/main/resources/templates/register.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Đăng Ký</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h2>Đăng Ký</h2>
+    <form th:action="@{/register}" method="post">
+        <div>
+            <label for="username">Tài khoản:</label>
+            <input type="text" id="username" name="username" required />
+        </div>
+        <div>
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+        <div>
+            <button type="submit">Đăng Ký</button>
+            <a th:href="@{/login}">Quay Lại Đăng Nhập</a>
+        </div>
+    </form>
+
+    <!-- Hộp thông báo lỗi -->
+    <div th:if="${error}">
+        <script>
+            alert([[${error}]]);
+        </script>
+    </div>
+</body>
+</html>

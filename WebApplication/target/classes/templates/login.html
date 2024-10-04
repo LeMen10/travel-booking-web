@@ -1,0 +1,38 @@
+<!-- src/main/resources/templates/login.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Đăng Nhập</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/login.css"> <!-- Thêm CSS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Đăng Nhập</h2>
+    <form th:action="@{/login}" method="post">
+        <div>
+            <label for="username">Tài khoản:</label>
+            <input type="text" id="username" name="username" required />
+        </div>
+        <div>
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+        <div>
+            <button type="submit">Đăng Nhập</button>
+            <a th:href="@{/register}">Đăng Ký</a>
+        </div>
+    </form>
+
+    <!-- Hộp thông báo lỗi -->
+    <div th:if="${error}" class="error-message">
+        <script>
+            var errorMessage = /*[[${error}]]*/ '';
+            if (errorMessage) {
+                alert(errorMessage);
+            }
+        </script>
+        <p th:text="${error}"></p> <!-- Hiển thị thông báo lỗi -->
+    </div>
+</body>
+</html>
