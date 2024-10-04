@@ -28,7 +28,7 @@ public class HomeController {
             return "error";  // Return view name without .html
         } else {
         	model.addAttribute("customers", listCustomer);
-            return "index";  // Assuming error.html is the intended page here
+            return "login";  // Assuming error.html is the intended page here
         }
     }
 
