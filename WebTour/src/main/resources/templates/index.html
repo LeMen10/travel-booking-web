@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ <table style="width:80%" border="1"
+           class = "table table-striped table-responsive-md">
+    <thead>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Address</th>
+    <th>Points</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="customer:${customers}">
+        <td th:text="${customer.full_name}"></td>
+        <td th:text="${customer.email}"></td>
+        <td th:text="${customer.phone}"></td>
+        <td th:text="${customer.address}"></td>
+        <td th:text="${customer.points}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
