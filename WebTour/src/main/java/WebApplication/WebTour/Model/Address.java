@@ -1,4 +1,4 @@
-package WebSpring.Model;
+package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package WebSpring.Model;
+package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
 
@@ -86,12 +86,12 @@ public class Customer implements Serializable{
 		}
 
 		public int getPoints() {
-			return points;
+			return Points;
 		}
 
 		public void setPoints(Integer Points) {
 			if(Points == null) return;
-			points = Points;
+			this.Points = Points;
 		}
 	    
 	    

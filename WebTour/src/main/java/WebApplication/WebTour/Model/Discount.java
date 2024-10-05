@@ -1,4 +1,4 @@
-package WebSpring.Model;
+package WebApplication.WebTour.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +13,6 @@ import lombok.Data;
 @Data
 public class Discount {
 	
-	private static final long serialVersionUID = 1L;
-
 	@Id
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "discount_id ")

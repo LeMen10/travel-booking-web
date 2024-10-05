@@ -1,4 +1,4 @@
-package WebSpring.Model;
+package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
 
@@ -29,7 +29,7 @@ public class Account implements Serializable{
     private String userName;
 
     @Column(name = "password")
-    private String Password;
+    private String password;
 
 	public Long getAccountId() {
 		return accountId;
@@ -52,11 +52,11 @@ public class Account implements Serializable{
 	}
 
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 	public void setPassword(String password) {
-		this.Password = password;
+		this.password = password;
 	}
    
 }

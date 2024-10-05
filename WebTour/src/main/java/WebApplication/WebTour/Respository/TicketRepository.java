@@ -1,9 +1,10 @@
-package WebSpring.Respository;
+package WebApplication.WebTour.Respository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import WebSpring.Model.Ticket;
+import WebApplication.WebTour.Model.Ticket;
+
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long>{

@@ -1,4 +1,4 @@
-package WebSpring.Controllers.Admin;
+package WebApplication.WebTour.Controllers.Admin;
 
 import java.util.List;
 
@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import WebSpring.Model.Customer;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

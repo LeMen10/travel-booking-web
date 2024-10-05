@@ -1,7 +1,6 @@
-package WebSpring.Model;
+package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package WebSpring.Controllers.Admin;
+package WebApplication.WebTour.Controllers.Admin;
 //
 import java.util.List;
 
@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import WebSpring.Model.Customer;
-import WebSpring.Respository.CustomerRespository;
 
 public class StatisticsContronller {
 

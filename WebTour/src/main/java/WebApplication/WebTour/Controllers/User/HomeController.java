@@ -1,7 +1,4 @@
-package WebSpring.Controllers.User;
-
-import WebSpring.Model.Customer;
-import WebSpring.Respository.CustomerRespository;
+package WebApplication.WebTour.Controllers.User;
 
 import java.util.List;
 
@@ -10,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
+
+import WebApplication.WebTour.Model.Customer;
+import WebApplication.WebTour.Respository.CustomerRespository;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,14 +22,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String navigateHomePage(Model model) {
-        List<Customer> listCustomer = customerRespository.findAll();
-        System.out.println(listCustomer);
-        if (listCustomer.isEmpty()) {
-            return "error";  // Return view name without .html
-        } else {
-        	model.addAttribute("customers", listCustomer);
-            return "login";  // Assuming error.html is the intended page here
-        }
+
+            return "login";
     }
 
     @GetMapping("/customer")

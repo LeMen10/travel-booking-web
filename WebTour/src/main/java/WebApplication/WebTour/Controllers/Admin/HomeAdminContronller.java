@@ -1,4 +1,4 @@
-package WebSpring.Controllers.Admin;
+package WebApplication.WebTour.Controllers.Admin;
 
 public class HomeAdminContronller {
 
