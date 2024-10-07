@@ -32,7 +32,7 @@ public class Bookings implements Serializable{
     private Date bookingDate;
 
     @Column(name = "status")
-    private boolean Status;
+    private boolean status;
     
     @Column(name = "pay_status")
     private int payStatus;
@@ -70,12 +70,14 @@ public class Bookings implements Serializable{
 		this.bookingDate = bookingDate;
 	}
 
+	
+
 	public boolean isStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(boolean status) {
-		Status = status;
+		this.status = status;
 	}
 
 	public int getPayStatus() {
