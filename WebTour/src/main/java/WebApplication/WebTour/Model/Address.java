@@ -32,10 +32,10 @@ public class Address implements Serializable{
     private int wardId;
 	
     @Column(name = "detail")
-    private String detail;
+    private String Detail;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean Status;
 
 	public int getProvinceId() {
 		return provinceId;
@@ -62,19 +62,19 @@ public class Address implements Serializable{
 	}
 
 	public String getDetail() {
-		return detail;
+		return Detail;
 	}
 
 	public void setDetail(String detail) {
-		detail = detail;
+		Detail = detail;
 	}
 
 	public boolean isStatus() {
-		return status;
+		return Status;
 	}
 
 	public void setStatus(boolean status) {
-		this.status = status;
+		this.Status = status;
 	}
 
 	public Long getAddressId() {

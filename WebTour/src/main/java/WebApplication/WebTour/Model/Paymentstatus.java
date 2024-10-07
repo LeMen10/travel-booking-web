@@ -23,25 +23,25 @@ public class Paymentstatus implements Serializable{
     private Long paymentStatusId ;
 
     @Column(name = "name")
-    private String name;
+    private String Name;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean Status;
 
 	public String getName() {
-		return name;
+		return Name;
 	}
 
 	public void setName(String name) {
-		name = name;
+		Name = name;
 	}
 
 	public boolean isStatus() {
-		return status;
+		return Status;
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		Status = status;
 	}
 
 	public Long getPaymentStatusId() {

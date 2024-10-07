@@ -25,8 +25,8 @@ public class Bookings implements Serializable{
 	@Column(name = "tour_id ")
     private int tourId; 
 
-    @Column(name = "user_id")
-    private int userId;
+    @Column(name = "customer_id")
+    private int customerId;
     
     @Column(name = "booking_date")
     private Date bookingDate;
@@ -40,26 +40,12 @@ public class Bookings implements Serializable{
     @Column(name = "people_nums")
     private int peopleNums;
 
-	
-
-	public int getTourId() {
-		return tourId;
+	public int getCustomerId() {
+		return customerId;
 	}
 
-	public void setTourId(int tourId) {
-		this.tourId = tourId;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	public void setBookingId(Long bookingId) {
-		this.bookingId = bookingId;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 
 	public Date getBookingDate() {

@@ -29,18 +29,11 @@ public class Tours implements Serializable{
     @Column(name = "tour_name")
     private String tourName;
     
-    @Column(name = "transport")
-    private String transport;
-    
-    @Column(name = "departure")
-    private String departure;
-    
     @Column(name = "destination")
-    private String destination;
-    
+    private String Destination;
     
     @Column(name = "detail")
-    private String detail;
+    private String Detail;
     
     @Column(name = "start_date")
     private Date startDate;
@@ -49,13 +42,13 @@ public class Tours implements Serializable{
     private Date endDate;
     
     @Column(name = "price")
-    private float price;
+    private float Price;
     
     @Column(name = "people_max")
     private int peopleMax;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean Status;
 
 	public int getGuidedId() {
 		return guidedId;
@@ -73,46 +66,20 @@ public class Tours implements Serializable{
 		this.tourName = tourName;
 	}
 
-	
-
-	public String getDeparture() {
-		return departure;
-	}
-
-	public void setDeparture(String departure) {
-		this.departure = departure;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getTransport() {
-		return transport;
-	}
-
-	public void setTransport(String transport) {
-		this.transport = transport;
-	}
-
 	public String getDestination() {
-		return destination;
+		return Destination;
 	}
 
 	public void setDestination(String destination) {
-		this.destination = destination;
+		Destination = destination;
 	}
 
 	public String getDetail() {
-		return detail;
+		return Detail;
 	}
 
 	public void setDetail(String detail) {
-		detail = detail;
+		Detail = detail;
 	}
 
 	public Date getStartDate() {
@@ -132,11 +99,11 @@ public class Tours implements Serializable{
 	}
 
 	public float getPrice() {
-		return price;
+		return Price;
 	}
 
 	public void setPrice(float price) {
-		price = price;
+		Price = price;
 	}
 
 	public int getPeopleMax() {
@@ -148,11 +115,11 @@ public class Tours implements Serializable{
 	}
 
 	public boolean isStatus() {
-		return status;
+		return Status;
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		Status = status;
 	}
 
 	public Long getTourId() {

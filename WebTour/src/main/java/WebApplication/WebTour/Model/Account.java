@@ -22,8 +22,8 @@ public class Account implements Serializable{
 	@Column(name = "account_id")
     private Long accountId;
 
-    @Column(name = "user_id")
-    private int userId;
+    @Column(name = "customer_id")
+    private int customerId;
     
     @Column(name = "user_name")
     private String userName;
@@ -35,15 +35,13 @@ public class Account implements Serializable{
 		return accountId;
 	}
 
-	public int getUser_id() {
-		return userId;
+	public int getCustomerId() {
+		return customerId;
 	}
 
-	public void setUser_id(int userId) {
-		this.userId = userId;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
-
-
 
 	public String getUserName() {
 		return userName;

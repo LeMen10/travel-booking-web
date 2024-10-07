@@ -18,44 +18,40 @@ public class Discount {
 	@Column(name = "discount_id ")
     private Long discountId ;
 
-    @Column(name = "user_id")
-    private int userId;
+    @Column(name = "customer_id")
+    private int customerId;
     
     @Column(name = "point")
-    private int point;
+    private int Point;
     
     @Column(name="reward")
-    private String reward;
+    private String Reward;
     
     @Column(name="status")
     private boolean Status;
 
-	
-
-	public int getUserId() {
-		return userId;
+	public int getCustomerId() {
+		return customerId;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
-
-	
 
 	public int getPoint() {
-		return point;
+		return Point;
 	}
 
 	public void setPoint(int point) {
-		this.point = point;
+		Point = point;
 	}
 
 	public String getReward() {
-		return reward;
+		return Reward;
 	}
 
 	public void setReward(String reward) {
-		this.reward = reward;
+		Reward = reward;
 	}
 
 	public boolean isStatus() {

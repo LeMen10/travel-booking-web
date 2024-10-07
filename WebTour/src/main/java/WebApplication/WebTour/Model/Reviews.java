@@ -23,38 +23,30 @@ public class Reviews implements Serializable{
 	@Column(name = "reviews_id")
     private Long reviewsId;
 
-    @Column(name = "user_id")
-    private int userId;
+    @Column(name = "customer_id")
+    private int customerId;
     
     @Column(name = "tour_id")
     private int tourId;
     
     @Column(name = "comment")
-    private String comment;
+    private String Comment;
     
     @Column(name = "rate")
-    private int rate;
+    private int Rate;
     
     @Column(name = "review_date")
     private Date reviewDate;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean Status;
 
-	public Long getReviewsId() {
-		return reviewsId;
+	public int getCustomerId() {
+		return customerId;
 	}
 
-	public void setReviewsId(Long reviewsId) {
-		this.reviewsId = reviewsId;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 
 	public int getTourId() {
@@ -66,19 +58,19 @@ public class Reviews implements Serializable{
 	}
 
 	public String getComment() {
-		return comment;
+		return Comment;
 	}
 
 	public void setComment(String comment) {
-		this.comment = comment;
+		Comment = comment;
 	}
 
 	public int getRate() {
-		return rate;
+		return Rate;
 	}
 
 	public void setRate(int rate) {
-		this.rate = rate;
+		Rate = rate;
 	}
 
 	public Date getReviewDate() {
@@ -90,13 +82,15 @@ public class Reviews implements Serializable{
 	}
 
 	public boolean isStatus() {
-		return status;
+		return Status;
 	}
 
 	public void setStatus(boolean status) {
-		this.status = status;
+		Status = status;
 	}
 
-	
+	public Long getReviewsId() {
+		return reviewsId;
+	}
     
 }

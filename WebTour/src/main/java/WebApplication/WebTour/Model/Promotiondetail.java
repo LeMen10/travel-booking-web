@@ -29,7 +29,7 @@ public class Promotiondetail implements Serializable{
     private int promotionId;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean Status;
 
 	public int getTourId() {
 		return tourId;
@@ -48,11 +48,11 @@ public class Promotiondetail implements Serializable{
 	}
 
 	public boolean isStatus() {
-		return status;
+		return Status;
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		Status = status;
 	}
 
 	public Long getPromotionDetailId() {

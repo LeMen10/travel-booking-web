@@ -23,20 +23,20 @@ public class District implements Serializable{
     private Long districtId;
 
     @Column(name = "name")
-    private String name;
+    private String Name;
     
     @Column(name = "province_id")
     private int provinceId;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean Status;
 
 	public String getName() {
-		return name;
+		return Name;
 	}
 
 	public void setName(String name) {
-		name = name;
+		Name = name;
 	}
 
 	public int getProvinceId() {
@@ -48,11 +48,11 @@ public class District implements Serializable{
 	}
 
 	public boolean isStatus() {
-		return status;
+		return Status;
 	}
 
 	public void setStatus(boolean status) {
-		this.status = status;
+		this.Status = status;
 	}
 
 	public static long getSerialversionuid() {
