@@ -20,7 +20,7 @@ public class User {
     private String fullName;
     
     @Column(name = "email")
-    private String Email;
+    private String email;
     
     @Column(name = "address")
     private String address;
@@ -59,11 +59,11 @@ public class User {
 	}
 
 	public String getEmail() {
-		return Email;
+		return email;
 	}
 
 	public void setEmail(String email) {
-		Email = email;
+		email = email;
 	}
 
 	public String getAddress() {

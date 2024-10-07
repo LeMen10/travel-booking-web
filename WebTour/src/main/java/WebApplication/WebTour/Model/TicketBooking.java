@@ -19,7 +19,7 @@ public class TicketBooking implements Serializable{
 	@Id
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-    private Long Id ;
+    private Long ticketBookingId ;
 
     @Column(name = "ticket_id")
     private int ticketId;
@@ -67,8 +67,11 @@ public class TicketBooking implements Serializable{
 		this.status = status;
 	}
 
-	public Long getId() {
-		return Id;
+	public Long getTicketBookingId() {
+		return ticketBookingId;
 	}
+
+// hai
+	
     
 }
