@@ -24,13 +24,13 @@ public class Promotions implements Serializable{
     private Long promotionId;
 
     @Column(name = "code")
-    private int Code;
+    private int code;
     
     @Column(name = "description")
-    private String Description;
+    private String description;
     
     @Column(name = "discount")
-    private int Discount;
+    private int discount;
     
     @Column(name = "start_date")
     private Date startDate;
@@ -39,30 +39,38 @@ public class Promotions implements Serializable{
     private Date endDate;
     
     @Column(name = "status")
-    private boolean Status;
+    private boolean status;
+
+	public Long getPromotionId() {
+		return promotionId;
+	}
+
+	public void setPromotionId(Long promotionId) {
+		this.promotionId = promotionId;
+	}
 
 	public int getCode() {
-		return Code;
+		return code;
 	}
 
 	public void setCode(int code) {
-		Code = code;
+		this.code = code;
 	}
 
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 
 	public int getDiscount() {
-		return Discount;
+		return discount;
 	}
 
 	public void setDiscount(int discount) {
-		Discount = discount;
+		this.discount = discount;
 	}
 
 	public Date getStartDate() {
@@ -82,15 +90,13 @@ public class Promotions implements Serializable{
 	}
 
 	public boolean isStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(boolean status) {
-		Status = status;
+		this.status = status;
 	}
 
-	public Long getPromotionId() {
-		return promotionId;
-	}
+	
     
 }

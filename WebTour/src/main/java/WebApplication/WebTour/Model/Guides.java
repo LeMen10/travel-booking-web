@@ -22,60 +22,19 @@ public class Guides implements Serializable{
 	@Column(name = "guide_id")
     private Long guideId ;
 
-    @Column(name = "full_name")
-    private String fullName;
 
-    @Column(name = "email")
-    private String Email;
     
     @Column(name = "languages")
-    private String Languages;
+    private String languages;
     
-    @Column(name = "employee_id")
-    private String employeeId;
+
     
     @Column(name = "status")
-    private boolean Status;
+    private boolean status;
 
-	public String getFullName() {
-		return fullName;
-	}
+	
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	public String getEmail() {
-		return Email;
-	}
-
-	public void setEmail(String email) {
-		Email = email;
-	}
-
-	public String getLanguages() {
-		return Languages;
-	}
-
-	public void setLanguages(String languages) {
-		Languages = languages;
-	}
-
-	public String getEmployeeId() {
-		return employeeId;
-	}
-
-	public void setEmployeeId(String employeeId) {
-		this.employeeId = employeeId;
-	}
-
-	public boolean isStatus() {
-		return Status;
-	}
-
-	public void setStatus(boolean status) {
-		Status = status;
-	}
+	
 
 	public Long getGuideId() {
 		return guideId;

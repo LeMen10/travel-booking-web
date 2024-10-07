@@ -23,51 +23,57 @@ public class Ticket implements Serializable{
     private Long ticketId ;
 
     @Column(name = "name")
-    private String Name;
+    private String name;
     
     @Column(name = "rate")
-    private int Rate;
+    private int rate;
     
     @Column(name = "detail")
-    private String Detail;
+    private String detail;
     
     @Column(name = "status")
-    private boolean Status;
-
-	public String getName() {
-		return Name;
-	}
-
-	public void setName(String name) {
-		Name = name;
-	}
-
-	public int getRate() {
-		return Rate;
-	}
-
-	public void setRate(int rate) {
-		Rate = rate;
-	}
-
-	public String getDetail() {
-		return Detail;
-	}
-
-	public void setDetail(String detail) {
-		Detail = detail;
-	}
-
-	public boolean isStatus() {
-		return Status;
-	}
-
-	public void setStatus(boolean status) {
-		Status = status;
-	}
+    private boolean status;
 
 	public Long getTicketId() {
 		return ticketId;
 	}
+
+	public void setTicketId(Long ticketId) {
+		this.ticketId = ticketId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getRate() {
+		return rate;
+	}
+
+	public void setRate(int rate) {
+		this.rate = rate;
+	}
+
+	public String getDetail() {
+		return detail;
+	}
+
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	
 
 }
