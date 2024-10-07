@@ -29,7 +29,7 @@ public class Payments implements Serializable{
     private Date paymentDate;
     
     @Column(name = "amount")
-    private int Amount;
+    private int amount;
 
     @Column(name = "payment_method ")
     private int paymentMethod ;
@@ -38,7 +38,7 @@ public class Payments implements Serializable{
     private int paymentStatus ;
     
     @Column(name = "status ")
-    private boolean Status ;
+    private boolean status ;
 
 	public int getBookingId() {
 		return bookingId;
@@ -57,11 +57,11 @@ public class Payments implements Serializable{
 	}
 
 	public int getAmount() {
-		return Amount;
+		return amount;
 	}
 
 	public void setAmount(int amount) {
-		Amount = amount;
+		amount = amount;
 	}
 
 	public int getPaymentMethod() {
@@ -81,11 +81,11 @@ public class Payments implements Serializable{
 	}
 
 	public boolean isStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(boolean status) {
-		Status = status;
+		status = status;
 	}
 
 	public static long getSerialversionuid() {

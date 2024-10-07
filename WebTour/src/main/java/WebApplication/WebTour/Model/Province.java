@@ -23,25 +23,25 @@ public class Province implements Serializable{
     private Long provinceId;
 
     @Column(name = "name")
-    private String Name;
+    private String name;
     
     @Column(name = "status")
-    private boolean Status;
+    private boolean status;
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		name = name;
 	}
 
 	public boolean isStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(boolean status) {
-		this.Status = status;
+		this.status = status;
 	}
 
 	public Long getProvinceId() {

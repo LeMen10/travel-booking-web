@@ -28,10 +28,10 @@ public class TicketBooking implements Serializable{
     private int bookingId;
     
     @Column(name = "quantity")
-    private int Quantity;
+    private int quantity;
     
     @Column(name = "status")
-    private boolean Status;
+    private boolean status;
 
 	public int getTicketId() {
 		return ticketId;
@@ -49,20 +49,22 @@ public class TicketBooking implements Serializable{
 		this.bookingId = bookingId;
 	}
 
+
+
 	public int getQuantity() {
-		return Quantity;
+		return quantity;
 	}
 
 	public void setQuantity(int quantity) {
-		Quantity = quantity;
+		this.quantity = quantity;
 	}
 
 	public boolean isStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(boolean status) {
-		Status = status;
+		this.status = status;
 	}
 
 	public Long getId() {

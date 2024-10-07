@@ -1,0 +1,203 @@
+@charset "UTF-8";
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+.container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+}
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.header h1 {
+    font-size: 24px;
+    margin: 0;
+}
+.header .stars {
+    color: #007bff;
+}
+.info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+.info div {
+    text-align: center;
+}
+.info div i {
+    color: #007bff;
+    font-size: 24px;
+}
+.info div p {
+    margin: 5px 0 0;
+}
+.main-content {
+    display: flex;
+    justify-content: space-between;
+}
+.main-content .image-gallery {
+    width: 60%;
+}
+.main-content .image-gallery img {
+    width: 100%;
+    border-radius: 10px;
+}
+.main-content .image-thumbnails {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.main-content .image-thumbnails img {
+    width: 24%;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.main-content .booking-info {
+    width: 35%;
+    background-color: #e6f7ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+.booking-info h2 {
+    color: #007bff;
+    font-size: 24px;
+    margin: 0;
+}
+.booking-info .original-price {
+    text-decoration: line-through;
+    color: #999;
+}
+.booking-info .tour-code,
+.booking-info .discount-codes,
+.booking-info .date-picker,
+.booking-info .customer-type,
+.booking-info .total-price {
+    margin: 20px 0;
+}
+.booking-info .discount-codes button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.booking-info .date-picker input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.booking-info .customer-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.booking-info .customer-type div {
+    text-align: center;
+}
+.booking-info .customer-type div input {
+    width: 50px;
+    text-align: center;
+}
+.booking-info .total-price {
+    text-align: right;
+    font-size: 24px;
+    color: #007bff;
+}
+.booking-info .buttons {
+    display: flex;
+    justify-content: space-between;
+}
+.booking-info .buttons button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.icon-info {
+	display: flex;
+}
+.fa-map-marker-alt,
+.fa-clock,
+.fa-user,
+.fa-bus {
+	margin-top: 14px;
+	margin-right: 4px;
+}
+
+.container2 {
+    width: 425px;
+    margin: 18px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.row label {
+    font-size: 16px;
+}
+.counter {
+    display: flex;
+    align-items: center;
+}
+.counter button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #007bff;
+    background-color: #ffffff;
+    color: #007bff;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.counter input {
+    width: 40px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #007bff;
+    border-left: none;
+    border-right: none;
+    font-size: 16px;
+    margin: 0 5px;
+}
+.price {
+    font-size: 16px;
+    color: #007bff;
+}
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.total .amount {
+    color: #007bff;
+}
+.row-word{
+    width: 72px;
+}
+.code-tour{
+	 display: flex;
+}

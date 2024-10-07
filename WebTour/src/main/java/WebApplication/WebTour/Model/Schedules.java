@@ -26,16 +26,16 @@ public class Schedules implements Serializable{
     private int tourId;
     
     @Column(name = "activity")
-    private String Activity;
+    private String activity;
     
     @Column(name = "step")
-    private int Step;
+    private int step;
     
     @Column(name = "location")
-    private String Location;
+    private String location;
        
     @Column(name = "status")
-    private boolean Status;
+    private boolean status;
 
 	public int getTourId() {
 		return tourId;
@@ -45,36 +45,42 @@ public class Schedules implements Serializable{
 		this.tourId = tourId;
 	}
 
+	
+
 	public String getActivity() {
-		return Activity;
+		return activity;
 	}
 
 	public void setActivity(String activity) {
-		Activity = activity;
+		this.activity = activity;
 	}
 
 	public int getStep() {
-		return Step;
+		return step;
 	}
 
 	public void setStep(int step) {
-		Step = step;
+		this.step = step;
 	}
 
 	public String getLocation() {
-		return Location;
+		return location;
 	}
 
 	public void setLocation(String location) {
-		Location = location;
+		this.location = location;
 	}
 
 	public boolean isStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(boolean status) {
-		Status = status;
+		this.status = status;
+	}
+
+	public void setScheduleId(Long scheduleId) {
+		this.scheduleId = scheduleId;
 	}
 
 	public Long getScheduleId() {

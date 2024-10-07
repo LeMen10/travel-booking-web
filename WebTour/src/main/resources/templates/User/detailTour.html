@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/detailTour.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+	<div class="container">
+		<div class="header">
+			<h1 th:text="${tour.tourName}">Tour Name</h1>
+			<div class="stars">
+				<i class="fa-regular fa-star"></i> <i class="fa-regular fa-star"></i>
+				<i class="fa-regular fa-star"></i> <i class="fa-regular fa-star"></i>
+				<i class="fa-regular fa-star"></i>
+			</div>
+		</div>
+		<div class="info">
+			<div class="icon-info">
+				<i class="fas fa-map-marker-alt"> </i>
+				<div>
+					<p>Khởi hành từ</p>
+					<p th:text="${tour.departure}">Khởi hành</p>
+				</div>
+
+			</div>
+			<div class="icon-info">
+				<i class="fas fa-map-marker-alt"> </i>
+				<div>
+					<p>Điểm đến</p>
+					<p th:text="${tour.destination}">Điểm đến</p>
+				</div>
+
+			</div>
+			<div class="icon-info">
+				<i class="fas fa-clock"> </i>
+				<div>
+					<p>Thời gian</p>
+					<p >1N</p>
+				</div>
+
+			</div>
+			<div class="icon-info">
+				<i class="fas fa-user"> </i>
+				<div>
+					<p>Số người</p>
+					<p th:text="${tour.peopleMax}">Số người</p>
+				</div>
+
+			</div>
+			<div class="icon-info">
+				<i class="fas fa-bus"> </i>
+				<div>
+					<p>Di chuyển bằng</p>
+					<p th:text="${tour.transport}">Phương tiện</p>
+				</div>
+
+			</div>
+		</div>
+		<div class="main-content">
+			<div class="image-gallery">
+				<img alt="A beautiful island with clear blue water and boats"
+					height="400"
+					src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
+					width="800" />
+				<div class="image-thumbnails">
+					<img alt="A beautiful island with clear blue water and boats"
+						height="100"
+						src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
+						width="200" /> <img
+						alt="Underwater scene with colorful fish and coral" height="100"
+						src="https://storage.googleapis.com/a1aa/image/vcU7UfsuqY27eUYsYaIUaMZNfziwa0CJ25KKNbN6SxoJXVHnA.jpg"
+						width="200" /> <img alt="A person enjoying the beach"
+						height="100"
+						src="https://storage.googleapis.com/a1aa/image/QMsjhveyXoUZYinEf4NgtFuEZ2SLz4BflzMrvbjtvkFRXVHnA.jpg"
+						width="200" /> <img
+						alt="A scenic view of the beach with palm trees" height="100"
+						src="https://storage.googleapis.com/a1aa/image/IJXLthajlgIODhkAvb7gtSh0Wli81l9MHXqsf7rwimAzV1xJA.jpg"
+						width="200" />
+				</div>
+			</div>
+			<div class="booking-info">
+				<h2>1.000.000₫</h2>
+				<p class="original-price">2.000.000₫</p>
+				<div class="code-tour">
+					<p>Mã tour:</p>
+					<p th:text="${tour.tourId}" class="tour-code">ND021</p>
+				</div>
+				
+				<div class="discount-codes">
+					<button>Giảm 50%</button>
+					<button>Giảm 15%</button>
+					<button>Giảm 10k</button>
+				</div>
+				<div class="date-picker">
+					<input th:value="${#dates.format(tour.startDate, 'dd/MM/yyyy')}"  placeholder="Chọn Ngày đi" type="text" />
+				</div>
+				<div class="container2">
+					<div class="title">Loại khách</div>
+					<div class="up-row">
+						<div class="row">
+							<label>Người lớn</label>
+							<div class="counter">
+								<button>-</button>
+								<input type="text" value="1">
+								<button>+</button>
+							</div>
+							<div  class="price">9.500.000₫</div>
+						</div>
+						<div class="row">
+							<label class="row-word">Trẻ em</label>
+							<div class="counter">
+								<button>-</button>
+								<input type="text" value="0">
+								<button>+</button>
+							</div>
+							<div  class="price">9.500.000₫</div>
+						</div>
+
+					</div>
+					<div class="total">
+						<div>Tổng tiền</div>
+						<div th:text="${tour.price}" class="amount">9.500.000₫</div>
+					</div>
+				</div>
+				<div class="buttons">
+					<button>Đặt ngay</button>
+					<button>Liên hệ tư vấn</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
