@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Management</title>
+<link rel="stylesheet" href="/css/home_admin.css">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+	rel="stylesheet" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap"
+	rel="stylesheet" />
+</head>
+
+</head>
+<body>
+	<div class="sidebar">
+		<div class="logo">
+			<img alt="" height="50" src="" width="50" />
+		</div>
+		<ul class="nav">
+			<li><a href="#"> <i class="fas fa-home"> </i> Dashboard
+			</a></li>
+			<li><a href="#"> <i class="fas fa-envelope"> </i> Email
+			</a></li>
+			<li><a th:href="@{/admin/customer-management}"> <i
+					class="fas fa-edit"> </i> Customer
+			</a></li>
+		</ul>
+	</div>
+	<div class="main-content">
+		<div class="header">
+			<div class="search-bar">
+				<input placeholder="Search..." type="text" /> <i
+					class="fas fa-search"> </i>
+			</div>
+			<div class="user-info">
+				<img alt="User Avatar" height="40"
+					src="https://storage.googleapis.com/a1aa/image/IkIPh4GKaG77KZx7nvUG3GOohf7MoegCFbHKFOjpxjycEvjTA.jpg"
+					width="40" /> <span> John Doe </span>
+			</div>
+		</div>
+		<div class="stats">
+			<div class="stat">
+				<h3>Total Visits</h3>
+				<p>+10%</p>
+				<div class="change">+10%</div>
+			</div>
+			<div class="stat">
+				<h3>Total Page Views</h3>
+				<p>-7%</p>
+				<div class="change negative">-7%</div>
+			</div>
+			<div class="stat">
+				<h3>Unique Visitor</h3>
+				<p>-12%</p>
+				<div class="change negative">-12%</div>
+			</div>
+			<div class="stat">
+				<h3>Bounce Rate</h3>
+				<p>33%</p>
+				<div class="change">33%</div>
+			</div>
+		</div>
+		<div class="map">
+			<h3>Site Visits</h3>
+			<img alt="World Map with Site Visits" height="400"
+				src="https://storage.googleapis.com/a1aa/image/nNJ4f4ZHIev4a0r7ed7L1IHrzK18dfdNrD5f2bvbRqeVHx74E.jpg"
+				width="800" />
+		</div>
+		<div class="visitors">
+			<div class="visitor">
+				<div class="info">
+					<span> 100k </span> <span> Visitors From USA </span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar usa"></div>
+				</div>
+				<span> 50% </span>
+			</div>
+			<div class="visitor">
+				<div class="info">
+					<span> 1M </span> <span> Visitors From Europe </span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar europe"></div>
+				</div>
+				<span> 80% </span>
+			</div>
+			<div class="visitor">
+				<div class="info">
+					<span> 450k </span> <span> Visitors From Australia </span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar australia"></div>
+				</div>
+				<span> 40% </span>
+			</div>
+			<div class="visitor">
+				<div class="info">
+					<span> 1B </span> <span> Visitors From India </span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar india"></div>
+				</div>
+				<span> 90% </span>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
