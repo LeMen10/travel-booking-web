@@ -1,10 +1,16 @@
 package WebApplication.WebTour.Model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 
+@Entity
+@Table(name = "user")
+@Data
 public class User {
 	private static final long serialVersionUID = 1L;
 
@@ -14,7 +20,7 @@ public class User {
     private Long user_id;
 
     @Column(name = "role_id")
-    private String role_id;
+    private int role_id;
     
     @Column(name = "full_name")
     private String fullName;
@@ -42,11 +48,11 @@ public class User {
 		this.user_id = user_id;
 	}
 
-	public String getRole_id() {
+	public int getRole_id() {
 		return role_id;
 	}
 
-	public void setRole_id(String role_id) {
+	public void setRole_id(int role_id) {
 		this.role_id = role_id;
 	}
 

@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul {
+	list-style: none;
+}
+
+:root {
+	--primary-color: rgba(0, 186, 131, 1);
+	--height-header: 124px;
+	--white-color: #fff;
+	--black-color: #000;
+	--text-color: #253D4E;
+	--border-color: #dbdbdb;
+	--font-family-quicksand: 'Quicksand', sans-serif;
+}
+
+.wrapper {
+	overflow: hidden;
+}

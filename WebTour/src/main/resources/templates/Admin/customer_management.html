@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Management</title>
+<link rel="stylesheet" href="/css/home_admin.css">
+<link rel="stylesheet" href="/css/modal.css">
+<link rel="stylesheet" href="/css/base.css">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+	rel="stylesheet" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap"
+	rel="stylesheet" />
+</head>
+
+</head>
+<body>
+	<div class="sidebar">
+		<div class="logo">
+			<img alt="" height="50" src="" width="50" />
+		</div>
+		<ul class="nav">
+			<li><a href="#"> <i class="fas fa-home"> </i> Dashboard
+			</a></li>
+			<li><a href="#"> <i class="fas fa-envelope"> </i> Email
+			</a></li>
+			<li><a th:href="@{/admin/customer-management}"> <i
+					class="fas fa-edit"> </i> Customer
+			</a></li>
+		</ul>
+	</div>
+	<div class="main-content">
+		<div class="header">
+			<div class="search-bar">
+				<input placeholder="Search..." type="text" /> <i
+					class="fas fa-search"> </i>
+			</div>
+			<div class="user-info">
+				<img alt="User Avatar" height="40"
+					src="https://storage.googleapis.com/a1aa/image/IkIPh4GKaG77KZx7nvUG3GOohf7MoegCFbHKFOjpxjycEvjTA.jpg"
+					width="40" /> <span> John Doe </span>
+			</div>
+		</div>
+		<div class="table-container">
+			<h2>Table head options</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Full name</th>
+						<th>Phone</th>
+						<th>Email</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user : ${users}">
+						<td th:text="${user.user_id}"></td>
+						<td th:text="${user.fullName}"></td>
+						<td th:text="${user.phone}"></td>
+						<td th:text="${user.email}"></td>
+						<td><a>Edit</a> <a>Delete</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</body>
+</html>
