@@ -16,6 +16,11 @@ import org.springframework.ui.Model;
 @Controller  // Use @Controller for returning views
 public class HomeController {
 
-    @Autowired
+//    @Autowired
     ToursRepository toursRepository;
+    
+    @GetMapping("/header")
+    public String nagivateHomePage(Model model) {
+    	return "/components/header";
+    }
 }
