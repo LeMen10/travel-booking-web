@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 01, 2024 lúc 04:16 AM
--- Phiên bản máy phục vụ: 10.4.27-MariaDB
--- Phiên bản PHP: 8.2.0
+-- Thời gian đã tạo: Th10 10, 2024 lúc 06:25 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,11 +28,24 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `account` (
-  `account_id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `user_name` varchar(25) NOT NULL,
-  `password` varchar(25) NOT NULL
+  `account_id` bigint(20) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `account`
+--
+
+INSERT INTO `account` (`account_id`, `user_id`, `user_name`, `password`, `status`) VALUES
+(1, 1, 'manh', '12345', NULL),
+(2, 2, 'minh', '12345', NULL),
+(3, 3, 'nam', '12345', NULL),
+(4, 4, 'men', '12345', NULL),
+(5, 8, 'truc', '12345', NULL),
+(6, 6, 'ngoc', '12345', NULL);
 
 -- --------------------------------------------------------
 
@@ -41,12 +54,12 @@ CREATE TABLE `account` (
 --
 
 CREATE TABLE `address` (
-  `address_id` int(11) NOT NULL,
+  `address_id` bigint(20) NOT NULL,
   `province_id` int(11) DEFAULT NULL,
   `district_id` int(11) DEFAULT NULL,
   `ward_id` int(11) DEFAULT NULL,
   `detail` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -58,44 +71,23 @@ CREATE TABLE `address` (
 CREATE TABLE `bookings` (
   `booking_id` int(11) NOT NULL,
   `tour_id` int(11) DEFAULT NULL,
-  `customer_id` int(11) DEFAULT NULL,
-  `booking_date` datetime DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `booking_date` datetime(6) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1,
   `pay_status` int(11) DEFAULT NULL,
   `people_nums` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Cấu trúc bảng cho bảng `customers`
+-- Đang đổ dữ liệu cho bảng `bookings`
 --
 
-CREATE TABLE `customers` (
-  `customer_id` int(11) NOT NULL,
-  `full_name` varchar(45) DEFAULT NULL,
-  `phone` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `address` int(11) DEFAULT NULL,
-  `points` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Đang đổ dữ liệu cho bảng `customers`
---
-
-INSERT INTO `customers` (`customer_id`, `full_name`, `phone`, `email`, `address`, `points`, `status`) VALUES
-(1, 'Trương Gia Minh', '0906342047', 'minh123@gmail.com', 2, 4, 1),
-(2, 'Lê Đình Mảnh', '0906342048', 'manh123@gmail.com', NULL, NULL, NULL),
-(3, 'Võ Lê Mến', '090634345', 'men123@gmail.com', NULL, NULL, NULL),
-(4, 'Đỗ Đình Nam', '0906341234', 'nam123@gmail.com', NULL, NULL, NULL),
-(5, 'Nguyễn Văn Mai', '0906345678', 'mai123@gmail.com', NULL, NULL, NULL),
-(6, 'Lê Thị Man', '0905436048', 'man1@gmail.com', NULL, NULL, NULL),
-(7, 'Đồ Thi Hà', '0906987648', 'ha123@gmail.com', NULL, NULL, NULL),
-(8, 'Nguyễn Văn Lên', '0945342048', 'len123@gmail.com', NULL, NULL, NULL),
-(9, 'Võ Thị Xuân', '0906983428', 'xuan23@gmail.com', NULL, NULL, NULL),
-(10, 'Hồ Thanh Nhã', '0906345298', 'nha12@gmail.com', NULL, NULL, NULL);
+INSERT INTO `bookings` (`booking_id`, `tour_id`, `user_id`, `booking_date`, `status`, `pay_status`, `people_nums`) VALUES
+(1, 1, 6, '2024-11-03 00:00:00.000000', 1, 2, 10),
+(2, 4, 7, '2024-11-05 00:00:00.000000', 1, 2, 10),
+(3, 1, 1, '2024-10-10 00:00:00.000000', 0, 1, 3),
+(4, 1, 1, '2024-10-10 00:00:00.000000', 0, 1, 3),
+(5, 1, 1, '2024-10-10 00:00:00.000000', 0, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -104,11 +96,11 @@ INSERT INTO `customers` (`customer_id`, `full_name`, `phone`, `email`, `address`
 --
 
 CREATE TABLE `discount` (
-  `discount_id` int(11) NOT NULL,
-  `customer_id` int(11) DEFAULT NULL,
+  `discount_id` bigint(20) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `point` int(11) DEFAULT NULL,
-  `reward` varchar(45) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `reward` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -121,7 +113,7 @@ CREATE TABLE `district` (
   `district_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `province_id` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -838,52 +830,42 @@ INSERT INTO `district` (`district_id`, `name`, `province_id`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `employees`
---
-
-CREATE TABLE `employees` (
-  `employee_id` int(11) NOT NULL,
-  `full_name` varchar(45) DEFAULT NULL,
-  `phone` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `role` varchar(45) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Đang đổ dữ liệu cho bảng `employees`
---
-
-INSERT INTO `employees` (`employee_id`, `full_name`, `phone`, `email`, `role`, `status`) VALUES
-(1, 'Lê Đình Mảnh', '0906342048', 'manh123@gmail.com', NULL, NULL),
-(2, 'Trương Gia Minh', '0906342048', 'minh123@gmail.com', NULL, NULL),
-(3, 'Đỗ Đình Nam', '0902134048', 'nam567@gmail.com', NULL, NULL),
-(4, 'Võ Lê Mến', '0902190878', 'men567@gmail.com', NULL, NULL),
-(5, 'Phan Hoàng Minh', '0976124048', 'minh567@gmail.com', NULL, NULL);
-
--- --------------------------------------------------------
-
---
 -- Cấu trúc bảng cho bảng `guides`
 --
 
 CREATE TABLE `guides` (
   `guide_id` int(11) NOT NULL,
-  `full_name` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `languages` varchar(45) DEFAULT NULL,
-  `employee_id` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `languages` varchar(255) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `guides`
 --
 
-INSERT INTO `guides` (`guide_id`, `full_name`, `email`, `languages`, `employee_id`, `status`) VALUES
-(1, 'Đỗ Đình Nam', 'nam567@gmail.com', 'Việt Nam', 3, NULL),
-(2, 'Lê Đình Mảnh', 'manh123@gmail.com', 'Việt Nam', 1, NULL),
-(3, 'Võ Lê Mến', 'men567@gmail.com', 'Việt Nam', 4, NULL);
+INSERT INTO `guides` (`guide_id`, `languages`, `user_id`, `status`) VALUES
+(1, 'Việt Nam', 3, NULL),
+(2, 'Việt Nam', 1, NULL),
+(3, 'Việt Nam', 4, NULL),
+(4, 'Việt Nam, Tiếng Anh', 6, NULL),
+(5, 'Tiếng Anh', 5, NULL),
+(6, 'Việt', 6, NULL),
+(7, 'Việt', 9, NULL),
+(8, 'Anh', 8, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `image`
+--
+
+CREATE TABLE `image` (
+  `image_id` int(11) NOT NULL,
+  `tour_id` int(11) NOT NULL,
+  `image_code` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -893,8 +875,8 @@ INSERT INTO `guides` (`guide_id`, `full_name`, `email`, `languages`, `employee_i
 
 CREATE TABLE `paymentmethod` (
   `paymethod_id` int(11) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `name` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -912,14 +894,22 @@ INSERT INTO `paymentmethod` (`paymethod_id`, `name`, `status`) VALUES
 --
 
 CREATE TABLE `payments` (
-  `payment_id` int(11) NOT NULL,
+  `payment_id` bigint(20) NOT NULL,
   `booking_id` int(11) DEFAULT NULL,
-  `payment_date` datetime DEFAULT NULL,
+  `payment_date` date DEFAULT NULL,
   `amount` int(11) DEFAULT NULL,
   `payment_method` int(11) DEFAULT NULL,
   `payment_status` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `payments`
+--
+
+INSERT INTO `payments` (`payment_id`, `booking_id`, `payment_date`, `amount`, `payment_method`, `payment_status`, `status`) VALUES
+(1, 1, '2024-11-03', 1, 1, 2, 1),
+(2, 2, '2024-11-05', 1, 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -929,8 +919,8 @@ CREATE TABLE `payments` (
 
 CREATE TABLE `paymentstatus` (
   `payment_status_id` int(11) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `name` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -944,14 +934,35 @@ INSERT INTO `paymentstatus` (`payment_status_id`, `name`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `point`
+--
+
+CREATE TABLE `point` (
+  `point_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `point` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `point`
+--
+
+INSERT INTO `point` (`point_id`, `user_id`, `point`, `status`) VALUES
+(1, 6, 5, 1),
+(2, 7, 3, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `promotiondetail`
 --
 
 CREATE TABLE `promotiondetail` (
-  `promotion_detail_id` int(11) NOT NULL,
+  `promotion_detail_id` bigint(20) NOT NULL,
   `tour_id` int(11) DEFAULT NULL,
   `promotion_id` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -965,9 +976,10 @@ CREATE TABLE `promotions` (
   `code` int(11) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `discount` int(11) DEFAULT NULL,
-  `start_date` datetime DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
   `endd_date` datetime DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1,
+  `end_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -979,7 +991,7 @@ CREATE TABLE `promotions` (
 CREATE TABLE `province` (
   `province_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1058,14 +1070,34 @@ INSERT INTO `province` (`province_id`, `name`, `status`) VALUES
 --
 
 CREATE TABLE `reviews` (
-  `reviews_id` int(11) NOT NULL,
-  `customer_id` int(11) DEFAULT NULL,
+  `reviews_id` bigint(20) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `tour_id` int(11) DEFAULT NULL,
   `rate` int(11) DEFAULT NULL,
   `comment` varchar(255) DEFAULT NULL,
-  `review_date` datetime DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `review_date` date DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `role`
+--
+
+CREATE TABLE `role` (
+  `role_id` int(11) NOT NULL,
+  `role` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `role`
+--
+
+INSERT INTO `role` (`role_id`, `role`) VALUES
+(1, 'admin'),
+(2, 'employee'),
+(3, 'customer');
 
 -- --------------------------------------------------------
 
@@ -1074,12 +1106,12 @@ CREATE TABLE `reviews` (
 --
 
 CREATE TABLE `schedules` (
-  `schedule_id` int(11) NOT NULL,
+  `schedule_id` bigint(20) NOT NULL,
   `tour_id` int(11) DEFAULT NULL,
   `step` int(11) DEFAULT NULL,
   `activity` varchar(255) DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1090,10 +1122,10 @@ CREATE TABLE `schedules` (
 
 CREATE TABLE `ticket` (
   `ticket_id` int(11) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `rate` int(11) DEFAULT NULL,
-  `detail` varchar(45) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `detail` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1111,12 +1143,20 @@ INSERT INTO `ticket` (`ticket_id`, `name`, `rate`, `detail`, `status`) VALUES
 --
 
 CREATE TABLE `ticketbooking` (
-  `id` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `ticket_id` int(11) DEFAULT NULL,
   `booking_id` int(11) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `ticketbooking`
+--
+
+INSERT INTO `ticketbooking` (`id`, `ticket_id`, `booking_id`, `quantity`, `status`) VALUES
+(1, 1, 1, 5, 1),
+(2, 2, 2, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -1127,15 +1167,58 @@ CREATE TABLE `ticketbooking` (
 CREATE TABLE `tours` (
   `tour_id` int(11) NOT NULL,
   `guided_id` int(11) DEFAULT NULL,
-  `tour_name` varchar(45) DEFAULT NULL,
-  `destination` varchar(45) DEFAULT NULL,
-  `start_date` datetime DEFAULT NULL,
-  `end_date` datetime DEFAULT NULL,
+  `tour_name` varchar(255) DEFAULT NULL,
+  `departure` varchar(255) NOT NULL,
+  `destination` varchar(255) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
   `price` float DEFAULT NULL,
   `detail` varchar(255) DEFAULT NULL,
   `people_max` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `transport` varchar(255) NOT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `tours`
+--
+
+INSERT INTO `tours` (`tour_id`, `guided_id`, `tour_name`, `departure`, `destination`, `start_date`, `end_date`, `price`, `detail`, `people_max`, `transport`, `status`) VALUES
+(1, 2, 'Đà Lạt - 2 ngày 1 đêm', 'Đà Lạt', 'Thành phố Hồ Chí Minh', '2024-10-14', '2024-10-16', 3000000, 'Vui vẻ hòa đồng', 5, 'Máy bay', 1),
+(2, 8, 'Phú Quốc - 3 ngày 2 đêm', 'Kiên Giang', 'Thành phố Hồ Chí Minh', '2024-10-23', '2024-10-25', 4000000, 'Có rất nhiều điều thú vị đang chờ bạn khám phá', 4, 'Máy bay', 1),
+(4, 7, 'Đảo Lý Sơn - Quảng Ngãi - 4 ngày', 'Quảng Ngãi', 'Thành phố Hồ Chí Minh', '2024-11-06', '2024-11-09', 8000000, 'Tham quan và thưởng thức nước mắm tỏi Lý Sơn cùng nhiều món ăn hấp dẫn', 10, 'Máy bay', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `user`
+--
+
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `full_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `gender` varchar(255) NOT NULL,
+  `status` varchar(255) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `user`
+--
+
+INSERT INTO `user` (`user_id`, `role_id`, `full_name`, `email`, `address`, `phone`, `gender`, `status`) VALUES
+(1, 1, 'Lê Đình Mảnh', 'manh123@gmail.com', '123 Nguyễn Văn Cừ', '0901223456', 'Nam', '1'),
+(2, 1, 'Trương Gia Minh', 'minh123@gmail.com', '123 Lương Ngọc Quyến', '0906342047', 'Nam', '1'),
+(3, 1, 'Đỗ Đình Nam', 'nam123@gmail.com', '234 Lê Lợi', '0908765234', 'Nam', '1'),
+(4, 1, 'Võ lê Mến', 'men123@gmail.com', '234 lê lai', '0908787677', 'Nam', '1'),
+(5, 2, 'Võ Xuân Mai', 'mai567@gmail.com', '2 Lê Quang Định', '0908765234', 'Nữ', '1'),
+(6, 2, 'Lê Bảo Ngọc', 'ngoc567@gmail.com', '542 Nguyễn Trãi', '0998765234', 'Nữ', '1'),
+(7, 2, 'Lê Thanh Mai', 'mai567@gmail.com', '78 Nguyễn Lữ', '0912365234', 'Nữ', '1'),
+(8, 2, 'Nguyễn Thanh Trúc', 'truc567@gmail.com', '9 Quang Trung', '0998761111', 'Nữ', '1'),
+(9, 2, 'Trần Hải Yến', 'yen567@gmail.com', '167 Lê Đại Hành', '0998763994', 'Nữ', '1');
 
 -- --------------------------------------------------------
 
@@ -1147,7 +1230,7 @@ CREATE TABLE `ward` (
   `ward_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `district_id` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -8305,7 +8388,7 @@ INSERT INTO `ward` (`ward_id`, `name`, `district_id`, `status`) VALUES
 --
 ALTER TABLE `account`
   ADD PRIMARY KEY (`account_id`),
-  ADD KEY `customer_id` (`customer_id`);
+  ADD KEY `customer_id` (`user_id`);
 
 --
 -- Chỉ mục cho bảng `address`
@@ -8322,21 +8405,14 @@ ALTER TABLE `address`
 ALTER TABLE `bookings`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `fk_bookings_tour` (`tour_id`),
-  ADD KEY `fk_bookings_customer` (`customer_id`);
-
---
--- Chỉ mục cho bảng `customers`
---
-ALTER TABLE `customers`
-  ADD PRIMARY KEY (`customer_id`),
-  ADD KEY `Address` (`address`);
+  ADD KEY `fk_bookings_customer` (`user_id`);
 
 --
 -- Chỉ mục cho bảng `discount`
 --
 ALTER TABLE `discount`
   ADD PRIMARY KEY (`discount_id`),
-  ADD KEY `fk_discount_customer` (`customer_id`);
+  ADD KEY `fk_discount_customer` (`user_id`);
 
 --
 -- Chỉ mục cho bảng `district`
@@ -8346,17 +8422,18 @@ ALTER TABLE `district`
   ADD KEY `fk_district_province` (`province_id`);
 
 --
--- Chỉ mục cho bảng `employees`
---
-ALTER TABLE `employees`
-  ADD PRIMARY KEY (`employee_id`);
-
---
 -- Chỉ mục cho bảng `guides`
 --
 ALTER TABLE `guides`
   ADD PRIMARY KEY (`guide_id`),
-  ADD KEY `fk_guides_employee` (`employee_id`);
+  ADD KEY `fk_guides_employee` (`user_id`);
+
+--
+-- Chỉ mục cho bảng `image`
+--
+ALTER TABLE `image`
+  ADD PRIMARY KEY (`image_id`),
+  ADD KEY `tour_id` (`tour_id`);
 
 --
 -- Chỉ mục cho bảng `paymentmethod`
@@ -8378,6 +8455,13 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `paymentstatus`
   ADD PRIMARY KEY (`payment_status_id`);
+
+--
+-- Chỉ mục cho bảng `point`
+--
+ALTER TABLE `point`
+  ADD PRIMARY KEY (`point_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Chỉ mục cho bảng `promotiondetail`
@@ -8404,8 +8488,14 @@ ALTER TABLE `province`
 --
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`reviews_id`),
-  ADD KEY `fk_reviews_customer` (`customer_id`),
+  ADD KEY `fk_reviews_customer` (`user_id`),
   ADD KEY `fk_reviews_tour` (`tour_id`);
+
+--
+-- Chỉ mục cho bảng `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`role_id`);
 
 --
 -- Chỉ mục cho bảng `schedules`
@@ -8436,6 +8526,14 @@ ALTER TABLE `tours`
   ADD KEY `GuidedId` (`guided_id`);
 
 --
+-- Chỉ mục cho bảng `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`user_id`),
+  ADD KEY `role_id` (`role_id`),
+  ADD KEY `role_id_2` (`role_id`);
+
+--
 -- Chỉ mục cho bảng `ward`
 --
 ALTER TABLE `ward`
@@ -8450,31 +8548,25 @@ ALTER TABLE `ward`
 -- AUTO_INCREMENT cho bảng `account`
 --
 ALTER TABLE `account`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `account_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `address`
 --
 ALTER TABLE `address`
-  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `address_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `customers`
---
-ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `discount`
 --
 ALTER TABLE `discount`
-  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `discount_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `district`
@@ -8483,16 +8575,16 @@ ALTER TABLE `district`
   MODIFY `district_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=706;
 
 --
--- AUTO_INCREMENT cho bảng `employees`
---
-ALTER TABLE `employees`
-  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
 -- AUTO_INCREMENT cho bảng `guides`
 --
 ALTER TABLE `guides`
-  MODIFY `guide_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `guide_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT cho bảng `image`
+--
+ALTER TABLE `image`
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `paymentmethod`
@@ -8504,7 +8596,7 @@ ALTER TABLE `paymentmethod`
 -- AUTO_INCREMENT cho bảng `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `payment_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT cho bảng `paymentstatus`
@@ -8513,10 +8605,16 @@ ALTER TABLE `paymentstatus`
   MODIFY `payment_status_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT cho bảng `point`
+--
+ALTER TABLE `point`
+  MODIFY `point_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT cho bảng `promotiondetail`
 --
 ALTER TABLE `promotiondetail`
-  MODIFY `promotion_detail_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `promotion_detail_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `promotions`
@@ -8534,13 +8632,19 @@ ALTER TABLE `province`
 -- AUTO_INCREMENT cho bảng `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `reviews_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `reviews_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `role`
+--
+ALTER TABLE `role`
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `schedule_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `ticket`
@@ -8552,13 +8656,19 @@ ALTER TABLE `ticket`
 -- AUTO_INCREMENT cho bảng `ticketbooking`
 --
 ALTER TABLE `ticketbooking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT cho bảng `tours`
 --
 ALTER TABLE `tours`
-  MODIFY `tour_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tour_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT cho bảng `user`
+--
+ALTER TABLE `user`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT cho bảng `ward`
@@ -8574,7 +8684,7 @@ ALTER TABLE `ward`
 -- Các ràng buộc cho bảng `account`
 --
 ALTER TABLE `account`
-  ADD CONSTRAINT `account_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`);
+  ADD CONSTRAINT `account_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `address`
@@ -8588,15 +8698,14 @@ ALTER TABLE `address`
 -- Các ràng buộc cho bảng `bookings`
 --
 ALTER TABLE `bookings`
-  ADD CONSTRAINT `fk_bookings_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`),
+  ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
   ADD CONSTRAINT `fk_bookings_tour` FOREIGN KEY (`tour_id`) REFERENCES `tours` (`tour_id`);
 
 --
 -- Các ràng buộc cho bảng `discount`
 --
 ALTER TABLE `discount`
-  ADD CONSTRAINT `discount_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`),
-  ADD CONSTRAINT `fk_discount_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`);
+  ADD CONSTRAINT `discount_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `district`
@@ -8605,10 +8714,10 @@ ALTER TABLE `district`
   ADD CONSTRAINT `fk_district_province` FOREIGN KEY (`province_id`) REFERENCES `province` (`province_id`);
 
 --
--- Các ràng buộc cho bảng `guides`
+-- Các ràng buộc cho bảng `image`
 --
-ALTER TABLE `guides`
-  ADD CONSTRAINT `fk_guides_employee` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`);
+ALTER TABLE `image`
+  ADD CONSTRAINT `image_ibfk_1` FOREIGN KEY (`tour_id`) REFERENCES `tours` (`tour_id`);
 
 --
 -- Các ràng buộc cho bảng `payments`
@@ -8617,6 +8726,12 @@ ALTER TABLE `payments`
   ADD CONSTRAINT `fk_payments_booking` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`),
   ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`payment_method`) REFERENCES `paymentmethod` (`paymethod_id`),
   ADD CONSTRAINT `payments_ibfk_2` FOREIGN KEY (`payment_status`) REFERENCES `paymentstatus` (`payment_status_id`);
+
+--
+-- Các ràng buộc cho bảng `point`
+--
+ALTER TABLE `point`
+  ADD CONSTRAINT `point_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `promotiondetail`
@@ -8629,8 +8744,8 @@ ALTER TABLE `promotiondetail`
 -- Các ràng buộc cho bảng `reviews`
 --
 ALTER TABLE `reviews`
-  ADD CONSTRAINT `fk_reviews_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`),
-  ADD CONSTRAINT `fk_reviews_tour` FOREIGN KEY (`tour_id`) REFERENCES `tours` (`tour_id`);
+  ADD CONSTRAINT `fk_reviews_tour` FOREIGN KEY (`tour_id`) REFERENCES `tours` (`tour_id`),
+  ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `schedules`
@@ -8650,6 +8765,12 @@ ALTER TABLE `ticketbooking`
 --
 ALTER TABLE `tours`
   ADD CONSTRAINT `tours_ibfk_1` FOREIGN KEY (`guided_id`) REFERENCES `guides` (`guide_id`);
+
+--
+-- Các ràng buộc cho bảng `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
 
 --
 -- Các ràng buộc cho bảng `ward`
