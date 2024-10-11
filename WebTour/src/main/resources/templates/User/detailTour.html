@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../css/detailTour.css">
+ <link rel="stylesheet" href="../js/detailTour.js"> 
+ <link rel="stylesheet" href="../js/payment.js"> 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -13,9 +15,11 @@
 		<div class="header">
 			<h1 th:text="${tour.tourName}">Tour Name</h1>
 			<div class="stars">
-				<i class="fa-regular fa-star"></i> <i class="fa-regular fa-star"></i>
-				<i class="fa-regular fa-star"></i> <i class="fa-regular fa-star"></i>
-				<i class="fa-regular fa-star"></i>
+				 <i class="fa-regular fa-star" data-value="1"></i> 
+    <i class="fa-regular fa-star" data-value="2"></i>
+    <i class="fa-regular fa-star" data-value="3"></i> 
+    <i class="fa-regular fa-star" data-value="4"></i>
+    <i class="fa-regular fa-star" data-value="5"></i>
 			</div>
 		</div>
 		<div class="info">
@@ -23,7 +27,7 @@
 				<i class="fas fa-map-marker-alt"> </i>
 				<div>
 					<p>Khởi hành từ</p>
-					<p th:text="${tour.departure}">Khởi hành</p>
+					<p th:text="${tour.destination}">Khởi hành</p>
 				</div>
 
 			</div>
@@ -31,7 +35,7 @@
 				<i class="fas fa-map-marker-alt"> </i>
 				<div>
 					<p>Điểm đến</p>
-					<p th:text="${tour.destination}">Điểm đến</p>
+					<p th:text="${tour.departure}">Điểm đến</p>
 				</div>
 
 			</div>
@@ -39,7 +43,7 @@
 				<i class="fas fa-clock"> </i>
 				<div>
 					<p>Thời gian</p>
-					<p >1N</p>
+					<p id="tour-day" onchange="HandleGetDay" >1N</p>
 				</div>
 
 			</div>
@@ -82,21 +86,24 @@
 						width="200" />
 				</div>
 			</div>
-			<div class="booking-info">
-				<h2>1.000.000₫</h2>
-				<p class="original-price">2.000.000₫</p>
+			<div class="booking-info" >
+				<h2 th:text="${tour.price}" >1.000.000₫</h2>
+				<!-- <p class="original-price">2.000.000₫</p> -->
 				<div class="code-tour">
-					<p>Mã tour:</p>
-					<p th:text="${tour.tourId}" class="tour-code">ND021</p>
+					<p>Mã tour: </p>
+					<p th:text="${tour.tourId}" id="id-booking-info" th:attr="data-id=${tour.tourId}" class="tour-code"> ND021</p>
 				</div>
-				
-				<div class="discount-codes">
+
+				<!-- <div class="discount-codes">
 					<button>Giảm 50%</button>
 					<button>Giảm 15%</button>
 					<button>Giảm 10k</button>
-				</div>
+				</div> -->
 				<div class="date-picker">
-					<input th:value="${#dates.format(tour.startDate, 'dd/MM/yyyy')}"  placeholder="Chọn Ngày đi" type="text" />
+					<p class="title">Ngày đi</p>
+					<!-- <input th:value="${#dates.format(tour.startDate, 'dd/MM/yyyy')}" type="date" id="book-day" name="book-day"> -->
+					<input id="book-day" th:value="${#dates.format(tour.startDate, 'yyy-MM-dd')}"
+						placeholder="Chọn Ngày đi" type="text" />
 				</div>
 				<div class="container2">
 					<div class="title">Loại khách</div>
@@ -104,34 +111,37 @@
 						<div class="row">
 							<label>Người lớn</label>
 							<div class="counter">
-								<button>-</button>
-								<input type="text" value="1">
-								<button>+</button>
+								<button id="bt-subtract">-</button>
+								<input id="value-quantity" type="text" value="0">
+								<button id="bt-plus">+</button>
 							</div>
-							<div  class="price">9.500.000₫</div>
+							<div id="price-adult" class="price">0₫</div>
 						</div>
 						<div class="row">
 							<label class="row-word">Trẻ em</label>
 							<div class="counter">
-								<button>-</button>
-								<input type="text" value="0">
-								<button>+</button>
+								<button id="bt-subtract1">-</button>
+								<input id="value-quantity1" type="text" value="0">
+								<button id="bt-plus1">+</button>
 							</div>
-							<div  class="price">9.500.000₫</div>
+							<div id="price-chill" class="price">0₫</div>
 						</div>
 
 					</div>
 					<div class="total">
 						<div>Tổng tiền</div>
-						<div th:text="${tour.price}" class="amount">9.500.000₫</div>
+						<div id="total-price"  class="amount">0₫</div>
 					</div>
 				</div>
 				<div class="buttons">
-					<button>Đặt ngay</button>
+					<button type="button" id="book-now">Đặt ngay</button>
 					<button>Liên hệ tư vấn</button>
-				</div>
+				</div> 
 			</div>
 		</div>
 	</div>
+	<script src="../js/detailTour.js"></script>
+	<script src="../js/payment.js"></script>
+	
 </body>
 </html>

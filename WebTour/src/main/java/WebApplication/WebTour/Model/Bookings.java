@@ -1,6 +1,7 @@
 package WebApplication.WebTour.Model;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import java.util.Optional;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -77,7 +78,7 @@ public class Bookings implements Serializable{
 	}
 
 	public void setStatus(boolean status) {
-		this.status = status;
+		status = status;
 	}
 
 	public int getPayStatus() {
@@ -99,6 +100,11 @@ public class Bookings implements Serializable{
 	public Long getBookingId() {
 		return bookingId;
 	}
+
+
+
+
+	
     
     
 }

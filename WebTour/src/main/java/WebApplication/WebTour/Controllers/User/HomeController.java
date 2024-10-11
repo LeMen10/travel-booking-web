@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
-import WebApplication.WebTour.Respository.ToursRepository;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +15,16 @@ import org.springframework.ui.Model;
 @Controller  // Use @Controller for returning views
 public class HomeController {
 
-//    @Autowired
-    ToursRepository toursRepository;
+    @GetMapping("/")
+    public String navigateHomePage(Model model) {
+
+            return "login";
+    }
+
     
-    @GetMapping("/header")
-    public String nagivateHomePage(Model model) {
-    	return "/components/header";
+
+    @GetMapping("/home")
+    public String navigateLoginPage(Model model) {
+        return "home";  // Return the name of the view without .html
     }
 }

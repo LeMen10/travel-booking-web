@@ -20,7 +20,14 @@ body {
 }
 .header .stars {
     color: #007bff;
+    cursor: pointer;
 }
+
+/* đổi màu vàng khi chọn */
+.stars .fa-star.selected {
+     color: gold;  
+}
+
 .info {
     display: flex;
     justify-content: space-around;
@@ -72,7 +79,7 @@ body {
     text-decoration: line-through;
     color: #999;
 }
-.booking-info .tour-code,
+
 .booking-info .discount-codes,
 .booking-info .date-picker,
 .booking-info .customer-type,
@@ -89,7 +96,7 @@ body {
     cursor: pointer;
 }
 .booking-info .date-picker input {
-    width: 100%;
+    width: 92%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -135,12 +142,12 @@ body {
 }
 
 .container2 {
-    width: 425px;
+    width: 90%;
     margin: 18px auto;
-    background-color: #ffffff;
+    background-color: #e6f7ff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);*/
 }
 .title {
     font-size: 18px;
@@ -155,10 +162,13 @@ body {
 }
 .row label {
     font-size: 16px;
+    flex-grow: 1;
 }
 .counter {
     display: flex;
     align-items: center;
+    flex-grow: 0;
+    
 }
 .counter button {
     width: 30px;
@@ -183,6 +193,10 @@ body {
 .price {
     font-size: 16px;
     color: #007bff;
+    max-width: 30%;
+    flex-grow: 1;
+    text-align: right;
+    
 }
 .total {
     display: flex;
@@ -196,8 +210,12 @@ body {
     color: #007bff;
 }
 .row-word{
-    width: 72px;
+    width: 17%;
 }
 .code-tour{
 	 display: flex;
+}
+.date-picker{
+	padding-left: 3%;
+	
 }

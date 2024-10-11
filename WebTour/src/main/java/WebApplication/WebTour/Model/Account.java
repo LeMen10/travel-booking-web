@@ -30,11 +30,15 @@ public class Account implements Serializable{
 
     @Column(name = "password")
     private String password;
+    
+    @Column(name = "status")
+    private boolean status;
 
 	public Long getAccountId() {
 		return accountId;
 	}
 
+	
 	public int getUser_id() {
 		return userId;
 	}
@@ -60,5 +64,26 @@ public class Account implements Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+
+	public int getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+
+	public boolean isStatus() {
+		return status;
+	}
+
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
    
+	
 }
