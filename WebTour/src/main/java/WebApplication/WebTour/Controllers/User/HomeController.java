@@ -18,16 +18,9 @@ public class HomeController {
 
 //    @Autowired
     ToursRepository toursRepository;
-    
-<<<<<<< Updated upstream
-    @GetMapping("/header")
-    public String nagivateHomePage(Model model) {
-    	return "/components/header";
-=======
 
     @GetMapping("/home")
     public String navigateLoginPage(Model model) {
         return "home";
->>>>>>> Stashed changes
     }
 }
