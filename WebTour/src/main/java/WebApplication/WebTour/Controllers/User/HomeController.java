@@ -14,13 +14,12 @@ import org.springframework.ui.Model;
 @Controller // Use @Controller for returning views
 public class HomeController {
 
-    @GetMapping("/")
-    public String navigateHomePage(Model model) {
-        return "home";
-    }
+
+ @Autowired
+    ToursRepository toursRepository;
 
     @GetMapping("/home")
     public String navigateLoginPage(Model model) {
-        return "home"; // Return the name of the view without .html
+        return "home";
     }
 }
