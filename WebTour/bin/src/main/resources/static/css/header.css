@@ -1,0 +1,225 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo img {
+    height: 50px;
+    margin-right: 10px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+nav ul li a:hover {
+    color: #00aaff;
+}
+
+.icons a {
+    color: #00aaff;
+    margin-right: 20px;
+    font-size: 25px;
+    text-decoration: none;
+}
+
+.icons .hotline {
+    font-size: 16px;
+    color: #00aaff;
+    font-weight: bold;
+}
+
+.icons .hotline i {
+    font-size: 25px;
+}
+
+.hero {
+    background-color: #00aaff;
+    height: 100px;
+    /* background-image: url('pic/image.png'); */
+    /* background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; */
+    align-content: center;
+}
+
+.hero .bread {
+    padding: 0 13%;
+}
+
+.hero #breadcrumb {
+    color: #ffff;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+nav ul li a:hover i {
+    transform: rotate(180deg); /* Quay biểu tượng */
+    transition: transform 0.3s; /* Hiệu ứng chuyển động */
+}
+
+.column {
+    margin-right: 20px;
+}
+
+.column a {
+    padding: 5px 0;
+}
+
+.column a:hover {
+    color: #00aaff;
+}
+
+/* Màn hình lớn (Desktop) */
+@media (min-width: 992px) {
+    .container {
+        max-width: 1200px;
+    }
+
+    nav ul li a {
+        font-size: 16px;
+    }
+
+    .hero {
+        height: 150px; /* Tăng chiều cao hero trên màn hình lớn */
+    }
+
+    .hero .breadcrumb {
+        font-size: 24px; /* Tăng kích thước font */
+    }
+}
+
+/* Màn hình vừa (Tablets) */
+@media (max-width: 991px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    nav ul {
+        flex-direction: column; /* Menu dọc trên tablet */
+        align-items: flex-start;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    .icons a {
+        font-size: 20px;
+    }
+
+    .hero {
+        height: 250px;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .hero .breadcrumb {
+        font-size: 18px;
+        margin-top: 70px;
+    }
+}
+
+/* Màn hình nhỏ (Mobile) */
+@media (max-width: 576px) {
+    .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo img {
+        height: 40px; /* Giảm kích thước logo */
+    }
+
+    nav ul {
+        flex-direction: column; /* Menu dọc trên mobile */
+        width: 100%;
+        padding-left: 0;
+    }
+
+    nav ul li {
+        margin: 8px 0;
+    }
+
+    nav ul li a {
+        font-size: 14px;
+        padding: 8px 0;
+    }
+
+    .icons a {
+        font-size: 18px;
+    }
+
+    .icons .hotline {
+        font-size: 14px;
+    }
+
+    .hero {
+        height: 150px;
+        background-size: contain; /* Điều chỉnh background trên màn hình nhỏ */
+    }
+
+    .hero .breadcrumb {
+        font-size: 16px;
+        margin-top: 40px;
+        text-align: center;
+    }
+    
+}

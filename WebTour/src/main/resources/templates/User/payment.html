@@ -4,67 +4,84 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../css/payment.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="../js/payment.js">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 	<div class="container">
 		<div class="left">
 			<h1>ND Travel</h1>
-			<div class="section-title">
-				Thông tin nhận hàng <a href="#"
+			<!-- <div class="section-title">
+				Thông tin khách hàng <a href="#"
 					style="float: right; color: #007bff;"> Đăng xuất </a>
+			</div> -->
+			<!-- <div class="form-group">
+				<label for="address"> Số địa chỉ </label> 
+				<input id="address" type="address" value="" />
+			</div> -->
+			<div class="form-group">
+				<label for="email"> Email </label> <input th:value="${user.email}"
+					id="email" type="email" /> <span id="email-error"
+					class="error-message"></span>
 			</div>
 			<div class="form-group">
-				<label for="address"> Số địa chỉ </label> <select id="address">
-					<option>Địa chỉ khác...</option>
-				</select>
+				<label for="name"> Họ và tên </label> <input
+					th:value="${user.fullName}" id="name" type="text" /> <span
+					id="name-error" class="error-message"></span>
 			</div>
 			<div class="form-group">
-				<label for="email"> Email </label> <input disabled="" id="email"
-					type="email" value="oda@gmail.com" />
+				<label for="phone"> Số điện thoại </label> <input
+					th:value="${user.phone}" id="phone" type="text" /> <span
+					id="phone-error" class="error-message"></span>
+				<!-- <div class="flag"></div> -->
 			</div>
 			<div class="form-group">
-				<label for="name"> Họ và tên </label> <input id="name" type="text"
-					value="Đỗ Nam" />
-			</div>
-			<div class="form-group">
-				<label for="phone"> Số điện thoại (tùy chọn) </label> <input
-					id="phone" type="text" />
-				<div class="flag"></div>
-			</div>
-			<div class="form-group">
-				<label for="optional-address"> Địa chỉ (tùy chọn) </label> <input
+				<label for="optional-address"> Địa chỉ (Số nhà, tên
+					đường...) </label> <input th:value="${user.address.detail}"
 					id="optional-address" type="text" />
 			</div>
+
+
 			<div class="form-group">
-				<label for="city"> Tỉnh thành </label> <select id="city">
-					<option>---</option>
+				<label for="city"> Tỉnh thành </label> 
+				<select th:each="users: ${user}" id="city">
+					<option th:value="${users.address.province.provinceId}" th:text="${users.address.province.name}">---</option>
 				</select>
 			</div>
 			<div class="form-group">
-				<label for="district"> Quận huyện (tùy chọn) </label> <select
-					id="district">
-					<option>---</option>
+				<label for="district"> Quận huyện </label> 
+				<select th:each="users: ${user}" id="district">
+					<option th:value="${users.address.district.districtId}" th:text="${users.address.district.name}">---</option>
 				</select>
 			</div>
 			<div class="form-group">
-				<label for="ward"> Phường xã (tùy chọn) </label> <select id="ward">
-					<option>---</option>
+				<label for="ward"> Phường xã </label> 
+				<select th:each="users: ${user}" id="ward">
+					<option th:value="${users.address.ward.wardId}" th:text="${users.address.ward.name}">---</option>
 				</select>
 			</div>
-			<div class="section-title">Vận chuyển</div>
-			<div class="shipping-info">Vui lòng nhập thông tin giao hàng</div>
+
+
+
+
+			<!-- <div class="section-title">Vận chuyển</div>
+			<div class="shipping-info">Vui lòng nhập thông tin giao hàng</div> -->
 			<div class="section-title">Thanh toán</div>
 			<div class="payment-methods">
-				<label> <input name="payment" type="radio" value="bank" />
-					Chuyển khoản <i class="fas fa-money-bill-wave"> </i>
-				</label> <label> <input name="payment" type="radio" value="cod" />
-					Thu hộ (COD) <i class="fas fa-money-bill-wave"> </i>
+				<label> <input id="payment-online" name="payment"
+					type="radio" value="bank" />Online <i
+					class="fas fa-money-bill-wave"> </i>
+				</label> <label> <input id="payment-cash" name="payment"
+					type="radio" value="cod" />Cash <i class="fas fa-money-bill-wave">
+				</i>
 				</label>
 			</div>
 		</div>
+		
+		
 		<div class="right">
-			<div class="section-title">Đơn hàng (2 sản phẩm)</div>
+			<div class="section-title">Đơn hàng</div>
 			<div class="order-summary">
 				<div class="item">
 					<img
@@ -72,36 +89,48 @@
 						height="50"
 						src="https://storage.googleapis.com/a1aa/image/oqgWqTIWzj6BHhMp9dwUieDNUzA68MxOwsjm2kBWoISepujTA.jpg"
 						width="50" />
-					<div class="item-details">
-						<p>Du Lịch 4 Đảo Phú Quốc: Hành Trình 1 ngày</p>
-						<p>Người lớn</p>
+					<div th:object="${ticketBooking}" class="item-details">
+						<p th:text="${tourPayment.tourName}">Du Lịch 4 Đảo Phú Quốc:
+							Hành Trình 1 ngày</p>
+
+						<div th:each="ticketBooking : ${ticketBookings}">
+							<div class="div-quantity">
+								<p th:text="${ticketBooking.ticket.name}">:</p>
+								<p th:text="${ticketBooking.quantity}" class="quantity"></p>
+							</div>
+						</div>
+
 						<p>Ngày đi: 03/10/2024</p>
 						<p>Vịnh - Trương Gia Giới -</p>
 						<p class="price">1.000.000đ</p>
 					</div>
 				</div>
 				<div class="apply-coupon">
-					<input placeholder="Nhập mã giảm giá" type="text" />
-					<button>Áp dụng</button>
+					<input id="discount-code" placeholder="Nhập mã giảm giá"
+						type="text" />
+					<button id="bt-apply">Áp dụng</button>
 				</div>
 				<div class="item">
 					<p>Tạm tính</p>
-					<p>10.500.000đ</p>
+					<p id="temp-price">10.500.000đ</p>
 				</div>
-				<div class="item">
-					<p>Phí vận chuyển</p>
-					<p>-</p>
+
+				<div class="total">
+					<span>Tổng cộng</span> <span id="total-price" class="total-amount">10.500.000₫</span>
 				</div>
-				<div class="total">Tổng cộng: 10.500.000đ</div>
-				<div class="checkout">
-					<button>ĐẶT HÀNG</button>
-				</div>
-				<div class="back-to-cart">
-					<a href="#"> Quay về giỏ hàng </a>
+				<div class="actions">
+					<a href="#" class="back-to-cart">‹ Quay về giỏ hàng</a>
+					<button class="order-button">Thanh toán</button>
 				</div>
 			</div>
 		</div>
 	</div>
-
+	
+	<script src="../js/payment.js"></script>
+	<script type="text/javascript">
+		window.onload = function() {
+			console.log("Bạn đã vào trang payment thành công!");
+		}
+	</script>
 </body>
 </html>

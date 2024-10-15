@@ -2,11 +2,14 @@ package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -22,43 +25,60 @@ public class Address implements Serializable{
 	@Column(name = "address_id")
     private Long addressId;
 	
-	@Column(name = "province_id")
-    private int provinceId;
+//	@Column(name = "province_id")
+//    private int provinceId;
+//	
+//	@Column(name = "district_id ")
+//    private int districtId ;
+//	
+//	@Column(name = "ward_id")
+//    private int wardId;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "province_id", nullable = true)
+    private Province Province;
 	
-	@Column(name = "district_id ")
-    private int districtId ;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "district_id", nullable = true)
+    private District district;
 	
-	@Column(name = "ward_id")
-    private int wardId;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "ward_id", nullable = true)
+    private Ward ward;
 	
     @Column(name = "detail")
     private String detail;
     
-    @Column(name = "status")
+    public void setAddressId(Long addressId) {
+		this.addressId = addressId;
+	}
+
+	@Column(name = "status")
     private boolean status;
 
-	public int getProvinceId() {
-		return provinceId;
+
+
+	public Province getProvince() {
+		return Province;
 	}
 
-	public void setProvinceId(int provinceId) {
-		this.provinceId = provinceId;
+	public void setProvince(Province province) {
+		Province = province;
 	}
 
-	public int getDistrictId() {
-		return districtId;
+	public District getDistrict() {
+		return district;
 	}
 
-	public void setDistrictId(int districtId) {
-		this.districtId = districtId;
+	public void setDistrict(District district) {
+		this.district = district;
 	}
 
-	public int getWardId() {
-		return wardId;
+	public Ward getWard() {
+		return ward;
 	}
 
-	public void setWardId(int wardId) {
-		this.wardId = wardId;
+	public void setWard(Ward ward) {
+		this.ward = ward;
 	}
 
 	public String getDetail() {

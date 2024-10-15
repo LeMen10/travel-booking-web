@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Results</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+	        body {
+			    font-family: Arial, sans-serif;
+			    background-color: #f5f5f5;
+			    margin: 0;
+			    padding: 20px;
+			}
+			
+			.container {
+			    max-width: 1200px;
+			    margin: 0 auto;
+			    display: flex;
+			    flex-wrap: wrap;
+			    gap: 20px; /* Khoảng cách giữa các tour */
+			    justify-content: flex-start; /* Căn đều các thẻ tour */
+			}
+			
+			.card {
+			    background-color: #fff;
+			    border: 1px solid #e0e0e0;
+			    border-radius: 8px;
+			    overflow: hidden;
+			    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			    flex: 1 1 calc(25% - 20px); /* Căn 4 thẻ trên 1 hàng, trừ đi khoảng cách giữa các thẻ */
+			    min-width: 280px; /* Chiều rộng tối thiểu để thẻ không quá hẹp */
+			    max-width: calc(25% - 20px);
+			    display: flex;
+			    flex-direction: column;
+			    margin-bottom: 20px;
+			    height: 100%; /* Giúp card có chiều cao bằng nhau */
+			}
+			
+			.card img {
+			    width: 100%;
+			    height: 150px;
+			    object-fit: cover;
+			}
+			
+			.card-content {
+			    padding: 15px;
+			    display: flex;
+			    flex-direction: column;
+			    flex-grow: 1;
+			}
+			
+			/* Giới hạn chiều cao tên tour và cho phép xuống dòng */
+			.card-content h3 {
+			    font-size: 16px;
+			    margin: 0 0 10px;
+			    line-height: 1.2;
+			    max-height: 3em; /* Giới hạn chiều cao tối đa cho tên tour, khoảng 2 dòng */
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    display: -webkit-box;
+			    -webkit-line-clamp: 2; /* Giới hạn tối đa 2 dòng */
+			    -webkit-box-orient: vertical;
+			    height: 38px;
+			}
+			
+			.card-content p {
+			    margin: 5px 0;
+			    color: #757575;
+			    font-size: 13px;
+			    white-space: nowrap; /* Không cho phép xuống dòng ở các thông tin khác */
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			}
+		
+			/* Giá tiền */
+			.card-content .price {
+		    font-size: 16px;
+		    color: #ff5722;
+		    font-weight: bold;
+		}
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a,
+        .pagination button {
+            text-decoration: none;
+            color: #1e88e5;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        .pagination a:hover,
+        .pagination button:hover {
+            background-color: #eee;
+        }
+
+        .pagination .current {
+            background-color: #1e88e5;
+            color: white;
+        }
+
+        .pagination .icon {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+            <div class="card" th:each="tour : ${searchResults}">
+                <img src="/image/vinhhalong.jpg">
+                <div class="card-content">
+                    <p>
+                        <i class="fas fa-map-marker-alt icon"></i>
+                        Khởi hành từ: <span th:text="${tour.departure}">Địa điểm khởi hành</span>
+                    </p>
+                    <h3 th:text="${tour.tourName}">Tên tour</h3>
+                    
+                    <p class="rating">
+                        <i class="fas fa-star"></i>    
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </p>
+                    <p class="price">
+                        <span th:text="${tour.price}"></span>
+                    </p>
+                    <p class="time">
+                        <i class="fas fa-clock icon"></i>
+                        Thời gian:
+					    <span class="tour-duration"
+					          th:attr="data-start-date=${tour.startDate}, data-end-date=${tour.endDate}">
+					    </span>
+                    </p>
+                </div>
+            </div>
+        
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+        <ul class="pagination">
+            <li th:if="${currentPage > 0}">
+                <button th:onclick="|window.location.href='@{/search(s=${searchParam}, page=${currentPage - 1}, size=8)}'|">
+                    <i class="fas fa-chevron-left icon"></i>
+                </button>
+            </li>
+
+            <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/search(s=${searchParam}, page=${i - 1}, size=8)}"
+                   th:text="${i}"
+                   th:class="${currentPage == i - 1} ? 'current' : ''"></a>
+            </li>
+
+            <li th:if="${currentPage + 1 < totalPages}">
+                <button th:onclick="|window.location.href='@{/search(s=${searchParam}, page=${currentPage + 1}, size=2)}'|">
+                    <i class="fas fa-chevron-right icon"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">document.addEventListener("DOMContentLoaded", function() {
+        // Lấy tất cả các phần tử có chứa tour-duration
+        const tourDurations = document.querySelectorAll('.tour-duration');
+        
+        tourDurations.forEach(function(element) {
+            // Lấy giá trị ngày bắt đầu và ngày kết thúc từ data attributes
+            const startDate = new Date(element.getAttribute('data-start-date'));
+            const endDate = new Date(element.getAttribute('data-end-date'));
+			
+            // Tính khoảng thời gian giữa ngày kết thúc và ngày bắt đầu (đơn vị là milliseconds)
+            const timeDifference = endDate - startDate;
+            
+            // Tính số ngày bằng cách chia milliseconds cho số milliseconds trong 1 ngày
+            const days = timeDifference / (1000 * 60 * 60 * 24)+1;
+            console.log(element.getAttribute('data-start-date'));
+            console.log(element.getAttribute('data-end-date'));
+            // Định dạng thời gian hiển thị theo dạng 'XN YĐ'
+            // Thông thường số đêm sẽ bằng số ngày trừ đi 1
+            const nights = days - 1;
+            
+            // Kiểm tra nếu days >= 0 thì hiển thị, nếu không sẽ hiển thị giá trị mặc định
+            if (days > 0) {
+                element.textContent = `${days}N${nights}Đ`; // Ví dụ: 3N2Đ
+            } else {
+                element.textContent = 'N/A'; // Nếu không hợp lệ
+            }
+        });
+    });
+</script>
+</body>
+</html>

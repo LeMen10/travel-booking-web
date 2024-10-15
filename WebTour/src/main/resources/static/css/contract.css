@@ -1,0 +1,219 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 50px 0;
+}
+
+.header {
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 16px;
+}
+
+.subheader {
+    color: #6c757d;
+    margin-bottom: 30px;
+}
+
+.info-boxes {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+}
+
+.info-box {
+    background-color: #fdfdfd;
+    border-radius: 8px;
+    border: 1px solid #f1f1f1;
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    margin: 20px;
+}
+
+.info-box i {
+    font-size: 36px;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.info-box h3 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.info-box p {
+    color: #6c757d;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.map {
+    width: 55%;
+}
+
+.map img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.form {
+    width: 45%;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.form input,
+.form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #f1f1f1;
+    border-radius: 4px;
+    background: #fdfdfd;
+}
+
+.form button {
+    background-color: #0099FF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: left;
+}
+
+.form button:hover {
+    background-color: #0056b3;
+}
+
+a {
+    color: #777;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.subscribe-section {
+    background-color: #0099FF;
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 16px;
+    max-width: 80%;
+    position: relative;
+}
+
+.subscribe-section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.subscribe-section p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.subscribe-section input[type="email"] {
+    width: 40%;
+    height: 56px;
+    border: initial;
+    border-radius: 51px;
+    padding: 0 110px 0 20px;
+}
+
+.subscribe-section button {
+    right: 332px;
+    position: absolute;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: #0396ff;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    height: 44px;
+    width: 101px;
+    bottom: 46px;
+}
+
+.footer {
+    background-color: #f9f9f9;
+    padding: 40px 20px;
+    text-align: left;
+    display: flex;
+}
+
+.footer .column {
+    width: 25%;
+    display: inline-block;
+    vertical-align: top;
+    padding: 0 10px;
+}
+
+.footer .column h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.footer .column p,
+.footer .column a {
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.footer .social-icons a {
+    font-size: 20px;
+    margin-right: 10px;
+    color: #333;
+}
+
+.footer .app-links img {
+    width: 120px;
+    margin-right: 10px;
+}
+
+.footer .payment-methods img {
+    width: 50px;
+    margin-right: 10px;
+}
+
+.footer .copyright {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.module-mailchimp {
+    position: relative;
+}
+
+.module-container {
+    display: flex;
+    justify-content: center;
+}
+
+button,
+input {
+    overflow: visible;
+    outline: none !important;
+}
+
+.social-icons {
+    display: flex;
+}
