@@ -1,11 +1,14 @@
 package WebApplication.WebTour.Model;
 import java.io.Serializable;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -21,8 +24,11 @@ public class TicketBooking implements Serializable{
 	@Column(name = "id")
     private Long ticketBookingId ;
 
-    @Column(name = "ticket_id")
-    private int ticketId;
+//    @Column(name = "ticket_id")
+//    private int ticketId;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "ticket_id", nullable = true)
+    private Ticket ticket;
     
     @Column(name = "booking_id")
     private int bookingId;
@@ -31,14 +37,12 @@ public class TicketBooking implements Serializable{
     private int quantity;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
-	public int getTicketId() {
-		return ticketId;
-	}
 
-	public void setTicketId(int ticketId) {
-		this.ticketId = ticketId;
+
+	public void setTicketBookingId(Long ticketBookingId) {
+		this.ticketBookingId = ticketBookingId;
 	}
 
 	public int getBookingId() {
@@ -71,7 +75,16 @@ public class TicketBooking implements Serializable{
 		return ticketBookingId;
 	}
 
-// hai
+	public Ticket getTicket() {
+		return ticket;
+	}
+
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
+	}
+
+
+	
 	
     
 }

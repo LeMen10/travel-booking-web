@@ -33,7 +33,7 @@ public class Bookings implements Serializable{
     private Date bookingDate;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
     
     @Column(name = "pay_status")
     private int payStatus;
@@ -41,7 +41,8 @@ public class Bookings implements Serializable{
     @Column(name = "people_nums")
     private int peopleNums;
 
-	
+    @Column(name = "total_price")
+    private float totalPrice;
 
 	public int getTourId() {
 		return tourId;
@@ -99,6 +100,14 @@ public class Bookings implements Serializable{
 
 	public Long getBookingId() {
 		return bookingId;
+	}
+
+	public float getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(float totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 

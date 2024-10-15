@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/payment.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+	<div class="container">
+		<div class="left">
+			<h1>ND Travel</h1>
+			<div class="section-title">
+				Thông tin nhận hàng <a href="#"
+					style="float: right; color: #007bff;"> Đăng xuất </a>
+			</div>
+			<div class="form-group">
+				<label for="address"> Số địa chỉ </label> <select id="address">
+					<option>Địa chỉ khác...</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="email"> Email </label> <input disabled="" id="email"
+					type="email" value="oda@gmail.com" />
+			</div>
+			<div class="form-group">
+				<label for="name"> Họ và tên </label> <input id="name" type="text"
+					value="Đỗ Nam" />
+			</div>
+			<div class="form-group">
+				<label for="phone"> Số điện thoại (tùy chọn) </label> <input
+					id="phone" type="text" />
+				<div class="flag"></div>
+			</div>
+			<div class="form-group">
+				<label for="optional-address"> Địa chỉ (tùy chọn) </label> <input
+					id="optional-address" type="text" />
+			</div>
+			<div class="form-group">
+				<label for="city"> Tỉnh thành </label> <select id="city">
+					<option>---</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="district"> Quận huyện (tùy chọn) </label> <select
+					id="district">
+					<option>---</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="ward"> Phường xã (tùy chọn) </label> <select id="ward">
+					<option>---</option>
+				</select>
+			</div>
+			<div class="section-title">Vận chuyển</div>
+			<div class="shipping-info">Vui lòng nhập thông tin giao hàng</div>
+			<div class="section-title">Thanh toán</div>
+			<div class="payment-methods">
+				<label> <input name="payment" type="radio" value="bank" />
+					Chuyển khoản <i class="fas fa-money-bill-wave"> </i>
+				</label> <label> <input name="payment" type="radio" value="cod" />
+					Thu hộ (COD) <i class="fas fa-money-bill-wave"> </i>
+				</label>
+			</div>
+		</div>
+		<div class="right">
+			<div class="section-title">Đơn hàng (2 sản phẩm)</div>
+			<div class="order-summary">
+				<div class="item">
+					<img
+						alt="Image of a beautiful beach with clear blue water and white sand"
+						height="50"
+						src="https://storage.googleapis.com/a1aa/image/oqgWqTIWzj6BHhMp9dwUieDNUzA68MxOwsjm2kBWoISepujTA.jpg"
+						width="50" />
+					<div class="item-details">
+						<p>Du Lịch 4 Đảo Phú Quốc: Hành Trình 1 ngày</p>
+						<p>Người lớn</p>
+						<p>Ngày đi: 03/10/2024</p>
+						<p>Vịnh - Trương Gia Giới -</p>
+						<p class="price">1.000.000đ</p>
+					</div>
+				</div>
+				<div class="apply-coupon">
+					<input placeholder="Nhập mã giảm giá" type="text" />
+					<button>Áp dụng</button>
+				</div>
+				<div class="item">
+					<p>Tạm tính</p>
+					<p>10.500.000đ</p>
+				</div>
+				<div class="item">
+					<p>Phí vận chuyển</p>
+					<p>-</p>
+				</div>
+				<div class="total">Tổng cộng: 10.500.000đ</div>
+				<div class="checkout">
+					<button>ĐẶT HÀNG</button>
+				</div>
+				<div class="back-to-cart">
+					<a href="#"> Quay về giỏ hàng </a>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+window.onload = function() {
+    console.log("Bạn đã vào trang payment thành công!");
+}
+</script>
+</body>
+</html>

@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -21,6 +22,8 @@ public class Province implements Serializable{
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "province_id")
     private Long provinceId;
+	
+	
 
     @Column(name = "name")
     private String name;
@@ -46,6 +49,10 @@ public class Province implements Serializable{
 
 	public Long getProvinceId() {
 		return provinceId;
+	}
+
+	public void setProvinceId(Long provinceId) {
+		this.provinceId = provinceId;
 	}
     
 }

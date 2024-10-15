@@ -1,27 +1,43 @@
 package WebApplication.WebTour.Controllers.User;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import WebApplication.WebTour.Model.Address;
 import WebApplication.WebTour.Model.Bookings;
+import WebApplication.WebTour.Model.District;
 import WebApplication.WebTour.Model.Payments;
+import WebApplication.WebTour.Model.Promotions;
+import WebApplication.WebTour.Model.Province;
 import WebApplication.WebTour.Model.Ticket;
+import WebApplication.WebTour.Model.TicketBooking;
 import WebApplication.WebTour.Model.Tours;
+import WebApplication.WebTour.Model.User;
+import WebApplication.WebTour.Model.Ward;
+import WebApplication.WebTour.Respository.AddressRespository;
 import WebApplication.WebTour.Respository.BookingsRespository;
+import WebApplication.WebTour.Respository.DistrictRespository;
 import WebApplication.WebTour.Respository.PaymentsRepository;
+import WebApplication.WebTour.Respository.PromotionsRepository;
+import WebApplication.WebTour.Respository.ProvinceRepository;
+import WebApplication.WebTour.Respository.TicketBookingRepository;
 import WebApplication.WebTour.Respository.TicketRepository;
+import WebApplication.WebTour.Respository.ToursRepository;
+import WebApplication.WebTour.Respository.UserRepository;
+import WebApplication.WebTour.Respository.WardRepository;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,63 +48,130 @@ public class PaymentController {
 	PaymentsRepository paymentsRepository;
 	@Autowired
 	BookingsRespository bookingsRespository;
+	@Autowired
+	ProvinceRepository provinceRepository;
+	@Autowired
+	DistrictRespository districtRespository;
+	@Autowired
+	WardRepository wardRepository;
+	@Autowired
+	UserRepository userRepository;
+	@Autowired
+	PromotionsRepository promotionsRepository;
+	@Autowired
+	ToursRepository toursRepository;
+	@Autowired
+	AddressRespository addressRespository;
+	@Autowired
+	TicketBookingRepository ticketBookingRepository;
 
-	public PaymentController(BookingsRespository bookingsRespository) {
-		this.bookingsRespository = bookingsRespository;
-	}
-
-	// tạo booking
-//	@PostMapping("/create-booking")
-//    public ResponseEntity<Bookings> createBooking(
-//    		@RequestParam("tourId") int tourId, 
-//            @RequestParam("userId") int userId, 
-//            @RequestParam("bookingDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date bookingDate, 
-//            @RequestParam("payStatus") int payStatus, 
-//            @RequestParam("peopleNums") int peopleNums) {
-//        
-//        try {
-//        	bookingsRespository.insertBooking(tourId, userId, bookingDate, payStatus, peopleNums);
-//            
-//            Bookings booking = bookingsRespository.findLastInsertedBooking();
-//            
-//            if (booking != null) {
-//                return ResponseEntity.ok(booking);
-//            } else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//            }
-//            
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//		
-//    }
-	// tạo booking
-	@PostMapping("/create-booking") public ResponseEntity<Bookings>
-	  createBooking(
-	  @RequestParam("tourId") int tourId,
-	  @RequestParam("userId") int userId,
-	  @RequestParam("bookingDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date bookingDate,
-	  @RequestParam("peopleNums") int peopleNums) {
-		
-	  Bookings booking = new Bookings(); booking.setTourId(tourId);
-	  booking.setUserId(userId); booking.setBookingDate(bookingDate);
-	  booking.setPeopleNums(peopleNums); //JPA đã cung cấp sẵn phương thức "save",
-//	  sẽ trả về đối tượng vừa chèn, nên không cần viết hàm inser ở file respository
-	  Bookings savedBooking = bookingsRespository.save(booking); return
-	  ResponseEntity.ok(savedBooking); 
-	  }
-
-	// lấy id booking vừa tạo và mở trang payment
+	// lấy id booking (có user trong đó để hiện thị t/tin user lên trang) vừa tạo và
+	// mở trang payment
 	@GetMapping("/payment/{bookingId}")
 	public String openPaymentForm(@PathVariable("bookingId") Long bookingId, Model model) {
-		Optional<Payments> payment = paymentsRepository.findById(bookingId);
-		// Kiểm tra nếu có giá trị trong Optional
-		if (payment.isPresent()) {
-			model.addAttribute("payment", payment.get());
+		// llấy thông tin booking từ bookingsRespository
+		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingId);
+		if (bookingOpt.isPresent()) {
+			Bookings booking = bookingOpt.get();
+			// Lấy thông tin user từ userId trong booking
+			Optional<User> user = userRepository.findById((long) booking.getUserId());
+			if (user.isPresent()) {
+				model.addAttribute("user", user.get());
+			} else {
+				model.addAttribute("error", "User không tồn tại!");
+			}
+
+			// Lấy thông tin payment
+			Optional<Payments> payment = paymentsRepository.findById(bookingId); 
+			if (payment.isPresent()) {
+				model.addAttribute("payment", payment.get());
+			} else {
+				model.addAttribute("error", "Payment không tồn tại!");
+			}
+			//lấy thông tin của tour 
+			Optional<Tours> tourPayment = toursRepository.findById( (long) booking.getTourId());
+			if (tourPayment.isPresent()) {
+				model.addAttribute("tourPayment", tourPayment.get());
+			} else {
+				model.addAttribute("error", "TourPayment không tồn tại!");
+			}
+			//lấy ticketBooking để hiển thị số lượng người lớn và trẻ em
+			List<TicketBooking> ticketBooking =  ticketBookingRepository.findTicketBookingById(booking.getBookingId());
+			if (!ticketBooking.isEmpty()) {
+				model.addAttribute("ticketBookings", ticketBooking);
+				System.out.println(ticketBooking);
+			} else {
+				model.addAttribute("error", "ticketBooking không tồn tại!");
+			}
+			
+			
 		} else {
-			model.addAttribute("error", "payment không tồn tại!");
+			model.addAttribute("error", "Booking không tồn tại!");
+		}
+
+		return "/User/payment";
+	}
+
+	// lấy người dùng với id
+	@GetMapping("/api-get-user/{userId}")
+	public String getUserById(@PathVariable("userId") Long userId, Model model) {
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			model.addAttribute("user", user.get());
+		} else {
+			model.addAttribute("user", new User());
+			model.addAttribute("error", "User không tồn tại!");
+			System.out.println("không tìm thấy user với ID: " + userId);
 		}
 		return "/User/payment";
 	}
 
+	// lấy tất cả province (tỉnh, thành)
+	@GetMapping("/api-get-province")
+	@ResponseBody
+	// muốn giữ lại @Controller (ở đầu) thì dùng @ResponseBody để chỉ định rằng
+	// phương thức này sẽ trả về dữ liệu, không phải một view/template:
+//	public String getAllProvince(Model model) {
+//	    List<Province> provinces = provinceRepository.findAll();
+//	    model.addAttribute("provinces", provinces); // Thêm danh sách tỉnh vào model
+//	    return "/User/payment"; // Đổi "your-view" thành tên view của bạn
+//	}
+	public List<Province> getAllProvince() {
+		return provinceRepository.findAll();
+	}
+	
+
+	// lấy tất cả district (quận, huyện) theo province
+	@ResponseBody
+	@GetMapping("/api-get-district/{provinceId}")
+	// muốn giữ lại @Controller (ở đầu) thì dùng @ResponseBody để chỉ định rằng
+	// phương thức này sẽ trả về dữ liệu, không phải một view/template:
+	public List<District> getAllDistrict(@PathVariable int provinceId) {
+		return districtRespository.findByProvinceId(provinceId);
+	}
+
+	@ResponseBody
+	@GetMapping("/api-get-ward/{districtId}")
+	// muốn giữ lại @Controller (ở đầu) thì dùng @ResponseBody để chỉ định rằng
+	// phương thức này sẽ trả về dữ liệu, không phải một view/template:
+	public List<Ward> getAllWard(@PathVariable int districtId) {
+		return wardRepository.findByDistrictId(districtId);
+	}
+
+	// láy mã giảm giá theo String
+	@ResponseBody
+	@GetMapping("/api-get-promotion/{code}")
+	// ResponseEntity<?>: ? có thể chứa bất kỳ kiểu dữ liệu nào, bao gồm cả
+	// Promotions và String
+	public ResponseEntity<?> getPromotionById(@PathVariable String code) {
+		Optional<Promotions> promotionOpt = promotionsRepository.findByCode(code);
+
+		if (promotionOpt.isPresent()) {
+			return ResponseEntity.ok(promotionOpt.get()); // Trả về thông tin mã giảm giá
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy mã giảm giá");
+		}
+
+	}
+	
 }
