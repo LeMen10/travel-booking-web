@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 13, 2024 lúc 05:18 AM
+-- Thời gian đã tạo: Th10 16, 2024 lúc 11:13 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.0.30
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -54,13 +54,20 @@ INSERT INTO `account` (`account_id`, `user_id`, `user_name`, `password`, `status
 --
 
 CREATE TABLE `address` (
-  `address_id` bigint(20) NOT NULL,
+  `address_id` int(11) NOT NULL,
   `province_id` int(11) DEFAULT NULL,
   `district_id` int(11) DEFAULT NULL,
   `ward_id` int(11) DEFAULT NULL,
   `detail` varchar(255) DEFAULT NULL,
   `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `address`
+--
+
+INSERT INTO `address` (`address_id`, `province_id`, `district_id`, `ward_id`, `detail`, `status`) VALUES
+(1, 50, 550, 8671, '123 Nguyễn Trãi', 1);
 
 -- --------------------------------------------------------
 
@@ -74,7 +81,7 @@ CREATE TABLE `bookings` (
   `user_id` int(11) DEFAULT NULL,
   `booking_date` datetime(6) DEFAULT NULL,
   `status` tinyint(1) DEFAULT 1,
-  `pay_status` int(11) DEFAULT NULL,
+  `payment_id` int(11) DEFAULT NULL,
   `people_nums` int(11) DEFAULT NULL,
   `total_price` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -83,16 +90,10 @@ CREATE TABLE `bookings` (
 -- Đang đổ dữ liệu cho bảng `bookings`
 --
 
-INSERT INTO `bookings` (`booking_id`, `tour_id`, `user_id`, `booking_date`, `status`, `pay_status`, `people_nums`, `total_price`) VALUES
-(1, 1, 6, '2024-11-03 00:00:00.000000', 1, 2, 10, NULL),
-(2, 4, 7, '2024-11-05 00:00:00.000000', 1, 2, 10, NULL),
-(16, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 5, NULL),
-(17, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 1, NULL),
-(18, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 4, NULL),
-(19, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 1, NULL),
-(20, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 2, NULL),
-(21, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 1, NULL),
-(22, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 3, 0);
+INSERT INTO `bookings` (`booking_id`, `tour_id`, `user_id`, `booking_date`, `status`, `payment_id`, `people_nums`, `total_price`) VALUES
+(1, 1, 6, '2024-11-03 00:00:00.000000', 1, 1, 10, 0),
+(2, 4, 7, '2024-11-05 00:00:00.000000', 1, 1, 10, 0),
+(67, 1, 6, '2024-10-14 00:00:00.000000', 1, 1, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -899,7 +900,7 @@ INSERT INTO `paymentmethod` (`paymethod_id`, `name`, `status`) VALUES
 --
 
 CREATE TABLE `payments` (
-  `payment_id` bigint(20) NOT NULL,
+  `payment_id` int(11) NOT NULL,
   `booking_id` int(11) DEFAULT NULL,
   `payment_date` date DEFAULT NULL,
   `amount` int(11) DEFAULT NULL,
@@ -987,7 +988,7 @@ INSERT INTO `promotiondetail` (`promotion_detail_id`, `tour_id`, `promotion_id`,
 
 CREATE TABLE `promotions` (
   `promotion_id` int(11) NOT NULL,
-  `code` varchar(8) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `discount` int(11) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
@@ -1000,7 +1001,7 @@ CREATE TABLE `promotions` (
 --
 
 INSERT INTO `promotions` (`promotion_id`, `code`, `description`, `discount`, `start_date`, `status`, `end_date`) VALUES
-(1, 'OAIW82Q9', 'Giảm giá tour Đà Lạt 2 ngày-1 đêm và nhận 2 bữa ăn sáng buffet.', 30, '2024-10-01', 1, '2024-10-13'),
+(1, 'OAIW82Q9', 'Giảm giá tour Đà Lạt 2 ngày-1 đêm và nhận 2 bữa ăn sáng buffet.', 30, '2024-10-01', 1, '2024-10-22'),
 (2, 'AIKD98KN', 'Giảm giá tour Phú Quốc 3 ngày-2 đêm và bao ăn ngày đầu', 40, '2024-10-10', 1, '2024-10-22'),
 (3, '86IHUIGY', 'Giảm giá tour đảo Lý Sơn 4 ngày và tặng kèm voucher giảm 299k khi check in tại đảo Lý Sơn.', 35, '2024-10-26', 1, '2024-10-05');
 
@@ -1190,7 +1191,8 @@ CREATE TABLE `ticketbooking` (
 
 INSERT INTO `ticketbooking` (`id`, `ticket_id`, `booking_id`, `quantity`, `status`) VALUES
 (1, 1, 1, 5, 1),
-(2, 2, 2, 5, 1);
+(2, 2, 1, 5, 1),
+(67, 1, 67, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1245,7 +1247,7 @@ CREATE TABLE `user` (
   `role_id` int(11) NOT NULL,
   `full_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
+  `address` int(11) DEFAULT NULL,
   `phone` varchar(255) NOT NULL,
   `gender` varchar(255) NOT NULL,
   `status` varchar(255) DEFAULT '1'
@@ -1256,26 +1258,26 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `role_id`, `full_name`, `email`, `address`, `phone`, `gender`, `status`) VALUES
-(1, 1, 'Lê Đình Mảnh', 'manh123@gmail.com', '123 Nguyễn Văn Cừ', '0901223456', 'Nam', '1'),
-(2, 1, 'Trương Gia Minh', 'minh123@gmail.com', '123 Lương Ngọc Quyến', '0906342047', 'Nam', '1'),
-(3, 1, 'Đỗ Đình Nam', 'nam123@gmail.com', '234 Lê Lợi', '0908765234', 'Nam', '1'),
-(4, 1, 'Võ lê Mến', 'men123@gmail.com', '234 lê lai', '0908787677', 'Nam', '1'),
-(5, 2, 'Võ Xuân Mai', 'mai567@gmail.com', '2 Lê Quang Định', '0908765234', 'Nữ', '1'),
-(6, 2, 'Lê Bảo Ngọc', 'ngoc567@gmail.com', '542 Nguyễn Trãi', '0998765234', 'Nữ', '1'),
-(7, 2, 'Lê Thanh Mai', 'mai567@gmail.com', '78 Nguyễn Lữ', '0912365234', 'Nữ', '1'),
-(8, 2, 'Nguyễn Thanh Trúc', 'truc567@gmail.com', '9 Quang Trung', '0998761111', 'Nữ', '1'),
-(9, 2, 'Trần Hải Yến', 'yen567@gmail.com', '167 Lê Đại Hành', '0998763994', 'Nữ', '1'),
-(10, 3, 'Dương Thị Hà', 'duongthiha@gmail.com', '23 TP Hưng Yên', '0987654321', 'Nữ', '1'),
-(11, 2, 'Trịnh Văn Định', 'trinhvan.dinh@yahoo.com', 'Xã Yên Nghĩa, Quận Hà Đông, Hà Nội', '0912345678', 'Nam', '1'),
-(12, 3, 'Phạm Thị Lụa', 'pham.luadp@outlook.com', 'Phường 9, TP.Hồ Chí Minh', '0988123456', 'Nữ', '1'),
-(13, 3, 'Đỗ Văn Hùng', 'hungdv@viettel.vn', 'Phường Hiến Nam, TP Hưng Yên', '0978123456', 'Nam', '1'),
-(14, 2, 'Lý Thị Hương', 'huonglt@gmail.com', 'Phường Quang Trung, TP Hải Dương', '0967123456', 'Nữ', '1'),
-(15, 3, 'Nguyễn Văn Tình', 'tinhnguyen@fpt.vn', 'Phường Thanh Xuân, Hà Nội', '0923456789', 'Nam', '1'),
-(16, 3, 'Phùng Thị Khuê', 'khue.phung@yahoo.com', 'Phường Khương Trung, Hà Nội', '0981234567', 'Nữ', '1'),
-(17, 3, 'Hoàng Thị Dung', 'hoang.dung@gmail.com', 'Phường Trần Phú, TP Hà Giang', '0934567890', 'Nữ', '1'),
-(18, 3, 'Nguyễn Văn Sơn', 'sonnguyen@vnpt.vn', 'Phường Đông Thành, TP Ninh Bình', '0945123456', 'Nam', '1'),
-(19, 2, 'Phạm Văn Hậu', 'haupham@gmail.com', 'Xã Hòa Phong, Quảng Ngãi', '0976123456', 'Nam', '1'),
-(20, 3, 'Trần Thị Hoa', 'hoa.tran@yahoo.com', 'Phường Phú Đô, TP Đà Nẵng', '0981123456', 'Nữ', '1');
+(1, 1, 'Lê Đình Mảnh', 'manh123@gmail.com', 1, '0901223456', 'Nam', '1'),
+(2, 1, 'Trương Gia Minh', 'minh123@gmail.com', 1, '0906342047', 'Nam', '1'),
+(3, 1, 'Đỗ Đình Nam', 'nam123@gmail.com', 1, '0908765234', 'Nam', '1'),
+(4, 1, 'Võ lê Mến', 'men123@gmail.com', 1, '0908787677', 'Nam', '1'),
+(5, 2, 'Võ Xuân Mai', 'mai567@gmail.com', 1, '0908765234', 'Nữ', '1'),
+(6, 2, 'Lê Bảo Ngọc', 'ngoc567@gmail.com', 1, '0998765234', 'Nữ', '1'),
+(7, 2, 'Lê Thanh Mai', 'mai567@gmail.com', 1, '0912365234', 'Nữ', '1'),
+(8, 2, 'Nguyễn Thanh Trúc', 'truc567@gmail.com', 1, '0998761111', 'Nữ', '1'),
+(9, 2, 'Trần Hải Yến', 'yen567@gmail.com', 1, '0998763994', 'Nữ', '1'),
+(10, 3, 'Dương Thị Hà', 'duongthiha@gmail.com', 1, '0987654321', 'Nữ', '1'),
+(11, 2, 'Trịnh Văn Định', 'trinhvan.dinh@yahoo.com', 1, '0912345678', 'Nam', '1'),
+(12, 3, 'Phạm Thị Lụa', 'pham.luadp@outlook.com', 1, '0988123456', 'Nữ', '1'),
+(13, 3, 'Đỗ Văn Hùng', 'hungdv@viettel.vn', 1, '0978123456', 'Nam', '1'),
+(14, 2, 'Lý Thị Hương', 'huonglt@gmail.com', 1, '0967123456', 'Nữ', '1'),
+(15, 3, 'Nguyễn Văn Tình', 'tinhnguyen@fpt.vn', 1, '0923456789', 'Nam', '1'),
+(16, 3, 'Phùng Thị Khuê', 'khue.phung@yahoo.com', 1, '0981234567', 'Nữ', '1'),
+(17, 3, 'Hoàng Thị Dung', 'hoang.dung@gmail.com', 1, '0934567890', 'Nữ', '1'),
+(18, 3, 'Nguyễn Văn Sơn', 'sonnguyen@vnpt.vn', 1, '0945123456', 'Nam', '1'),
+(19, 2, 'Phạm Văn Hậu', 'haupham@gmail.com', 1, '0976123456', 'Nam', '1'),
+(20, 3, 'Trần Thị Hoa', 'hoa.tran@yahoo.com', 1, '0981123456', 'Nữ', '1');
 
 -- --------------------------------------------------------
 
@@ -11912,7 +11914,8 @@ ALTER TABLE `address`
 ALTER TABLE `bookings`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `fk_bookings_tour` (`tour_id`),
-  ADD KEY `fk_bookings_customer` (`user_id`);
+  ADD KEY `fk_bookings_customer` (`user_id`),
+  ADD KEY `payment_id` (`payment_id`);
 
 --
 -- Chỉ mục cho bảng `discount`
@@ -11953,7 +11956,6 @@ ALTER TABLE `paymentmethod`
 --
 ALTER TABLE `payments`
   ADD PRIMARY KEY (`payment_id`),
-  ADD KEY `fk_payments_booking` (`booking_id`),
   ADD KEY `PaymentMethod` (`payment_method`,`payment_status`),
   ADD KEY `PaymentStatus` (`payment_status`);
 
@@ -12038,7 +12040,8 @@ ALTER TABLE `tours`
 ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`),
   ADD KEY `role_id` (`role_id`),
-  ADD KEY `role_id_2` (`role_id`);
+  ADD KEY `role_id_2` (`role_id`),
+  ADD KEY `address` (`address`);
 
 --
 -- Chỉ mục cho bảng `ward`
@@ -12061,13 +12064,13 @@ ALTER TABLE `account`
 -- AUTO_INCREMENT cho bảng `address`
 --
 ALTER TABLE `address`
-  MODIFY `address_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT cho bảng `discount`
@@ -12103,7 +12106,7 @@ ALTER TABLE `paymentmethod`
 -- AUTO_INCREMENT cho bảng `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT cho bảng `paymentstatus`
@@ -12163,7 +12166,7 @@ ALTER TABLE `ticket`
 -- AUTO_INCREMENT cho bảng `ticketbooking`
 --
 ALTER TABLE `ticketbooking`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT cho bảng `tours`
@@ -12206,6 +12209,7 @@ ALTER TABLE `address`
 --
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`payment_id`),
   ADD CONSTRAINT `fk_bookings_tour` FOREIGN KEY (`tour_id`) REFERENCES `tours` (`tour_id`);
 
 --
@@ -12218,6 +12222,7 @@ ALTER TABLE `discount`
 -- Các ràng buộc cho bảng `district`
 --
 ALTER TABLE `district`
+  ADD CONSTRAINT `FK8bsg0f7duwhs42kbc0ba92qb1` FOREIGN KEY (`province_id`) REFERENCES `district` (`district_id`),
   ADD CONSTRAINT `fk_district_province` FOREIGN KEY (`province_id`) REFERENCES `province` (`province_id`);
 
 --
@@ -12230,7 +12235,6 @@ ALTER TABLE `image`
 -- Các ràng buộc cho bảng `payments`
 --
 ALTER TABLE `payments`
-  ADD CONSTRAINT `fk_payments_booking` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`),
   ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`payment_method`) REFERENCES `paymentmethod` (`paymethod_id`),
   ADD CONSTRAINT `payments_ibfk_2` FOREIGN KEY (`payment_status`) REFERENCES `paymentstatus` (`payment_status_id`);
 
@@ -12277,7 +12281,8 @@ ALTER TABLE `tours`
 -- Các ràng buộc cho bảng `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`),
+  ADD CONSTRAINT `user_ibfk_2` FOREIGN KEY (`address`) REFERENCES `address` (`address_id`);
 
 --
 -- Các ràng buộc cho bảng `ward`
