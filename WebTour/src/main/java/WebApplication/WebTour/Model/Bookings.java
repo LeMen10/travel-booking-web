@@ -82,12 +82,14 @@ public class Bookings implements Serializable{
 		status = status;
 	}
 
-	public int getPayStatus() {
-		return payStatus;
+
+
+	public int getPaymentId() {
+		return paymentId;
 	}
 
-	public void setPayStatus(int payStatus) {
-		this.payStatus = payStatus;
+	public void setPaymentId(int paymentId) {
+		this.paymentId = paymentId;
 	}
 
 	public int getPeopleNums() {

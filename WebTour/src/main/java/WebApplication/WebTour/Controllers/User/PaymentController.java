@@ -203,7 +203,10 @@ public class PaymentController {
 		    }
 		}
 		
-		
+		@PostMapping("/create-payment")
+		public ResponseEntity<Payments> createPayment(@RequestParam("tourId") int tourId,){
+			
+		}
 		
 	
 }
