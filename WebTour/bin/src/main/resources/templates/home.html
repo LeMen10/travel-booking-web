@@ -1,12 +1,254 @@
-<!-- src/main/resources/templates/home.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Trang Chủ</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ND Travel</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+        .navbar .logo img {
+            height: 40px;
+        }
+        .navbar .menu {
+            display: flex;
+            gap: 20px;
+        }
+        .navbar .menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            padding: 10px 15px;
+            border-radius: 20px;
+        }
+        .navbar .menu a.active {
+            background-color: #e6f0ff;
+            color: #007bff;
+        }
+        .navbar .icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .navbar .icons i {
+            font-size: 20px;
+            color: #007bff;
+        }
+        .navbar .icons .badge {
+            position: relative;
+        }
+        .navbar .icons .badge::after {
+            content: '12';
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .navbar .hotline {
+            font-size: 16px;
+            color: #007bff;
+        }
+        .navbar .hotline span {
+            font-weight: bold;
+        }
+        .hero {
+            background-color: #0056b3;
+            color: #fff;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+        }
+        .hero .content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .hero .content h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .hero .content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .hero .content .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .hero .content .btn i {
+            margin-left: 10px;
+        }
+
+        /* Search Box and Overlay Styles */
+        .search-box {
+            display: none; /* Initially hidden */
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        /* Thanh header search-top */
+.search-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff; /* Màu nền trắng cho thanh search */
+    z-index: 1001; /* Đặt z-index cao hơn navbar để che nó */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0; /* Đệm để tạo khoảng trống trên dưới */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Tạo đổ bóng cho thanh header */
+}
+
+/* Search container trong thanh search-top */
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #00a0e3;
+    border-radius: 25px;
+    padding: 5px 10px;
+    width: 50%; /* Đặt kích thước thanh search tùy theo ý muốn */
+    background-color: white;
+}
+
+.search-container input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.search-container .fa-search {
+    color: #00a0e3;
+    font-size: 20px;
+}
+
+/* Làm tối nền khi hiển thị search-box */
+.empty-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối */
+    z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
+}
+
+    </style>
 </head>
 <body>
-    <h2>Chào mừng, <span th:text="${username}">User</span>!</h2>
-    <a th:href="@{/logout}">Đăng Xuất</a>
+    <div class="container">
+        <div class="maindiv"> 
+            <div class="navbar">
+                <div class="logo">
+                    <img alt="ND Travel Logo" height="40" src="https://storage.googleapis.com/a1aa/image/3pQMfiOOuNwtBSFcG9IzxF69ugFpysTerz4cgiPVJNBu5OlTA.jpg" width="100"/>
+                </div>
+                <div class="menu">
+                    <a class="active" href="#">Trang chủ</a>
+                    <a href="#">Giới thiệu</a>
+                    <a href="#">Tour du lịch</a>
+                    <a href="#">Tin tức</a>
+                    <a href="#">Faqs</a>
+                    <a href="#">Liên hệ</a>
+                </div>
+                <div class="icons">
+                    <i class="fas fa-search btn-search"></i>
+                    <i class="fas fa-user"></i>
+                    <div class="badge">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="hotline">
+                        <i class="fas fa-headset"></i>
+                        Hotline
+                        <span>1900 6750</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero">
+                <div class="content">
+                    <h1>Du lịch cùng ND TRAVEL</h1>
+                    <p>Vinh hạnh của chúng tôi là mang đến cho bạn những chuyến đi đáng nhớ. Mang đến cho bạn những chuyến đi đầy cảm hứng. Khám phá những vùng đất mới. Tự do khám phá cùng chúng tôi.</p>
+                    <a class="btn" href="#">Tìm hiểu ngay <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Div phụ (search-box) -->
+        <div class="search-box" id="searchBox">
+            <div class="empty-box" id="emptyBox"></div>
+            <div class="search-top">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Nhập tên tour...">
+                    <i class="fas fa-search" id="searchIcon"></i>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        const emptyBox = document.getElementById('emptyBox');
+        const searchBtn = document.querySelector('.btn-search');
+
+        // Hiển thị search-box khi nhấn vào nút tìm kiếm
+        searchBtn.addEventListener('click', () => {
+            searchBox.style.display = 'flex';
+        });
+
+        // Ẩn search-box khi nhấn vào nền (empty-box)
+        emptyBox.addEventListener('click', () => {
+            searchBox.style.display = 'none';
+        });
+     // Lấy các phần tử
+        const searchInput = document.getElementById('searchInput');
+        const searchIcon = document.getElementById('searchIcon');
+
+        // Hàm chuyển hướng
+        function redirectToSearch() {
+            const query = searchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
+            if (query) {
+                // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
+                window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
+            }
+        }
+
+        // Sự kiện nhấn Enter trong input
+        searchInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                redirectToSearch();
+            }
+        });
+
+        // Sự kiện click vào icon tìm kiếm
+        searchIcon.addEventListener('click', redirectToSearch);
+
+    </script>
 </body>
 </html>

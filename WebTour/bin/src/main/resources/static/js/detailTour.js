@@ -20,11 +20,21 @@ document.addEventListener('DOMContentLoaded', function() {
 	sub1.addEventListener("click", function() {
 		HandleDecrease("value-quantity1");
 	});
-	
-	var start = document.addEventListener('DOMContentLoaded',HandelStart());
-	
+
+	HandelStart();
+
+	var book_now = document.getElementById("book-now");
+	console.log("Book Now button:", book_now);
+	book_now.addEventListener("click", function(event) {
+		event.preventDefault();
+		createBooking();
+		console.log(1);
+
+	});
+
 	HandleGetDay();
 })
+
 
 
 //xử lý dấu cộng
@@ -44,11 +54,11 @@ async function HandleIncrement(inputId) {
 		}
 	});
 	const response = await fetch(request);
-		if (!response.ok) {
-			console.log(response);
-			return;
-		}
-		
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+
 	const data = await response.json();
 	console.log(data);
 	const peopleMax = data.peopleMax;
@@ -61,9 +71,9 @@ async function HandleIncrement(inputId) {
 	if (valueInput < peopleMax) {
 		valueInput += 1;
 		if (input_child + input_adult < peopleMax) {
-				await HandlePrice(inputId, valueInput);
+			await HandlePrice(inputId, valueInput);
 		} else {
-				return;
+			return;
 		}
 
 	} else {
@@ -90,21 +100,21 @@ async function HandleDecrease(inputId) {
 			"Content-Type": "applycation/json",
 		}
 	});
-	const response = await  fetch(request);
-		if (!response.ok) {
-			console.log(response);
-			return;
-		}
+	const response = await fetch(request);
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
 
 	const data = await response.json();
 	console.log(data);
-			if (valueInput > 0) {
-				valueInput -= 1;
-				await HandlePrice(inputId, valueInput);
-			} else {
-				return;
-			}
-			document.getElementById(inputId).value = valueInput;
+	if (valueInput > 0) {
+		valueInput -= 1;
+		await HandlePrice(inputId, valueInput);
+	} else {
+		return;
+	}
+	document.getElementById(inputId).value = valueInput;
 }
 
 //tính giá tiền của từng loại vé
@@ -127,7 +137,7 @@ async function HandlePrice(inputId, valueInput) {
 		console.log(response);
 		return;
 	}
-	
+
 	const tourdata = await response.json();
 	const tourPrice = tourdata.price;
 	const url_get_ticket = `http://localhost:8080/api-get-ticket`;
@@ -143,7 +153,7 @@ async function HandlePrice(inputId, valueInput) {
 		console.log(ticketResponse)
 		return;
 	}
-	
+
 	ticketData = await ticketResponse.json();
 	console.log(ticketData);
 	let price_adult = 0;
@@ -165,10 +175,10 @@ async function HandlePrice(inputId, valueInput) {
 }
 
 //xử lý số ngày hiển thị 
-function HandleGetDay() {
+async function HandleGetDay() {
 	const id = document.getElementById("id-booking-info").getAttribute("data-id");
 	var tour_day = document.getElementById("tour-day").value;
-	
+
 
 	if (!id) {
 		console.error("ID không tồn tại hoặc không hợp lệ");
@@ -203,97 +213,147 @@ function HandleGetDay() {
 }
 
 //xử lý khi ấn vào các ngôi sao đánh giá 
-function HandelStart(){
+async function HandelStart() {
 	/*để chọn các phần tử có lớp .fa-star bên trong phần tử có lớp .stars*/
 	const stars = document.querySelectorAll('.stars .fa-star');
-	    stars.forEach(star => {
-	        star.addEventListener('click', function() {
-				//this: để truy cập đến phần tử nhận sự kiện, getAttribute :để lấy giá trị của thuộc tính data-value
-				// data-value (bên html) để lưu trữ thông tin về sao khi click
-	            const rate = this.getAttribute('data-value');
-				if(this.classList.contains('selected')){
-					resetStars(); 
-				}else{
-					resetStars(); 
-	            	paintStars(rate); 
-				}
-	            
-	        });
-	    });
-		// selected ở bên file css (dòng 27), dùng để tô màu vàng khi chọn 
-	    function resetStars() {
-	        stars.forEach(star => {
-	            star.classList.remove('selected'); 
-	        });
-	    }
-		// selected ở bên file css (dòng 27), dùng để tô màu vàng khi chọn
-	    function paintStars(count_start) {
-	        for (let i = 0; i < count_start; i++) {
-	            stars[i].classList.add('selected'); 
-	        }
-	    }
+	stars.forEach(star => {
+		star.addEventListener('click', function() {
+			//this: để truy cập đến phần tử nhận sự kiện, getAttribute :để lấy giá trị của thuộc tính data-value
+			// data-value (bên html) để lưu trữ thông tin về sao khi click
+			const rate = this.getAttribute('data-value');
+			if (this.classList.contains('selected')) {
+				resetStars();
+			} else {
+				resetStars();
+				paintStars(rate);
+			}
+
+		});
+	});
+	// selected ở bên file css (dòng 27), dùng để tô màu vàng khi chọn 
+	function resetStars() {
+		stars.forEach(star => {
+			star.classList.remove('selected');
+		});
+	}
+	// selected ở bên file css (dòng 27), dùng để tô màu vàng khi chọn
+	function paintStars(count_start) {
+		for (let i = 0; i < count_start; i++) {
+			stars[i].classList.add('selected');
+		}
+	}
 }
 
+//tạo booking khi ấn nút đặt ngay(lưu bookingID) sau đó chuyển đến trang payment
+async function createBooking() {
+	console.log("Hàm createBooking đã được gọi.");
+	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
+	const userId = 6;/*= document.getElementById("userId").value;*/
 	
+	
+	//kiểm tra đăng nhập
+	if (!userId) {
+		window.location.href = `/User/login`;
+		return;
+	}
+	const bookingDate = document.getElementById("book-day").value;
+	console.log("bookingDate " + bookingDate);
+	const adult = parseInt(document.getElementById("value-quantity").value.replace(/[^0-9]/g, '')) || 0; // Chỉ lấy số
+	const child = parseInt(document.getElementById("value-quantity1").value.replace(/[^0-9]/g, '')) || 0;
+	
+	const peopleNums = adult + child;
+	console.log(peopleNums);
+
+	/*tạo booking khi ấn nút đặt ngay*/
+	const url = `http://localhost:8080/create-booking?tourId=${tourId}&userId=${userId}&bookingDate=${bookingDate}&peopleNums=${peopleNums}&quantityAdult=${adult}&quantityChild=${child}`;
+	const request = new Request(url, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		
+	});
+	const response = await fetch(request);
+	console.log("Phản hồi từ server createBooking:", response);
+	if (!response.ok) {
+		console.log(response);
+		return null;
+	}
+	const dataBooking = await response.json();
+	console.log("Dữ liệu booking đã lưu: ", dataBooking);
+	const bookingID = dataBooking.bookingId
+	console.log("bookingID " + bookingID);
+
+	const totalPrice = parseInt(document.getElementById("total-price").innerText.replace(/[^0-9]/g, ''));
+	console.log(totalPrice);
+
+
+	// Lưu thông tin bookingID, tourID, userID vào localStorage
+	localStorage.setItem("bookingID", bookingID);
+	localStorage.setItem("tourID", tourId);
+	localStorage.setItem("userID", userId);
+	localStorage.setItem("totalPrice", totalPrice);
+	/*mở trang payment với id của booking mới tạo*/
+	window.location.href = `/payment/${bookingID}`;
+
+}
+
+
 //-------------------------------------------Manh Here-------------------------------------
-async function ManhHandleIncrement(elementQuantityId)
-{
+async function ManhHandleIncrement(elementQuantityId) {
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
 	var quantity = document.getElementById(elementQuantityId).value;
 	const tourData = await getTourData(tourId);
-	if(tourData == null) return;
-	
+	if (tourData == null) return;
+
 	const numAdultTicket = parseInt(document.getElementById("price-adult").innerText.replace(/[^0-9]/g, '')) || 0;
 	const numChildTicket = parseInt(document.getElementById("price-chill").innerText.replace(/[^0-9]/g, '')) || 0;
-	
-	if(numAdultTicket + numChildTicket == tourData.peopleMax) return;
-	
+
+	if (numAdultTicket + numChildTicket == tourData.peopleMax) return;
+
 	document.getElementById(elementQuantityId).value = quantity + 1;
-	
-	
+
+
 }
-async function ManhHandleDescrement(elementQuantityId)
-{
+async function ManhHandleDescrement(elementQuantityId) {
 	const id = document.getElementById("id-booking-info").getAttribute("data-id");
 	var quantity = parseInt(document.getElementById(elementQuantityId).innerText.replace(/[^0-9]/g, '')) || 0;
-	
-	if(quantity - 1  < 0) return;
-	
+
+	if (quantity - 1 < 0) return;
+
 	document.getElementById(elementQuantityId).value = quantity - 1;
 }
 
-async function getTourData(tourId)
-{
+async function getTourData(tourId) {
 	const url = `http://localhost:8080/api-get-detail-tour?id=${id}`;
-		const request = new Request(url, {
-			method: "GET",
-			headers: {
-				"Content-Type": "applycation/json",
-			}
-		});
-		const response = await fetch(request);
-			if (!response.ok) {
-				console.log(response);
-			return null;
-			}
-		return await response.json();
+	const request = new Request(url, {
+		method: "GET",
+		headers: {
+			"Content-Type": "applycation/json",
+		}
+	});
+	const response = await fetch(request);
+	if (!response.ok) {
+		console.log(response);
+		return null;
+	}
+	return await response.json();
 }
 
-async function getTicketData()
-{
+async function getTicketData() {
 	const url = `http://localhost:8080/api-get-ticket`;
-			const request = new Request(url, {
-				method: "GET",
-				headers: {
-					"Content-Type": "applycation/json",
-				}
-			});
-			const response = await fetch(request);
-				if (!response.ok) {
-					console.log(response);
-				return null;
-				}
-			return await response.json();
+	const request = new Request(url, {
+		method: "GET",
+		headers: {
+			"Content-Type": "applycation/json",
+		}
+	});
+	const response = await fetch(request);
+	if (!response.ok) {
+		console.log(response);
+		return null;
+	}
+	return await response.json();
 }
 //-------------------------------------------Manh Here-------------------------------------
 
