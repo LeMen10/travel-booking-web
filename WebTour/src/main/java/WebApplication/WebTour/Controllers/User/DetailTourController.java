@@ -104,8 +104,9 @@ public class DetailTourController {
 		booking.setUserId(userId);
 		booking.setBookingDate(bookingDate);
 		
-		booking.setPeopleNums(quantityAdult+quantityChild); // JPA đã cung cấp sẵn phương thức "save",
-		//sẽ trả về đối tượng vừa chèn, nên không cần viết hàm inser ở file respository
+		booking.setPeopleNums(quantityAdult+quantityChild); 
+		
+		// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên không cần viết hàm insert ở file respository
 		Bookings savedBooking = bookingsRespository.save(booking);
 		handleQuantityTicket(Integer.parseInt(savedBooking.getBookingId().toString())  , quantityAdult, quantityChild);
 		return ResponseEntity.ok(savedBooking);

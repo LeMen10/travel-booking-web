@@ -119,6 +119,7 @@ body {
     color: #007bff;
 }
 .booking-info .buttons {
+	padding: 0 5%;
     display: flex;
     justify-content: space-between;
 }

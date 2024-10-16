@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import WebApplication.WebTour.Model.Address;
 import WebApplication.WebTour.Model.Bookings;
@@ -64,6 +66,7 @@ public class PaymentController {
 	AddressRespository addressRespository;
 	@Autowired
 	TicketBookingRepository ticketBookingRepository;
+	
 
 	// lấy id booking (có user trong đó để hiện thị t/tin user lên trang) vừa tạo và
 	// mở trang payment
@@ -73,6 +76,13 @@ public class PaymentController {
 		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingId);
 		if (bookingOpt.isPresent()) {
 			Bookings booking = bookingOpt.get();
+			Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
+			if(bookingPayment.isPresent()) {
+				model.addAttribute("bookingPayment", bookingPayment.get());
+			}
+			else {
+				model.addAttribute("error", "bookingPayment không tồn tại!");
+			}
 			// Lấy thông tin user từ userId trong booking
 			Optional<User> user = userRepository.findById((long) booking.getUserId());
 			if (user.isPresent()) {
@@ -173,5 +183,27 @@ public class PaymentController {
 		}
 
 	}
+	
+	// lưu tổng tiền (tiền sau khi giảm giá)
+		@PutMapping("/api-update-totalprice")
+		public ResponseEntity<?> updateTotalPrice(
+				@RequestParam("totalPrice") float totalPrice,
+				@RequestParam("bookingId") Long bookingId) {
+
+			try {
+		        int updatedRows = bookingsRespository.updateTotalPrice(totalPrice, bookingId);
+		        if (updatedRows > 0) {
+		            return ResponseEntity.ok("Cập nhật totalPrice thành công cho booking với ID: " + bookingId);
+		        } else {
+		            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy booking với ID: " + bookingId);
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();  // In lỗi ra console để dễ debug
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi cập nhật: " + e.getMessage());
+		    }
+		}
+		
+		
+		
 	
 }

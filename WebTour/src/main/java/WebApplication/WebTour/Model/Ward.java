@@ -34,7 +34,8 @@ public class Ward implements Serializable{
     
 //    @Column(name = "districtId")
 //    private int districtId;
-    @JsonManagedReference
+    
+    
     @ManyToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "district_id", nullable = true)
     private District district;

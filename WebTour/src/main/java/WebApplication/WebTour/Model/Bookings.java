@@ -20,10 +20,10 @@ public class Bookings implements Serializable{
 	
 	@Id
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "booking_id ")
+	@Column(name = "booking_id")
     private Long bookingId ;
 	
-	@Column(name = "tour_id ")
+	@Column(name = "tour_id")
     private int tourId; 
 
     @Column(name = "user_id")
@@ -35,8 +35,8 @@ public class Bookings implements Serializable{
     @Column(name = "status")
     private boolean status = true;
     
-    @Column(name = "pay_status")
-    private int payStatus;
+    @Column(name = "payment_id")
+    private int paymentId;
     
     @Column(name = "people_nums")
     private int peopleNums;

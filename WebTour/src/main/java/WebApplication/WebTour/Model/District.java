@@ -34,10 +34,11 @@ public class District implements Serializable{
     
 //    @Column(name = "province_id")
 //    private int provinceId;
-    @JsonManagedReference
+    
+    
     @ManyToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "province_id", nullable = true)
-    private District district;
+    private Province province;
     
     @Column(name = "status")
     private boolean status;
@@ -72,13 +73,15 @@ public class District implements Serializable{
 		return serialVersionUID;
 	}
 
-	public District getDistrict() {
-		return district;
+	public Province getProvince() {
+		return province;
 	}
 
-	public void setDistrict(District district) {
-		this.district = district;
+	public void setProvince(Province province) {
+		this.province = province;
 	}
+
+
 
 
     
