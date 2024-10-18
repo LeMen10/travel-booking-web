@@ -33,13 +33,27 @@
 			    flex-direction: column;
 			    margin-bottom: 20px;
 			    height: 100%; /* Giúp card có chiều cao bằng nhau */
+			    
+			    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng zoom nhẹ và đổ bóng */
+			    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ mặc định */
+			    border-radius: 10px;
+			    overflow: hidden;
+				}
+			.card:hover {
+			    transform: scale(1.05); /* Zoom nhẹ toàn bộ tour */
+			    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Đổ bóng nổi bật hơn khi hover */
+			    cursor: pointer;
 			}
 			
 			.card img {
-			    width: 100%;
-			    height: 150px;
-			    object-fit: cover;
+			    transition: transform 0.3s ease; /* Hiệu ứng chuyển đổi cho ảnh */
+    width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều rộng */
+    height: auto;
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
 			}
+			.card:hover img {
+    transform: scale(1.1); /* Phóng to nhẹ ảnh khi hover */
+}
 			
 			.card-content {
 			    padding: 15px;
@@ -57,7 +71,7 @@
 			    overflow: hidden;
 			    text-overflow: ellipsis;
 			    display: -webkit-box;
-			    -webkit-line-clamp: 2; /* Giới hạn tối đa 2 dòng */
+			    
 			    -webkit-box-orient: vertical;
 			    height: 38px;
 			}
@@ -119,15 +133,14 @@
 <body>
     <div class="container">
         
-            <div class="card" th:each="tour : ${searchResults}">
+            <div  class="card" th:each="tour : ${searchResults}" onclick="linktoDetailTour(this)" th:attr="data-id=${tour.tourId}">
                 <img src="/image/vinhhalong.jpg">
-                <div class="card-content">
+                <div class="card-content" >
                     <p>
                         <i class="fas fa-map-marker-alt icon"></i>
                         Khởi hành từ: <span th:text="${tour.departure}">Địa điểm khởi hành</span>
                     </p>
-                    <h3 th:text="${tour.tourName}">Tên tour</h3>
-                    
+                    <h3  th:text="${tour.tourName}">Tên tour</h3>
                     <p class="rating">
                         <i class="fas fa-star"></i>    
                         <i class="fas fa-star"></i>
@@ -136,7 +149,7 @@
                         <i class="fas fa-star"></i>
                     </p>
                     <p class="price">
-                        <span th:text="${tour.price}"></span>
+                        <span class="tourPrice" th:text="${tour.price}"></span>
                     </p>
                     <p class="time">
                         <i class="fas fa-clock icon"></i>
@@ -147,7 +160,6 @@
                     </p>
                 </div>
             </div>
-        
     </div>
 
     <!-- Pagination -->
@@ -166,7 +178,7 @@
             </li>
 
             <li th:if="${currentPage + 1 < totalPages}">
-                <button th:onclick="|window.location.href='@{/search(s=${searchParam}, page=${currentPage + 1}, size=2)}'|">
+                <button th:onclick="|window.location.href='@{/search(s=${searchParam}, page=${currentPage + 1}, size=8)}'|">
                     <i class="fas fa-chevron-right icon"></i>
                 </button>
             </li>
@@ -186,8 +198,7 @@
             
             // Tính số ngày bằng cách chia milliseconds cho số milliseconds trong 1 ngày
             const days = timeDifference / (1000 * 60 * 60 * 24)+1;
-            console.log(element.getAttribute('data-start-date'));
-            console.log(element.getAttribute('data-end-date'));
+            
             // Định dạng thời gian hiển thị theo dạng 'XN YĐ'
             // Thông thường số đêm sẽ bằng số ngày trừ đi 1
             const nights = days - 1;
@@ -200,6 +211,22 @@
             }
         });
     });
+    function linktoDetailTour(pram){
+    	var tourId = pram.getAttribute("data-id");
+    	console.log(pram);
+    	window.location.href="detail-tour/" + tourId; 
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        const priceElements = document.querySelectorAll('.tourPrice');
+        priceElements.forEach(function(priceElement) {
+            let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
+            if (!isNaN(price)) {
+                // Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
+                priceElement.textContent = price.toLocaleString('vi-VN') + '₫';
+            }
+        });
+    });
+	
 </script>
 </body>
 </html>
