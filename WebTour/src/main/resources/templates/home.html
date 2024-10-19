@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ND Travel</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -107,58 +113,191 @@
             width: 100%;
             height: 100%;
             z-index: 1000;
+            transition: opacity 0.3s ease, transform 0.3s ease; /* Thêm hiệu ứng chuyển động */
+		    opacity: 0; /* Khởi tạo opacity là 0 */
+		    transform: translateY(-20px); /* Khởi tạo vị trí lệch lên */
         }
+        .search-box.active {
+		    display: flex; /* Hiển thị box khi có class active */
+		    opacity: 1; /* Đặt opacity thành 1 khi hiển thị */
+		    transform: translateY(0); /* Trở về vị trí ban đầu */
+		}
         /* Thanh header search-top */
-.search-top {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #fff; /* Màu nền trắng cho thanh search */
-    z-index: 1001; /* Đặt z-index cao hơn navbar để che nó */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0; /* Đệm để tạo khoảng trống trên dưới */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Tạo đổ bóng cho thanh header */
-}
+		.search-top {
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    background-color: #fff; /* Màu nền trắng cho thanh search */
+		    z-index: 1001; /* Đặt z-index cao hơn navbar để che nó */
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    padding: 10px 0; /* Đệm để tạo khoảng trống trên dưới */
+		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Tạo đổ bóng cho thanh header */
+		}
+		
+		/* Search container trong thanh search-top */
+		.search-container {
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    border: 1px solid #00a0e3;
+		    border-radius: 25px;
+		    padding: 5px 10px;
+		    width: 50%; /* Đặt kích thước thanh search tùy theo ý muốn */
+		    background-color: white;
+		}
+		
+		.search-container input {
+		    border: none;
+		    outline: none;
+		    flex: 1;
+		    padding: 10px;
+		    font-size: 16px;
+		}
+		
+		.search-container .fa-search {
+		    color: #00a0e3;
+		    font-size: 20px;
+		}
+		
+		/* Làm tối nền khi hiển thị search-box */
+		.empty-box {
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối */
+		    z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
+		}
+		
+		.search-container-main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: #0056b3;
+        }
+        .search-box-main {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+        .search-box-main input{
+            border: 1px solid #17a2b8;
+            border-radius: 5px;
+            padding: 10px;
+           /*  margin: 0 5px; */
+            outline: none;
+        }
+        .search-box-main button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .search-box-main i {
+            color: #17a2b8;
+            margin-right: 5px;
+        }
+        .location-and-day{
+            padding-left: 12px;
+        }
+        select{
+        		padding: 10px;
+        }
+        select {
+		    font-size: 14px; /* Kích thước font giống với input */
+		    color: #76809B; /* Màu chữ mặc định */
+		    padding: 10px;
+		    border: 1px solid #17a2b8;
+		    border-radius: 5px;
+		    outline: none;
+		    
+		    margin: 0 5px;
+		    appearance: none; /* Loại bỏ mũi tên mặc định của select trên một số trình duyệt */
+		}
+		 .location-select {
+            border: 1px solid #17a2b8; /* Đường viền */
+            border-radius: 5px; /* Bo tròn góc */
+            padding: 10px; /* Khoảng cách bên trong */
+            margin: 0 5px; /* Khoảng cách bên ngoài */
+            outline: none; /* Không viền khi focus */
+            width: calc(100% - 10px); /* Đảm bảo chiều rộng giống với input (bao gồm padding) */
+            box-sizing: border-box; /* Đảm bảo kích thước bao gồm padding và border */
+            font-size: 12px;
+           
+            
+        }
 
-/* Search container trong thanh search-top */
-.search-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #00a0e3;
-    border-radius: 25px;
-    padding: 5px 10px;
-    width: 50%; /* Đặt kích thước thanh search tùy theo ý muốn */
-    background-color: white;
-}
-
-.search-container input {
-    border: none;
-    outline: none;
-    flex: 1;
-    padding: 10px;
-    font-size: 16px;
-}
-
-.search-container .fa-search {
-    color: #00a0e3;
-    font-size: 20px;
-}
-
-/* Làm tối nền khi hiển thị search-box */
-.empty-box {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối */
-    z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
-}
-
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #17a2b8; /* Đường viền */
+            border-radius: 5px; /* Bo tròn góc */
+            padding: 10px; /* Khoảng cách bên trong */
+            height: 35px	; /* Chiều cao của select */
+            display: flex; /* Để căn giữa nội dung */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            font-size: 13px;
+        }
+        .select2-container .select2-selection--single {
+	    color: #76809B; /* Màu chữ của ô select */
+	    border: 1px solid #17a2b8; /* Giữ nguyên border */
+	    border-radius: 5px; /* Giữ nguyên border-radius */
+		}
+		
+		/* Thay đổi màu chữ của placeholder */
+		.select2-container .select2-selection--single .select2-selection__placeholder {
+		    color: #76809B; /* Màu chữ của placeholder */
+		}
+		
+		/* Thay đổi màu chữ khi người dùng chọn giá trị */
+		.select2-container--default .select2-selection--single .select2-selection__rendered {
+		    color: #76809B; /* Màu chữ khi có giá trị đã chọn */
+		}
+		
+		/* Thay đổi màu chữ của dropdown list */
+		.select2-container--default .select2-results__option {
+		    color: #76809B; /* Màu chữ của các tùy chọn trong dropdown */
+		}.select2-container--default .select2-selection--single .select2-selection__clear {
+		    margin-left: 5px; /* Khoảng cách bên trái của icon x */
+		}
+		.flatpickr-input {
+    		color: #76809B; /* Màu chữ của ô input */
+    		
+		}
+		
+		/* Thay đổi màu chữ của các ngày trong calendar */
+		.flatpickr-calendar .flatpickr-day {
+		    color: #76809B; /* Màu chữ của các ngày */
+		}
+		
+		/* Thay đổi màu chữ của ngày được chọn */
+		.flatpickr-calendar .flatpickr-day.selected {
+		    color: #fff; /* Màu chữ cho ngày được chọn */
+		    background-color: #007bff; /* Màu nền cho ngày được chọn */
+		}
+		
+		/* Thay đổi màu chữ cho ngày hiện tại */
+		.flatpickr-calendar .flatpickr-day.today {
+		    color: #e60000; /* Màu chữ cho ngày hôm nay */
+		}
+		
+		/* Thay đổi màu chữ cho tháng và năm */
+		.flatpickr-calendar .flatpickr-month {
+		    color: #333; /* Màu chữ cho tháng */
+		}
+		.flatpickr-input[readonly] {
+		    cursor: text;
+		    margin: 0 2px;
+		}
     </style>
 </head>
 <body>
@@ -198,7 +337,37 @@
                 </div>
             </div>
         </div>
-
+        <!-- Main Search (search-box) -->
+		<div class="search-container-main">
+	        <div class="search-box-main">
+	            <div >
+	                <input id="mainSearchInput" type="text" placeholder="Bạn muốn đi đâu?">
+	            </div>
+	            <div class="location-and-day">
+	                <i class="fas fa-map-marker-alt"></i>
+	                
+	                <select id="departureSelect" class="location-select" data-type="departure">
+	                	<option value="" disabled selected>Chọn điểm đi</option>
+						<option th:each="provinces: ${province}" th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn điểm đi</option>
+					</select>
+	            </div>
+	            <div class="location-and-day">
+	                <i class="fas fa-map-marker-alt"></i>
+	                <select id="destinationSelect" class="location-select" data-type="destination">
+	                	 <option value="" disabled selected>Chọn điểm đến</option>
+						<option th:each="provinces: ${province}" th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn điểm đi</option>
+					</select>
+	            </div>
+	            <div class="location-and-day">
+				    <i class="fas fa-calendar-alt"></i>
+				    <input type="text" id="departureDate" placeholder="Chọn ngày đi" >
+				</div>
+				<div >
+					<button id="main-btn-search" >Tìm kiếm</button>
+				</div>
+	       
+	        </div>
+    	</div>
         <!-- Div phụ (search-box) -->
         <div class="search-box" id="searchBox">
             <div class="empty-box" id="emptyBox"></div>
@@ -213,21 +382,40 @@
     </div>
 
     <script>
-        const searchBox = document.getElementById('searchBox');
-        const emptyBox = document.getElementById('emptyBox');
-        const searchBtn = document.querySelector('.btn-search');
+    const searchBox = document.getElementById('searchBox');
+    const emptyBox = document.getElementById('emptyBox');
+    const searchBtn = document.querySelector('.btn-search');
 
-        // Hiển thị search-box khi nhấn vào nút tìm kiếm
-        searchBtn.addEventListener('click', () => {
-            searchBox.style.display = 'flex';
-        });
+    // Hàm để hiển thị hoặc ẩn search-box với hiệu ứng
+    const toggleSearchBox = () => {
+        if (searchBox.classList.contains('active')) {
+            // Nếu đang hiển thị, ẩn đi
+            searchBox.classList.remove('active');
+            setTimeout(() => {
+                searchBox.style.display = 'none'; // Ẩn hoàn toàn sau khi hiệu ứng kết thúc
+            }, 300); // Thời gian trùng khớp với thời gian hiệu ứng CSS
+        } else {
+            // Nếu đang ẩn, hiển thị
+            searchBox.style.display = 'flex'; // Hiển thị trước khi thêm lớp active
+            setTimeout(() => {
+                searchBox.classList.add('active'); // Thêm lớp active để hiển thị hiệu ứng
+            }, 10); // Thời gian nhỏ để đảm bảo display: flex đã được áp dụng
+        }
+    };
 
-        // Ẩn search-box khi nhấn vào nền (empty-box)
-        emptyBox.addEventListener('click', () => {
-            searchBox.style.display = 'none';
-        });
+    // Hiển thị search-box khi nhấn vào nút tìm kiếm
+    searchBtn.addEventListener('click', toggleSearchBox);
+
+    // Ẩn search-box khi nhấn vào nền (empty-box)
+    emptyBox.addEventListener('click', () => {
+        searchBox.classList.remove('active'); // Xóa lớp active khi nhấn vào nền
+        setTimeout(() => {
+            searchBox.style.display = 'none'; // Ẩn hoàn toàn sau khi hiệu ứng kết thúc
+        }, 300); // Thời gian trùng khớp với thời gian hiệu ứng CSS
+    });
      // Lấy các phần tử
         const searchInput = document.getElementById('searchInput');
+        const mainsearchInput = document.getElementById('mainSearchInput');
         const searchIcon = document.getElementById('searchIcon');
 
         // Hàm chuyển hướng
@@ -238,7 +426,14 @@
                 window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
             }
         }
-
+        // Hàm chuyển hướng có đối số
+        function redirectToSearch2() {
+            const query = mainsearchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
+            if (query) {
+                // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
+                window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
+            }
+        }
         // Sự kiện nhấn Enter trong input
         searchInput.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
@@ -248,7 +443,87 @@
 
         // Sự kiện click vào icon tìm kiếm
         searchIcon.addEventListener('click', redirectToSearch);
+		//Chỉnh placeholder cho chọn ngày đi
+		flatpickr("#departureDate", {
+            dateFormat: "d-m-Y", // Định dạng ngày hiển thị
+            onChange: function(selectedDates, dateStr, instance) {
+                // Cập nhật giá trị cho ô input khi chọn ngày
+                document.getElementById('departureDate').value = dateStr;
+            }
+        });
+		//Khởi tạo Select2
+		$(document).ready(function() {
+    		$('.location-select').each(function() {
+        var type = $(this).data('type'); // Lấy type từ thuộc tính data-type
+        var placeholderText = type === 'departure' ? "Chọn điểm đi" : "Chọn điểm đến"; // Đặt placeholder tương ứng
 
+        $(this).select2({
+            placeholder: placeholderText,
+            allowClear: true
+        		});
+    		});
+		});
+		$('.location-select').on('select2:open', function(e) {
+	        $('.select2-results__options').hide().fadeIn(200); // 300ms là thời gian hiệu ứng
+	    });
+
+	    // Hiệu ứng Fade Out khi đóng select2
+	    $('.location-select').on('select2:close', function(e) {
+	        $('.select2-results__options').fadeOut(200, function() {
+	            $(this).hide(); // Sau khi hiệu ứng kết thúc, ẩn dropdown
+	        });
+	    });
+	 // xử lý sự kiện ấn nút "tìm kiếm"
+		document.getElementById('main-btn-search').addEventListener('click', function() {
+	    // Lấy giá trị từ các ô input và select
+	    var tourName = document.getElementById('mainSearchInput').value;
+	    var startDate = document.getElementById('departureDate').value;
+	 // Chuyển đổi định dạng ngày từ dd-MM-yyyy sang yyyy-MM-dd
+	    var formattedStartDate = "";
+	    if (startDate) {
+	        var dateParts = startDate.split('-'); // Tách ngày, tháng, năm
+	        if (dateParts.length === 3) {
+	            formattedStartDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]; // Chuyển đổi sang yyyy-MM-dd
+	        }
+	    }
+	 // Lấy text từ departureSelect
+	    var departureSelect = document.getElementById('departureSelect');
+	    var departureText = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+	    var departure = (departureText === "Chọn điểm đi") ? "" : departureText; // Nếu chọn "Chọn điểm đi" thì gán rỗng
+	
+	    // Lấy text từ destinationSelect
+	    var destinationSelect = document.getElementById('destinationSelect');
+	    var destinationText = destinationSelect.options[destinationSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+	    var destination = (destinationText === "Chọn điểm đến") ? "" : destinationText; // Nếu chọn "Chọn điểm đến" thì gán rỗng // Lấy text của tùy chọn đã chọn
+		
+	    console.log("Tour Name: ", tourName);
+	    console.log("Start Date: ", formattedStartDate);
+	    console.log("Departure: ", departure);
+	    console.log("Destination: ", destination);
+
+	    // Tạo URL với các tham số
+	    var searchUrl = '/search?'; // Đường dẫn tới trang tìm kiếm
+
+	    // Thêm các điều kiện vào URL nếu có giá trị
+	    if (tourName) {
+	        searchUrl += 'tourName=' + encodeURIComponent(tourName) + '&';
+	    }
+	    if (startDate) {
+	        searchUrl += 'startDate=' + encodeURIComponent(formattedStartDate) + '&';
+	    }
+	    if (departure) {
+	        searchUrl += 'departure=' + encodeURIComponent(departure) + '&';
+	    }
+	    if (destination) {
+	        searchUrl += 'destination=' + encodeURIComponent(destination) + '&';
+	    }
+
+	    // Loại bỏ dấu "&" cuối cùng
+	    searchUrl = searchUrl.slice(0, -1);
+
+	    // Redirect đến URL mới
+	   	window.location.href = searchUrl;
+		});
     </script>
 </body>
 </html>

@@ -10,11 +10,16 @@ import WebApplication.WebTour.Model.Account;
 import WebApplication.WebTour.Respository.AccountRespository;
 import WebApplication.WebTour.Respository.ToursRepository;
 
+import WebApplication.WebTour.Model.Province;
+import WebApplication.WebTour.Respository.ProvinceRepository;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 @Controller
 public class HomeController {
+	@Autowired
+	private ProvinceRepository provinceRepository;
 
 
 	@Autowired
@@ -42,4 +47,6 @@ public class HomeController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    
 }
