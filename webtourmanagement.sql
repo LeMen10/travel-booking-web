@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
+<<<<<<< Updated upstream
 -- Thời gian đã tạo: Th10 16, 2024 lúc 11:13 AM
+=======
+-- Thời gian đã tạo: Th10 14, 2024 lúc 09:28 AM
+>>>>>>> Stashed changes
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -22,7 +26,8 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
-
+create database webtourmanagement;
+use webtourmanagement;
 --
 -- Cấu trúc bảng cho bảng `account`
 --
@@ -81,7 +86,11 @@ CREATE TABLE `bookings` (
   `user_id` int(11) DEFAULT NULL,
   `booking_date` datetime(6) DEFAULT NULL,
   `status` tinyint(1) DEFAULT 1,
+<<<<<<< Updated upstream
   `payment_id` int(11) DEFAULT NULL,
+=======
+  `pay_status` int(11) DEFAULT NULL,
+>>>>>>> Stashed changes
   `people_nums` int(11) DEFAULT NULL,
   `total_price` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -90,10 +99,29 @@ CREATE TABLE `bookings` (
 -- Đang đổ dữ liệu cho bảng `bookings`
 --
 
+<<<<<<< Updated upstream
 INSERT INTO `bookings` (`booking_id`, `tour_id`, `user_id`, `booking_date`, `status`, `payment_id`, `people_nums`, `total_price`) VALUES
 (1, 1, 6, '2024-11-03 00:00:00.000000', 1, 1, 10, 0),
 (2, 4, 7, '2024-11-05 00:00:00.000000', 1, 1, 10, 0),
 (67, 1, 6, '2024-10-14 00:00:00.000000', 1, 1, 2, 0);
+=======
+INSERT INTO `bookings` (`booking_id`, `tour_id`, `user_id`, `booking_date`, `status`, `pay_status`, `people_nums`, `total_price`) VALUES
+(1, 1, 6, '2024-11-03 00:00:00.000000', 1, 2, 10, NULL),
+(2, 4, 7, '2024-11-05 00:00:00.000000', 1, 2, 10, NULL),
+(16, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 5, NULL),
+(17, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 1, NULL),
+(18, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 4, NULL),
+(19, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 1, NULL),
+(20, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 2, NULL),
+(21, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 1, NULL),
+(22, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 3, 0),
+(23, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 2, 0),
+(24, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 2, 0),
+(25, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 4, 0),
+(26, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 2, 0),
+(27, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 1, 0),
+(28, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 2, 0);
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -900,7 +928,7 @@ INSERT INTO `paymentmethod` (`paymethod_id`, `name`, `status`) VALUES
 --
 
 CREATE TABLE `payments` (
-  `payment_id` int(11) NOT NULL,
+  `payment_id` bigint(20) NOT NULL,
   `booking_id` int(11) DEFAULT NULL,
   `payment_date` date DEFAULT NULL,
   `amount` int(11) DEFAULT NULL,
@@ -1191,8 +1219,12 @@ CREATE TABLE `ticketbooking` (
 
 INSERT INTO `ticketbooking` (`id`, `ticket_id`, `booking_id`, `quantity`, `status`) VALUES
 (1, 1, 1, 5, 1),
+<<<<<<< Updated upstream
 (2, 2, 1, 5, 1),
 (67, 1, 67, 1, 1);
+=======
+(2, 2, 2, 5, 1);
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -11914,8 +11946,12 @@ ALTER TABLE `address`
 ALTER TABLE `bookings`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `fk_bookings_tour` (`tour_id`),
+<<<<<<< Updated upstream
   ADD KEY `fk_bookings_customer` (`user_id`),
   ADD KEY `payment_id` (`payment_id`);
+=======
+  ADD KEY `fk_bookings_customer` (`user_id`);
+>>>>>>> Stashed changes
 
 --
 -- Chỉ mục cho bảng `discount`
@@ -12070,7 +12106,11 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT cho bảng `bookings`
 --
 ALTER TABLE `bookings`
+<<<<<<< Updated upstream
   MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+=======
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT cho bảng `discount`
@@ -12106,7 +12146,11 @@ ALTER TABLE `paymentmethod`
 -- AUTO_INCREMENT cho bảng `payments`
 --
 ALTER TABLE `payments`
+<<<<<<< Updated upstream
   MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+=======
+  MODIFY `payment_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT cho bảng `paymentstatus`
@@ -12166,7 +12210,11 @@ ALTER TABLE `ticket`
 -- AUTO_INCREMENT cho bảng `ticketbooking`
 --
 ALTER TABLE `ticketbooking`
+<<<<<<< Updated upstream
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+=======
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT cho bảng `tours`
@@ -12209,7 +12257,10 @@ ALTER TABLE `address`
 --
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+<<<<<<< Updated upstream
   ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`payment_id`),
+=======
+>>>>>>> Stashed changes
   ADD CONSTRAINT `fk_bookings_tour` FOREIGN KEY (`tour_id`) REFERENCES `tours` (`tour_id`);
 
 --
