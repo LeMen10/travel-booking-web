@@ -66,12 +66,13 @@
 			<div class="shipping-info">Vui lòng nhập thông tin giao hàng</div> -->
 			<div class="section-title">Thanh toán</div>
 			<div class="payment-methods">
-				<label> <input id="payment-online" name="payment"
-					type="radio" value="bank" />Online <i
-					class="fas fa-money-bill-wave"> </i>
-				</label> <label> <input id="payment-cash" name="payment"
-					type="radio" value="cod" />Cash <i class="fas fa-money-bill-wave">
-				</i>
+				<label> 
+					<input checked id="payment-online" name="payment" type="radio" value="online" />Online 
+					<i class="fas fa-money-bill-wave"> </i>
+				</label> 
+				<label> 
+					<input id="payment-cash" name="payment" type="radio" value="cash" />Cash 
+					<i class="fas fa-money-bill-wave"></i>
 				</label>
 			</div>
 		</div>
@@ -105,7 +106,7 @@
 							</div>
 						</div>
 
-						<p th:text="${ #dates.format(tourPayment.startDate, 'yyyy-MM-dd') }" >Ngày đi: 2019-10-12</p> 
+						<p id="date" th:text="${ #dates.format(tourPayment.startDate, 'yyyy-MM-dd') }" >Ngày đi: 2019-10-12</p> 
 						<!-- <p th:text="${tourPayment.startDate != null ? #dates.format(tourPayment.startDate, 'yyyy-MM-dd') : 'Chưa có ngày đi'}">Ngày đi: </p> -->
 						
 					</div>
@@ -126,7 +127,7 @@
 				</div>
 				<div class="actions">
 					
-					<button id="bt-pay" class="order-button">Thanh toán</button>
+					<button  id="bt-pay" class="order-button">Thanh toán</button>
 					
 				</div>
 				<div id="paypal-button-container"></div>

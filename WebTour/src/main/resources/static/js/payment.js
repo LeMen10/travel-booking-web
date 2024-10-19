@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-	const bookingID = localStorage.getItem("bookingID");
-	const tourID = localStorage.getItem("tourID");
-	const userID = localStorage.getItem("userID");
-	const totalPrice = localStorage.getItem("totalPrice");
+	const bookingID = sessionStorage.getItem("bookingID");
+	const tourID = sessionStorage.getItem("tourID");
+	const userID = sessionStorage.getItem("userID");
+	const totalPrice = sessionStorage.getItem("totalPrice");
 	console.log("Booking ID: " + bookingID);
 	console.log("Tour ID: " + tourID);
 	console.log("User ID: " + userID);
@@ -38,33 +38,55 @@ document.addEventListener('DOMContentLoaded', function() {
 	var bt_apply = document.getElementById("bt-apply").addEventListener("click", function() {
 		var discount_code = document.getElementById("discount-code").value;
 		console.log("discount_code " + discount_code);
-		updateTotalPrice();
-		console.log("upDateTotalPrice đc gọi");
+		//updateTotalPrice();
+
 		if (discount_code) {
 			paymentByDiscount(discount_code);
+			//updateTotalPrice();
+			//console.log("updateTotalPrice được gọi");
 		}
 		else {
 			console.log("chưa có mã giảm giá.");
 		}
 	})
+
 	let isPayPalInitialized = false;
-	var bt_pay = document.getElementById("bt-pay").addEventListener("click", function() {
+	var bt_pay = document.getElementById("bt-pay").addEventListener("click", async function() {
 		checkInformationInput();
 		var div_paypal = document.getElementById("paypal-button-container");
 
-		if (div_paypal.style.display === "none" || div_paypal.style.display === "") {
-			div_paypal.style.display = "block";
+		// Kiểm tra phương thức thanh toán
+		const paymentMethod = checkPaymentMethod();
+		console.log("Giá trị paymentMethod từ sự kiện nhấn nút: ", paymentMethod);
+
+		if (!paymentMethod) {
+			alert("Vui lòng chọn phương thức thanh toán.");
+			return;
+		}
+		if (paymentMethod === 2) { //online
 			if (!isPayPalInitialized) {
+				await createPayment();
+				div_paypal.style.display = "block";
 				payPal();
 				isPayPalInitialized = true;
+			} else {
+				div_paypal.style.display = "block";
 			}
-		}
-		else {
+		} else if (paymentMethod === 1) { //cash
 			div_paypal.style.display = "none";
+			await createPayment();
+			await updateTotalPrice();
+			const bookingId = document.getElementById("id-booking").getAttribute("data-id");
+			await updatePaymentStatus(bookingId);
+			alert("Thanh toán thành công!");
+			
+			window.location.href = `/notificationSuccess/${bookingId}`;
 		}
-
 	});
-	document.getElementById("paypal-button-container").style.display = "none";
+
+	document.getElementById("paypal-button-container").style.display = "none"; // Ẩn div PayPal ban đầu
+
+
 	getAllProvince();
 
 
@@ -214,11 +236,6 @@ async function getAllWard(districtId) {
 	}
 }
 
-
-
-
-
-
 // tính tiền khi nhập mã giảm giá ở trang thanh toán
 async function paymentByDiscount(code) {
 	const totalPrice = localStorage.getItem("totalPrice");
@@ -226,7 +243,7 @@ async function paymentByDiscount(code) {
 	console.log("price " + totalPrice, tempPrice);
 	/*code = document.getElementById('discount-code').value;
    console.log("code discount " + code);*/
-	var code1 = "OAIW82Q9";
+
 
 	const url = `http://localhost:8080/api-get-promotion/${code}`;
 	const request = new Request(url, {
@@ -258,6 +275,7 @@ async function paymentByDiscount(code) {
 				const discount = tempPrice * (data.discount / 100);
 				const total = totalPrice - discount;
 				document.getElementById("total-price").innerHTML = total.toLocaleString() + "₫";
+				updateTotalPrice();
 			}
 			else {
 				console.log("Mã giảm giá đã hết hạn.");
@@ -274,6 +292,7 @@ async function paymentByDiscount(code) {
 
 }
 
+//kiểm tra thông tin người dùng
 async function checkInformationInput() {
 	let email = document.getElementById("email").value.trim();
 	let name = document.getElementById("name").value.trim();
@@ -290,6 +309,7 @@ async function checkInformationInput() {
 	}
 }
 
+//dùng để tính giá tiền khi dùng mã giảm giá
 async function updateTotalPrice() {
 	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 	const totalPriceText = document.getElementById("total-price").innerText || document.getElementById("total-price").textContent;
@@ -314,14 +334,14 @@ async function updateTotalPrice() {
 			return null;
 		} else {
 			// Kiểm tra nếu phản hồi là JSON hoặc text
-						const contentType = response.headers.get("Content-Type");
-						if (contentType && contentType.includes("application/json")) {
-							const data = await response.json(); // Phân tích JSON từ phản hồi
-							console.log("Cập nhật thành công (JSON):", data);
-						} else {
-							const textData = await response.text(); // Phân tích text từ phản hồi
-							console.log("Cập nhật thành công (Text):", textData);
-						}
+			const contentType = response.headers.get("Content-Type");
+			if (contentType && contentType.includes("application/json")) {
+				const data = await response.json();
+				console.log("Cập nhật thành công (JSON):", data);
+			} else {
+				const textData = await response.text();
+				console.log("Cập nhật thành công (Text):", textData);
+			}
 		}
 	} catch (error) {
 		console.error("Lỗi  cập nhật updateTotalPrice:", error);
@@ -329,16 +349,102 @@ async function updateTotalPrice() {
 
 }
 
-async function payPal() {
+//kiểm tra phương thức thanh toán (người dùng chọn trả online hay cash) trước khi ấn thanh toán
+function checkPaymentMethod() {
+	const paymentOnline = document.getElementById('payment-online');
+	const paymentCash = document.getElementById('payment-cash');
 
+	console.log("Trạng thái paymentOnline: ", paymentOnline.checked);
+	console.log("Trạng thái paymentCash: ", paymentCash.checked);
+
+	if (paymentOnline.checked) {
+		console.log("paymentMethod: online");
+		return 2; // Trả về phương thức thanh toán online
+	} else if (paymentCash.checked) {
+		console.log("paymentMethod: cash");
+		return 1; // Trả về phương thức thanh toán bằng tiền mặt
+	} else {
+		console.log("Vui lòng chọn phương thức thanh toán");
+		return null; // Trả về null nếu chưa chọn
+	}
+}
+//tạo payment
+async function createPayment() {
+	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
+	var date = document.getElementById("date").innerText;
+	console.log("date  " + date);
+	const totalPriceText = document.getElementById("total-price").innerText || document.getElementById("total-price").textContent;
+	const amount = parseFloat(totalPriceText.replace(/[^0-9]/g, '')) || 0;
+	console.log(amount);
+	const paymentOnline = document.getElementById('payment-online');
+	const paymentCash = document.getElementById('payment-cash');
+
+	// Lấy phương thức thanh toán ở đây để đảm bảo người dùng đã chọn
+	const paymentMethod = checkPaymentMethod();
+
+	// Nếu chưa chọn phương thức thanh toán thì dừng lại
+	if (!paymentMethod) {
+		return;  // Dừng hàm lại, cho người dùng chọn lại phương thức
+	}
+
+
+	const url = `http://localhost:8080/api-create-payment?bookingId=${bookingId}&paymentDate=${date}&amount=${amount}&paymentMethod=${paymentMethod}`;
+	console.log(url);
+	const request = new Request(url, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+
+	});
+	const response = await fetch(request);
+	console.log("Phản hồi từ server createBooking:", response);
+	if (!response.ok) {
+		console.log(response);
+		return null;
+	}
+	const dataPayment = await response.json();
+	updateTotalPrice();
+	console.log("Payment đã được tạo: ", dataPayment);
+
+
+
+}
+
+//cập nhật paymentStatus sau khi thanh toán thành công
+async function updatePaymentStatus(bookingId) {
+    const url = `http://localhost:8080/update-status/${bookingId}`;
+    const request = new Request(url, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    try {
+        const response = await fetch(request);
+        if (!response.ok) {
+            throw new Error("lỗi response updatePaymentStatus");
+        }
+        const message = await response.text();
+        console.log("updatePaymentStatus "+message); 
+    } catch (error) {
+        console.error("Lỗi updatePaymentStatus:", error);
+    }
+}
+
+//tạo thanh toán paypal
+async function payPal() {
+	
+	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 	const totalPriceText = document.getElementById('total-price').innerText;
 	// Loại bỏ ký tự không phải số (ví dụ: "₫") và chuyển thành số
 	const totalPrice = parseFloat(totalPriceText.replace(/[^\d.-]/g, ''));
-	console, log("totalPrice trong hàm paypal " + totalPrice);
+	console.log("totalPrice trong hàm paypal " + totalPrice);
 	// Chuyển đổi sang USD và lấy 2 chữ số thập phân
 	const exchangeRate = 24000;
-	const totalPriceUSD = (totalPriceVND / exchangeRate).toFixed(2);
-	console, log("totalPriceUSD trong hàm paypal " + totalPriceUSD);
+	const totalPriceUSD = (totalPrice / exchangeRate).toFixed(2);
+	console.log("totalPriceUSD trong hàm paypal " + totalPriceUSD);
 	paypal.Buttons({
 		createOrder: function(data, actions) {
 			// Tạo đơn hàng
@@ -354,7 +460,9 @@ async function payPal() {
 			// Thanh toán thành công
 			return actions.order.capture().then(function(details) {
 				alert('Thanh toán thành công, ' + details.payer.name.given_name);
-				// Bạn có thể thêm logic xử lý sau khi thanh toán thành công ở đây
+				updatePaymentStatus(bookingId);
+				
+				window.location.href = `/notificationSuccess/${bookingId}`;
 			});
 		},
 		onError: function(err) {
@@ -362,7 +470,6 @@ async function payPal() {
 			alert('Đã xảy ra lỗi trong quá trình thanh toán.');
 		}
 	}).render('#paypal-button-container');
-
 
 }
 

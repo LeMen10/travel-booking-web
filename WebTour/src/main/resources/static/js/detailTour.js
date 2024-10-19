@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+
 	var plus = document.getElementById("bt-plus");
 	plus.addEventListener("click", function() {
 
@@ -25,11 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	var book_now = document.getElementById("book-now");
 	console.log("Book Now button:", book_now);
-	book_now.addEventListener("click", function(event) {
+	book_now.addEventListener("click", async function(event) {
 		event.preventDefault();
-		createBooking();
-		console.log(1);
-
+		const isValidQuantity = await checkQuantity();
+		if (!isValidQuantity) {
+			return;
+		}
+		await createBooking();
+		console.log("Booking created");
 	});
 
 	HandleGetDay();
@@ -158,6 +162,7 @@ async function HandlePrice(inputId, valueInput) {
 	console.log(ticketData);
 	let price_adult = 0;
 	let price_chill = 0;
+
 	if (inputId === "value-quantity") {
 		price_adult = tourPrice * valueInput;
 		document.getElementById("price-adult").innerHTML = price_adult.toLocaleString() + "₫";
@@ -244,23 +249,38 @@ async function HandelStart() {
 	}
 }
 
+//kiểm tra người dùng có chọn số lượng chưa
+async function checkQuantity() {
+	var valueInputAdult = document.getElementById("value-quantity").value;
+	var valueInputChild = document.getElementById("value-quantity1").value;
+	// Chuyển đổi thành số nguyên, nếu không hợp lệ thì đặt về 0
+	valueInputAdult = parseInt(valueInputAdult) || 0;
+	valueInputChild = parseInt(valueInputChild) || 0;
+	let quantity = valueInputAdult + valueInputChild;
+
+	// Kiểm tra nếu tổng số lượng <= 0
+	if (quantity <= 0) {
+		alert("Mời nhập số lượng vé hợp lệ");
+		return false; // Trả về false nếu số lượng không hợp lệ
+	}
+	return true;
+}
+
 //tạo booking khi ấn nút đặt ngay(lưu bookingID) sau đó chuyển đến trang payment
 async function createBooking() {
 	console.log("Hàm createBooking đã được gọi.");
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
-	const userId = 6;/*= document.getElementById("userId").value;*/
 	
-	
+	const userId = sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
+
+
 	//kiểm tra đăng nhập
-	if (!userId) {
-		window.location.href = `/User/login`;
-		return;
-	}
+	
 	const bookingDate = document.getElementById("book-day").value;
 	console.log("bookingDate " + bookingDate);
 	const adult = parseInt(document.getElementById("value-quantity").value.replace(/[^0-9]/g, '')) || 0; // Chỉ lấy số
 	const child = parseInt(document.getElementById("value-quantity1").value.replace(/[^0-9]/g, '')) || 0;
-	
+
 	const peopleNums = adult + child;
 	console.log(peopleNums);
 
@@ -271,7 +291,7 @@ async function createBooking() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-		
+
 	});
 	const response = await fetch(request);
 	console.log("Phản hồi từ server createBooking:", response);
@@ -286,17 +306,19 @@ async function createBooking() {
 
 	const totalPrice = parseInt(document.getElementById("total-price").innerText.replace(/[^0-9]/g, ''));
 	console.log(totalPrice);
+	if (!userId) {
+		sessionStorage.setItem("bookingID", bookingID);
+			window.location.href = `/`;
+			return;
+		}
 
-
-	// Lưu thông tin bookingID, tourID, userID vào localStorage
-	localStorage.setItem("bookingID", bookingID);
-	localStorage.setItem("tourID", tourId);
-	localStorage.setItem("userID", userId);
-	localStorage.setItem("totalPrice", totalPrice);
+	
 	/*mở trang payment với id của booking mới tạo*/
 	window.location.href = `/payment/${bookingID}`;
 
 }
+
+
 
 
 //-------------------------------------------Manh Here-------------------------------------

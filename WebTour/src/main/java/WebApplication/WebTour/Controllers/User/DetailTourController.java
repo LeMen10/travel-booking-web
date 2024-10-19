@@ -108,6 +108,7 @@ public class DetailTourController {
 		
 		// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên không cần viết hàm insert ở file respository
 		Bookings savedBooking = bookingsRespository.save(booking);
+		System.out.println("Payment ID: " + savedBooking.getPaymentId());
 		handleQuantityTicket(Integer.parseInt(savedBooking.getBookingId().toString())  , quantityAdult, quantityChild);
 		return ResponseEntity.ok(savedBooking);
 	}

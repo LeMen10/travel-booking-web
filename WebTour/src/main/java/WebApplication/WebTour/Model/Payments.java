@@ -1,6 +1,6 @@
 package WebApplication.WebTour.Model;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,16 +20,16 @@ public class Payments implements Serializable{
 	@Id
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "payment_id")
-    private Long paymentId ;
+    private Integer paymentId ;
 
     @Column(name = "booking_id")
-    private int bookingId;
+    private Long bookingId;
 
     @Column(name = "payment_date")
     private Date paymentDate;
     
     @Column(name = "amount")
-    private int amount;
+    private float amount;
 
     @Column(name = "payment_method ")
     private int paymentMethod ;
@@ -40,13 +40,17 @@ public class Payments implements Serializable{
     @Column(name = "status ")
     private boolean status ;
 
-	public int getBookingId() {
+	public Long getBookingId() {
 		return bookingId;
 	}
 
-	public void setBookingId(int bookingId) {
+
+
+	public void setBookingId(Long bookingId) {
 		this.bookingId = bookingId;
 	}
+
+
 
 	public Date getPaymentDate() {
 		return paymentDate;
@@ -56,12 +60,12 @@ public class Payments implements Serializable{
 		this.paymentDate = paymentDate;
 	}
 
-	public int getAmount() {
+	public float getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
-		amount = amount;
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 
 	public int getPaymentMethod() {
@@ -85,14 +89,14 @@ public class Payments implements Serializable{
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		this.status = status;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	public Long getPaymentId() {
+	public Integer getPaymentId() {
 		return paymentId;
 	}
 }

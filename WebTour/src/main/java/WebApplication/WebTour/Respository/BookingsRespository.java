@@ -29,13 +29,14 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 //                       @Param("peopleNums") int peopleNums);
 //	@Query(value = "SELECT * FROM Bookings WHERE booking_id = LAST_INSERT_ID()", nativeQuery = true)
 //	Bookings findLastInsertedBooking();
+	
+	
 	@Modifying
     @Transactional
     @Query(value = "UPDATE bookings SET total_price = :totalPrice WHERE booking_id = :bookingId AND status = true", nativeQuery = true)
 	int updateTotalPrice(@Param("totalPrice") float totalPrice, @Param("bookingId") Long bookingId);
     
-	/*@Query(value = "UPDATE  bookings b SET b.totalPrice = :totalPrice WHERE b.bookingId = :bookingId AND b.status = true", nativeQuery = true)
-	int updateTotalPrice(@Param("totalPrice") float totalPrice, @Param("bookingId") Long bookingId);*/
+	
     
 
 }

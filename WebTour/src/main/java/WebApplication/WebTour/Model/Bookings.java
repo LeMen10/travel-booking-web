@@ -3,6 +3,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +28,7 @@ public class Bookings implements Serializable{
 	@Column(name = "tour_id")
     private int tourId; 
 
-    @Column(name = "user_id")
+    @Column(name = "user_id" , nullable = true)
     private int userId;
     
     @Column(name = "booking_date")
@@ -35,8 +37,9 @@ public class Bookings implements Serializable{
     @Column(name = "status")
     private boolean status = true;
     
-    @Column(name = "payment_id")
-    private int paymentId;
+    @JsonInclude
+    @Column(name = "payment_id", nullable = true)
+    private Integer paymentId;
     
     @Column(name = "people_nums")
     private int peopleNums;
@@ -84,7 +87,7 @@ public class Bookings implements Serializable{
 
 
 
-	public int getPaymentId() {
+	public Integer getPaymentId() {
 		return paymentId;
 	}
 
@@ -114,8 +117,5 @@ public class Bookings implements Serializable{
 
 
 
-
-	
-    
     
 }

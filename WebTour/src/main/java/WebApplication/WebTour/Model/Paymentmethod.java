@@ -20,7 +20,7 @@ public class Paymentmethod implements Serializable{
 	@Id
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "paymethod_id")
-    private Long paymethodId ;
+    private int paymethodId ;
 
     @Column(name = "name")
     private String name;
@@ -44,7 +44,7 @@ public class Paymentmethod implements Serializable{
 		status = status;
 	}
 
-	public Long getPaymethodId() {
+	public int getPaymethodId() {
 		return paymethodId;
 	}
 }

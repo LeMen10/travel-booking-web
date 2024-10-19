@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 import WebApplication.WebTour.Model.Address;
 import WebApplication.WebTour.Model.Bookings;
 import WebApplication.WebTour.Model.District;
@@ -66,7 +65,6 @@ public class PaymentController {
 	AddressRespository addressRespository;
 	@Autowired
 	TicketBookingRepository ticketBookingRepository;
-	
 
 	// lấy id booking (có user trong đó để hiện thị t/tin user lên trang) vừa tạo và
 	// mở trang payment
@@ -76,11 +74,11 @@ public class PaymentController {
 		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingId);
 		if (bookingOpt.isPresent()) {
 			Bookings booking = bookingOpt.get();
+			
 			Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
-			if(bookingPayment.isPresent()) {
+			if (bookingPayment.isPresent()) {
 				model.addAttribute("bookingPayment", bookingPayment.get());
-			}
-			else {
+			} else {
 				model.addAttribute("error", "bookingPayment không tồn tại!");
 			}
 			// Lấy thông tin user từ userId trong booking
@@ -92,29 +90,28 @@ public class PaymentController {
 			}
 
 			// Lấy thông tin payment
-			Optional<Payments> payment = paymentsRepository.findById(bookingId); 
+			Optional<Payments> payment = paymentsRepository.findById(bookingId);
 			if (payment.isPresent()) {
 				model.addAttribute("payment", payment.get());
 			} else {
 				model.addAttribute("error", "Payment không tồn tại!");
 			}
-			//lấy thông tin của tour 
-			Optional<Tours> tourPayment = toursRepository.findById( (long) booking.getTourId());
+			// lấy thông tin của tour
+			Optional<Tours> tourPayment = toursRepository.findById((long) booking.getTourId());
 			if (tourPayment.isPresent()) {
 				model.addAttribute("tourPayment", tourPayment.get());
 			} else {
 				model.addAttribute("error", "TourPayment không tồn tại!");
 			}
-			//lấy ticketBooking để hiển thị số lượng người lớn và trẻ em
-			List<TicketBooking> ticketBooking =  ticketBookingRepository.findTicketBookingById(booking.getBookingId());
+			// lấy ticketBooking để hiển thị số lượng người lớn và trẻ em
+			List<TicketBooking> ticketBooking = ticketBookingRepository.findTicketBookingById(booking.getBookingId());
 			if (!ticketBooking.isEmpty()) {
 				model.addAttribute("ticketBookings", ticketBooking);
 				System.out.println(ticketBooking);
 			} else {
 				model.addAttribute("error", "ticketBooking không tồn tại!");
 			}
-			
-			
+
 		} else {
 			model.addAttribute("error", "Booking không tồn tại!");
 		}
@@ -149,7 +146,6 @@ public class PaymentController {
 	public List<Province> getAllProvince() {
 		return provinceRepository.findAll();
 	}
-	
 
 	// lấy tất cả district (quận, huyện) theo province
 	@ResponseBody
@@ -183,30 +179,62 @@ public class PaymentController {
 		}
 
 	}
-	
-	// lưu tổng tiền (tiền sau khi giảm giá)
-		@PutMapping("/api-update-totalprice")
-		public ResponseEntity<?> updateTotalPrice(
-				@RequestParam("totalPrice") float totalPrice,
-				@RequestParam("bookingId") Long bookingId) {
 
-			try {
-		        int updatedRows = bookingsRespository.updateTotalPrice(totalPrice, bookingId);
-		        if (updatedRows > 0) {
-		            return ResponseEntity.ok("Cập nhật totalPrice thành công cho booking với ID: " + bookingId);
-		        } else {
-		            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy booking với ID: " + bookingId);
-		        }
-		    } catch (Exception e) {
-		        e.printStackTrace();  // In lỗi ra console để dễ debug
-		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi cập nhật: " + e.getMessage());
-		    }
+	// lưu tổng tiền (tiền sau khi giảm giá)
+	@PutMapping("/api-update-totalprice")
+	public ResponseEntity<?> updateTotalPrice(@RequestParam("totalPrice") float totalPrice,
+			@RequestParam("bookingId") Long bookingId) {
+
+		try {
+			int updatedRows = bookingsRespository.updateTotalPrice(totalPrice, bookingId);
+			if (updatedRows > 0) {
+				return ResponseEntity.ok("Cập nhật totalPrice thành công cho booking với ID: " + bookingId);
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy booking với ID: " + bookingId);
+			}
+		} catch (Exception e) {
+			e.printStackTrace(); // In lỗi ra console để dễ debug
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi cập nhật: " + e.getMessage());
 		}
-		
-		@PostMapping("/create-payment")
-		public ResponseEntity<Payments> createPayment(@RequestParam("tourId") int tourId,){
-			
+	}
+
+	// tạo payment
+	@PostMapping("/api-create-payment")
+	public ResponseEntity<Payments> createPayment(@RequestParam("bookingId") Long bookingId,
+			@RequestParam("paymentDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date paymentDate,
+			@RequestParam("amount") float amount, @RequestParam("paymentMethod") int paymentMethod
+			) {
+		System.out.println("Amount received from request: " + amount);
+		Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
+		if (!bookingPayment.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+		Bookings existingBooking = bookingPayment.get();
+
+		Payments payment = new Payments();
+		payment.setBookingId(existingBooking.getBookingId());
+		payment.setPaymentDate(paymentDate);
+		payment.setAmount(amount);
 		
+		payment.setPaymentMethod(paymentMethod);
+		payment.setPaymentStatus(2);
+		payment.setStatus(true);
+
+		Payments savePayment = paymentsRepository.save(payment);
+		System.out.println("Saved Payment amount: " + savePayment.getAmount());
+
+		existingBooking.setPaymentId(savePayment.getPaymentId());
+		bookingsRespository.save(existingBooking);
+		return ResponseEntity.ok(savePayment);
+
+	}
+	
+	//dùng để cập nhật paymentStatus sau khi thanh toán thành công
+	@PutMapping("/update-status/{bookingId}")
+    public ResponseEntity<String> updatePaymentStatus(@PathVariable Long bookingId) {
+        paymentsRepository.updatePaymentStatus(bookingId);
+        return ResponseEntity.ok("update successfully");
+    }
+	
 	
 }

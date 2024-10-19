@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/orderNotificationSuccess.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+	<div class="container">
+		<div class="header">ND Travel</div>
+		<div class="confirmation">
+			<i class="fas fa-check-circle"> </i>
+			<div class="confirmation-text">
+				<b> Cảm ơn bạn đã đặt hàng </b>
+
+			</div>
+		</div>
+		<div class="order-info">
+			<div>
+				<p  >Thông tin mua hàng</p>
+				<p th:text="${user.fullName}">Đỗ Nam</p>
+
+				<p >oda@gmail.com</p>
+				<p  >Phương thức thanh toán</p>
+				<p  >0</p>
+				<!-- <p th:text="${payments.paymentmethod.name}" ></p> -->
+					
+			</div>
+			
+		</div>
+		<div class="order-summary">
+			<label>Đơn hàng: </label>
+			<p th:text="${bookingPayment.bookingId}" >  #1015 (2) </p>
+			<div class="item">
+				<img alt="Image of a tropical beach destination" height="50"
+					src="https://storage.googleapis.com/a1aa/image/jqqEmLv24fWUYS6bKopLTbETHHpeNWnGXeQwZ1gZJUfteaAdC.jpg"
+					width="50" />
+				<div class="item-info">
+					<b> Du Lịch 4 Đảo Phú Quốc: Hành Trình 1 ngày </b> <span>
+						Người lớn </span>
+				</div>
+				<div>1.000.000đ</div>
+			</div>
+			<div class="total">
+				<div>Tạm tính</div>
+				<div>10.500.000đ</div>
+			</div>
+
+			<div class="total">
+				<b> Tổng cộng </b> <b> 10.540.000đ </b>
+			</div>
+		</div>
+		<div class="actions">
+			<button>
+				<i class="fas fa-shopping-cart"> </i> Tiếp tục mua hàng
+			</button>
+			<button>
+				<i class="fas fa-print"> </i> In
+			</button>
+		</div>
+	</div>
+</body>
+</html>
