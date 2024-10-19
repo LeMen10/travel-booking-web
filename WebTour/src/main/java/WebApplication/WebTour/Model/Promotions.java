@@ -39,7 +39,7 @@ public class Promotions implements Serializable{
     private Date endDate;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
 	public Long getPromotionId() {
 		return promotionId;
@@ -49,8 +49,11 @@ public class Promotions implements Serializable{
 		this.promotionId = promotionId;
 	}
 
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
 	public String getCode() {
 		return code;
 	}
