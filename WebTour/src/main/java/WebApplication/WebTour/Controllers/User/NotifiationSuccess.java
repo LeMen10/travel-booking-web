@@ -48,56 +48,11 @@ public class NotifiationSuccess {
 	// lấy thông tin trong thông báo thanh toán thành công
 	@GetMapping("/api-success/{bookingId}")
 	public String notificationSuccess(@PathVariable("bookingId") Long bookingId, Model model) {
-		// lấy thông tin booking từ bookingsRespository
-		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingId);
-		if (bookingOpt.isPresent()) {
-			Bookings booking = bookingOpt.get();
-			System.out.println("User ID from booking: " + booking.getUserId());
-
-			// Lấy thông tin user từ userId trong booking
-			Optional<User> user = userRepository.findById((long) booking.getUserId());
-			if (user.isPresent()) {
-				model.addAttribute("user", user.get());
-			} else {
-				System.out.println("User không tồn tại!");
-	            model.addAttribute("user", null);  // Đảm bảo user là null nếu không tìm thấy
-	            model.addAttribute("error", "User không tồn tại!");
-			}
-
-			Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
-			if (bookingPayment.isPresent()) {
-				model.addAttribute("bookingPayment", bookingPayment.get());
-			} else {
-				model.addAttribute("error", "bookingPayment không tồn tại!");
-			}
-
-			// Lấy thông tin payment
-			Optional<Payments> payment = paymentsRepository.findById(bookingId);
-			if (payment.isPresent()) {
-				model.addAttribute("payment", payment.get());
-			} else {
-				model.addAttribute("error", "Payment không tồn tại!");
-			}
-			// lấy thông tin của tour
-			Optional<Tours> tourPayment = toursRepository.findById((long) booking.getTourId());
-			if (tourPayment.isPresent()) {
-				model.addAttribute("tourPayment", tourPayment.get());
-			} else {
-				model.addAttribute("error", "TourPayment không tồn tại!");
-			}
-			// lấy ticketBooking để hiển thị số lượng người lớn và trẻ em
-			List<TicketBooking> ticketBooking = ticketBookingRepository.findTicketBookingById(booking.getBookingId());
-			if (!ticketBooking.isEmpty()) {
-				model.addAttribute("ticketBookings", ticketBooking);
-				System.out.println(ticketBooking);
-			} else {
-				model.addAttribute("error", "ticketBooking không tồn tại!");
-			}
-
-		} else {
-			model.addAttribute("error", "Booking không tồn tại!");
-		}
-
+		
+		Bookings b = bookingsRespository.findById(bookingId).get();
+		User u = b.getUser();
+		System.out.println(u);
+		model.addAttribute("user", u);
 		return "/User/notificationSuccess";
 	}
 

@@ -1,15 +1,15 @@
 package WebApplication.WebTour.Model;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -25,11 +25,13 @@ public class Bookings implements Serializable{
 	@Column(name = "booking_id")
     private Long bookingId ;
 	
-	@Column(name = "tour_id")
-    private int tourId; 
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "tour_id", nullable = true)
+    private Tours tour; 
 
-    @Column(name = "user_id" , nullable = true)
-    private int userId;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user;
     
     @Column(name = "booking_date")
     private Date bookingDate;
@@ -37,9 +39,9 @@ public class Bookings implements Serializable{
     @Column(name = "status")
     private boolean status = true;
     
-    @JsonInclude
-    @Column(name = "payment_id", nullable = true)
-    private Integer paymentId;
+    @ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "payment_id", nullable = true)
+    private Payments payment;
     
     @Column(name = "people_nums")
     private int peopleNums;
@@ -47,20 +49,21 @@ public class Bookings implements Serializable{
     @Column(name = "total_price")
     private float totalPrice;
 
-	public int getTourId() {
-		return tourId;
+
+	public Tours getTour() {
+		return tour;
 	}
 
-	public void setTourId(int tourId) {
-		this.tourId = tourId;
+	public void setTour(Tours tour) {
+		this.tour = tour;
 	}
 
-	public int getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setBookingId(Long bookingId) {
@@ -82,17 +85,15 @@ public class Bookings implements Serializable{
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		this.status = status;
 	}
 
-
-
-	public Integer getPaymentId() {
-		return paymentId;
+	public Payments getPayment() {
+		return payment;
 	}
 
-	public void setPaymentId(int paymentId) {
-		this.paymentId = paymentId;
+	public void setPayment(Payments payment) {
+		this.payment = payment;
 	}
 
 	public int getPeopleNums() {

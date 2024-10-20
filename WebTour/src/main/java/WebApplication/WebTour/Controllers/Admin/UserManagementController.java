@@ -17,7 +17,7 @@ public class UserManagementController {
 
     @GetMapping("/admin/customer-management")
     public String customerManagementPage(Model model) {
-    	 	List<User> users = userRepository.findByRoleId();
+    	 	List<User> users = userRepository.findByRoleId(3);
     	 	
     	 	model.addAttribute("users", users);
     		return "/Admin/customer_management";

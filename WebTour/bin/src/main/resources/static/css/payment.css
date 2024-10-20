@@ -113,7 +113,8 @@ h1 {
 }
 
 .order-summary .item-details p {
-	margin: 0;
+	margin: 0 !important;
+	
 }
 
 .order-summary .item-details .price {
@@ -197,7 +198,7 @@ h1 {
 .actions {
 	padding: 18px 5px;
 	display: flex;
-	justify-content: space-between; color : #fff;
+	justify-content: center; color : #fff;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
@@ -218,6 +219,22 @@ h1 {
 .div-quantity{
 	display: flex;
 }
-.quantity{
+div .div-quantity .quantity-p{
 	margin-left: 2%; 
+}
+.code-tour{
+	display: flex;
+}
+
+.tour-id, 
+.booking-id,
+.quantity-p  {
+	padding-left: 1%;
+}
+
+.code-booking{
+	display: flex;
+}
+.code-booking tour-id{
+	margin-left: 2%;
 }

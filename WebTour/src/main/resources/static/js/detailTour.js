@@ -271,7 +271,7 @@ async function createBooking() {
 	console.log("Hàm createBooking đã được gọi.");
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
 	
-	const userId = sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
+	const userId = sessionStorage.getItem("userId") == null? 0:sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
 
 
 	//kiểm tra đăng nhập

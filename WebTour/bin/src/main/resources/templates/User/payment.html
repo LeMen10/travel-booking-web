@@ -5,8 +5,9 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="../css/payment.css">
 <link rel="stylesheet" href="../js/payment.js">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://www.paypal.com/sdk/js?client-id=ARW6b-dLanvCGRATvXwTqwf2KkcQNm11tPjKinXLalb7UD1PJV2OVsOSOhx1l6bM6BBPsSDYNagdR6Uu&currency=USD"></script>
+
 </head>
 <body>
 	<div class="container">
@@ -42,7 +43,6 @@
 					id="optional-address" type="text" />
 			</div>
 
-
 			<div class="form-group">
 				<label for="city"> Tỉnh thành </label> 
 				<select th:each="users: ${user}" id="city">
@@ -61,9 +61,6 @@
 					<option th:value="${users.address.ward.wardId}" th:text="${users.address.ward.name}">---</option>
 				</select>
 			</div>
-
-
-
 
 			<!-- <div class="section-title">Vận chuyển</div>
 			<div class="shipping-info">Vui lòng nhập thông tin giao hàng</div> -->
@@ -90,19 +87,27 @@
 						src="https://storage.googleapis.com/a1aa/image/oqgWqTIWzj6BHhMp9dwUieDNUzA68MxOwsjm2kBWoISepujTA.jpg"
 						width="50" />
 					<div th:object="${ticketBooking}" class="item-details">
-						<p th:text="${tourPayment.tourName}">Du Lịch 4 Đảo Phú Quốc:
-							Hành Trình 1 ngày</p>
+						<div class="code-booking">
+							<label>Mã đơn: </label>
+							<p th:text="${bookingPayment.bookingId}" id="id-booking" th:attr="data-id=${bookingPayment.bookingId}" class="booking-id" ></p>
+						</div>
+						<div class="code-tour">
+							<label>Mã tour: </label>
+							<p th:text="${tourPayment.tourId}" id="id-booking-info" th:attr="data-id=${tourPayment.tourId}" class="tour-id" ></p>
+						</div>
+						
+							<p th:text="${tourPayment.tourName}">Du Lịch 4 Đảo Phú Quốc: Hành Trình 1 ngày</p>
 
 						<div th:each="ticketBooking : ${ticketBookings}">
 							<div class="div-quantity">
 								<p th:text="${ticketBooking.ticket.name}">:</p>
-								<p th:text="${ticketBooking.quantity}" class="quantity"></p>
+								<p  th:text="${ticketBooking.quantity}" class="quantity-p"></p>
 							</div>
 						</div>
 
-						<p>Ngày đi: 03/10/2024</p>
-						<p>Vịnh - Trương Gia Giới -</p>
-						<p class="price">1.000.000đ</p>
+						<p th:text="${ #dates.format(tourPayment.startDate, 'yyyy-MM-dd') }" >Ngày đi: 2019-10-12</p> 
+						<!-- <p th:text="${tourPayment.startDate != null ? #dates.format(tourPayment.startDate, 'yyyy-MM-dd') : 'Chưa có ngày đi'}">Ngày đi: </p> -->
+						
 					</div>
 				</div>
 				<div class="apply-coupon">
@@ -116,12 +121,16 @@
 				</div>
 
 				<div class="total">
-					<span>Tổng cộng</span> <span id="total-price" class="total-amount">10.500.000₫</span>
+					<span>Tổng cộng</span> 
+					<span id="total-price" class="total-amount">0₫</span>
 				</div>
 				<div class="actions">
-					<a href="#" class="back-to-cart">‹ Quay về giỏ hàng</a>
-					<button class="order-button">Thanh toán</button>
+					
+					<button id="bt-pay" class="order-button">Thanh toán</button>
+					
 				</div>
+				<div id="paypal-button-container"></div>
+				<a href="#" class="back-to-cart">‹ Quay về giỏ hàng</a>
 			</div>
 		</div>
 	</div>

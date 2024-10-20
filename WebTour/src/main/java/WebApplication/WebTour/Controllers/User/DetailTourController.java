@@ -47,7 +47,7 @@ public class DetailTourController {
 	public DetailTourController(TicketRepository ticketRepository) {
 		this.ticketRepository = ticketRepository;
 	}
-
+	
 	@GetMapping("/detail-tour")
 	public String GetDetailTour(Model model) {
 		Optional<Tours> detailTour = toursRepository.findById(1l);
@@ -93,22 +93,23 @@ public class DetailTourController {
 
 	// tạo booking
 	@PostMapping("/create-booking")
-	public ResponseEntity<Bookings> createBooking(@RequestParam("tourId") int tourId,
-			@RequestParam("userId") int userId,
+	public ResponseEntity<Bookings> createBooking(@RequestParam("tourId") long tourId,
+			@RequestParam("userId") long userId,
 			@RequestParam("bookingDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date bookingDate,
 			@RequestParam("quantityAdult") int quantityAdult, 
 			@RequestParam("quantityChild") int quantityChild) {
 
 		Bookings booking = new Bookings();
-		booking.setTourId(tourId);
-		booking.setUserId(userId);
+		Tours tour = toursRepository.findById(tourId).get();
+		booking.setTour(tour);
+		User user = userId == 0? null: userRepository.findById(userId).get();
+		booking.setUser(user);
 		booking.setBookingDate(bookingDate);
 		
 		booking.setPeopleNums(quantityAdult+quantityChild); 
 		
 		// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên không cần viết hàm insert ở file respository
 		Bookings savedBooking = bookingsRespository.save(booking);
-		System.out.println("Payment ID: " + savedBooking.getPaymentId());
 		handleQuantityTicket(Integer.parseInt(savedBooking.getBookingId().toString())  , quantityAdult, quantityChild);
 		return ResponseEntity.ok(savedBooking);
 	}

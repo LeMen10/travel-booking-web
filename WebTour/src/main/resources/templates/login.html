@@ -6,28 +6,27 @@
     <title>3D Box Design</title>
     <link rel="stylesheet" href="/css/loginStyle.css">
 
-</script>
 </head>
 <body>
 	<div class="container" id="container">
 		<div class="form-container sign-up-container">
-			<form action="#">
+			<form>
 				<h1>Create Account</h1>
 				<input id="full-name-register" type="text" placeholder="Full name" required/>
 				<input id="email-register" type="email" placeholder="Email" required/>
-				<input id="user-namme-register" type="text" placeholder="User name" required/>
+				<input id="user-name-register" type="text" placeholder="User name" required/>
 				<input id="phone-register" type="tel" placeholder="Phone" pattern="^0[0-9]{6,12}" required/>
 				<input id="password-register" type="password" placeholder="Password" required/>
-				<button onClick="handleRegisterAccont()">Sign Up</button>
+				<button onClick="handleRegisterAccont(event)">Sign Up</button>
 			</form>
 		</div>
 		<div class="form-container sign-in-container">
-			<form action="#">
+			<form>
 				<h1>Sign in</h1>
 				<input id="user-name-login" type="text" placeholder="User name" required/>
 				<input id="password-login" type="password" placeholder="Password" required/>
-				<a href="#">Forgot your password?</a>
-				<button onClick="handleLogin()">Sign In</button>
+				<a href="/forgot-password">Forgot your password?</a>
+				<button onClick="handleLogin(event)">Sign In</button>
 			</form>
 		</div>
 		<div class="overlay-container">

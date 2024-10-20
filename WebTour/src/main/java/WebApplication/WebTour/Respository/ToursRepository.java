@@ -8,8 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import WebApplication.WebTour.Model.Tours;
 
@@ -35,4 +37,8 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	                      @Param("departure") String departure,
 	                      @Param("destination") String destination,
 	                      Pageable pageable);
+	
+	//Get tour for home page
+    @Query(value = "SELECT t FROM Tours t WHERE t.status = true ORDER BY t.price ASC LIMIT 8")
+	List<Tours> listOfCheapestTours();
 }

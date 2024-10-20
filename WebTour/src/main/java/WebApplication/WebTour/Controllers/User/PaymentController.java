@@ -70,52 +70,15 @@ public class PaymentController {
 	// mở trang payment
 	@GetMapping("/payment/{bookingId}")
 	public String openPaymentForm(@PathVariable("bookingId") Long bookingId, Model model) {
-		// llấy thông tin booking từ bookingsRespository
-		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingId);
-		if (bookingOpt.isPresent()) {
-			Bookings booking = bookingOpt.get();
-			
-			Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
-			if (bookingPayment.isPresent()) {
-				model.addAttribute("bookingPayment", bookingPayment.get());
-			} else {
-				model.addAttribute("error", "bookingPayment không tồn tại!");
-			}
-			// Lấy thông tin user từ userId trong booking
-			Optional<User> user = userRepository.findById((long) booking.getUserId());
-			if (user.isPresent()) {
-				model.addAttribute("user", user.get());
-			} else {
-				model.addAttribute("error", "User không tồn tại!");
-			}
 
-			// Lấy thông tin payment
-			Optional<Payments> payment = paymentsRepository.findById(bookingId);
-			if (payment.isPresent()) {
-				model.addAttribute("payment", payment.get());
-			} else {
-				model.addAttribute("error", "Payment không tồn tại!");
-			}
-			// lấy thông tin của tour
-			Optional<Tours> tourPayment = toursRepository.findById((long) booking.getTourId());
-			if (tourPayment.isPresent()) {
-				model.addAttribute("tourPayment", tourPayment.get());
-			} else {
-				model.addAttribute("error", "TourPayment không tồn tại!");
-			}
-			// lấy ticketBooking để hiển thị số lượng người lớn và trẻ em
-			List<TicketBooking> ticketBooking = ticketBookingRepository.findTicketBookingById(booking.getBookingId());
-			if (!ticketBooking.isEmpty()) {
-				model.addAttribute("ticketBookings", ticketBooking);
-				System.out.println(ticketBooking);
-			} else {
-				model.addAttribute("error", "ticketBooking không tồn tại!");
-			}
-
-		} else {
-			model.addAttribute("error", "Booking không tồn tại!");
-		}
-
+			Bookings bookings = bookingsRespository.findById(bookingId).get();
+			User user = bookings.getUser();
+			Tours tour = bookings.getTour();
+			List<TicketBooking> ticketBookings = ticketBookingRepository.findTicketBookingById(bookingId);
+			model.addAttribute("bookingPayment", bookings);
+			model.addAttribute("tourPayment", tour);
+			model.addAttribute("user", user);
+			model.addAttribute("ticketBooking", ticketBookings);
 		return "/User/payment";
 	}
 
@@ -223,7 +186,7 @@ public class PaymentController {
 		Payments savePayment = paymentsRepository.save(payment);
 		System.out.println("Saved Payment amount: " + savePayment.getAmount());
 
-		existingBooking.setPaymentId(savePayment.getPaymentId());
+		existingBooking.setPayment(savePayment);
 		bookingsRespository.save(existingBooking);
 		return ResponseEntity.ok(savePayment);
 

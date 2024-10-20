@@ -2,11 +2,14 @@ package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -22,8 +25,9 @@ public class Account implements Serializable{
 	@Column(name = "account_id")
     private Long accountId;
 
-    @Column(name = "user_id")
-    private int userId;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user;
     
     @Column(name = "user_name")
     private String userName;
@@ -32,22 +36,22 @@ public class Account implements Serializable{
     private String password;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
+
+	public Account() {
+		super();
+	}
+
+	public Account(User user, String userName, String password) {
+		super();
+		this.user = user;
+		this.userName = userName;
+		this.password = password;
+	}
 
 	public Long getAccountId() {
 		return accountId;
 	}
-
-	
-	public int getUser_id() {
-		return userId;
-	}
-
-	public void setUser_id(int userId) {
-		this.userId = userId;
-	}
-
-
 
 	public String getUserName() {
 		return userName;
@@ -61,20 +65,17 @@ public class Account implements Serializable{
 		return password;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-
-	public int getUserId() {
-		return userId;
-	}
-
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
 
 	public boolean isStatus() {
 		return status;

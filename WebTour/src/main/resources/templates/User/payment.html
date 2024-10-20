@@ -45,20 +45,20 @@
 
 			<div class="form-group">
 				<label for="city"> Tỉnh thành </label> 
-				<select th:each="users: ${user}" id="city">
-					<option th:value="${users.address.province.provinceId}" th:text="${users.address.province.name}">---</option>
+				<select id="city">
+					<option th:value="${user.address.province.provinceId}" th:text="${user.address.province.name}">---</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="district"> Quận huyện </label> 
-				<select th:each="users: ${user}" id="district">
-					<option th:value="${users.address.district.districtId}" th:text="${users.address.district.name}">---</option>
+				<select id="district">
+					<option th:value="${user.address.district.districtId}" th:text="${user.address.district.name}">---</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="ward"> Phường xã </label> 
-				<select th:each="users: ${user}" id="ward">
-					<option th:value="${users.address.ward.wardId}" th:text="${users.address.ward.name}">---</option>
+				<select id="ward">
+					<option th:value="${user.address.ward.wardId}" th:text="${user.address.ward.name}">---</option>
 				</select>
 			</div>
 

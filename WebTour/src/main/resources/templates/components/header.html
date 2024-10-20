@@ -1,48 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ND Travel</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/css/header.css">
-</head>
-<body>
-    <header>
+
+    <div class="container">
         <div class="container">
             <div class="logo">
-                <a href="#"><img src="/image/logo.png" alt="ND Travel Logo"></a>
+                <a href="home.html"><img src="/image/Logo.png" alt="ND Travel Logo"></a>
             </div>
             <nav>
                 <ul>
-                    <li><a href="#" id="home-link">Trang chủ</a></li>
+                    <li><a href="/home" id="home-link">Trang chủ</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropbtn" id="about-link">Giới thiệu <i class="fa-solid fa-caret-down"></i></a>
-                        <div class="dropdown-content">
-                            <div class="column">
-                                <a href="#">Bảo hiểm tour</a>
-                            </div>
-                            <div class="column">
-                                <a href="#">Visa</a>
-                            </div>
-                        </div>
+                        <a href="#" class="dropbtn" id="about-link">Giới thiệu</a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropbtn" id="tour-link">Tour du lịch <i class="fa-solid fa-caret-down"></i></a>
-                        <div class="dropdown-content">
-                            <div class="column">
-                                <a href="#" class="title"><b>Tour trong nước</b></a>
-                                <a href="#">Phú Quốc</a>
-                                <a href="#">Nha Trang</a>
-                                <a href="#">Đà Nẵng</a>
-                            </div>
-                            <div class="column">
-                                <a href="#"><b>Tour nước ngoài</b></a>
-                                <a href="#">Hàn Quốc</a>
-                                <a href="#">Trung Quốc</a>
-                                <a href="#">Thái Lan</a>
-                            </div>
-                        </div>
+                        <a href="/search?s=" class="dropbtn" id="tour-link">Tour du lịch</a>
                     </li>
                     <li><a href="#" id="news-link">Tin tức</a></li>
                     <li><a href="#" id="faq-link">FAQs</a></li>
@@ -50,8 +19,8 @@
                 </ul>
             </nav>            
             <div class="icons">
-                <a href="#"><i class="fas fa-search"></i></a>
-                <a href="#"><i class="fa-regular fa-circle-user"></i></a>
+                <a href="#"><i class="fas fa-search btn-search"></i></a>
+                <a href="/"><i class="fa-regular fa-circle-user"></i></a>
                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
                 <span class="hotline">
                     <i class="fa-solid fa-headset"></i>
@@ -59,14 +28,15 @@
                 </span>
             </div>         
         </div>
-    </header>
-    <div class="hero">
-        <div class="bread">
-            <div id="breadcrumb">
 
-            </div> 
-        </div>  
-    </div>
-    <script src="/js/header.js"></script>
-</body>
-</html>
+        <!-- Div phụ (search-box) -->
+        <div class="search-box" id="searchBox">
+            <div class="empty-box" id="emptyBox"></div>
+            <div class="search-top">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Nhập tên tour...">
+                    <i class="fas fa-search" id="searchIcon"></i>
+                </div>
+            </div>
+        </div>
+      </div>

@@ -15,15 +15,14 @@ import lombok.Data;
 @Table(name = "user")
 @Data
 public class User {
-	private static final long serialVersionUID = 1L;
-
 	@Id
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
     private Long user_id;
 
-    @Column(name = "role_id")
-    private int role_id;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "role_id", nullable = true)
+    private Role role;
     
     @Column(name = "full_name")
     private String fullName;
@@ -40,11 +39,26 @@ public class User {
     private String gender;
     
     @Column(name = "status")
-    private String status;
+    private boolean status = true;
     
     @ManyToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "address", nullable = true)
     private Address address;
+
+    
+	public User() {
+		super();
+	}
+
+	public User(Role role, String fullName, String email, String phone, String gender, Address address) {
+		super();
+		this.role = role;
+		this.fullName = fullName;
+		this.email = email;
+		this.phone = phone;
+		this.gender = gender;
+		this.address = address;
+	}
 
 	public Long getUser_id() {
 		return user_id;
@@ -54,9 +68,6 @@ public class User {
 		this.user_id = user_id;
 	}
 
-	public int getRole_id() {
-		return role_id;
-	}
 	
 
 	public Address getAddress() {
@@ -67,8 +78,13 @@ public class User {
 		this.address = address;
 	}
 
-	public void setRole_id(int role_id) {
-		this.role_id = role_id;
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public String getFullName() {
@@ -104,14 +120,19 @@ public class User {
 		this.gender = gender;
 	}
 
-	public String getStatus() {
+	public boolean isStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
-    
-    
+
+	@Override
+	public String toString() {
+		return "User [user_id=" + user_id + ", role=" + role + ", fullName=" + fullName + ", email=" + email
+				+ ", phone=" + phone + ", gender=" + gender + ", status=" + status + ", address=" + address + "]";
+	}
+        
     
 }
