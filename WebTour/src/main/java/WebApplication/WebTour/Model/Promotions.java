@@ -49,11 +49,6 @@ public class Promotions implements Serializable{
 		this.promotionId = promotionId;
 	}
 
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 	public String getCode() {
 		return code;
 	}

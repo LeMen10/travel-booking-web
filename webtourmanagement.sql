@@ -3,11 +3,6 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
-<<<<<<< Updated upstream
--- Thời gian đã tạo: Th10 16, 2024 lúc 11:13 AM
-=======
--- Thời gian đã tạo: Th10 14, 2024 lúc 09:28 AM
->>>>>>> Stashed changes
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -86,11 +81,7 @@ CREATE TABLE `bookings` (
   `user_id` int(11) DEFAULT NULL,
   `booking_date` datetime(6) DEFAULT NULL,
   `status` tinyint(1) DEFAULT 1,
-<<<<<<< Updated upstream
   `payment_id` int(11) DEFAULT NULL,
-=======
-  `pay_status` int(11) DEFAULT NULL,
->>>>>>> Stashed changes
   `people_nums` int(11) DEFAULT NULL,
   `total_price` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -99,12 +90,7 @@ CREATE TABLE `bookings` (
 -- Đang đổ dữ liệu cho bảng `bookings`
 --
 
-<<<<<<< Updated upstream
-INSERT INTO `bookings` (`booking_id`, `tour_id`, `user_id`, `booking_date`, `status`, `payment_id`, `people_nums`, `total_price`) VALUES
-(1, 1, 6, '2024-11-03 00:00:00.000000', 1, 1, 10, 0),
-(2, 4, 7, '2024-11-05 00:00:00.000000', 1, 1, 10, 0),
-(67, 1, 6, '2024-10-14 00:00:00.000000', 1, 1, 2, 0);
-=======
+
 INSERT INTO `bookings` (`booking_id`, `tour_id`, `user_id`, `booking_date`, `status`, `pay_status`, `people_nums`, `total_price`) VALUES
 (1, 1, 6, '2024-11-03 00:00:00.000000', 1, 2, 10, NULL),
 (2, 4, 7, '2024-11-05 00:00:00.000000', 1, 2, 10, NULL),
@@ -121,7 +107,6 @@ INSERT INTO `bookings` (`booking_id`, `tour_id`, `user_id`, `booking_date`, `sta
 (26, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 2, 0),
 (27, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 1, 0),
 (28, 1, 6, '2024-10-14 00:00:00.000000', 0, 0, 2, 0);
->>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -1218,11 +1203,11 @@ CREATE TABLE `ticketbooking` (
 --
 
 INSERT INTO `ticketbooking` (`id`, `ticket_id`, `booking_id`, `quantity`, `status`) VALUES
-(1, 1, 1, 5, 1),
 <<<<<<< Updated upstream
 (2, 2, 1, 5, 1),
 (67, 1, 67, 1, 1);
 =======
+(1, 1, 1, 5, 1),
 (2, 2, 2, 5, 1);
 >>>>>>> Stashed changes
 
@@ -11947,8 +11932,12 @@ ALTER TABLE `bookings`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `fk_bookings_tour` (`tour_id`),
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   ADD KEY `fk_bookings_customer` (`user_id`),
   ADD KEY `payment_id` (`payment_id`);
+=======
+  ADD KEY `fk_bookings_customer` (`user_id`);
+>>>>>>> Stashed changes
 =======
   ADD KEY `fk_bookings_customer` (`user_id`);
 >>>>>>> Stashed changes
@@ -12107,7 +12096,11 @@ ALTER TABLE `address`
 --
 ALTER TABLE `bookings`
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+=======
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+>>>>>>> Stashed changes
 =======
   MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 >>>>>>> Stashed changes
@@ -12147,7 +12140,11 @@ ALTER TABLE `paymentmethod`
 --
 ALTER TABLE `payments`
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+=======
+  MODIFY `payment_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> Stashed changes
 =======
   MODIFY `payment_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 >>>>>>> Stashed changes
@@ -12211,7 +12208,11 @@ ALTER TABLE `ticket`
 --
 ALTER TABLE `ticketbooking`
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+=======
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> Stashed changes
 =======
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 >>>>>>> Stashed changes
@@ -12257,10 +12258,7 @@ ALTER TABLE `address`
 --
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-<<<<<<< Updated upstream
   ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`payment_id`),
-=======
->>>>>>> Stashed changes
   ADD CONSTRAINT `fk_bookings_tour` FOREIGN KEY (`tour_id`) REFERENCES `tours` (`tour_id`);
 
 --

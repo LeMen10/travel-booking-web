@@ -49,6 +49,24 @@
 		<div class="tab-content">
 			<div class="tab-title-promotion mb-20">
 				<h1 class="title-promotion">Khuyến mãi</h1>
+<<<<<<< Updated upstream
+				<p class="create-promotion-btn" id="add-promotion-btn">Tạo
+					khuyến mãi</p>
+			</div>
+
+			<div class="filter">
+				<div class="d-flex space-between">
+					<label for="" class="align-center d-flex mr-10">Ngày bắt đầu</label>
+					<input type="date" id="datetime-start-filter" class="datetime-start mr-50"
+						name="datetime">
+				</div>
+				<div class="d-flex space-between">
+					<label for="" class="align-center d-flex mr-10">Ngày hết hạn</label>
+					<input type="date" id="datetime-end-filter" class="datetime-end mr-10"
+						name="datetime">
+				</div>
+				<button id="filter-promotion-byDate">Lọc</button>
+=======
 				<p class="create-promotion-btn"  id="add-promotion-btn">Tạo
 					khuyến mãi</p>
 			</div>
@@ -60,22 +78,37 @@
 				<input type="text" placeholder="Lọc khuyến mãi..."> <input
 					type="text" placeholder="Tìm kiếm khuyến mãi...">
 				<button>Lọc</button>
+>>>>>>> Stashed changes
 			</div>
 			<table class="table">
 				<thead>
 					<tr>
 						<th class="large-column">Mã khuyến mãi</th>
+<<<<<<< Updated upstream
+						<th class="small-column">Chi tiết</th>
+=======
 						<th class="small-column">Chi tiết</th> 
+>>>>>>> Stashed changes
 						<th class="mid-column">Phần trăm</th>
 						<th class="large-column">Bắt đầu</th>
 						<th class="large-column">Kết thúc</th>
 					</tr>
 				</thead>
+<<<<<<< Updated upstream
+				<tbody id="promotion-table-body">
+					<tr th:each="promotion : ${promotions}"
+						th:attr="data-id=${promotion.promotionId}"
+						onclick="getPromotionId(this)">
+						<td th:text="${promotion.code}"></td>
+						<td th:text="${promotion.description}" class="text-left"></td>
+						<td th:text="${promotion.discount + '%'}"></td>
+=======
 				<tbody>
 					<tr th:each="promotion : ${promotions}">
 						<td th:text="${promotion.code}"></td>
 						<td th:text="${promotion.description}" class="text-left"></td>
 						<td th:text="${promotion.discount}"></td>
+>>>>>>> Stashed changes
 						<td th:text="${promotion.startDate}"></td>
 						<td th:text="${promotion.endDate}"></td>
 					</tr>
@@ -83,6 +116,10 @@
 			</table>
 		</div>
 	</div>
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
 	<div class="modal" id="add-promotion-modal">
 		<div class="modal__overlay"></div>
 		<div class="modal__body">
@@ -97,14 +134,24 @@
 						<div class="auth-form__group">
 							<div class="d-flex space-between">
 								<label for="name" class="weight-6">Mã khuyến mãi *</label>
+<<<<<<< Updated upstream
+								<p id="random-string" class="random-string">Sinh mã ngẫu
+									nhiên</p>
+=======
 								<p id="random-string" class="random-string">Sinh mã ngẫu nhiên</p>
+>>>>>>> Stashed changes
 							</div>
 							<input type="text" placeholder=" " class="auth-form__input mt-8"
 								id="promotion-code">
 							<div class="error"></div>
 						</div>
 						<div class="auth-form__group mt-16">
+<<<<<<< Updated upstream
+							<p for="name" class="pro-cate weight-6">Phần trăm khuyến mãi
+								*</p>
+=======
 							<p for="name" class="pro-cate weight-6">Phần trăm khuyến mãi *</p>
+>>>>>>> Stashed changes
 
 							<div class="pd-bt-6px">
 								<input type="text" name="promotion" value="" id="discount"
@@ -118,33 +165,97 @@
 							<p class="weight-6">Thời gian *</p>
 							<div class="mt-8">
 								<div class="d-flex space-between">
+<<<<<<< Updated upstream
+									<label for="" class="align-center d-flex">Thời gian bắt
+										đầu</label> <input type="date" id="datetime-start"
+										class="datetime-start" name="datetime">
+								</div>
+								<div class="d-flex space-between mt-8">
+									<label for="" class="align-center d-flex">Thời gian kết
+										thúc</label> <input type="date" id="datetime-end" class="datetime-end"
+										name="datetime">
+=======
 									<label for="" class="align-center d-flex">Thời gian bắt đầu</label>
 									<input type="date" id="datetime-start" class="datetime-start" name="datetime">
 								</div>
 								<div class="d-flex space-between mt-8">
 									<label for="" class="align-center d-flex">Thời gian kết thúc</label>
 									<input type="date" id="datetime-end" class="datetime-end" name="datetime">
+>>>>>>> Stashed changes
 								</div>
 							</div>
 						</div>
 
 						<div class="auth-form__group mt-16">
 							<label for="name" class="weight-6">Chi tiết</label>
+<<<<<<< Updated upstream
+							<textarea rows="6" class="w-max mt-8 description"
+								id="description"></textarea>
+=======
 							<textarea rows="6" class="w-max mt-8 description" id="description"></textarea>
+>>>>>>> Stashed changes
 							<div class="error"></div>
 						</div>
 					</div>
 
 					<div class="auth-form__control">
+<<<<<<< Updated upstream
+						<button class="btn auth-form__control-back btn--normal btn-cancel"
+							id="close-modal-btn">Trở lại</button>
+						<button class="btn btn--primary view-cart btn-confirm"
+							id="getData">Xác nhận</button>
+=======
 						<button
 							class="btn auth-form__control-back btn--normal btn-cancel" id="close-modal-btn">Trở lại</button>
 						<button class="btn btn--primary view-cart btn-confirm" id="getData">Xác nhận</button>
+>>>>>>> Stashed changes
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
+<<<<<<< Updated upstream
+	<div class="modal" id="promotional-program-modal">
+		<div class="modal__overlay"></div>
+		<div class="modal__body">
+			<!-- Login form  -->
+			<div class="auth-form-program">
+				<div class="auth-form__container">
+					<div class="auth-form__header">
+						<h3 class="auth-form__heading">Dánh sách các tuyến du lịch</h3>
+					</div>
+
+					<div class="auth-form__form">
+						<table class="table">
+							<thead>
+								<tr>
+									<th class="small-column">Chuyến du lịch</th>
+									<th class="mid-column">Giá</th>
+									<th class="large-column">Bắt đầu</th>
+									<th class="large-column">Kết thúc</th>
+									<th class="large-column">Hành động</th>
+								</tr>
+							</thead>
+							<tbody id="tours-body">
+
+							</tbody>
+						</table>
+					</div>
+
+					<div class="auth-form__control">
+						<button class="btn auth-form__control-back btn--normal btn-cancel"
+							id="close-promotional-program-btn">Trở lại</button>
+						<button class="btn btn--primary view-cart btn-confirm"
+							id="savePromotionDetails">Xác nhận</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="../js/promotion.js"></script>
+=======
 	<script type="text/javascript">
 		const generateRandomString = (length) => {
 			const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -225,6 +336,7 @@
 		});
 
 	</script>
+>>>>>>> Stashed changes
 </body>
 </html>
 

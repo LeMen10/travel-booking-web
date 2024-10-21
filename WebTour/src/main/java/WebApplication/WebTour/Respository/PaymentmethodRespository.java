@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import WebApplication.WebTour.Model.Paymentmethod;
 
-@Repository
-public interface PaymentmethodRespository extends JpaRepository<Paymentmethod, Long>{
-
-}
+//@Repository
+//public interface PaymentmethodRespository extends JpaRepository<Paymentmethod, long>{
+//
+//}

@@ -130,3 +130,11 @@ ul {
 .btn-cancel:hover, .btn-confirm:hover {
 	cursor: pointer;
 }
+
+.mr-10{
+	margin-right: 10px;
+}
+
+.mr-50{
+	margin-right: 50px;
+}
