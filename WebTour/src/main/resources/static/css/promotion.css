@@ -109,7 +109,6 @@ th, td {
 
 .filter {
 	display: flex;
-	justify-content: space-between;
 	margin-bottom: 20px;
 }
 
@@ -131,8 +130,7 @@ th, td {
 .filter button:hover {
 	cursor: pointer;
 	background-color: #3288de;
-	padding: 5px 10px;
-	background-color: #3498db;
+	padding: 5px 18px;
 	color: white;
 	border: none;
 	border-radius: 3px;
