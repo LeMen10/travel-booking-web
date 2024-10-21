@@ -15,7 +15,7 @@ import WebApplication.WebTour.Model.User;
 public interface UserRepository extends JpaRepository<User, Long>{
 
 	@Transactional
-	@Query(value = "SELECT u FROM User WHERE User.role.roleId = :roleId", nativeQuery = true)
+	@Query(value = "SELECT * FROM user WHERE role_id = :roleId", nativeQuery = true)
     List<User> findByRoleId(@Param("roleId") int roleId);
 	
 }
