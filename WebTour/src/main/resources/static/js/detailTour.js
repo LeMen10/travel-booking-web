@@ -208,7 +208,7 @@ async function HandleGetDay() {
 			const endDay = data.end_Date;
 			let start = startDay.split("-")[2];
 			let end = endDay.split("-")[2];
-			let day = end - start;
+			let day = end - start +1;
 
 			document.getElementById("tour-day").innerHTML = day.toLocaleString() + " Day";
 		})
@@ -275,7 +275,7 @@ async function createBooking() {
 
 
 	//kiểm tra đăng nhập
-	
+
 	const bookingDate = document.getElementById("book-day").value;
 	console.log("bookingDate " + bookingDate);
 	const adult = parseInt(document.getElementById("value-quantity").value.replace(/[^0-9]/g, '')) || 0; // Chỉ lấy số
@@ -308,16 +308,36 @@ async function createBooking() {
 	console.log(totalPrice);
 	if (!userId) {
 		sessionStorage.setItem("bookingID", bookingID);
-			window.location.href = `/`;
-			return;
-		}
+		window.location.href = `/`;
+		return;
+	}
 
-	
+	sessionStorage.setItem("bookingID", bookingID);
+	sessionStorage.setItem("tourID", tourId);
+	sessionStorage.setItem("userID", userId);
+	sessionStorage.setItem("totalPrice", totalPrice);
 	/*mở trang payment với id của booking mới tạo*/
 	window.location.href = `/payment/${bookingID}`;
 
 }
 
+function showContent(contentId) {
+    // Ẩn tất cả các nội dung tab
+    var tabContents = document.getElementsByClassName('tab-content');
+    for (var i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove('active-content');
+    }
+
+    // Hiện nội dung của tab được chọn
+    document.getElementById(contentId).classList.add('active-content');
+
+    // Đặt lại trạng thái active cho tab
+    var tabs = document.getElementsByClassName('tab');
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+    }
+    event.target.classList.add('active');
+}
 
 
 

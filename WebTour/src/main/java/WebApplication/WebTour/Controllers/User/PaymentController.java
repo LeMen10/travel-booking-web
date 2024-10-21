@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import WebApplication.WebTour.Model.Address;
 import WebApplication.WebTour.Model.Bookings;
 import WebApplication.WebTour.Model.District;
+import WebApplication.WebTour.Model.Paymentmethod;
 import WebApplication.WebTour.Model.Payments;
+import WebApplication.WebTour.Model.Promotiondetail;
 import WebApplication.WebTour.Model.Promotions;
 import WebApplication.WebTour.Model.Province;
 import WebApplication.WebTour.Model.Ticket;
@@ -31,7 +33,9 @@ import WebApplication.WebTour.Model.Ward;
 import WebApplication.WebTour.Respository.AddressRespository;
 import WebApplication.WebTour.Respository.BookingsRespository;
 import WebApplication.WebTour.Respository.DistrictRespository;
+import WebApplication.WebTour.Respository.PaymentmethodRespository;
 import WebApplication.WebTour.Respository.PaymentsRepository;
+import WebApplication.WebTour.Respository.PromotiondetailRepository;
 import WebApplication.WebTour.Respository.PromotionsRepository;
 import WebApplication.WebTour.Respository.ProvinceRepository;
 import WebApplication.WebTour.Respository.TicketBookingRepository;
@@ -65,11 +69,60 @@ public class PaymentController {
 	AddressRespository addressRespository;
 	@Autowired
 	TicketBookingRepository ticketBookingRepository;
-
+	@Autowired
+	PaymentmethodRespository paymentmethodRespository;
+	@Autowired
+	PromotiondetailRepository promotiondetailRepository;
 	// lấy id booking (có user trong đó để hiện thị t/tin user lên trang) vừa tạo và
 	// mở trang payment
 	@GetMapping("/payment/{bookingId}")
 	public String openPaymentForm(@PathVariable("bookingId") Long bookingId, Model model) {
+		// llấy thông tin booking từ bookingsRespository
+		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingId);
+		if (bookingOpt.isPresent()) {
+			Bookings booking = bookingOpt.get();
+			
+			Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
+			if (bookingPayment.isPresent()) {
+				model.addAttribute("bookingPayment", bookingPayment.get());
+			} else {
+				model.addAttribute("error", "bookingPayment không tồn tại!");
+			}
+			// Lấy thông tin user từ userId trong booking
+			User user = booking.getUser();
+			if (user!=null) {
+				model.addAttribute("user", user);
+			} else {
+				model.addAttribute("error", "User không tồn tại!");
+			}
+
+			// Lấy thông tin payment
+			/*Optional<Payments> payment = paymentsRepository.findById((long) booking.getPaymentId());*/
+			Optional<Payments> payment = paymentsRepository.findById(bookingId);
+			if (payment.isPresent()) {
+				model.addAttribute("payment", payment.get());
+			} else {
+				model.addAttribute("error", "Payment không tồn tại!");
+			}
+			// lấy thông tin của tour
+			Tours tourPayment = booking.getTour();
+			if (tourPayment!=null) {
+				model.addAttribute("tourPayment", tourPayment);
+			} else {
+				model.addAttribute("error", "TourPayment không tồn tại!");
+			}
+			// lấy ticketBooking để hiển thị số lượng người lớn và trẻ em
+			List<TicketBooking> ticketBooking = ticketBookingRepository.findTicketBookingById(booking.getBookingId());
+			if (!ticketBooking.isEmpty()) {
+				model.addAttribute("ticketBookings", ticketBooking);
+				System.out.println(ticketBooking);
+			} else {
+				model.addAttribute("error", "ticketBooking không tồn tại!");
+			}
+
+		} else {
+			model.addAttribute("error", "Booking không tồn tại!");
+		}
 
 			Bookings bookings = bookingsRespository.findById(bookingId).get();
 			User user = bookings.getUser();
@@ -165,7 +218,8 @@ public class PaymentController {
 	@PostMapping("/api-create-payment")
 	public ResponseEntity<Payments> createPayment(@RequestParam("bookingId") Long bookingId,
 			@RequestParam("paymentDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date paymentDate,
-			@RequestParam("amount") float amount, @RequestParam("paymentMethod") int paymentMethod
+			@RequestParam("amount") float amount, @RequestParam("paymentMethodId") long paymentMethodId,
+			@RequestParam("promotionCode") String promotionCode
 			) {
 		System.out.println("Amount received from request: " + amount);
 		Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
@@ -179,12 +233,14 @@ public class PaymentController {
 		payment.setPaymentDate(paymentDate);
 		payment.setAmount(amount);
 		
+		Paymentmethod paymentMethod = paymentmethodRespository.findById(paymentMethodId).get();
 		payment.setPaymentMethod(paymentMethod);
 		payment.setPaymentStatus(2);
+		payment.setPromotionCode(promotionCode);
 		payment.setStatus(true);
 
 		Payments savePayment = paymentsRepository.save(payment);
-		System.out.println("Saved Payment amount: " + savePayment.getAmount());
+		System.out.println("Saved Payment amount: " + savePayment);
 
 		existingBooking.setPayment(savePayment);
 		bookingsRespository.save(existingBooking);
@@ -199,5 +255,33 @@ public class PaymentController {
         return ResponseEntity.ok("update successfully");
     }
 	
+	//dùng để kiểm tra mã giảm giá đã dùng chưa
+	@GetMapping("/api-check-promotion")
+	public ResponseEntity<?> checkPromotion(@RequestParam("code") String promotionCode, 
+			@RequestParam("userId") Long userId,
+			@RequestParam("tourId") Long tourId) {
+		//kiểm tra mã có dành cho tour hay không
+		Optional<Promotiondetail> promotiondetailOpt = promotiondetailRepository.getPromotionByTourIdAndPromotionName(tourId, promotionCode);
+		if(!promotiondetailOpt.isPresent()) {
+			return ResponseEntity.ok("Mã khuyến mãi không dành cho tour này.");
+		}
+		//kiểm tra mã đã được sử dụng chưa
+		Optional<List<Bookings>> listBooking = bookingsRespository.getUserByBookingId(userId);
+		if(listBooking.isPresent()) {
+			
+			List<Bookings> bookings = listBooking.get();
+			for (Bookings booking : bookings) {
+				if(booking.getPayment() == null) continue;
+				booking.getPayment();
+				if(booking.getPayment().getPromotionCode() == null) continue;
+				if(booking.getPayment().getPromotionCode().equals(promotionCode)) {
+					
+					return ResponseEntity.ok(true);
+				}
+			}
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy mã giảm giá");
+	}
+        
 	
 }

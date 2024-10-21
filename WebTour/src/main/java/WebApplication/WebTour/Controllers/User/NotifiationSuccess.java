@@ -32,27 +32,56 @@ public class NotifiationSuccess {
 	PaymentsRepository paymentsRepository;
 	@Autowired
 	ToursRepository toursRepository;
-
-	// chuyển đến trang card (các tour đã đặt khi thanh toán thành công)
+	
+	
+	
+	// chuyển đến trang thanh toán thành công và hiển thị các thông tin của khách
+	// hàng
 	@GetMapping("/notificationSuccess/{bookingid}")
 	public String openNotificationSuccessForm(@PathVariable("bookingid") Long bookingid, Model model) {
-		Optional<Bookings> booking = bookingsRespository.findById(bookingid);
-		if (booking.isPresent()) {
-			model.addAttribute("booking", booking.get());
-		} else {
-			model.addAttribute("error", "booking không tồn tại!");
-		}
-		return "/User/notificationSuccess";
-	}
 
-	// lấy thông tin trong thông báo thanh toán thành công
-	@GetMapping("/api-success/{bookingId}")
-	public String notificationSuccess(@PathVariable("bookingId") Long bookingId, Model model) {
+		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingid);
+		if (!bookingOpt.isPresent()) {
+			return "bookingOpt notificationSuccess không tồn tại!";
+		}
+		Bookings booking = bookingOpt.get();
+
+		// Tìm user theo userId của booking
+		User userOpt =  booking.getUser();
+		if (userOpt==null) {
+			return "userOpt notificationSuccess không tồn tại!";
+		}
 		
-		Bookings b = bookingsRespository.findById(bookingId).get();
-		User u = b.getUser();
-		System.out.println(u);
-		model.addAttribute("user", u);
+
+		// Tìm payment theo paymentId của booking
+		Payments paymentOpt = booking.getPayment();
+		if (paymentOpt==null) {
+			return "paymentOpt notificationSuccess không tồn tại!";
+		}
+		
+
+		// Tìm tour theo paymentId của booking
+		Tours tourtOpt = booking.getTour();
+		if (tourtOpt==null) {
+			return "tourtOpt notificationSuccess không tồn tại!";
+		}
+		
+		
+		//hiển thị số lượng người lớn và trẻ em
+		List<TicketBooking> ticketBookingList = ticketBookingRepository.findTicketBookingById(booking.getBookingId());
+		if(ticketBookingList.isEmpty()) {
+			return "ticketBookingList notificationSuccess không tồn tại!";
+		}
+		
+		
+		
+		
+		// Thêm thông tin vào model để hiển thị trên trang notificationSuccess
+		model.addAttribute("bookingNotification", booking);
+		model.addAttribute("paymentNotification", paymentOpt);
+		model.addAttribute("userNotification", userOpt);
+		model.addAttribute("tourNotification", tourtOpt);
+		model.addAttribute("ticketBookingList", ticketBookingList);
 		return "/User/notificationSuccess";
 	}
 

@@ -63,7 +63,7 @@ public class PromontionManagementController {
 		try {
 			
 			boolean exists = promotionDetailRepository.existsByTourIdAndPromotionId(promotionDetail.getTourId(), 
-					promotionDetail.getPromotionId());
+					promotionDetail.getPromotions().getPromotionId());
             if (exists) {
                 response.put("status", 400);
                 response.put("message", "Promotion detail for this tour and promotion already exists");

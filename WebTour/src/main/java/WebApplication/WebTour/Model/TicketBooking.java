@@ -24,8 +24,7 @@ public class TicketBooking implements Serializable{
 	@Column(name = "id")
     private Long ticketBookingId ;
 
-//    @Column(name = "ticket_id")
-//    private int ticketId;
+
 	@ManyToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "ticket_id", nullable = true)
     private Ticket ticket;

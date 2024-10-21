@@ -44,11 +44,16 @@ body {
     margin: 5px 0 0;
 }
 .main-content {
-    display: flex;
+    /* display: flex; */
+    /* justify-content: space-between; */
+}
+.first-main-content{
+	 display: flex; 
     justify-content: space-between;
 }
 .main-content .image-gallery {
-    width: 60%;
+    width: 54%;
+    margin-left: 8%;
 }
 .main-content .image-gallery img {
     width: 100%;
@@ -66,6 +71,8 @@ body {
 }
 .main-content .booking-info {
     width: 35%;
+    margin-left: 2%;
+    margin-right: 8%;
     background-color: #e6f7ff;
     padding: 20px;
     border-radius: 10px;
@@ -219,4 +226,50 @@ body {
 .date-picker{
 	padding-left: 3%;
 	
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around; /* Phân chia đều các tab */
+    border-bottom: 2px solid #007bff;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    cursor: pointer;
+    font-weight: bold;
+    border-top-left-radius: 15px;
+    border-bottom-right-radius: 20px;
+    border-right: 1px solid #e9ecef;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab:last-child {
+    border-right: none;
+}
+
+.tab.active {
+    background-color: #007bff;
+    
+    border-bottom: 3px solid #0056b3;
+}
+
+.tab:hover {
+    background-color: #f1f1f1;
+}
+
+/* Nội dung tab sẽ được ẩn mặc định */
+.tab-content {
+    display: none;
+}
+
+/* Nội dung tab được hiển thị khi class 'active-content' được thêm */
+.active-content {
+    display: block;
+}
+.second-main-content{
+	margin-top: 2%;
 }

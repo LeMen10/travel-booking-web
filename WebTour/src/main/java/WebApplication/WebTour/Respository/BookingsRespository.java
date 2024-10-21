@@ -12,6 +12,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import WebApplication.WebTour.Model.Bookings;
+import WebApplication.WebTour.Model.Payments;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -36,7 +38,10 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
     @Query(value = "UPDATE bookings SET total_price = :totalPrice WHERE booking_id = :bookingId AND status = true", nativeQuery = true)
 	int updateTotalPrice(@Param("totalPrice") float totalPrice, @Param("bookingId") Long bookingId);
     
-	
+	@Transactional
+    @Modifying
+    @Query(value = "SELECT * FROM  Bookings   WHERE user_id = :userId AND status = true", nativeQuery = true)
+    Optional<List<Bookings>> getUserByBookingId(@Param("userId") Long userId);
     
 
 }

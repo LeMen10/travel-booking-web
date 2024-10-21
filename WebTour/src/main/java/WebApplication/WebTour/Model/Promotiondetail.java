@@ -2,11 +2,14 @@ package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -25,8 +28,9 @@ public class Promotiondetail implements Serializable{
     @Column(name = "tourId")
     private int tourId;
     
-    @Column(name = "promotion_id")
-    private int promotionId;
+    @ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "promotion_id", nullable = true)
+    private Promotions promotions;
     
     @Column(name = "status")
     private boolean status = true;
@@ -39,12 +43,13 @@ public class Promotiondetail implements Serializable{
 		this.tourId = tourId;
 	}
 
-	public int getPromotionId() {
-		return promotionId;
+
+	public Promotions getPromotions() {
+		return promotions;
 	}
 
-	public void setPromotionId(int promotionId) {
-		this.promotionId = promotionId;
+	public void setPromotions(Promotions promotions) {
+		this.promotions = promotions;
 	}
 
 	public boolean isStatus() {

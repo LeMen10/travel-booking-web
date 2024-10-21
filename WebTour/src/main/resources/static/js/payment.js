@@ -8,6 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	console.log("User ID: " + userID);
 	console.log("totalPrice : " + totalPrice);
 
+	
+	document.getElementById('payment-online').addEventListener("change", function(event) {
+		showMethodPaypal(event.target.checked);
+	});
+	 document.getElementById('payment-cash').addEventListener("change", function(event) {
+		showMethodPaypal(!event.target.checked);
+	});
+	
 	var email = document.getElementById('email').addEventListener('input', validateEmail);
 	var name = document.getElementById('name').addEventListener('input', validateName);
 	var phone = document.getElementById('phone').addEventListener('input', validatePhone);
@@ -35,10 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 
-	var bt_apply = document.getElementById("bt-apply").addEventListener("click", function() {
+	var bt_apply = document.getElementById("bt-apply").addEventListener("click", async function() {
 		var discount_code = document.getElementById("discount-code").value;
 		console.log("discount_code " + discount_code);
 		//updateTotalPrice();
+		if (await checkPromotion()) {
+			alert("Mã đã sử dụng");
+			return;
+		}
 
 		if (discount_code) {
 			paymentByDiscount(discount_code);
@@ -74,12 +86,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		} else if (paymentMethod === 1) { //cash
 			div_paypal.style.display = "none";
+			
+			
 			await createPayment();
 			await updateTotalPrice();
 			const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 			await updatePaymentStatus(bookingId);
 			alert("Thanh toán thành công!");
-			
+
 			window.location.href = `/notificationSuccess/${bookingId}`;
 		}
 	});
@@ -88,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 	getAllProvince();
-
+	payPal();
 
 })
 // Hàm kiểm tra email
@@ -238,7 +252,7 @@ async function getAllWard(districtId) {
 
 // tính tiền khi nhập mã giảm giá ở trang thanh toán
 async function paymentByDiscount(code) {
-	const totalPrice = localStorage.getItem("totalPrice");
+	const totalPrice = sessionStorage.getItem("totalPrice");
 	const tempPrice = parseInt(document.getElementById("temp-price").innerText.replace(/[^0-9]/g, ''));
 	console.log("price " + totalPrice, tempPrice);
 	/*code = document.getElementById('discount-code').value;
@@ -358,6 +372,7 @@ function checkPaymentMethod() {
 	console.log("Trạng thái paymentCash: ", paymentCash.checked);
 
 	if (paymentOnline.checked) {
+
 		console.log("paymentMethod: online");
 		return 2; // Trả về phương thức thanh toán online
 	} else if (paymentCash.checked) {
@@ -378,6 +393,7 @@ async function createPayment() {
 	console.log(amount);
 	const paymentOnline = document.getElementById('payment-online');
 	const paymentCash = document.getElementById('payment-cash');
+	let promotionCode = document.getElementById("discount-code").value;
 
 	// Lấy phương thức thanh toán ở đây để đảm bảo người dùng đã chọn
 	const paymentMethod = checkPaymentMethod();
@@ -388,7 +404,7 @@ async function createPayment() {
 	}
 
 
-	const url = `http://localhost:8080/api-create-payment?bookingId=${bookingId}&paymentDate=${date}&amount=${amount}&paymentMethod=${paymentMethod}`;
+	const url = `http://localhost:8080/api-create-payment?bookingId=${bookingId}&paymentDate=${date}&amount=${amount}&paymentMethodId=${paymentMethod}&promotionCode=${promotionCode}`;
 	console.log(url);
 	const request = new Request(url, {
 		method: "POST",
@@ -413,29 +429,29 @@ async function createPayment() {
 
 //cập nhật paymentStatus sau khi thanh toán thành công
 async function updatePaymentStatus(bookingId) {
-    const url = `http://localhost:8080/update-status/${bookingId}`;
-    const request = new Request(url, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+	const url = `http://localhost:8080/update-status/${bookingId}`;
+	const request = new Request(url, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 
-    try {
-        const response = await fetch(request);
-        if (!response.ok) {
-            throw new Error("lỗi response updatePaymentStatus");
-        }
-        const message = await response.text();
-        console.log("updatePaymentStatus "+message); 
-    } catch (error) {
-        console.error("Lỗi updatePaymentStatus:", error);
-    }
+	try {
+		const response = await fetch(request);
+		if (!response.ok) {
+			throw new Error("lỗi response updatePaymentStatus");
+		}
+		const message = await response.text();
+		console.log("updatePaymentStatus " + message);
+	} catch (error) {
+		console.error("Lỗi updatePaymentStatus:", error);
+	}
 }
 
 //tạo thanh toán paypal
 async function payPal() {
-	
+
 	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 	const totalPriceText = document.getElementById('total-price').innerText;
 	// Loại bỏ ký tự không phải số (ví dụ: "₫") và chuyển thành số
@@ -458,10 +474,11 @@ async function payPal() {
 		},
 		onApprove: function(data, actions) {
 			// Thanh toán thành công
-			return actions.order.capture().then(function(details) {
+			return actions.order.capture().then(async function(details) {
 				alert('Thanh toán thành công, ' + details.payer.name.given_name);
-				updatePaymentStatus(bookingId);
-				
+				await createPayment();
+				await updatePaymentStatus(bookingId);
+
 				window.location.href = `/notificationSuccess/${bookingId}`;
 			});
 		},
@@ -471,6 +488,38 @@ async function payPal() {
 		}
 	}).render('#paypal-button-container');
 
+}
+ 
+function showMethodPaypal(isOnline) {
+	if (isOnline) {
+		document.getElementById("bt-pay").style.display = "none"; // Ẩn nút thanh toán tiền mặt
+		 var div_paypal = document.getElementById("paypal-button-container");
+		 div_paypal.style.display = "block";
+		 // Gọi hàm PayPal để hiển thị nút thanh toán
+	} else {
+		document.getElementById("bt-pay").style.display = "block"; // Hiện nút thanh toán tiền mặt
+		document.getElementById("paypal-button-container").style.display = "none"; // Ẩn container nút PayPal
+	}
+}
+
+async function checkPromotion(){
+	let promotionCode = document.getElementById("discount-code").value;
+	let userId = sessionStorage.getItem("userId");
+	const url = `http://localhost:8080/api-check-promotion?code=${promotionCode}&userId=${userId}`;
+		const request = new Request(url, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+
+		try {
+			const response = await fetch(request);
+			return (response.ok) 
+			
+		} catch (error) {
+			console.error("Lỗi checkPromotion:", error);
+		}
 }
 
 
