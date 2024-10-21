@@ -8,4 +8,5 @@ import WebApplication.WebTour.Model.Promotiondetail;
 @Repository
 public interface PromotiondetailRepository extends JpaRepository<Promotiondetail, Long>{
 	
+	 boolean existsByTourIdAndPromotionId(int tourId, int promotionId);
 }

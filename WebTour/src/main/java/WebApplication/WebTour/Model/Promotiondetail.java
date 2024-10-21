@@ -29,7 +29,7 @@ public class Promotiondetail implements Serializable{
     private int promotionId;
     
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
 	public int getTourId() {
 		return tourId;

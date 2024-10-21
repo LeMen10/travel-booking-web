@@ -26,7 +26,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 
 //	@Query("SELECT t FROM Tours t WHERE LOWER(t.tourName) LIKE LOWER(CONCAT('%', :tourName, '%'))")
 //	Page<Tours> findByTourNameContainingIgnoreCase(@Param("tourName") String tourName, Pageable pageable);
-	
+
 	@Query("SELECT t FROM Tours t WHERE "
 	        + "(:tourName IS NULL OR LOWER(t.tourName) LIKE LOWER(CONCAT('%', :tourName, '%'))) "
 	        + "AND (:startDate IS NULL OR t.startDate = :startDate) "
@@ -41,4 +41,10 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	//Get tour for home page
     @Query(value = "SELECT t FROM Tours t WHERE t.status = true ORDER BY t.price ASC LIMIT 8")
 	List<Tours> listOfCheapestTours();
+
+	// lấy ra những tour chưa bắt đầu và những tour đó chưa được áp mã đang xem xét áp dụng
+	@Query("SELECT t FROM Tours t WHERE t.startDate > CURRENT_DATE AND t.tourId NOT IN "
+			+ "(SELECT pd.tourId FROM Promotiondetail pd WHERE pd.promotionId = :promotionId)")
+	List<Tours> getToursAboutToBegin(@Param("promotionId") long promotionId);
+
 }
