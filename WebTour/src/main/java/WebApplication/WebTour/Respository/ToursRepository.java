@@ -44,7 +44,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 
 	// lấy ra những tour chưa bắt đầu và những tour đó chưa được áp mã đang xem xét áp dụng
 	@Query("SELECT t FROM Tours t WHERE t.startDate > CURRENT_DATE AND t.tourId NOT IN "
-			+ "(SELECT pd.tourId FROM Promotiondetail pd WHERE pd.promotionId = :promotionId)")
+			+ "(SELECT pd.tourId FROM Promotiondetail pd WHERE pd.promotions.promotionId = :promotionId)")
 	List<Tours> getToursAboutToBegin(@Param("promotionId") long promotionId);
 
 }

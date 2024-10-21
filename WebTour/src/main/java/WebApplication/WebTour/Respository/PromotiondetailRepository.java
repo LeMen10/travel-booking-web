@@ -21,7 +21,7 @@ public interface PromotiondetailRepository extends JpaRepository<Promotiondetail
 	@Transactional
 	@Modifying
 	@Query(value = "SELECT pd.* FROM Promotiondetail pd JOIN Promotions p ON pd.promotion_id = p.promotion_id WHERE pd.tourId = :tourId "
-			+ "AND pd.promotion_id = :promotionId AND pd.status = true", nativeQuery = true)
+			+ "AND pd.promotions.promotionId = :promotionId AND pd.status = true", nativeQuery = true)
 	boolean existsByTourIdAndPromotionId(@Param("tourId") int tourId,@Param("promotionId") Long promotionId);
 
 	// lấy promotion detail theo tour và id
