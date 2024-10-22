@@ -145,11 +145,11 @@ const applyPromotion = async (tourId, event) => {
 	console.log("Selected promotion ID:", selectedPromotionId);
 
 	const data = {
-		promotions :{
-			promotionId: selectedPromotionId
-		},
-		tourId: selectedTourId,
-		status: true
+	    promotions: {
+	        promotionId: selectedPromotionId
+	    },
+	    tourId: selectedTourId,
+	    status: true
 	};
 
 	try {
@@ -187,7 +187,6 @@ savePromotionDetails.addEventListener('click', () => {
 
 filterPromotionByDate.addEventListener("click", async (event) => {
 	event.preventDefault();
-	console.log(datetimeStartFilter.value, datetimeEndFilter.value)
 
 	const params = new URLSearchParams({
 		startDate: datetimeStartFilter.value,
