@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -58,25 +59,15 @@ public class PromontionManagementController {
 	public ResponseEntity<Map<String, Object>> createPromotionDetail(@RequestBody Promotiondetail promotionDetail) {
 
 		Map<String, Object> response = new HashMap<>();
-
-		System.out.println("Received promotion detail: " + promotionDetail);
-		System.out.println("Received promotion ID: " + promotionDetail.getPromotions().getPromotionId());
-
+    
 		try {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-			
-			boolean exists = promotionDetailRepository.existsByTourIdAndPromotionId(promotionDetail.getTourId(), 
-					promotionDetail.getPromotionId());
-            if (exists) {
+			Integer exists = promotionDetailRepository.existsByTourIdAndPromotion(promotionDetail.getTourId(), 
+					promotionDetail.getPromotions().getPromotionId());
+            if (exists > 0) {
                 response.put("status", 400);
                 response.put("message", "Promotion detail for this tour and promotion already exists");
                 return ResponseEntity.status(400).body(response);
             }
-            
-=======
-=======
->>>>>>> Stashed changes
 
 			boolean exists = promotionDetailRepository.existsByTourIdAndPromotionId(promotionDetail.getTourId(),
 					promotionDetail.getPromotions().getPromotionId());
@@ -86,10 +77,8 @@ public class PromontionManagementController {
 				return ResponseEntity.status(400).body(response);
 			}
 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+      Promotions promotion = promotionsRepository.findById(promotionDetail.getPromotions().getPromotionId()).get();
+      promotionDetail.setPromotions(promotion);
 			promotionDetailRepository.save(promotionDetail);
 
 			response.put("status", 200);

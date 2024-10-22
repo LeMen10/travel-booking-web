@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="../css/orderNotificationSuccess.css">
+<link rel="stylesheet" href="../css/NotificationSuccess.css">
+<link rel="stylesheet" href="/css/notificationSuccess.js">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -19,41 +20,72 @@
 		</div>
 		<div class="order-info">
 			<div>
-				<p  >Thông tin mua hàng</p>
-				<p th:text="${user.fullName}">Đỗ Nam</p>
+				<p>Thông tin mua hàng</p>
+				<div class="lable-info">
+					<label> <b>Khách hàng:</b>
+					</label>
+					<p th:text="${userNotification.fullName}">Đỗ Nam</p>
+				</div>
+				<div class="lable-info">
+					<label><b>Email:</b> </label>
+					<p th:text="${userNotification.email}">oda@gmail.com</p>
+				</div>
+				<div class="lable-info">
+					<p>Phương thức thanh toán</p>
+					<p th:text="${paymentNotification.paymentMethod.name}">0</p>
+				</div>
 
-				<p >oda@gmail.com</p>
-				<p  >Phương thức thanh toán</p>
-				<p  >0</p>
-				<!-- <p th:text="${payments.paymentmethod.name}" ></p> -->
-					
+
 			</div>
-			
+
 		</div>
 		<div class="order-summary">
-			<label>Đơn hàng: </label>
-			<p >  #1015 (2) </p>
-			<div class="item">
-				<img alt="Image of a tropical beach destination" height="50"
-					src="https://storage.googleapis.com/a1aa/image/jqqEmLv24fWUYS6bKopLTbETHHpeNWnGXeQwZ1gZJUfteaAdC.jpg"
-					width="50" />
-				<div class="item-info">
-					<b> Du Lịch 4 Đảo Phú Quốc: Hành Trình 1 ngày </b> <span>
-						Người lớn </span>
+			<div class="lable-bookingId">
+				<div class="lable-bookingId">
+					<label> <b>Mã tour:</b>
+					</label> <b><p class="lable-p"
+							th:text="${bookingNotification.bookingId}">01</p></b>
 				</div>
-				<div>1.000.000đ</div>
-			</div>
-			<div class="total">
-				<div>Tạm tính</div>
-				<div>10.500.000đ</div>
+
 			</div>
 
+
+			<div class="item">
+
+				<div class="item-info">
+					<b th:text="${tourNotification.tourName}"> Du Lịch </b>
+
+					<div th:each="ticketBooking : ${ticketBookingList}">
+						<div class="div-quantity">
+							<p th:text="${ticketBooking.ticket.name}">:</p>
+							<p th:text="${ticketBooking.quantity}" class="quantity-p"></p>
+
+						</div>
+					</div>
+					<div class="div-departure">
+						<label>Ngày đi:</label>
+						<p class="departure-p" th:text="${tourNotification.startDate}"></p>
+					</div>
+					<div class="div-departure">
+						<label>khởi hành:</label>
+						<p class="departure-p" th:text="${tourNotification.departure}"></p>
+					</div>
+					<div class="div-departure">
+						<label>Đến:</label>
+						<p class="departure-p" th:text="${tourNotification.destination}"></p>
+					</div>
+				</div>
+
+			</div>
+
+
 			<div class="total">
-				<b> Tổng cộng </b> <b> 10.540.000đ </b>
+				<b> Thành tiền </b> <b th:text="${bookingNotification.totalPrice}">
+					0đ </b>
 			</div>
 		</div>
 		<div class="actions">
-			<button>
+			<button id="bt-continuteShop">
 				<i class="fas fa-shopping-cart"> </i> Tiếp tục mua hàng
 			</button>
 			<button>
@@ -61,5 +93,6 @@
 			</button>
 		</div>
 	</div>
+	<script src="../js/notificationSuccess.js"></script>
 </body>
 </html>

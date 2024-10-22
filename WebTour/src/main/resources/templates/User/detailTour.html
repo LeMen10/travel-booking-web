@@ -4,23 +4,29 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../css/detailTour.css">
- <link rel="stylesheet" href="../js/detailTour.js"> 
- <link rel="stylesheet" href="../js/payment.js"> 
+<link rel="stylesheet" href="../js/detailTour.js">
+<link rel="stylesheet" href="../js/payment.js">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- <link rel="stylesheet" href="/css/home_user.css"> -->
+
 </head>
 <body>
+
+
 
 	<div class="container">
 		<div class="header">
 			<h1 th:text="${tour.tourName}">Tour Name</h1>
-			<div class="stars">
-				 <i class="fa-regular fa-star" data-value="1"></i> 
-    <i class="fa-regular fa-star" data-value="2"></i>
-    <i class="fa-regular fa-star" data-value="3"></i> 
-    <i class="fa-regular fa-star" data-value="4"></i>
-    <i class="fa-regular fa-star" data-value="5"></i>
-			</div>
+			<!-- <div class="stars">
+				<i class="fa-regular fa-star" data-value="1"></i> <i
+					class="fa-regular fa-star" data-value="2"></i> <i
+					class="fa-regular fa-star" data-value="3"></i> <i
+					class="fa-regular fa-star" data-value="4"></i> <i
+					class="fa-regular fa-star" data-value="5"></i>
+			</div> -->
 		</div>
 		<div class="info">
 			<div class="icon-info">
@@ -43,7 +49,7 @@
 				<i class="fas fa-clock"> </i>
 				<div>
 					<p>Thời gian</p>
-					<p id="tour-day" onchange="HandleGetDay" >1N</p>
+					<p id="tour-day" onchange="HandleGetDay">1N</p>
 				</div>
 
 			</div>
@@ -65,82 +71,185 @@
 			</div>
 		</div>
 		<div class="main-content">
-			<div class="image-gallery">
-				<img alt="A beautiful island with clear blue water and boats"
-					height="400"
-					src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
-					width="800" />
-				<div class="image-thumbnails">
+			<div class="first-main-content">
+				<div class="image-gallery">
 					<img alt="A beautiful island with clear blue water and boats"
-						height="100"
+						height="400"
 						src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
-						width="200" /> <img
-						alt="Underwater scene with colorful fish and coral" height="100"
-						src="https://storage.googleapis.com/a1aa/image/vcU7UfsuqY27eUYsYaIUaMZNfziwa0CJ25KKNbN6SxoJXVHnA.jpg"
-						width="200" /> <img alt="A person enjoying the beach"
-						height="100"
-						src="https://storage.googleapis.com/a1aa/image/QMsjhveyXoUZYinEf4NgtFuEZ2SLz4BflzMrvbjtvkFRXVHnA.jpg"
-						width="200" /> <img
-						alt="A scenic view of the beach with palm trees" height="100"
-						src="https://storage.googleapis.com/a1aa/image/IJXLthajlgIODhkAvb7gtSh0Wli81l9MHXqsf7rwimAzV1xJA.jpg"
-						width="200" />
-				</div>
-			</div>
-			<div class="booking-info" >
-				<h2 th:text="${tour.price}" >1.000.000₫</h2>
-				<!-- <p class="original-price">2.000.000₫</p> -->
-				<div class="code-tour">
-					<p>Mã tour: </p>
-					<p th:text="${tour.tourId}" id="id-booking-info" th:attr="data-id=${tour.tourId}" class="tour-code"> ND021</p>
-				</div>
-
-				<!-- <div class="discount-codes">
-					<button>Giảm 50%</button>
-					<button>Giảm 15%</button>
-					<button>Giảm 10k</button>
-				</div> -->
-				<div class="date-picker">
-					<p class="title">Ngày đi</p>
-					<!-- <input th:value="${#dates.format(tour.startDate, 'dd/MM/yyyy')}" type="date" id="book-day" name="book-day"> -->
-					<input id="book-day" th:value="${#dates.format(tour.startDate, 'yyy-MM-dd')}"
-						placeholder="Chọn Ngày đi" type="text" />
-				</div>
-				<div class="container2">
-					<div class="title">Loại khách</div>
-					<div class="up-row">
-						<div class="row">
-							<label>Người lớn</label>
-							<div class="counter">
-								<button id="bt-subtract">-</button>
-								<input data-id="2" id="value-quantity" type="text" value="0">
-								<button id="bt-plus">+</button>
-							</div>
-							<div id="price-adult" class="price">0₫</div>
-						</div>
-						<div  class="row">
-							<label class="row-word">Trẻ em</label>
-							<div class="counter">
-								<button id="bt-subtract1">-</button>
-								<input data-id="1" id="value-quantity1" type="text" value="0">
-								<button id="bt-plus1">+</button>
-							</div>
-							<div id="price-chill" class="price">0₫</div>
-						</div>
-
-					</div>
-					<div class="total">
-						<div>Tổng tiền</div>
-						<div id="total-price"  class="amount">0₫</div>
+						width="800" />
+					<div class="image-thumbnails">
+						<img alt="A beautiful island with clear blue water and boats"
+							height="100"
+							src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
+							width="200" /> <img
+							alt="Underwater scene with colorful fish and coral" height="100"
+							src="https://storage.googleapis.com/a1aa/image/vcU7UfsuqY27eUYsYaIUaMZNfziwa0CJ25KKNbN6SxoJXVHnA.jpg"
+							width="200" /> <img alt="A person enjoying the beach"
+							height="100"
+							src="https://storage.googleapis.com/a1aa/image/QMsjhveyXoUZYinEf4NgtFuEZ2SLz4BflzMrvbjtvkFRXVHnA.jpg"
+							width="200" /> <img
+							alt="A scenic view of the beach with palm trees" height="100"
+							src="https://storage.googleapis.com/a1aa/image/IJXLthajlgIODhkAvb7gtSh0Wli81l9MHXqsf7rwimAzV1xJA.jpg"
+							width="200" />
 					</div>
 				</div>
-				<div class="buttons">
-					<button>Liên hệ tư vấn</button>
-					<button type="button" id="book-now">Đặt ngay</button>
-				</div> 
+				<div class="booking-info">
+					<h2 th:text="${tour.price}">1.000.000₫</h2>
+					<!-- <p class="original-price">2.000.000₫</p> -->
+					<div class="code-tour">
+						<p>Mã tour:</p>
+						<p th:text="${tour.tourId}" id="id-booking-info"
+							th:attr="data-id=${tour.tourId}" class="tour-code">ND021</p>
+					</div>
+
+					<!-- <div class="discount-codes">
+						<button>Giảm 50%</button>
+						<button>Giảm 15%</button>
+						<button>Giảm 10k</button>
+					</div> -->
+					<div class="date-picker">
+						<p class="title">Ngày đi</p>
+						<!-- <input th:value="${#dates.format(tour.startDate, 'dd/MM/yyyy')}" type="date" id="book-day" name="book-day"> -->
+						<input id="book-day"
+							th:value="${#dates.format(tour.startDate, 'yyy-MM-dd')}"
+							placeholder="Chọn Ngày đi" type="text" />
+					</div>
+					<div class="container2">
+						<div class="title">Loại khách</div>
+						<div class="up-row">
+							<div class="row">
+								<label>Người lớn</label>
+								<div class="counter">
+									<button id="bt-subtract">-</button>
+									<input data-id="2" id="value-quantity" type="text" value="0">
+									<button id="bt-plus">+</button>
+								</div>
+								<div id="price-adult" class="price">0₫</div>
+							</div>
+							<div class="row">
+								<label class="row-word">Trẻ em</label>
+								<div class="counter">
+									<button id="bt-subtract1">-</button>
+									<input data-id="1" id="value-quantity1" type="text" value="0">
+									<button id="bt-plus1">+</button>
+								</div>
+								<div id="price-chill" class="price">0₫</div>
+							</div>
+
+						</div>
+						<div class="total">
+							<div>Tổng tiền</div>
+							<div id="total-price" class="amount">0₫</div>
+						</div>
+					</div>
+					<div class="buttons">
+						<button>Liên hệ tư vấn</button>
+						<button type="button" id="book-now">Đặt ngay</button>
+					</div>
+				</div>
 			</div>
+
+			<div class="second-main-content">
+				<div class="container3">
+					<div class="tabs">
+						<div class="tab active" onclick="showContent('description')">Mô
+							tả</div>
+						<div class="tab" onclick="showContent('schedule')">Lịch
+							trình</div>
+						<div class="tab" onclick="showContent('reviews')">Đánh giá
+							tour</div>
+					</div>
+					<div class="content">
+						<div th:text="${tour.detail}" id="description"
+							class="tab-content active-content">
+							<p>Phượng Hoàng là thị trấn cổ còn lưu giữ nhiều thành
+								quách...</p>
+
+						</div>
+
+						<div id="schedule" class="tab-content">
+							<div  th:each="schedule : ${schedules}">
+								<p class="schedule-p">
+									Ngày thứ <span class="schedule-p-span" th:text="${schedule.step}"> 
+									</span>: <span
+										class="schedule-p-span" th:text="${schedule.activity}"></span>
+								</p>
+							</div>
+
+
+						</div>
+
+						<div id="reviews" class="tab-content">
+							<div class="container4">
+								<div class="message">Đánh giá tour theo cảm nhận của bạn
+									để giúp chúng tôi cải thiện thiếu sót. Niềm vui của bạn là hạnh
+									phúc của chúng tôi.</div>
+								<button class="button" id="openReviewModal">Gửi đánh
+									giá của bạn</button>
+
+							</div>
+							<!--các review của người dùng  -->
+							<div>
+								<h3>Đánh giá từ khách hàng</h3>
+							</div>
+
+							<div class="review-list">
+							<div>
+									<th:block th:each="review : ${reviews}">
+										<p class="review-list-p">
+											<strong class="review-list-strong"
+												th:text="${review.user.fullName}">Tên người dùng</strong>
+										</p>
+										<div class="start-review">
+
+											<p class="start-review-p" th:text="${review.rate}"></p>
+											<i class="fa-regular fa-star "></i>
+										</div>
+										<span th:text="${review.comment}">Nội dung đánh giá</span>
+
+									</th:block>
+								</div>
+								
+							</div>
+
+
+							<!-- modal đánh giá -->
+							<div id="overlay"
+								style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+
+							<!-- Modal -->
+							<div id="reviewContainer" class="review-container"
+								style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+								<span class="close-btn" id="closeReviewModal">&times;</span>
+								<h2>Đánh giá sản phẩm</h2>
+								<h3 th:text="${tour.tourName}">6N5Đ</h3>
+								<div class="stars">
+									<i class="fa-regular fa-star" data-value="1"></i> <i
+										class="fa-regular fa-star" data-value="2"></i> <i
+										class="fa-regular fa-star" data-value="3"></i> <i
+										class="fa-regular fa-star" data-value="4"></i> <i
+										class="fa-regular fa-star" data-value="5"></i>
+								</div>
+								<input type="text" placeholder="Nhập họ tên của bạn"> <input
+									type="email" placeholder="Nhập email của bạn">
+								<textarea id="textarea-review"
+									placeholder="Nhập nội dung đánh giá của bạn về sản phẩm này"></textarea>
+								<button id="bt-send-review" class="submit-btn">Gửi đánh
+									giá</button>
+							</div>
+
+						</div>
+
+
+
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</div>
 	<script src="../js/detailTour.js"></script>
-	
+	<script src="/js/header.js"></script>
+
 </body>
 </html>

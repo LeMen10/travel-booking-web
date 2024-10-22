@@ -14,6 +14,8 @@ public interface PaymentsRepository extends JpaRepository<Payments, Long>{
 	//dùng để cập nhật paymentStatus sau khi thanh toán thành công
 	@Transactional
     @Modifying
-    @Query("UPDATE Payments p SET p.paymentStatus = 1 WHERE p.bookingId = :bookingId")
+    @Query("UPDATE Payments p SET p.paymentStatus = 1 WHERE p.bookingId = :bookingId ")
     int updatePaymentStatus( Long bookingId);
+	
+	
 }

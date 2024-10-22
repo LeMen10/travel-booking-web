@@ -2,11 +2,14 @@ package WebApplication.WebTour.Model;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -20,7 +23,7 @@ public class Payments implements Serializable{
 	@Id
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "payment_id")
-    private Integer paymentId ;
+    private Long paymentId ;
 
     @Column(name = "booking_id")
     private Long bookingId;
@@ -31,11 +34,15 @@ public class Payments implements Serializable{
     @Column(name = "amount")
     private float amount;
 
-    @Column(name = "payment_method ")
-    private int paymentMethod ;
+    @ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "paymentMethod", nullable = true)
+    private Paymentmethod paymentMethod ;
     
     @Column(name = "payment_status ")
     private int paymentStatus ;
+    
+    @JoinColumn(name = "promotion_code", nullable = true)
+    private String promotionCode ;
     
     @Column(name = "status ")
     private boolean status ;
@@ -68,13 +75,18 @@ public class Payments implements Serializable{
 		this.amount = amount;
 	}
 
-	public int getPaymentMethod() {
+
+	public Paymentmethod getPaymentMethod() {
 		return paymentMethod;
 	}
 
-	public void setPaymentMethod(int paymentMethod) {
+
+
+	public void setPaymentMethod(Paymentmethod paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
+
+
 
 	public int getPaymentStatus() {
 		return paymentStatus;
@@ -96,7 +108,30 @@ public class Payments implements Serializable{
 		return serialVersionUID;
 	}
 
-	public Integer getPaymentId() {
+	public Long getPaymentId() {
 		return paymentId;
 	}
+
+
+
+	public String getPromotionCode() {
+		return promotionCode;
+	}
+
+
+
+	public void setPromotionCode(String promotionCode) {
+		this.promotionCode = promotionCode;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Payments [paymentId=" + paymentId + ", bookingId=" + bookingId + ", paymentDate=" + paymentDate
+				+ ", amount=" + amount + ", paymentMethod=" + paymentMethod + ", paymentStatus=" + paymentStatus
+				+ ", status=" + status + "]";
+	}
+	
+	
 }
