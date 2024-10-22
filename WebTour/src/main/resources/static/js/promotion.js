@@ -145,7 +145,9 @@ const applyPromotion = async (tourId, event) => {
 	console.log("Selected promotion ID:", selectedPromotionId);
 
 	const data = {
-		promotionId: selectedPromotionId,
+		promotions :{
+			promotionId: selectedPromotionId
+		},
 		tourId: selectedTourId,
 		status: true
 	};
