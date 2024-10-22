@@ -1,13 +1,16 @@
 package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -23,11 +26,14 @@ public class Reviews implements Serializable{
 	@Column(name = "reviews_id")
     private Long reviewsId;
 
-    @Column(name = "user_id")
-    private int userId;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user;
     
-    @Column(name = "tour_id")
-    private int tourId;
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "tour_id", nullable = true)
+    private Tours tours;
+    
     
     @Column(name = "comment")
     private String comment;
@@ -49,20 +55,21 @@ public class Reviews implements Serializable{
 		this.reviewsId = reviewsId;
 	}
 
-	public int getUserId() {
-		return userId;
+
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public int getTourId() {
-		return tourId;
+	public Tours getTours() {
+		return tours;
 	}
 
-	public void setTourId(int tourId) {
-		this.tourId = tourId;
+	public void setTours(Tours tours) {
+		this.tours = tours;
 	}
 
 	public String getComment() {
@@ -85,8 +92,8 @@ public class Reviews implements Serializable{
 		return reviewDate;
 	}
 
-	public void setReviewDate(Date reviewDate) {
-		this.reviewDate = reviewDate;
+	public void setReviewDate(java.util.Date reviewDate2) {
+		this.reviewDate = reviewDate2;
 	}
 
 	public boolean isStatus() {

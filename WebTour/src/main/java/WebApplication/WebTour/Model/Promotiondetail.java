@@ -25,7 +25,7 @@ public class Promotiondetail implements Serializable{
 	@Column(name = "promotion_detail_id")
     private Long promotionDetailId;
 
-    @Column(name = "tourId")
+    @Column(name = "tour_id")
     private int tourId;
     
     @ManyToOne(cascade = CascadeType.ALL, optional = true)

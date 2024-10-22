@@ -23,7 +23,7 @@ public class Payments implements Serializable{
 	@Id
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "payment_id")
-    private Integer paymentId ;
+    private Long paymentId ;
 
     @Column(name = "booking_id")
     private Long bookingId;
@@ -108,7 +108,7 @@ public class Payments implements Serializable{
 		return serialVersionUID;
 	}
 
-	public Integer getPaymentId() {
+	public Long getPaymentId() {
 		return paymentId;
 	}
 

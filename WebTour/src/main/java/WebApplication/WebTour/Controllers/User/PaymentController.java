@@ -1,5 +1,6 @@
 package WebApplication.WebTour.Controllers.User;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -257,13 +258,15 @@ public class PaymentController {
 	
 	//dùng để kiểm tra mã giảm giá đã dùng chưa
 	@GetMapping("/api-check-promotion")
-	public ResponseEntity<?> checkPromotion(@RequestParam("code") String promotionCode, 
+	public ResponseEntity<?> checkPromotion(
+			@RequestParam("code") String promotionCode, 
 			@RequestParam("userId") Long userId,
-			@RequestParam("tourId") Long tourId) {
+			@RequestParam("tourId") int tourId) {
+		
 		//kiểm tra mã có dành cho tour hay không
 		Optional<Promotiondetail> promotiondetailOpt = promotiondetailRepository.getPromotionByTourIdAndPromotionName(tourId, promotionCode);
 		if(!promotiondetailOpt.isPresent()) {
-			return ResponseEntity.ok("Mã khuyến mãi không dành cho tour này.");
+			return ResponseEntity.ok(Collections.singletonMap("message", "Mã khuyến mãi không dành cho tour này."));
 		}
 		//kiểm tra mã đã được sử dụng chưa
 		Optional<List<Bookings>> listBooking = bookingsRespository.getUserByBookingId(userId);
@@ -276,11 +279,11 @@ public class PaymentController {
 				if(booking.getPayment().getPromotionCode() == null) continue;
 				if(booking.getPayment().getPromotionCode().equals(promotionCode)) {
 					
-					return ResponseEntity.ok(true);
+					return ResponseEntity.ok(Collections.singletonMap("message", "Mã đã được dùng"));
 				}
 			}
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy mã giảm giá");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Mã giảm giá hợp lệ."));
 	}
         
 	

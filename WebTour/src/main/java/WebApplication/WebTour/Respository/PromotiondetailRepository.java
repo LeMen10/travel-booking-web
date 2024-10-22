@@ -17,19 +17,24 @@ import WebApplication.WebTour.Model.Promotiondetail;
 @Repository
 public interface PromotiondetailRepository extends JpaRepository<Promotiondetail, Long> {
 
-	/* boolean existsByTourIdAndPromotionId(int tourId, Long Long); */
+	/* boolean existsByTourIdAndPromotionId(int tourId, Long promotionId); */
 	@Transactional
 	@Modifying
 	@Query(value = "SELECT pd.* FROM Promotiondetail pd JOIN Promotions p ON pd.promotion_id = p.promotion_id WHERE pd.tourId = :tourId "
 			+ "AND pd.promotions.promotionId = :promotionId AND pd.status = true", nativeQuery = true)
-	boolean existsByTourIdAndPromotionId(@Param("tourId") int tourId,@Param("promotionId") Long promotionId);
+	boolean existsByTourIdAndPromotionId(@Param("tourId") int tourId, @Param("promotionId") Long promotionId);
 
 	// lấy promotion detail theo tour và id
-	@Transactional
-	@Modifying
-	@Query(value = "SELECT pd.* FROM Promotiondetail pd JOIN Promotions p ON pd.promotion_id = p.promotion_id WHERE pd.tourId = :tourId "
-			+ "AND p.name = :name AND pd.status = true", nativeQuery = true)
-	Optional<Promotiondetail> getPromotionByTourIdAndPromotionName(@Param("tourId") Long tourId,
-			@Param("name") String name);
+
+	
+//	  @Query(value = "SELECT * FROM Promotiondetail   WHERE tour_id = :tourId " +
+//	  "AND promotions.code = :name AND status = true", nativeQuery = true)
+//	  Optional<Promotiondetail>
+//	  getPromotionByTourIdAndPromotionName(@Param("tourId") int tourId, @Param("name") String name);
+
+	@Query(value = "SELECT pd.* FROM promotiondetail pd " +
+            "JOIN promotions p ON pd.promotion_id = p.promotion_id " +
+            "WHERE pd.tour_id = :tourId AND p.code = :name AND pd.status = true", nativeQuery = true)
+Optional<Promotiondetail> getPromotionByTourIdAndPromotionName(@Param("tourId") int tourId, @Param("name") String name);
 
 }
