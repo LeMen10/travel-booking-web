@@ -17,12 +17,11 @@ import WebApplication.WebTour.Model.Promotiondetail;
 @Repository
 public interface PromotiondetailRepository extends JpaRepository<Promotiondetail, Long> {
 
-	/* boolean existsByTourIdAndPromotionId(int tourId, Long promotionId); */
 	@Transactional
-	@Modifying
-	@Query(value = "SELECT pd.* FROM Promotiondetail pd JOIN Promotions p ON pd.promotion_id = p.promotion_id WHERE pd.tourId = :tourId "
-			+ "AND pd.promotions.promotionId = :promotionId AND pd.status = true", nativeQuery = true)
-	boolean existsByTourIdAndPromotionId(@Param("tourId") int tourId, @Param("promotionId") Long promotionId);
+	@Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM Promotiondetail pd "
+	             + "WHERE pd.tour_id = :tourId AND pd.promotion_id = :promotionId AND pd.status = true", nativeQuery = true)
+	Integer existsByTourIdAndPromotion(@Param("tourId") int tourId, @Param("promotionId") Long promotionId);
+
 
 	// lấy promotion detail theo tour và id
 

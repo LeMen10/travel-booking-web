@@ -134,7 +134,7 @@ a {
 }
 
 .subscribe-section button {
-    right: 332px;
+    right: 31.2%;
     position: absolute;
     padding: 10px 20px;
     border: none;
@@ -145,7 +145,7 @@ a {
     margin-left: 10px;
     height: 44px;
     width: 101px;
-    bottom: 46px;
+    bottom: 18%;
 }
 
 .footer {
