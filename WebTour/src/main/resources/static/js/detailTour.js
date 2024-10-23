@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		HandleDecrease("value-quantity1");
 	});
 
-	HandelStart();
 
 	var book_now = document.getElementById("book-now");
 	console.log("Book Now button:", book_now);
@@ -37,6 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	HandleGetDay();
+	openModalReview();
+
+	var bt_send_review = document.getElementById("bt-send-review");
+	bt_send_review.addEventListener("click", async function() {
+		await createReview();
+	});
 })
 
 
@@ -208,7 +213,7 @@ async function HandleGetDay() {
 			const endDay = data.end_Date;
 			let start = startDay.split("-")[2];
 			let end = endDay.split("-")[2];
-			let day = end - start +1;
+			let day = end - start + 1;
 
 			document.getElementById("tour-day").innerHTML = day.toLocaleString() + " Day";
 		})
@@ -226,6 +231,7 @@ async function HandelStart() {
 			//this: để truy cập đến phần tử nhận sự kiện, getAttribute :để lấy giá trị của thuộc tính data-value
 			// data-value (bên html) để lưu trữ thông tin về sao khi click
 			const rate = this.getAttribute('data-value');
+			console.log("Clicked on star with value: " + rate);
 			if (this.classList.contains('selected')) {
 				resetStars();
 			} else {
@@ -270,8 +276,8 @@ async function checkQuantity() {
 async function createBooking() {
 	console.log("Hàm createBooking đã được gọi.");
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
-	
-	const userId = sessionStorage.getItem("userId") == null? 0:sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
+
+	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
 
 
 	//kiểm tra đăng nhập
@@ -322,24 +328,83 @@ async function createBooking() {
 }
 
 function showContent(contentId) {
-    // Ẩn tất cả các nội dung tab
-    var tabContents = document.getElementsByClassName('tab-content');
-    for (var i = 0; i < tabContents.length; i++) {
-        tabContents[i].classList.remove('active-content');
-    }
 
-    // Hiện nội dung của tab được chọn
-    document.getElementById(contentId).classList.add('active-content');
+	// Ẩn tất cả các nội dung tab
+	var tabContents = document.getElementsByClassName('tab-content');
+	for (var i = 0; i < tabContents.length; i++) {
+		tabContents[i].classList.remove('active-content');
+	}
 
-    // Đặt lại trạng thái active cho tab
-    var tabs = document.getElementsByClassName('tab');
-    for (var i = 0; i < tabs.length; i++) {
-        tabs[i].classList.remove('active');
-    }
-    event.target.classList.add('active');
+	// Hiện nội dung của tab được chọn
+	document.getElementById(contentId).classList.add('active-content');
+
+	// Đặt lại trạng thái active cho tab
+	var tabs = document.getElementsByClassName('tab');
+	for (var i = 0; i < tabs.length; i++) {
+		tabs[i].classList.remove('active');
+	}
+	event.target.classList.add('active');
 }
 
+//ẩn hiện modal đánh giá ở tap đánh giá tour khi ấn gửi đánh giá của bạn
+function openModalReview() {
 
+	document.getElementById('openReviewModal').addEventListener('click', function() {
+		document.getElementById('reviewContainer').style.display = 'block';
+		document.getElementById('overlay').style.display = 'block'; // Hiển thị modal
+		HandelStart.re
+		HandelStart();
+
+	});
+
+	document.getElementById('closeReviewModal').addEventListener('click', function() {
+		document.getElementById('reviewContainer').style.display = 'none';
+		document.getElementById('overlay').style.display = 'none'; // Ẩn overlay
+	});
+
+	// Để đóng modal khi nhấn ra ngoài modal (nếu cần)
+	window.onclick = function(event) {
+		if (event.target == document.getElementById('overlay')) {
+			document.getElementById('reviewContainer').style.display = 'none';
+			document.getElementById('overlay').style.display = 'none'; // Ẩn overlay
+		}
+	};
+}
+
+//tạo review 
+async function createReview() {
+	console.log("Hàm createReview đã được gọi.");
+	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
+	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
+	const stars = document.querySelectorAll('.stars .fa-star.selected');
+	const rate = stars.length;
+	console.log("value của sao đã chọn: " + rate);
+	const comment = document.getElementById('textarea-review').value;
+	const reviewDate = new Date().toISOString().split('T')[0];
+
+	const url = `http://localhost:8080/create-review?userId=${userId}&tourId=${tourId}&rate=${rate}&comment=${comment}&reviewDate=${reviewDate}`;
+	const request = new Request(url, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+
+	});
+	const response = await fetch(request);
+	console.log("Phản hồi từ server createBooking:", response);
+	if (!response.ok) {
+		console.log(response);
+		return null;
+	}
+	const dataReview = await response.json();
+	console.log("Đánh giá đã được gửi:", dataReview);
+
+	// Load lại trang sau khi gửi đánh giá thành công
+	location.reload();
+
+
+
+}
 
 //-------------------------------------------Manh Here-------------------------------------
 async function ManhHandleIncrement(elementQuantityId) {

@@ -18,12 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import WebApplication.WebTour.Model.Bookings;
 import WebApplication.WebTour.Model.Payments;
+import WebApplication.WebTour.Model.Reviews;
+import WebApplication.WebTour.Model.Schedules;
 import WebApplication.WebTour.Model.Ticket;
 import WebApplication.WebTour.Model.TicketBooking;
 import WebApplication.WebTour.Model.Tours;
 import WebApplication.WebTour.Model.User;
 import WebApplication.WebTour.Respository.BookingsRespository;
 import WebApplication.WebTour.Respository.PaymentsRepository;
+import WebApplication.WebTour.Respository.ReviewsRepository;
+import WebApplication.WebTour.Respository.SchedulesRepository;
 import WebApplication.WebTour.Respository.TicketBookingRepository;
 import WebApplication.WebTour.Respository.TicketRepository;
 import WebApplication.WebTour.Respository.ToursRepository;
@@ -43,6 +47,10 @@ public class DetailTourController {
 	UserRepository userRepository;
 	@Autowired
 	TicketBookingRepository ticketBookingRepository;
+	@Autowired
+    SchedulesRepository schedulesRepository;
+	@Autowired
+	ReviewsRepository reviewsRepository;
 
 	public DetailTourController(TicketRepository ticketRepository) {
 		this.ticketRepository = ticketRepository;
@@ -54,16 +62,26 @@ public class DetailTourController {
 		model.addAttribute(detailTour);
 		return "/User/detailTour";
 	}
-
-	@GetMapping("/detail-tour/{id}") // hiển thị dữ liêu lên trang detail-tour
+	
+	// hiển thị dữ liêu lên trang detail-tour
+	@GetMapping("/detail-tour/{id}") 
 	public String getDetailTour(@PathVariable("id") Long id, Model model) {
 		Optional<Tours> detailTour = toursRepository.findById(id);
 		// Kiểm tra nếu có giá trị trong Optional
 		if (detailTour.isPresent()) {
-			model.addAttribute("tour", detailTour.get());
+			Tours tour = detailTour.get();
+			List<Schedules> schedules = schedulesRepository.findSchedulesByTourId(tour.getTourId().intValue());
+			List<Reviews> reviews = reviewsRepository.findReviewsByTourId(tour.getTourId());
+			
+			
+			model.addAttribute("tour", tour);
+			model.addAttribute("schedules", schedules);
+			model.addAttribute("reviews", reviews);
 		} else {
 			model.addAttribute("error", "Tour không tồn tại!");
 		}
+		
+		
 		return "/User/detailTour";
 	}
 
@@ -102,7 +120,7 @@ public class DetailTourController {
 		Bookings booking = new Bookings();
 		Tours tour = toursRepository.findById(tourId).get();
 		booking.setTour(tour);
-		User user = userId == 0? null: userRepository.findById(userId).get();
+		User user = userId == 0 ? null: userRepository.findById(userId).get();
 		booking.setUser(user);
 		booking.setBookingDate(bookingDate);
 		
@@ -114,6 +132,32 @@ public class DetailTourController {
 		return ResponseEntity.ok(savedBooking);
 	}
 
+	// tạo review
+		@PostMapping("/create-review")
+		public ResponseEntity<Reviews> createReview(
+				@RequestParam("userId") long userId,
+				@RequestParam("tourId") long tourId,
+				@RequestParam("rate") int rate,
+				@RequestParam("comment") String comment,
+				@RequestParam("reviewDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reviewDate) {
+
+			//lấy user và tour trong reviews.model thì cái thuộc tính đó là thực thể
+			User user = userRepository.findById(userId).get();
+			Tours tour = toursRepository.findById(tourId).get();
+			
+			Reviews review = new Reviews();
+			review.setUser(user);
+			review.setTours(tour);
+			review.setRate(rate);
+			review.setComment(comment);
+			review.setReviewDate(reviewDate);
+			
+			// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên không cần viết hàm insert ở file respository
+			Reviews savedReviews = reviewsRepository.save(review);
+			return ResponseEntity.ok(savedReviews);
+		}
+
+	
 	public void handleQuantityTicket(int bookingId,int quantityAdult, int quantityChild) {
 		 if(quantityAdult > 0) {
 			TicketBooking  ticketAdult = new TicketBooking();
