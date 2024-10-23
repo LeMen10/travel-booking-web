@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import WebApplication.WebTour.Model.Address;
 import WebApplication.WebTour.Model.Bookings;
 import WebApplication.WebTour.Model.District;
+import WebApplication.WebTour.Model.Image;
 import WebApplication.WebTour.Model.Paymentmethod;
 import WebApplication.WebTour.Model.Payments;
 import WebApplication.WebTour.Model.Promotiondetail;
@@ -34,6 +35,7 @@ import WebApplication.WebTour.Model.Ward;
 import WebApplication.WebTour.Respository.AddressRespository;
 import WebApplication.WebTour.Respository.BookingsRespository;
 import WebApplication.WebTour.Respository.DistrictRespository;
+import WebApplication.WebTour.Respository.ImageRepository;
 import WebApplication.WebTour.Respository.PaymentmethodRespository;
 import WebApplication.WebTour.Respository.PaymentsRepository;
 import WebApplication.WebTour.Respository.PromotiondetailRepository;
@@ -74,6 +76,9 @@ public class PaymentController {
 	PaymentmethodRespository paymentmethodRespository;
 	@Autowired
 	PromotiondetailRepository promotiondetailRepository;
+	@Autowired
+	ImageRepository imageRepository;
+
 	// lấy id booking (có user trong đó để hiện thị t/tin user lên trang) vừa tạo và
 	// mở trang payment
 	@GetMapping("/payment/{bookingId}")
@@ -82,7 +87,7 @@ public class PaymentController {
 		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingId);
 		if (bookingOpt.isPresent()) {
 			Bookings booking = bookingOpt.get();
-			
+
 			Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
 			if (bookingPayment.isPresent()) {
 				model.addAttribute("bookingPayment", bookingPayment.get());
@@ -91,14 +96,17 @@ public class PaymentController {
 			}
 			// Lấy thông tin user từ userId trong booking
 			User user = booking.getUser();
-			if (user!=null) {
+			if (user != null) {
 				model.addAttribute("user", user);
 			} else {
 				model.addAttribute("error", "User không tồn tại!");
 			}
 
 			// Lấy thông tin payment
-			/*Optional<Payments> payment = paymentsRepository.findById((long) booking.getPaymentId());*/
+			/*
+			 * Optional<Payments> payment = paymentsRepository.findById((long)
+			 * booking.getPaymentId());
+			 */
 			Optional<Payments> payment = paymentsRepository.findById(bookingId);
 			if (payment.isPresent()) {
 				model.addAttribute("payment", payment.get());
@@ -107,8 +115,17 @@ public class PaymentController {
 			}
 			// lấy thông tin của tour
 			Tours tourPayment = booking.getTour();
-			if (tourPayment!=null) {
+			if (tourPayment != null) {
 				model.addAttribute("tourPayment", tourPayment);
+				// Lấy hình ảnh của tour
+				List<Image> images = imageRepository.findByTours(tourPayment);
+				if (!images.isEmpty()) {
+
+					Image imagePayment = images.get(0); // hình đầu
+					model.addAttribute("imagePayment", imagePayment);
+				} else {
+					model.addAttribute("error", "Không có hình ảnh cho tour này!");
+				}
 			} else {
 				model.addAttribute("error", "TourPayment không tồn tại!");
 			}
@@ -125,14 +142,15 @@ public class PaymentController {
 			model.addAttribute("error", "Booking không tồn tại!");
 		}
 
-			Bookings bookings = bookingsRespository.findById(bookingId).get();
-			User user = bookings.getUser();
-			Tours tour = bookings.getTour();
-			List<TicketBooking> ticketBookings = ticketBookingRepository.findTicketBookingById(bookingId);
-			model.addAttribute("bookingPayment", bookings);
-			model.addAttribute("tourPayment", tour);
-			model.addAttribute("user", user);
-			model.addAttribute("ticketBooking", ticketBookings);
+		Bookings bookings = bookingsRespository.findById(bookingId).get();
+		User user = bookings.getUser();
+		Tours tour = bookings.getTour();
+		List<TicketBooking> ticketBookings = ticketBookingRepository.findTicketBookingById(bookingId);
+		model.addAttribute("bookingPayment", bookings);
+		model.addAttribute("tourPayment", tour);
+		model.addAttribute("user", user);
+		model.addAttribute("ticketBooking", ticketBookings);
+
 		return "/User/payment";
 	}
 
@@ -220,8 +238,7 @@ public class PaymentController {
 	public ResponseEntity<Payments> createPayment(@RequestParam("bookingId") Long bookingId,
 			@RequestParam("paymentDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date paymentDate,
 			@RequestParam("amount") float amount, @RequestParam("paymentMethodId") long paymentMethodId,
-			@RequestParam("promotionCode") String promotionCode
-			) {
+			@RequestParam("promotionCode") String promotionCode) {
 		System.out.println("Amount received from request: " + amount);
 		Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
 		if (!bookingPayment.isPresent()) {
@@ -233,7 +250,7 @@ public class PaymentController {
 		payment.setBookingId(existingBooking.getBookingId());
 		payment.setPaymentDate(paymentDate);
 		payment.setAmount(amount);
-		
+
 		Paymentmethod paymentMethod = paymentmethodRespository.findById(paymentMethodId).get();
 		payment.setPaymentMethod(paymentMethod);
 		payment.setPaymentStatus(2);
@@ -248,43 +265,88 @@ public class PaymentController {
 		return ResponseEntity.ok(savePayment);
 
 	}
-	
-	//dùng để cập nhật paymentStatus sau khi thanh toán thành công
+
+	// dùng để cập nhật paymentStatus sau khi thanh toán thành công
 	@PutMapping("/update-status/{bookingId}")
-    public ResponseEntity<String> updatePaymentStatus(@PathVariable Long bookingId) {
-        paymentsRepository.updatePaymentStatus(bookingId);
-        return ResponseEntity.ok("update successfully");
-    }
-	
-	//dùng để kiểm tra mã giảm giá đã dùng chưa
+	public ResponseEntity<String> updatePaymentStatus(@PathVariable Long bookingId) {
+		paymentsRepository.updatePaymentStatus(bookingId);
+		return ResponseEntity.ok("update successfully");
+	}
+
+	// dùng để kiểm tra mã giảm giá đã dùng chưa
 	@GetMapping("/api-check-promotion")
-	public ResponseEntity<?> checkPromotion(
-			@RequestParam("code") String promotionCode, 
-			@RequestParam("userId") Long userId,
-			@RequestParam("tourId") int tourId) {
-		
-		//kiểm tra mã có dành cho tour hay không
-		Optional<Promotiondetail> promotiondetailOpt = promotiondetailRepository.getPromotionByTourIdAndPromotionName(tourId, promotionCode);
-		if(!promotiondetailOpt.isPresent()) {
+	public ResponseEntity<?> checkPromotion(@RequestParam("code") String promotionCode,
+			@RequestParam("userId") Long userId, @RequestParam("tourId") int tourId) {
+
+		// kiểm tra mã có dành cho tour hay không
+		Optional<Promotiondetail> promotiondetailOpt = promotiondetailRepository
+				.getPromotionByTourIdAndPromotionName(tourId, promotionCode);
+		if (!promotiondetailOpt.isPresent()) {
 			return ResponseEntity.ok(Collections.singletonMap("message", "Mã khuyến mãi không dành cho tour này."));
 		}
-		//kiểm tra mã đã được sử dụng chưa
+		// kiểm tra mã đã được sử dụng chưa
 		Optional<List<Bookings>> listBooking = bookingsRespository.getUserByBookingId(userId);
-		if(listBooking.isPresent()) {
-			
+		if (listBooking.isPresent()) {
+
 			List<Bookings> bookings = listBooking.get();
 			for (Bookings booking : bookings) {
-				if(booking.getPayment() == null) continue;
+				if (booking.getPayment() == null)
+					continue;
 				booking.getPayment();
-				if(booking.getPayment().getPromotionCode() == null) continue;
-				if(booking.getPayment().getPromotionCode().equals(promotionCode)) {
-					
+				if (booking.getPayment().getPromotionCode() == null)
+					continue;
+				if (booking.getPayment().getPromotionCode().equals(promotionCode)) {
+
 					return ResponseEntity.ok(Collections.singletonMap("message", "Mã đã được dùng"));
 				}
 			}
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Mã giảm giá hợp lệ."));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(Collections.singletonMap("message", "Mã giảm giá hợp lệ."));
 	}
-        
-	
+
+	// tạo address trong trang thanh toán
+	@PostMapping("/api-create-address")
+	public ResponseEntity<?> createAddress(
+			@RequestParam Long userId,
+			@RequestParam String detail, 
+			@RequestParam Long provinceId,
+			@RequestParam Long districtId, 
+			@RequestParam Long wardId) {
+		
+		// Tạo address
+		Address address = new Address();
+		address.setDetail(detail);
+
+		// Tìm province, district, ward từ các repository
+		Optional<Province> provinceOpt = provinceRepository.findById(provinceId);
+		Optional<District> districtOpt = districtRespository.findById(districtId);
+		Optional<Ward> wardOpt = wardRepository.findById(wardId);
+
+		if (provinceOpt.isPresent()) {
+			address.setProvince(provinceOpt.get());
+		}
+		if (districtOpt.isPresent()) {
+			address.setDistrict(districtOpt.get());
+		}
+		if (wardOpt.isPresent()) {
+			address.setWard(wardOpt.get());
+		}
+
+		Optional<User> userOpt = userRepository.findById(userId);
+		if (userOpt.isPresent()) {
+	        User user = userOpt.get();
+	        user.setAddress(address);
+
+	        // Lưu vào database
+	        addressRespository.save(address);
+	        // Lưu địa chỉ mới cho user
+	        userRepository.save(user); 
+
+	        return ResponseEntity.ok().body(Collections.singletonMap("message", "Địa chỉ đã được lưu"));
+	    } else {
+	    	 return ResponseEntity.badRequest().body(Collections.singletonMap("error", "User createAddress không tồn tại!"));
+	    }
+	}
+
 }

@@ -24,15 +24,7 @@ public class Address implements Serializable{
  	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "address_id")
     private Long addressId;
-	
-//	@Column(name = "province_id")
-//    private int provinceId;
-//	
-//	@Column(name = "district_id ")
-//    private int districtId ;
-//	
-//	@Column(name = "ward_id")
-//    private int wardId;
+
 	@ManyToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "province_id", nullable = true)
     private Province Province;

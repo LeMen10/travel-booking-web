@@ -46,13 +46,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	var bt_apply = document.getElementById("bt-apply").addEventListener("click", async function() {
 		var discount_code = document.getElementById("discount-code").value;
 		console.log("discount_code " + discount_code);
-		
+
 		//updateTotalPrice();
 		const promotionValid = await checkPromotion();
 		// mã sai sẽ return
-		    if (!promotionValid) {
-		        return; 
-		    }
+		if (!promotionValid) {
+			return;
+		}
 
 		if (discount_code) {
 			paymentByDiscount(discount_code);
@@ -92,8 +92,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			await createPayment();
 			await updateTotalPrice();
+			await createAddress();
 			const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 			await updatePaymentStatus(bookingId);
+			
 			alert("Thanh toán thành công!");
 
 			window.location.href = `/notificationSuccess/${bookingId}`;
@@ -518,24 +520,50 @@ async function checkPromotion() {
 	});
 
 	try {
-	        const response = await fetch(request);
-	        const data = await response.json(); 
-	        if (response.ok) {
-	            console.error("Lỗi checkPromotion:", data.message);
-	            alert(data.message); // Hiển thị thông báo lỗi
-	            return false;
-	        }
-	        
-	        console.log(data.message); 
-	        alert(data.message); 
-	        return true; // Mã đúng
-	    } catch (error) {
-	        console.error("Lỗi checkPromotion:", error);
-	        alert("Có lỗi xảy ra trong quá trình kiểm tra mã giảm giá."); // Thông báo lỗi chung
-	        return false;
-	    }
+		const response = await fetch(request);
+		const data = await response.json();
+		if (response.ok) {
+			console.error("Lỗi checkPromotion:", data.message);
+			alert(data.message); // Hiển thị thông báo lỗi
+			return false;
+		}
+
+		console.log(data.message);
+		alert(data.message);
+		return true; // Mã đúng
+	} catch (error) {
+		console.error("Lỗi checkPromotion:", error);
+		alert("Có lỗi xảy ra trong quá trình kiểm tra mã giảm giá."); // Thông báo lỗi chung
+		return false;
+	}
 }
 
+//tạo address khi ấn thanh toán
+async function createAddress() {
+	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
+	const detail = document.getElementById('optional-address').value; 
+	const provinceId = document.getElementById('city').value; 
+	const districtId = document.getElementById('district').value; 
+	const wardId = document.getElementById('ward').value;
+
+	const url = `http://localhost:8080/api-create-address?userId=${userId}&detail=${detail}&provinceId=${provinceId}&districtId=${districtId}&wardId=${wardId}`;
+	const request = new Request(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+
+		});
+		const response = await fetch(request);
+		console.log("Phản hồi từ server createBooking:", response);
+		if (!response.ok) {
+			console.log(response);
+			return null;
+		}
+		const dataAddress = await response.json();
+		console.log("Address được tạo", dataAddress);
+
+}
 
 
 

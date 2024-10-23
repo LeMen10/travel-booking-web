@@ -40,24 +40,24 @@
 			<div class="form-group">
 				<label for="optional-address"> Địa chỉ (Số nhà, tên
 					đường...) </label> <input th:value="${user.address.detail}"
-					id="optional-address" type="text" />
+					id="optional-address" type="text" name="detail" />
 			</div>
 
 			<div class="form-group">
 				<label for="city"> Tỉnh thành </label> 
-				<select id="city">
+				<select id="city" name="provinceId" >
 					<option th:value="${user.address.province.provinceId}" th:text="${user.address.province.name}">---</option>
 				</select>
 			</div>
 			<div class="form-group">
-				<label for="district"> Quận huyện </label> 
-				<select id="district">
+				<label for="district"  > Quận huyện </label> 
+				<select id="district" name="districtId" >
 					<option th:value="${user.address.district.districtId}" th:text="${user.address.district.name}">---</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="ward"> Phường xã </label> 
-				<select id="ward">
+				<select id="ward" name="wardId" >
 					<option th:value="${user.address.ward.wardId}" th:text="${user.address.ward.name}">---</option>
 				</select>
 			</div>
@@ -82,11 +82,8 @@
 			<div class="section-title">Đơn hàng</div>
 			<div class="order-summary">
 				<div class="item">
-					<img
-						alt="Image of a beautiful beach with clear blue water and white sand"
-						height="50"
-						src="https://storage.googleapis.com/a1aa/image/oqgWqTIWzj6BHhMp9dwUieDNUzA68MxOwsjm2kBWoISepujTA.jpg"
-						width="50" />
+					<img th:src="@{'/image/' + ${imagePayment.imageId}}" alt="Tour Image" height="70" width="50" />
+
 					<div th:object="${ticketBooking}" class="item-details">
 						<div class="code-booking">
 							<label>Mã đơn: </label>

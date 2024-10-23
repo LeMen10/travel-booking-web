@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import WebApplication.WebTour.Model.Bookings;
+import WebApplication.WebTour.Model.Image;
 import WebApplication.WebTour.Model.Payments;
 import WebApplication.WebTour.Model.Reviews;
 import WebApplication.WebTour.Model.Schedules;
@@ -25,6 +26,7 @@ import WebApplication.WebTour.Model.TicketBooking;
 import WebApplication.WebTour.Model.Tours;
 import WebApplication.WebTour.Model.User;
 import WebApplication.WebTour.Respository.BookingsRespository;
+import WebApplication.WebTour.Respository.ImageRepository;
 import WebApplication.WebTour.Respository.PaymentsRepository;
 import WebApplication.WebTour.Respository.ReviewsRepository;
 import WebApplication.WebTour.Respository.SchedulesRepository;
@@ -51,6 +53,8 @@ public class DetailTourController {
     SchedulesRepository schedulesRepository;
 	@Autowired
 	ReviewsRepository reviewsRepository;
+	@Autowired
+	ImageRepository imageRepository;
 
 	public DetailTourController(TicketRepository ticketRepository) {
 		this.ticketRepository = ticketRepository;
@@ -72,11 +76,13 @@ public class DetailTourController {
 			Tours tour = detailTour.get();
 			List<Schedules> schedules = schedulesRepository.findSchedulesByTourId(tour.getTourId().intValue());
 			List<Reviews> reviews = reviewsRepository.findReviewsByTourId(tour.getTourId());
+			List<Image> images = imageRepository.findByTours(tour);
 			
-			
+			System.out.println("Số lượng ảnh: " + images.size());
 			model.addAttribute("tour", tour);
 			model.addAttribute("schedules", schedules);
 			model.addAttribute("reviews", reviews);
+			model.addAttribute("images", images);
 		} else {
 			model.addAttribute("error", "Tour không tồn tại!");
 		}

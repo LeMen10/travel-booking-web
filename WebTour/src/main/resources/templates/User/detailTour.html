@@ -72,27 +72,46 @@
 		</div>
 		<div class="main-content">
 			<div class="first-main-content">
+
 				<div class="image-gallery">
+					<!-- Hiển thị hình ảnh chính (hình lớn) -->
+					<img th:if="${images.size() > 0}" th:alt="${images[0].imageCode}"
+						height="400" th:src="@{'/image/' + ${images[0].imageId}}"
+						width="800" /> <img th:if="${images.size() == 0}"
+						src="path/to/default-image.jpg" height="400" width="800"
+						alt="Hình ảnh mặc định" />
+
+					<!-- Hiển thị các hình thu nhỏ -->
+					<div class="image-thumbnails">
+						<th:block th:each="image : ${images}">
+							<img th:alt="${image.imageCode}" height="100"
+								th:src="@{'/image/' + ${image.imageId}}" width="200" />
+						</th:block>
+					</div>
+				</div>
+
+
+				<!-- <div class="image-gallery">
 					<img alt="A beautiful island with clear blue water and boats"
 						height="400"
 						src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
 						width="800" />
 					<div class="image-thumbnails">
-						<img alt="A beautiful island with clear blue water and boats"
-							height="100"
+						<img alt="A beautiful island with clear blue water and boats" height="100"
 							src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
-							width="200" /> <img
+							width="200" /> 
+							<img
 							alt="Underwater scene with colorful fish and coral" height="100"
 							src="https://storage.googleapis.com/a1aa/image/vcU7UfsuqY27eUYsYaIUaMZNfziwa0CJ25KKNbN6SxoJXVHnA.jpg"
-							width="200" /> <img alt="A person enjoying the beach"
+							width="200" /> 
+							<img alt="A person enjoying the beach"
 							height="100"
 							src="https://storage.googleapis.com/a1aa/image/QMsjhveyXoUZYinEf4NgtFuEZ2SLz4BflzMrvbjtvkFRXVHnA.jpg"
-							width="200" /> <img
-							alt="A scenic view of the beach with palm trees" height="100"
-							src="https://storage.googleapis.com/a1aa/image/IJXLthajlgIODhkAvb7gtSh0Wli81l9MHXqsf7rwimAzV1xJA.jpg"
-							width="200" />
+							width="200" /> 
 					</div>
-				</div>
+				</div> -->
+
+
 				<div class="booking-info">
 					<h2 th:text="${tour.price}">1.000.000₫</h2>
 					<!-- <p class="original-price">2.000.000₫</p> -->
@@ -168,10 +187,10 @@
 						</div>
 
 						<div id="schedule" class="tab-content">
-							<div  th:each="schedule : ${schedules}">
+							<div th:each="schedule : ${schedules}">
 								<p class="schedule-p">
-									Ngày thứ <span class="schedule-p-span" th:text="${schedule.step}"> 
-									</span>: <span
+									Ngày thứ <span class="schedule-p-span"
+										th:text="${schedule.step}"> </span>: <span
 										class="schedule-p-span" th:text="${schedule.activity}"></span>
 								</p>
 							</div>
@@ -194,7 +213,7 @@
 							</div>
 
 							<div class="review-list">
-							<div>
+								<div>
 									<th:block th:each="review : ${reviews}">
 										<p class="review-list-p">
 											<strong class="review-list-strong"
@@ -209,7 +228,7 @@
 
 									</th:block>
 								</div>
-								
+
 							</div>
 
 
