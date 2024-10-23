@@ -59,15 +59,8 @@ public class HomeController {
     public String navigateHomePage(Model model) {
 			List<Province> province = provinceRepository.findAll();
 			List<Tours> tours = toursRepository.listOfCheapestTours();
-			model.addAttribute(province);
-			model.addAttribute(tours);
-			for (Tours tours2 : tours) {
-				System.out.println(tours2);
-			}
-			if(tours.isEmpty())
-			{
-				System.out.println("khum cos gif luoon");
-			}
+			model.addAttribute("province",province);
+			model.addAttribute("tours",tours);
             return "home";
     }
 	

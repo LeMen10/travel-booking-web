@@ -499,6 +499,126 @@ z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
     text-decoration: none;
 }
 
+.card-tour {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Khoảng cách giữa các tour */
+    justify-content: flex-start; /* Căn đều các thẻ tour */
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(25% - 20px); /* Căn 4 thẻ trên 1 hàng, trừ đi khoảng cách giữa các thẻ */
+    min-width: 280px; /* Chiều rộng tối thiểu để thẻ không quá hẹp */
+    max-width: calc(25% - 20px);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    height: 100%; /* Giúp card có chiều cao bằng nhau */
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng zoom nhẹ và đổ bóng */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ mặc định */
+    border-radius: 10px;
+    overflow: hidden;
+	}
+.card:hover {
+    transform: scale(1.05); /* Zoom nhẹ toàn bộ tour */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Đổ bóng nổi bật hơn khi hover */
+    cursor: pointer;
+}
+
+.card img {
+    transition: transform 0.3s ease; /* Hiệu ứng chuyển đổi cho ảnh */
+    width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều rộng */
+    height: auto;
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+}
+.card:hover img {
+ 			transform: scale(1.1); /* Phóng to nhẹ ảnh khi hover */
+}
+
+.card-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Giới hạn chiều cao tên tour và cho phép xuống dòng */
+.card-content h3 {
+    font-size: 16px;
+    margin: 0 0 10px;
+    line-height: 1.2;
+    max-height: 5em; /* Giới hạn chiều cao tối đa cho tên tour, khoảng 2 dòng */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* display: -webkit-box; */
+    
+    -webkit-box-orient: vertical;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;		}
+
+.card-content p {
+    margin: 5px 0;
+    color: #757575;
+    font-size: 13px;
+    white-space: nowrap; /* Không cho phép xuống dòng ở các thông tin khác */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Giá tiền */
+.card-content .price {
+    font-size: 16px;
+    color: #ff5722;
+    font-weight: bold;
+}
+
+      .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          list-style-type: none;
+          padding: 0;
+          margin-top: 20px;
+      }
+
+      .pagination li {
+          margin: 0 5px;
+      }
+
+      .pagination a,
+      .pagination button {
+          text-decoration: none;
+          color: #1e88e5;
+          padding: 10px 15px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          background-color: #fff;
+      }
+
+      .pagination a:hover,
+      .pagination button:hover {
+          background-color: #eee;
+      }
+
+      .pagination .current {
+          background-color: #1e88e5;
+          color: white;
+      }
+
+      .pagination .icon {
+          font-size: 18px;
+      }
+
 /* Media Queries for Responsive Design */
 @media (max-width: 1200px) {
     .search-form, .tour-cards, .features, .steps {
