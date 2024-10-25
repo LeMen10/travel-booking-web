@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Box Design</title>
+    <title>Hello Friend</title>
     <link rel="stylesheet" href="/css/loginStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
 <body>
@@ -16,7 +17,10 @@
 				<input id="email-register" type="email" placeholder="Email" required/>
 				<input id="user-name-register" type="text" placeholder="User name" required/>
 				<input id="phone-register" type="tel" placeholder="Phone" pattern="^0[0-9]{6,12}" required/>
-				<input id="password-register" type="password" placeholder="Password" required/>
+				<div class="password-wrapper">
+				    <input id="password-register" type="password" placeholder="Password" required/>
+				    <i class="fas fa-eye" id="togglePasswordRegister"></i>
+				</div>
 				<button onClick="handleRegisterAccont(event)">Sign Up</button>
 			</form>
 		</div>
@@ -24,7 +28,10 @@
 			<form>
 				<h1>Sign in</h1>
 				<input id="user-name-login" type="text" placeholder="User name" required/>
-				<input id="password-login" type="password" placeholder="Password" required/>
+				<div class="password-wrapper">
+				    <input id="password-login" type="password" placeholder="Password" required/>
+				    <i class="fas fa-eye" id="togglePasswordLogin"></i>
+				</div>
 				<a href="/forgot-password">Forgot your password?</a>
 				<button onClick="handleLogin(event)">Sign In</button>
 			</form>
@@ -44,6 +51,9 @@
 			</div>
 		</div>
 	</div>
+	<div id="notification"></div>
+		<script src="/js/notification.js"></script>
 	<script src="../js/loginScript.js"></script>
+
 </body>
 </html>

@@ -1,14 +1,45 @@
-const signUpButton = document.getElementById("signUp");
-const signInButton = document.getElementById("signIn");
-const container = document.getElementById("container");
+const linkHomePages = {
+	"1" :"/admin",
+	"2" : "/employee",
+	"3" : "/home"
+}
+document.addEventListener("DOMContentLoaded", function() {
+	const signUpButton = document.getElementById("signUp");
+	const signInButton = document.getElementById("signIn");
+	const container = document.getElementById("container");
 
-signUpButton.addEventListener("click", () => {
-    container.classList.add("right-panel-active");
+	signUpButton.addEventListener("click", () => {
+	    container.classList.add("right-panel-active");
+	});
+	
+	signInButton.addEventListener("click", () => {
+	    container.classList.remove("right-panel-active");
+	});
+	
+	setEventButtonEye();
 });
 
-signInButton.addEventListener("click", () => {
-    container.classList.remove("right-panel-active");
-});
+
+function setEventButtonEye(){
+	const togglePasswordRegister = document.getElementById('togglePasswordRegister');
+	const passwordRegister = document.getElementById('password-register');
+
+	togglePasswordRegister.addEventListener('click', function () {
+	    const type = passwordRegister.getAttribute('type') === 'password' ? 'text' : 'password';
+	    passwordRegister.setAttribute('type', type);
+	    this.classList.toggle('fa-eye-slash');
+	});
+	
+	const togglePasswordLogin = document.getElementById('togglePasswordLogin');
+	const passwordLogin = document.getElementById('password-login');
+
+	togglePasswordLogin.addEventListener('click', function () {
+	    const type = passwordLogin.getAttribute('type') === 'password' ? 'text' : 'password';
+	    passwordLogin.setAttribute('type', type);
+	    
+	    this.classList.toggle('fa-eye-slash');
+	});
+}
 
 async function handleLogin(event) {
 	event.preventDefault();
@@ -27,7 +58,7 @@ async function handleLogin(event) {
     try {
         const response = await fetch(request);
         if (!response.ok) {
-           alert("User not found or request failed");
+           openDialogError("User not found or request failed");
 		   return;
         }
         const data = await response.json();
@@ -43,13 +74,13 @@ async function handleLogin(event) {
 					sessionStorage.removeItem("bookingID");
 					window.location.href = `/payment/${bookingId}`;
 				} 
-			else window.location.href = data.user.role.roleId == 3? "/home" : "/admin/";
+			else window.location.href =linkHomePages[data.user.role.roleId + ""];
 
 		}
-		else alert("Incorrect Password!");
+		else openDialogError("Incorrect Password!");
     } catch (error) {
         console.error("Error:", error.message);
-		alert("500 server error");
+		openDialogError("500 server error");
     }
 }
 
@@ -71,11 +102,14 @@ async function handleRegisterAccont(event)
 		    },
 		});
 	
+	console.log(responseCheckUserName.ok)
 	if(responseCheckUserName.ok)
 	{
-		alert("User Name have existed!");
+		openDialogError("User Name have existed!");
 		return;
 	}
+	else
+	{
 	const User = {
 		"fullName" : fullName,
 		"userName" : userName,
@@ -95,10 +129,11 @@ async function handleRegisterAccont(event)
 	
 	if(Response.ok)
 	{
-		alert("created successfully!");
+		openDialogSuccess("created successfully!");
 			
 	}
-	else alert("500 server error");
+	else openDialogError("500 server error");
+	}
 }
 
 async function encryptPasswordHMAC(passwordInput) {
