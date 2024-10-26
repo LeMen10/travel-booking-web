@@ -247,7 +247,7 @@ public class PaymentController {
 		Bookings existingBooking = bookingPayment.get();
 
 		Payments payment = new Payments();
-		payment.setBookingId(existingBooking.getBookingId());
+		payment.setBooking(existingBooking);
 		payment.setPaymentDate(paymentDate);
 		payment.setAmount(amount);
 
@@ -317,6 +317,7 @@ public class PaymentController {
 		// Tạo address
 		Address address = new Address();
 		address.setDetail(detail);
+		System.out.println(detail);
 
 		// Tìm province, district, ward từ các repository
 		Optional<Province> provinceOpt = provinceRepository.findById(provinceId);
@@ -332,12 +333,17 @@ public class PaymentController {
 		if (wardOpt.isPresent()) {
 			address.setWard(wardOpt.get());
 		}
+		System.out.println("Detail: " + detail);
+		System.out.println("ProvinceId: " + provinceId);
+		System.out.println("DistrictId: " + districtId);
+		System.out.println("WardId: " + wardId);
+
 
 		Optional<User> userOpt = userRepository.findById(userId);
 		if (userOpt.isPresent()) {
 	        User user = userOpt.get();
 	        user.setAddress(address);
-
+	        
 	        // Lưu vào database
 	        addressRespository.save(address);
 	        // Lưu địa chỉ mới cho user

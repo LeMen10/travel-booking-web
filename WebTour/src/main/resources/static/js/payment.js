@@ -66,7 +66,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	let isPayPalInitialized = false;
 	var bt_pay = document.getElementById("bt-pay").addEventListener("click", async function() {
-		checkInformationInput();
+		/*if(!checkInformationInput()){
+			return;
+		}*/
 		var div_paypal = document.getElementById("paypal-button-container");
 
 		// Kiểm tra phương thức thanh toán
@@ -92,10 +94,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			await createPayment();
 			await updateTotalPrice();
-			await createAddress();
+			
 			const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 			await updatePaymentStatus(bookingId);
-			
+			await createAddress();
 			alert("Thanh toán thành công!");
 
 			window.location.href = `/notificationSuccess/${bookingId}`;
@@ -259,6 +261,8 @@ async function paymentByDiscount(code) {
 	const totalPrice = sessionStorage.getItem("totalPrice");
 	const tempPrice = parseInt(document.getElementById("temp-price").innerText.replace(/[^0-9]/g, ''));
 	console.log("price " + totalPrice, tempPrice);
+	const conversionValue = sessionStorage.getItem("conversion-value");
+	
 	/*code = document.getElementById('discount-code').value;
    console.log("code discount " + code);*/
 
@@ -293,6 +297,7 @@ async function paymentByDiscount(code) {
 				const discount = tempPrice * (data.discount / 100);
 				const total = totalPrice - discount;
 				document.getElementById("total-price").innerHTML = total.toLocaleString() + "₫";
+				
 				updateTotalPrice();
 			}
 			else {
@@ -311,7 +316,8 @@ async function paymentByDiscount(code) {
 }
 
 //kiểm tra thông tin người dùng
-async function checkInformationInput() {
+ function checkInformationInput() {
+	
 	let email = document.getElementById("email").value.trim();
 	let name = document.getElementById("name").value.trim();
 	let phone = document.getElementById("phone").value.trim();
@@ -323,8 +329,9 @@ async function checkInformationInput() {
 	// Kiểm tra nếu bất kỳ trường nào trống
 	if (!email || !name || !phone || !address || !city || !district || !ward) {
 		alert("Bạn chưa nhập đầy đủ thông tin!");
-		return;
+		return false;
 	}
+	return true;
 }
 
 //dùng để tính giá tiền khi dùng mã giảm giá
@@ -465,6 +472,8 @@ async function payPal() {
 	const exchangeRate = 24000;
 	const totalPriceUSD = (totalPrice / exchangeRate).toFixed(2);
 	console.log("totalPriceUSD trong hàm paypal " + totalPriceUSD);
+	
+	document.getElementById("conversion-value").innerHTML = totalPriceUSD.toLocaleString() + "$";
 	paypal.Buttons({
 		createOrder: function(data, actions) {
 			// Tạo đơn hàng
@@ -541,7 +550,9 @@ async function checkPromotion() {
 //tạo address khi ấn thanh toán
 async function createAddress() {
 	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
-	const detail = document.getElementById('optional-address').value; 
+	const detail = document.getElementById('optional-address').value.trim(); 
+	console.log(detail);
+	console.log(`Detail: ${detail}`);
 	const provinceId = document.getElementById('city').value; 
 	const districtId = document.getElementById('district').value; 
 	const wardId = document.getElementById('ward').value;
@@ -555,7 +566,7 @@ async function createAddress() {
 
 		});
 		const response = await fetch(request);
-		console.log("Phản hồi từ server createBooking:", response);
+		console.log("Phản hồi từ server createAddress:", response);
 		if (!response.ok) {
 			console.log(response);
 			return null;

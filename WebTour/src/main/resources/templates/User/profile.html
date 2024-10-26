@@ -45,7 +45,8 @@
             <h2>TRANG TÀI KHOẢN</h2>
             <p><strong>Xin chào, <span th:text="${user.fullName}" >Đỗ Nam</span>!</strong></p>
             <p><a href="\account">Thông tin tài khoản</a></p>
-            <p><a href="\account\tour-booking">Đơn hàng của bạn</a></p>
+            <p><a th:href="@{/account/get-order(userId=${user.user_id})}">Đơn hàng của bạn</a></p>
+
             <p><a href="\account\change-password">Đổi mật khẩu</a></p>
             <p><a href="\account\address">Sổ địa chỉ</a></p>
         </div>

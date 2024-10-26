@@ -78,7 +78,7 @@ public class Address implements Serializable{
 	}
 
 	public void setDetail(String detail) {
-		detail = detail;
+		this.detail = detail;
 	}
 
 	public boolean isStatus() {

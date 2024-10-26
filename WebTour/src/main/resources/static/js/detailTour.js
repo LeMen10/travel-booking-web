@@ -282,7 +282,9 @@ async function createBooking() {
 
 	//kiểm tra đăng nhập
 
-	const bookingDate = document.getElementById("book-day").value;
+	/*const bookingDate = document.getElementById("book-day").value;*/
+	const today = new Date().toISOString().split('T')[0]; // lấy định dạng yyyy-MM-dd
+	const bookingDate = today; 
 	console.log("bookingDate " + bookingDate);
 	const adult = parseInt(document.getElementById("value-quantity").value.replace(/[^0-9]/g, '')) || 0; // Chỉ lấy số
 	const child = parseInt(document.getElementById("value-quantity1").value.replace(/[^0-9]/g, '')) || 0;

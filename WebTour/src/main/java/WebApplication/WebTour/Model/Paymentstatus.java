@@ -33,7 +33,7 @@ public class Paymentstatus implements Serializable{
 	}
 
 	public void setName(String name) {
-		name = name;
+		this.name = name;
 	}
 
 	public boolean isStatus() {
@@ -41,7 +41,7 @@ public class Paymentstatus implements Serializable{
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		this.status = status;
 	}
 
 	public Long getPaymentStatusId() {

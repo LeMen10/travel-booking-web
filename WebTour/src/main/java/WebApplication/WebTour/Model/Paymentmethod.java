@@ -41,7 +41,7 @@ public class Paymentmethod implements Serializable{
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		this.status = status;
 	}
 
 	public long getPaymethodId() {

@@ -25,8 +25,9 @@ public class Payments implements Serializable{
 	@Column(name = "payment_id")
     private Long paymentId ;
 
-    @Column(name = "booking_id")
-    private Long bookingId;
+	@ManyToOne
+	@JoinColumn(name = "booking_id", nullable = true)
+	private Bookings booking;
 
     @Column(name = "payment_date")
     private Date paymentDate;
@@ -47,17 +48,17 @@ public class Payments implements Serializable{
     @Column(name = "status ")
     private boolean status ;
 
-	public Long getBookingId() {
-		return bookingId;
+
+
+
+
+	public Bookings getBooking() {
+		return booking;
 	}
 
-
-
-	public void setBookingId(Long bookingId) {
-		this.bookingId = bookingId;
+	public void setBooking(Bookings booking) {
+		this.booking = booking;
 	}
-
-
 
 	public Date getPaymentDate() {
 		return paymentDate;
@@ -125,13 +126,6 @@ public class Payments implements Serializable{
 	}
 
 
-
-	@Override
-	public String toString() {
-		return "Payments [paymentId=" + paymentId + ", bookingId=" + bookingId + ", paymentDate=" + paymentDate
-				+ ", amount=" + amount + ", paymentMethod=" + paymentMethod + ", paymentStatus=" + paymentStatus
-				+ ", status=" + status + "]";
-	}
 	
 	
 }
