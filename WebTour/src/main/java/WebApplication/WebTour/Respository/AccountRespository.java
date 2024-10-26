@@ -1,5 +1,6 @@
 package WebApplication.WebTour.Respository;
 
+import java.sql.Date;
 import java.util.Optional;
 
 import org.springframework.data.jdbc.repository.query.Query;
@@ -13,4 +14,7 @@ import WebApplication.WebTour.Model.Account;
 public interface AccountRespository extends JpaRepository<Account, Long>{
 	@Query("SELECT a FROM Account a WHERE a.userName = :name")
     Optional<Account> findByUserName(@Param("name") String name);
+	
+//	@Query("SELECT COUNT(accountId) FROM Account WHERE createOn BETWEEN :startDate AND :finishDate")
+//	Integer countUserByCreateOn(@Param("startDate") Date startDate, @Param("finishDate") Date finishDate);
 }

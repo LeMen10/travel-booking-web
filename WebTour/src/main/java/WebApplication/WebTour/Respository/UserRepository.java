@@ -1,5 +1,6 @@
 package WebApplication.WebTour.Respository;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	@Query("SELECT u, COUNT(b) FROM User u LEFT JOIN u.bookings b WHERE  u.role.roleId = 3 GROUP BY u.user_id ORDER BY COUNT(b) DESC")
 	List<Object[]> findAllUsersOrderedByBookingsDesc();
-
+	
 }

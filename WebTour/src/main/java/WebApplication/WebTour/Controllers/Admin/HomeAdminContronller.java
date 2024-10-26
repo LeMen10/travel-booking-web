@@ -10,9 +10,6 @@ import ch.qos.logback.core.model.Model;
 @Controller
 public class HomeAdminContronller {
 
-	@GetMapping("/admin")
-	public String getHomeAdminPage(Model model) {
-		return "/Admin/home";
-	}
+
 
 }

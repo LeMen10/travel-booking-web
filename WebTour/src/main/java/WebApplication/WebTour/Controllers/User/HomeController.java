@@ -55,12 +55,26 @@ public class HomeController {
     public String getHeaderHTML(Model model) {
     		return "/components/header";
     }
+    
+    @GetMapping("/api-get-header-admin")
+    public String getHeaderAdminHTML(Model model) {
+    		return "/components/headerAdmin";
+    }
+    
+    @GetMapping("/api-get-header-employee")
+    public String getHeaderEmployeeHTML(Model model) {
+    		return "/components/headerEmployee";
+    }
+    
+    @GetMapping("/api-get-notification")
+    public String getNotificationHTML(Model model) {
+    		return "/components/notification";
+    }
+    
 	@GetMapping("/home")
     public String navigateHomePage(Model model) {
-			List<Province> province = provinceRepository.findAll();
-			List<Tours> tours = toursRepository.listOfCheapestTours();
-			model.addAttribute("province",province);
-			model.addAttribute("tours",tours);
+			model.addAttribute(provinceRepository.findAll());
+			model.addAttribute(toursRepository.listOfCheapestTours());
             return "home";
     }
 	
@@ -79,12 +93,10 @@ public class HomeController {
         System.out.println(username);
         Optional<Account> account = accountRespository.findByUserName(username);
         
-        if (account != null && account.isPresent()) {
-            System.out.println(account.get().toString());
+        if (account.isPresent()) {
             return ResponseEntity.ok(account.get());
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.notFound().build();
     }
     
     @PostMapping("/add-account")
@@ -114,9 +126,14 @@ public class HomeController {
         return ResponseEntity.ok("Email sent successfully!");
     }
     
-    @GetMapping("/admin/")
+    @GetMapping("/admin")
     public String navigateAdminHomePage(Model model) {
             return "/Admin/home";
+    }
+    
+    @GetMapping("/employee")
+    public String navigateEmployeeHomePage(Model model) {
+            return "/Employee/home";
     }
     
 }

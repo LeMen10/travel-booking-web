@@ -1,6 +1,7 @@
 package WebApplication.WebTour.Model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,6 +35,9 @@ public class Account implements Serializable{
 
     @Column(name = "password")
     private String password;
+    
+    @Column(name = "create_on")
+    private Date createOn;
     
     @Column(name = "status")
     private boolean status = true;
