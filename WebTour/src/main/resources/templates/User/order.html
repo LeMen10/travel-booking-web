@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Đơn hàng của bạn</title>
 
 <link rel="stylesheet" href="../css/order.css">
 
@@ -34,8 +34,13 @@
                 <option value="2">UnPaid</option>
                 <option value="3">Departure</option>
             </select>
-            <!-- ô input của option departure -->
-            <input  type="text" id="add-input" placeholder="Nhập departure" style="display: none;" />
+            
+            <div class="div-search-departture">
+	            <!-- ô input của option departure -->
+	            <input  type="text" id="add-input" placeholder="Nhập departure" style="display: none;" />
+	            <button id="btn-input-ok" style="display: none;" >OK</button>
+            </div>
+            
         </div>
 		</div>
 		
@@ -43,7 +48,7 @@
 			   <table>
 				<thead>
 					<tr>
-						<th>Mã đơn</th>
+						<th>#</th>
 						<th>Tour</th>
 						<th>Mã thanh toán</th>
 						<th>Ngày đặt</th>
@@ -77,10 +82,32 @@
 				        	<span th:if="${booking[3] == 2}">Unpaid</span>
 			            	<span th:if="${booking[3] == null or booking[3] == ''}">Unpaid</span>
 			            </td> 
-			           <td> <button class="btn-payment-status" >Thanh toán</button> </td>
+			           <td class="table-td table-td-action"> 
+			           		<button class="btn-payment-status"
+            						th:text="${booking[3] == 1 ? 'Đã thanh toán' : 'Thanh toán'}" 
+            						th:disabled="${booking[3] == 1}"
+            						th:classappend="${booking[3] == 1} ? 'paid-status' : ''"
+            						th:attr="data-booking-id=${booking[0]} , data-total-price=${booking[7]}">
+         						</button> 
+         						 <!-- Hiển thị nút hủy đơn chỉ khi đơn hàng chưa thanh toán -->
+           					<button id="bt-cancel-order" class="btn-cancel" 
+					                th:if="${booking[3] != 1}" 
+					                th:attr="data-booking-id=${booking[0]}">Hủy đơn
+				                </button>
+			           </td>
 			        </tr>
+			        <!--modal hủy đơn -->
+			        <div id="cancel-confirm-modal" class="modal-overlay">
+					    <div class="modal-content">
+					        <p>Bạn có chắc chắn muốn hủy đơn này không?</p>
+					        <button id="confirm-cancel">Xác nhận</button>
+					        <button id="cancel-close">Hủy</button>
+					    </div>
+					</div>
+
     			</tbody>
 			</table>  
+			 
 			 
 
 

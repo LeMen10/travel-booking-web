@@ -103,10 +103,6 @@ public class PaymentController {
 			}
 
 			// Lấy thông tin payment
-			/*
-			 * Optional<Payments> payment = paymentsRepository.findById((long)
-			 * booking.getPaymentId());
-			 */
 			Optional<Payments> payment = paymentsRepository.findById(bookingId);
 			if (payment.isPresent()) {
 				model.addAttribute("payment", payment.get());

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +59,7 @@ public class PromontionManagementController {
 
 		Map<String, Object> response = new HashMap<>();
     
-		
+		try {
 			Integer exists = promotionDetailRepository.existsByTourIdAndPromotion(promotionDetail.getTourId(), 
 					promotionDetail.getPromotions().getPromotionId());
             if (exists > 0) {
@@ -68,10 +67,9 @@ public class PromontionManagementController {
                 response.put("message", "Promotion detail for this tour and promotion already exists");
                 return ResponseEntity.status(400).body(response);
             }
-		}
 
-      Promotions promotion = promotionsRepository.findById(promotionDetail.getPromotions().getPromotionId()).get();
-      promotionDetail.setPromotions(promotion);
+            Promotions promotion = promotionsRepository.findById(promotionDetail.getPromotions().getPromotionId()).get();
+            promotionDetail.setPromotions(promotion);
 			promotionDetailRepository.save(promotionDetail);
 
 			response.put("status", 200);
@@ -114,3 +112,4 @@ public class PromontionManagementController {
 		}
 	}
 }
+		

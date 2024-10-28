@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-
+	//xử lý khi ấn vào hình nhỏ sẽ hiện lên thành ảnh lớn trong detailTour.html
+	const subImage = document.querySelectorAll(".sub-image");
+	//sử dụng for để quét (lấy hết) các ảnh nhỏ và đặt sự kiện click
+ 	subImage.forEach(image => {
+		image.addEventListener("click", function() {
+			showImage(image);
+		});
+	});
 	var plus = document.getElementById("bt-plus");
 	plus.addEventListener("click", function() {
 
@@ -284,7 +291,7 @@ async function createBooking() {
 
 	/*const bookingDate = document.getElementById("book-day").value;*/
 	const today = new Date().toISOString().split('T')[0]; // lấy định dạng yyyy-MM-dd
-	const bookingDate = today; 
+	const bookingDate = today;
 	console.log("bookingDate " + bookingDate);
 	const adult = parseInt(document.getElementById("value-quantity").value.replace(/[^0-9]/g, '')) || 0; // Chỉ lấy số
 	const child = parseInt(document.getElementById("value-quantity1").value.replace(/[^0-9]/g, '')) || 0;
@@ -292,8 +299,13 @@ async function createBooking() {
 	const peopleNums = adult + child;
 	console.log(peopleNums);
 
+	const totalPriceText = document.getElementById("total-price").innerText;
+	console.log("Giá trị của totalPriceText:", totalPriceText);
+	const totalPrice = parseFloat(totalPriceText.replace(/\./g, '').replace(/[^\d]/g, '')) || 0;
+	console.log("Tổng giá sau khi chuyển đổi:", totalPrice);
+
 	/*tạo booking khi ấn nút đặt ngay*/
-	const url = `http://localhost:8080/create-booking?tourId=${tourId}&userId=${userId}&bookingDate=${bookingDate}&peopleNums=${peopleNums}&quantityAdult=${adult}&quantityChild=${child}`;
+	const url = `http://localhost:8080/create-booking?tourId=${tourId}&userId=${userId}&bookingDate=${bookingDate}&peopleNums=${peopleNums}&quantityAdult=${adult}&quantityChild=${child}&totalPrice=${totalPrice}`;
 	const request = new Request(url, {
 		method: "POST",
 		headers: {
@@ -312,7 +324,7 @@ async function createBooking() {
 	const bookingID = dataBooking.bookingId
 	console.log("bookingID " + bookingID);
 
-	const totalPrice = parseInt(document.getElementById("total-price").innerText.replace(/[^0-9]/g, ''));
+
 	console.log(totalPrice);
 	if (!userId) {
 		sessionStorage.setItem("bookingID", bookingID);
@@ -403,9 +415,14 @@ async function createReview() {
 
 	// Load lại trang sau khi gửi đánh giá thành công
 	location.reload();
+}
 
-
-
+//xử lý khi ấn vào hình nhỏ sẽ hiện lên thành ảnh lớn trong detailTour.html
+function showImage(image) {
+	const mainImage = document.getElementById("main-image");
+	//thay đổi ảnh cần thay đổi src và alt
+	mainImage.src = image.src;  
+	mainImage.alt = image.alt;  
 }
 
 //-------------------------------------------Manh Here-------------------------------------

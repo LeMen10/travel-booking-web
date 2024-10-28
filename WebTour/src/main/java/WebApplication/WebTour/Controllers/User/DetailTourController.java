@@ -121,21 +121,44 @@ public class DetailTourController {
 			@RequestParam("userId") long userId,
 			@RequestParam("bookingDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date bookingDate,
 			@RequestParam("quantityAdult") int quantityAdult, 
-			@RequestParam("quantityChild") int quantityChild) {
+			@RequestParam("quantityChild") int quantityChild,
+			@RequestParam("totalPrice") float totalPrice) {
 
 		Bookings booking = new Bookings();
 		Tours tour = toursRepository.findById(tourId).get();
 		booking.setTour(tour);
+		
 		User user = userId == 0 ? null: userRepository.findById(userId).get();
 		booking.setUser(user);
 		booking.setBookingDate(bookingDate);
 		
 		booking.setPeopleNums(quantityAdult+quantityChild); 
+		booking.setTotalPrice(totalPrice);
 		
 		// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên không cần viết hàm insert ở file respository
 		Bookings savedBooking = bookingsRespository.save(booking);
 		handleQuantityTicket(Integer.parseInt(savedBooking.getBookingId().toString())  , quantityAdult, quantityChild);
 		return ResponseEntity.ok(savedBooking);
+	}
+	
+	public void handleQuantityTicket(int bookingId,int quantityAdult, int quantityChild) {
+		 if(quantityAdult > 0) {
+			TicketBooking  ticketAdult = new TicketBooking();
+			Ticket ticket = ticketRepository.findById(2l).get();
+			ticketAdult.setTicket(ticket);
+			ticketAdult.setBookingId(bookingId);
+			ticketAdult.setQuantity(quantityAdult);
+			TicketBooking saveticketBooking = ticketBookingRepository.save(ticketAdult);
+		}
+		if (quantityChild > 0){
+			TicketBooking  ticketChild = new TicketBooking();
+			Ticket ticket = ticketRepository.findById(1l).get();
+			ticketChild.setTicket(ticket);
+			ticketChild.setBookingId(bookingId);
+			ticketChild.setQuantity(quantityChild);
+			TicketBooking saveticketBooking = ticketBookingRepository.save(ticketChild);
+		
+		}
 	}
 
 	// tạo review
@@ -164,25 +187,7 @@ public class DetailTourController {
 		}
 
 	
-	public void handleQuantityTicket(int bookingId,int quantityAdult, int quantityChild) {
-		 if(quantityAdult > 0) {
-			TicketBooking  ticketAdult = new TicketBooking();
-			Ticket ticket = ticketRepository.findById(2l).get();
-			ticketAdult.setTicket(ticket);
-			ticketAdult.setBookingId(bookingId);
-			ticketAdult.setQuantity(quantityAdult);
-			TicketBooking saveticketBooking = ticketBookingRepository.save(ticketAdult);
-		}
-		if (quantityChild > 0){
-			TicketBooking  ticketChild = new TicketBooking();
-			Ticket ticket = ticketRepository.findById(1l).get();
-			ticketChild.setTicket(ticket);
-			ticketChild.setBookingId(bookingId);
-			ticketChild.setQuantity(quantityChild);
-			TicketBooking saveticketBooking = ticketBookingRepository.save(ticketChild);
-		
-		}
-	}
+	
 
 //	@GetMapping("/api-get-type-ticket")
 //	public ResponseEntity<List<Ticket>> getTypeTicket(@RequestParam("userId") long userId) {

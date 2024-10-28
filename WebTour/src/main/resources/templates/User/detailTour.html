@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Chi tiết tour</title>
 <link rel="stylesheet" href="../css/detailTour.css">
 <link rel="stylesheet" href="../js/detailTour.js">
 <link rel="stylesheet" href="../js/payment.js">
@@ -20,13 +20,7 @@
 	<div class="container">
 		<div class="header">
 			<h1 th:text="${tour.tourName}">Tour Name</h1>
-			<!-- <div class="stars">
-				<i class="fa-regular fa-star" data-value="1"></i> <i
-					class="fa-regular fa-star" data-value="2"></i> <i
-					class="fa-regular fa-star" data-value="3"></i> <i
-					class="fa-regular fa-star" data-value="4"></i> <i
-					class="fa-regular fa-star" data-value="5"></i>
-			</div> -->
+			
 		</div>
 		<div class="info">
 			<div class="icon-info">
@@ -75,7 +69,7 @@
 
 				<div class="image-gallery">
 					<!-- Hiển thị hình ảnh chính (hình lớn) -->
-					<img th:if="${images.size() > 0}" th:alt="${images[0].imageCode}"
+					<img id="main-image" th:if="${images.size() > 0}" th:alt="${images[0].imageCode}"
 						height="400" th:src="@{'/image/' + ${images[0].imageId}}"
 						width="800" /> <img th:if="${images.size() == 0}"
 						src="path/to/default-image.jpg" height="400" width="800"
@@ -84,7 +78,7 @@
 					<!-- Hiển thị các hình thu nhỏ -->
 					<div class="image-thumbnails">
 						<th:block th:each="image : ${images}">
-							<img th:alt="${image.imageCode}" height="100"
+							<img class="sub-image" th:alt="${image.imageCode}" height="100"
 								th:src="@{'/image/' + ${image.imageId}}" width="200" />
 						</th:block>
 					</div>

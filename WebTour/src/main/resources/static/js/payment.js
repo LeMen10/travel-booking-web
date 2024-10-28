@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	console.log("totalPrice : " + totalPrice);
 
 
+	
+	
+	
+	
 	document.getElementById('payment-online').addEventListener("change", function(event) {
 		showMethodPaypal(event.target.checked);
 	});
@@ -64,6 +68,20 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	})
 
+
+	const urlParams = new URLSearchParams(window.location.search);
+	const totalPriceOrder = urlParams.get('totalPrice');
+	console.log("totalPriceOrder" , totalPriceOrder);
+	if (totalPriceOrder) { // Kiểm tra biến totalPriceOrder
+	        // Định dạng totalPrice thành tiền tệ VND
+	        const formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPriceOrder);
+			console.log("formattedPrice" , formattedPrice);
+	        // Cập nhật vào các phần tử HTML
+	        document.getElementById("temp-price").innerText = formattedPrice;
+	        document.getElementById("total-price").innerText = formattedPrice;
+	    } else {
+	        console.warn("Không tìm thấy totalPrice trong URL.");
+	    }
 	let isPayPalInitialized = false;
 	var bt_pay = document.getElementById("bt-pay").addEventListener("click", async function() {
 		/*if(!checkInformationInput()){
@@ -94,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			await createPayment();
 			await updateTotalPrice();
-			
+
 			const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 			await updatePaymentStatus(bookingId);
 			await createAddress();
@@ -262,7 +280,7 @@ async function paymentByDiscount(code) {
 	const tempPrice = parseInt(document.getElementById("temp-price").innerText.replace(/[^0-9]/g, ''));
 	console.log("price " + totalPrice, tempPrice);
 	const conversionValue = sessionStorage.getItem("conversion-value");
-	
+
 	/*code = document.getElementById('discount-code').value;
    console.log("code discount " + code);*/
 
@@ -297,7 +315,7 @@ async function paymentByDiscount(code) {
 				const discount = tempPrice * (data.discount / 100);
 				const total = totalPrice - discount;
 				document.getElementById("total-price").innerHTML = total.toLocaleString() + "₫";
-				
+
 				updateTotalPrice();
 			}
 			else {
@@ -316,8 +334,8 @@ async function paymentByDiscount(code) {
 }
 
 //kiểm tra thông tin người dùng
- function checkInformationInput() {
-	
+function checkInformationInput() {
+
 	let email = document.getElementById("email").value.trim();
 	let name = document.getElementById("name").value.trim();
 	let phone = document.getElementById("phone").value.trim();
@@ -399,9 +417,11 @@ async function createPayment() {
 	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 	var date = document.getElementById("date").innerText;
 	console.log("date  " + date);
+	
 	const totalPriceText = document.getElementById("total-price").innerText || document.getElementById("total-price").textContent;
 	const amount = parseFloat(totalPriceText.replace(/[^0-9]/g, '')) || 0;
 	console.log(amount);
+	
 	const paymentOnline = document.getElementById('payment-online');
 	const paymentCash = document.getElementById('payment-cash');
 	let promotionCode = document.getElementById("discount-code").value;
@@ -465,14 +485,15 @@ async function payPal() {
 
 	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 	const totalPriceText = document.getElementById('total-price').innerText;
+	console.log("totalPriceText trong hàm paypal " + totalPriceText);
 	// Loại bỏ ký tự không phải số (ví dụ: "₫") và chuyển thành số
-	const totalPrice = parseFloat(totalPriceText.replace(/[^\d.-]/g, ''));
+	const totalPrice = parseFloat(totalPriceText.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(/,/g, '.'));
 	console.log("totalPrice trong hàm paypal " + totalPrice);
 	// Chuyển đổi sang USD và lấy 2 chữ số thập phân
-	const exchangeRate = 24000;
+	const exchangeRate = 25363;
 	const totalPriceUSD = (totalPrice / exchangeRate).toFixed(2);
 	console.log("totalPriceUSD trong hàm paypal " + totalPriceUSD);
-	
+
 	document.getElementById("conversion-value").innerHTML = totalPriceUSD.toLocaleString() + "$";
 	paypal.Buttons({
 		createOrder: function(data, actions) {
@@ -503,6 +524,7 @@ async function payPal() {
 
 }
 
+//ẩn hiện nút paypal
 function showMethodPaypal(isOnline) {
 	if (isOnline) {
 		document.getElementById("bt-pay").style.display = "none"; // Ẩn nút thanh toán tiền mặt
@@ -515,6 +537,7 @@ function showMethodPaypal(isOnline) {
 	}
 }
 
+//kiểm tra mã giảm giá có thuộc về tour, có dùng chưa
 async function checkPromotion() {
 	let promotionCode = document.getElementById("discount-code").value;
 	let userId = sessionStorage.getItem("userId");
@@ -550,29 +573,29 @@ async function checkPromotion() {
 //tạo address khi ấn thanh toán
 async function createAddress() {
 	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
-	const detail = document.getElementById('optional-address').value.trim(); 
+	const detail = document.getElementById('optional-address').value.trim();
 	console.log(detail);
 	console.log(`Detail: ${detail}`);
-	const provinceId = document.getElementById('city').value; 
-	const districtId = document.getElementById('district').value; 
+	const provinceId = document.getElementById('city').value;
+	const districtId = document.getElementById('district').value;
 	const wardId = document.getElementById('ward').value;
 
 	const url = `http://localhost:8080/api-create-address?userId=${userId}&detail=${detail}&provinceId=${provinceId}&districtId=${districtId}&wardId=${wardId}`;
 	const request = new Request(url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
 
-		});
-		const response = await fetch(request);
-		console.log("Phản hồi từ server createAddress:", response);
-		if (!response.ok) {
-			console.log(response);
-			return null;
-		}
-		const dataAddress = await response.json();
-		console.log("Address được tạo", dataAddress);
+	});
+	const response = await fetch(request);
+	console.log("Phản hồi từ server createAddress:", response);
+	if (!response.ok) {
+		console.log(response);
+		return null;
+	}
+	const dataAddress = await response.json();
+	console.log("Address được tạo", dataAddress);
 
 }
 
