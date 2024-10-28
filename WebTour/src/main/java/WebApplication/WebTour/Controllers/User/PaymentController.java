@@ -98,6 +98,21 @@ public class PaymentController {
 			User user = booking.getUser();
 			if (user != null) {
 				model.addAttribute("user", user);
+				Address address = user.getAddress();
+				Province provinceUser = address.getProvince();
+				Ward wardUser = address.getWard();
+				District districtUser = address.getDistrict();
+				
+				model.addAttribute("address", address);
+				model.addAttribute("provinceUser", provinceUser);
+				model.addAttribute("wardUser", wardUser);
+				model.addAttribute("districtUser", districtUser);
+				List<Province> province = provinceRepository.findAll();
+				List<District> district = districtRepository.findAll();
+				List<Ward> ward = wardRepository.findAll();
+				model.addAttribute("province",province);
+				model.addAttribute("district",district);
+				model.addAttribute("ward",ward);
 			} else {
 				model.addAttribute("error", "User không tồn tại!");
 			}

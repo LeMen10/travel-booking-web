@@ -45,21 +45,33 @@
 
 			<div class="form-group">
 				<label for="city"> Tỉnh thành </label> 
-				<select id="city" name="provinceId" >
-					<option th:value="${user.address.province.provinceId}" th:text="${user.address.province.name}">---</option>
-				</select>
+				<select id="city" name="provinceId" onchange="updateDistricts()">
+		            <option th:each="prov : ${province}" 
+		                    th:value="${prov.provinceId}" 
+		                    th:text="${prov.name}"
+		                    th:selected="${prov.provinceId == provinceUser.provinceId}">
+		            </option>
+		        </select>
 			</div>
 			<div class="form-group">
-				<label for="district"  > Quận huyện </label> 
-				<select id="district" name="districtId" >
-					<option th:value="${user.address.district.districtId}" th:text="${user.address.district.name}">---</option>
-				</select>
+				<label for="district"> Quận huyện </label> 
+				<select id="district" name="districtId" onchange="updateWards()">
+		            <option th:each="dist : ${district}" 
+		                    th:value="${dist.districtId}" 
+		                    th:text="${dist.name}"
+		                    th:selected="${dist.districtId == districtUser.districtId}">
+		            </option>
+		        </select>
 			</div>
 			<div class="form-group">
 				<label for="ward"> Phường xã </label> 
-				<select id="ward" name="wardId" >
-					<option th:value="${user.address.ward.wardId}" th:text="${user.address.ward.name}">---</option>
-				</select>
+				<select id="ward" name="wardId">
+		            <option th:each="w : ${ward}" 
+		                    th:value="${w.wardId}" 
+		                    th:text="${w.name}"
+		                    th:selected="${w.wardId == wardUser.wardId}">
+		            </option>
+		        </select>
 			</div>
 
 			
@@ -145,6 +157,92 @@
 		window.onload = function() {
 			console.log("Bạn đã vào trang payment thành công!");
 		}
+		function updateDistricts() {
+            var provinceId = document.getElementById("province").value;
+            var districtSelect = document.getElementById("district");
+            
+            // Reset district và ward với "--"
+            districtSelect.innerHTML = "<option value=''>--</option>";
+            document.getElementById("ward").innerHTML = "<option value=''>--</option>";
+
+            fetch(`/districts-by-province?provinceId=` + provinceId)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(function (district) {
+                        var option = document.createElement("option");
+                        option.value = district.districtId;
+                        option.text = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                    updateWards();
+                });
+        }
+
+        function updateWards() {
+            var districtId = document.getElementById("district").value;
+            var wardSelect = document.getElementById("ward");
+
+            // Reset ward với "--" chỉ khi district được thay đổi
+            if (districtId !== "") {
+                wardSelect.innerHTML = "<option value=''>--</option>";
+            }
+
+            fetch(`/wards-by-district?districtId=` + districtId)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(function (ward) {
+                        var option = document.createElement("option");
+                        option.value = ward.wardId;
+                        option.text = ward.name;
+                        wardSelect.appendChild(option);
+                    });
+                });
+        }
+
+        function loadInitialDistrictAndWard() {
+            var provinceId = document.getElementById("province").value;
+            var districtId = document.getElementById("district").value;
+            var wardId = document.getElementById("ward").value;
+
+            fetch(`/districts-by-province?provinceId=` + provinceId)
+                .then(response => response.json())
+                .then(data => {
+                    var districtSelect = document.getElementById("district");
+                    districtSelect.innerHTML = "<option value=''>--</option>";
+                    data.forEach(function(district) {
+                        var option = document.createElement("option");
+                        option.value = district.districtId;
+                        option.text = district.name;
+                        if (district.districtId == districtId) {
+                            option.selected = true;
+                        }
+                        districtSelect.appendChild(option);
+                    });
+
+                    // Load wards ngay lập tức khi district có giá trị
+                    if (districtId !== "") {
+                        fetch(`/wards-by-district?districtId=` + districtId)
+                            .then(response => response.json())
+                            .then(wards => {
+                                var wardSelect = document.getElementById("ward");
+                                wardSelect.innerHTML = "<option value=''>--</option>";
+                                wards.forEach(function(ward) {
+                                    var option = document.createElement("option");
+                                    option.value = ward.wardId;
+                                    option.text = ward.name;
+                                    if (ward.wardId == wardId) {
+                                        option.selected = true;
+                                    }
+                                    wardSelect.appendChild(option);
+                                });
+                            });
+                    }
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadInitialDistrictAndWard();
+        });
 	</script>
 </body>
 </html>

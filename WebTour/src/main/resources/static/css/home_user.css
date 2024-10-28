@@ -338,7 +338,7 @@ z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    /* transition: background-color 0.3s ease; */
 }
 
 .search-btn:hover {

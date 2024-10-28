@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/css/home_admin.css">
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/sidebar_admin.css">
+<link rel="stylesheet" href="/css/tours_management.css">
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
 	rel="stylesheet" />
@@ -60,19 +61,23 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Full name</th>
-						<th>Phone</th>
-						<th>Email</th>
-						<th>Gender</th>
+						<th>Tên tour</th>
+						<th>Điểm đến</th>
+						<th>Điểm đi</th>
+						<th>Ngày bắt đầu</th>
+						<th>Ngày kết thúc</th>
+						<th>Giá</th>
 					</tr>
 				</thead>
 				<tbody id="user-table">
-					<tr th:each="user : ${users}">
-						<td th:text="${user.user_id}"></td>
-						<td th:text="${user.fullName}"></td>
-						<td th:text="${user.phone}"></td>
-						<td th:text="${user.email}"></td>
-						<td th:text="${user.gender}"></td>
+					<tr th:each="tour : ${tours}">
+						<td th:text="${tour.tourId}"></td>
+						<td th:text="${tour.tourName}"></td>
+						<td th:text="${tour.departure}"></td>
+						<td th:text="${tour.destination}"></td>
+						<td th:text="${tour.startDate}"></td>
+						<td th:text="${tour.endDate}"></td>
+						<td th:text="${tour.price}"></td>
 					</tr>
 				</tbody>
 			</table>

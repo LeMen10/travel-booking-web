@@ -138,7 +138,7 @@
 		    align-items: center;
 		    padding: 10px 0; /* Đệm để tạo khoảng trống trên dưới */
 		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Tạo đổ bóng cho thanh header */
-		    height: 13.3%;
+		    height: 15%;
 		}
 		
 		/* Search container trong thanh search-top */
@@ -207,6 +207,9 @@
             padding: 10px 20px;
             cursor: pointer;
             margin-left: 5px;
+        }
+        #main-btn-search:hover{
+        	background-color: #0396ff;
         }
         .search-box-main i {
             color: #17a2b8;
@@ -619,13 +622,16 @@
                 const searchInput = document.getElementById('searchInput');
                 const mainsearchInput = document.getElementById('mainSearchInput');
                 const searchIcon = document.getElementById('searchIcon');
-        
+        		
                 // Hàm chuyển hướng
                 function redirectToSearch() {
                     const query = searchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
                     if (query) {
                         // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
                         window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
+                    }else{
+                	    alert("Vui lòng nhập thông tin tìm kiếm");
+                	    return;
                     }
                 }
                 // Hàm chuyển hướng có đối số
@@ -678,53 +684,59 @@
              // xử lý sự kiện ấn nút "tìm kiếm"
                 document.getElementById('main-btn-search').addEventListener('click', function() {
                 // Lấy giá trị từ các ô input và select
-                var tourName = document.getElementById('mainSearchInput').value;
-                var startDate = document.getElementById('departureDate').value;
-             // Chuyển đổi định dạng ngày từ dd-MM-yyyy sang yyyy-MM-dd
-                var formattedStartDate = "";
-                if (startDate) {
-                    var dateParts = startDate.split('-'); // Tách ngày, tháng, năm
-                    if (dateParts.length === 3) {
-                        formattedStartDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]; // Chuyển đổi sang yyyy-MM-dd
-                    }
-                }
-             // Lấy text từ departureSelect
-                var departureSelect = document.getElementById('departureSelect');
-                var departureText = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
-                var departure = (departureText === "Chọn điểm đi") ? "" : departureText; // Nếu chọn "Chọn điểm đi" thì gán rỗng
-            
-                // Lấy text từ destinationSelect
-                var destinationSelect = document.getElementById('destinationSelect');
-                var destinationText = destinationSelect.options[destinationSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
-                var destination = (destinationText === "Chọn điểm đến") ? "" : destinationText; // Nếu chọn "Chọn điểm đến" thì gán rỗng // Lấy text của tùy chọn đã chọn
-                
-                console.log("Tour Name: ", tourName);
-                console.log("Start Date: ", formattedStartDate);
-                console.log("Departure: ", departure);
-                console.log("Destination: ", destination);
-        
-                // Tạo URL với các tham số
-                var searchUrl = '/search?'; // Đường dẫn tới trang tìm kiếm
-        
-                // Thêm các điều kiện vào URL nếu có giá trị
-                if (tourName) {
-                    searchUrl += 'tourName=' + encodeURIComponent(tourName) + '&';
-                }
-                if (startDate) {
-                    searchUrl += 'startDate=' + encodeURIComponent(formattedStartDate) + '&';
-                }
-                if (departure) {
-                    searchUrl += 'departure=' + encodeURIComponent(departure) + '&';
-                }
-                if (destination) {
-                    searchUrl += 'destination=' + encodeURIComponent(destination) + '&';
-                }
-        
-                // Loại bỏ dấu "&" cuối cùng
-                searchUrl = searchUrl.slice(0, -1);
-        
-                // Redirect đến URL mới
-                   window.location.href = searchUrl;
+	                var tourName = document.getElementById('mainSearchInput').value;
+	                var startDate = document.getElementById('departureDate').value;
+	             // Chuyển đổi định dạng ngày từ dd-MM-yyyy sang yyyy-MM-dd
+	                var formattedStartDate = "";
+	                if (startDate) {
+	                    var dateParts = startDate.split('-'); // Tách ngày, tháng, năm
+	                    if (dateParts.length === 3) {
+	                        formattedStartDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]; // Chuyển đổi sang yyyy-MM-dd
+	                    }
+	                }
+	             // Lấy text từ departureSelect
+	                var departureSelect = document.getElementById('departureSelect');
+	                var departureText = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+	                var departure = (departureText === "Chọn điểm đi") ? "" : departureText; // Nếu chọn "Chọn điểm đi" thì gán rỗng
+	            
+	                // Lấy text từ destinationSelect
+	                var destinationSelect = document.getElementById('destinationSelect');
+	                var destinationText = destinationSelect.options[destinationSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+	                var destination = (destinationText === "Chọn điểm đến") ? "" : destinationText; // Nếu chọn "Chọn điểm đến" thì gán rỗng // Lấy text của tùy chọn đã chọn
+	                
+	                console.log("Tour Name: ", tourName);
+	                console.log("Start Date: ", formattedStartDate);
+	                console.log("Departure: ", departure);
+	                console.log("Destination: ", destination);
+	        
+	                // Tạo URL với các tham số
+	                var searchUrl = '/search?'; // Đường dẫn tới trang tìm kiếm
+	        
+	                // Thêm các điều kiện vào URL nếu có giá trị
+	                if (tourName) {
+	                    searchUrl += 'tourName=' + encodeURIComponent(tourName) + '&';
+	                }
+	                if (startDate) {
+	                    searchUrl += 'startDate=' + encodeURIComponent(formattedStartDate) + '&';
+	                }
+	                if (departure) {
+	                    searchUrl += 'departure=' + encodeURIComponent(departure) + '&';
+	                }
+	                if (destination) {
+	                    searchUrl += 'destination=' + encodeURIComponent(destination) + '&';
+	                }
+	        
+	                // Loại bỏ dấu "&" cuối cùng
+	                searchUrl = searchUrl.slice(0, -1);
+	        
+	                // Redirect đến URL mới
+	                if(tourName=="" && startDate=="" && departure=="" && destination==""){
+	        	    	alert("Vui lòng nhập thông tin tìm kiếm");
+	        	    	return;
+	        	    }else{
+	        	    	window.location.href = searchUrl;	
+	        	    }
+	                
                 });
              
                 async function getUser(){
@@ -762,7 +774,7 @@
 	                        login.href = "/account?userId="+userId;
 	                        var register = document.getElementById("register");
 	                        register.innerHTML='Đăng xuất';
-	                        register.href = "/";
+	                        register.href = "/home";
 	                        register.addEventListener('click', function(event) {
 	                        	sessionStorage.removeItem('userId');
 	               
