@@ -248,7 +248,7 @@ z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
     text-align: center;
     align-content: center;
     height: 550px;
-    background-image: url('/image/bg.jpg');
+    background-image: url('/imagess/bg.jpg');
     /* background-repeat: no-repeat; */
     background-size: cover;
 }

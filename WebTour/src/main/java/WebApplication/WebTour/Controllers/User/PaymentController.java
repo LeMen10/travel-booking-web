@@ -108,7 +108,7 @@ public class PaymentController {
 				model.addAttribute("wardUser", wardUser);
 				model.addAttribute("districtUser", districtUser);
 				List<Province> province = provinceRepository.findAll();
-				List<District> district = districtRepository.findAll();
+				List<District> district = districtRespository.findAll();
 				List<Ward> ward = wardRepository.findAll();
 				model.addAttribute("province",province);
 				model.addAttribute("district",district);

@@ -29,6 +29,10 @@ public class Schedules implements Serializable{
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
     
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "tour_id", nullable = true)
+    private Tours Tours;
+	
     @Column(name = "activity")
     private String activity;
     

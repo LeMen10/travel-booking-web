@@ -43,12 +43,6 @@ public class CardController {
 		return "/User/card";
 	}
 
-	// hiển thị các tour đã đặt lên trang card
-	@GetMapping("api-show-card/{userId}")
-	public String showCard(@PathVariable("userId") Long userId, Model model) {
-		
 
-		return "/User/card";
-	}
 
 }
