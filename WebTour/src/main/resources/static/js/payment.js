@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var temp = document.getElementById('temp-price').innerHTML = totalPrice + "₫";
 	var total = document.getElementById('total-price').innerHTML = totalPrice + "₫";
 
-	var selectProvince = document.getElementById("city").addEventListener("change", function() {
+	var selectProvince = document.getElementById("province").addEventListener("change", function() {
 		const provinceId = this.value;
 		if (provinceId) {
 			getAllDistrict(provinceId);
@@ -185,7 +185,7 @@ async function getAllProvince() {
 		}
 		const dataProvince = await response.json();
 		const fragment = document.createDocumentFragment();
-		const citySelect = document.getElementById("city");
+		const citySelect = document.getElementById("province");
 		dataProvince.forEach(province => {
 			var option = document.createElement("option");
 			option.value = province.provinceId;
