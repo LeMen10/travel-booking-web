@@ -13,14 +13,7 @@
 	<div class="container">
 		<div class="left">
 			<h1>ND Travel</h1>
-			<!-- <div class="section-title">
-				Thông tin khách hàng <a href="#"
-					style="float: right; color: #007bff;"> Đăng xuất </a>
-			</div> -->
-			<!-- <div class="form-group">
-				<label for="address"> Số địa chỉ </label> 
-				<input id="address" type="address" value="" />
-			</div> -->
+
 			<div class="form-group">
 				<label for="email"> Email </label> <input th:value="${user.email}"
 					id="email" type="email" /> <span id="email-error"
@@ -82,7 +75,7 @@
 					<i class="fas fa-money-bill-wave"> </i>
 				</label> 
 				<label> 
-					<input checked id="payment-cash" name="payment" type="radio" value="cash" />Cash 
+					<input id="payment-cash" name="payment" type="radio" value="cash" disabled  />Cash 
 					<i class="fas fa-money-bill-wave"></i>
 				</label>
 			</div>
@@ -145,8 +138,9 @@
 					<button  id="bt-pay" class="order-button">Thanh toán</button>
 				</div>
 				
-				
+				<!-- paypal -->
 				<div id="paypal-button-container"></div>
+				
 				<a href="#" class="back-to-cart">‹ Quay về giỏ hàng</a>
 			</div>
 		</div>
@@ -158,7 +152,7 @@
 			console.log("Bạn đã vào trang payment thành công!");
 		}
 		function updateDistricts() {
-            var provinceId = document.getElementById("province").value;
+            var provinceId = document.getElementById("province").value; 
             var districtSelect = document.getElementById("district");
             
             // Reset district và ward với "--"

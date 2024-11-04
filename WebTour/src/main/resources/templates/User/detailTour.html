@@ -14,13 +14,9 @@
 
 </head>
 <body>
-
-
-
 	<div class="container">
 		<div class="header">
 			<h1 th:text="${tour.tourName}">Tour Name</h1>
-			
 		</div>
 		<div class="info">
 			<div class="icon-info">
@@ -29,7 +25,6 @@
 					<p>Khởi hành từ</p>
 					<p th:text="${tour.departure}">Khởi hành</p>
 				</div>
-
 			</div>
 			<div class="icon-info">
 				<i class="fas fa-map-marker-alt"> </i>
@@ -45,7 +40,6 @@
 					<p>Thời gian</p>
 					<p id="tour-day" onchange="HandleGetDay">1N</p>
 				</div>
-
 			</div>
 			<div class="icon-info">
 				<i class="fas fa-user"> </i>
@@ -53,7 +47,6 @@
 					<p>Số người</p>
 					<p th:text="${tour.peopleMax}">Số người</p>
 				</div>
-
 			</div>
 			<div class="icon-info">
 				<i class="fas fa-bus"> </i>
@@ -61,7 +54,6 @@
 					<p>Di chuyển bằng</p>
 					<p th:text="${tour.transport}">Phương tiện</p>
 				</div>
-
 			</div>
 		</div>
 		<div class="main-content">
@@ -83,29 +75,6 @@
 						</th:block>
 					</div>
 				</div>
-
-
-				<!-- <div class="image-gallery">
-					<img alt="A beautiful island with clear blue water and boats"
-						height="400"
-						src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
-						width="800" />
-					<div class="image-thumbnails">
-						<img alt="A beautiful island with clear blue water and boats" height="100"
-							src="https://storage.googleapis.com/a1aa/image/hHIfsfXKK4kSG0Ej3ncVKeJ1GORfv0KXXXVstxH9aJZUuqOOB.jpg"
-							width="200" /> 
-							<img
-							alt="Underwater scene with colorful fish and coral" height="100"
-							src="https://storage.googleapis.com/a1aa/image/vcU7UfsuqY27eUYsYaIUaMZNfziwa0CJ25KKNbN6SxoJXVHnA.jpg"
-							width="200" /> 
-							<img alt="A person enjoying the beach"
-							height="100"
-							src="https://storage.googleapis.com/a1aa/image/QMsjhveyXoUZYinEf4NgtFuEZ2SLz4BflzMrvbjtvkFRXVHnA.jpg"
-							width="200" /> 
-					</div>
-				</div> -->
-
-
 				<div class="booking-info">
 					<h2 th:text="${tour.price}">1.000.000₫</h2>
 					<!-- <p class="original-price">2.000.000₫</p> -->
@@ -114,12 +83,6 @@
 						<p th:text="${tour.tourId}" id="id-booking-info"
 							th:attr="data-id=${tour.tourId}" class="tour-code">ND021</p>
 					</div>
-
-					<!-- <div class="discount-codes">
-						<button>Giảm 50%</button>
-						<button>Giảm 15%</button>
-						<button>Giảm 10k</button>
-					</div> -->
 					<div class="date-picker">
 						<p class="title">Ngày đi</p>
 						<!-- <input th:value="${#dates.format(tour.startDate, 'dd/MM/yyyy')}" type="date" id="book-day" name="book-day"> -->
@@ -148,12 +111,10 @@
 								</div>
 								<div id="price-chill" class="price">0₫</div>
 							</div>
-
 						</div>
 						<div class="total">
 							<div>Tổng tiền</div>
 							<div id="total-price" class="amount">0₫</div>
-							
 						</div>
 					</div>
 					<div class="buttons">
@@ -162,7 +123,6 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="second-main-content">
 				<div class="container3">
 					<div class="tabs">
@@ -189,10 +149,7 @@
 										class="schedule-p-span" th:text="${schedule.activity}"></span>
 								</p>
 							</div>
-
-
 						</div>
-
 						<div id="reviews" class="tab-content">
 							<div class="container4">
 								<div class="message">Đánh giá tour theo cảm nhận của bạn
@@ -253,17 +210,12 @@
 							</div>
 
 						</div>
-
-
-
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 	<script src="../js/detailTour.js"></script>
 	<script src="/js/header.js"></script>
-
 </body>
 </html>

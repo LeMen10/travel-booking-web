@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Edit Schedule</title>
+<link rel="stylesheet" href="../css/editSchedule.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+	<div class="edit-container">
+		<h2>Edit Schedule</h2>
+		<p>
+			<strong>ID tour:</strong> <span id="tourId"
+				th:attr="data-id=${tour.tourId}" th:text="${tour.tourId}">Tour
+				ID</span>
+		</p>
+		<p>
+			<strong>Tên Tour:</strong> <span th:text="${tour.tourName}">Tên
+				Tour</span>
+		</p>
+		<!-- Other tour details... -->
+
+		<h3>Schedules</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Step</th>
+					<th>Activity</th>
+					<th>Location</th>
+					<th>Action</th>
+					<th>Delete</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="schedule : ${schedules}">
+					<td id="scheduleId" th:attr="data-id=${schedule.scheduleId}"
+						th:text="${schedule.scheduleId}">#</td>
+					<td th:text="${schedule.step}">Step</td>
+					<td th:text="${schedule.activity}">Activity</td>
+					<td th:text="${schedule.location}">Location</td>
+					<td>
+						<button id="btEditScheduleInTable" class="bt-edit-in-table">Sửa</button>
+					</td>
+					<td>
+						<button id="bt-delete-schedule-in-table" class="btDelete-in-table">Xóa</button>
+					</td>
+					<td th:text="${schedule.status ? 'Active' : 'Inactive'}">Status</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="btn-function">
+			<button class="btn-insert-schedule">Tạo lịch trình</button>
+			
+		</div>
+
+		<!-- Overlay cho modal -->
+		<div class="modal-overlay" id="modalOverlay"></div>
+
+		<!-- Modal Tạo Lịch Trình -->
+		<div id="createModal" style="display: none;">
+			<div class="modal-content">
+				<h3>Tạo Lịch Trình</h3>
+				<!-- <label for="step-input">Step:</label> 
+				<input type="number" id="step-input" name="step">  -->
+				<label for="activity-input">Activity:</label>
+				<textarea type="text" id="activity-input" name="activity"></textarea>
+				<label for="location-input">Location:</label> 
+				<input type="text" id="location-input" name="location">
+				<button id="btn-Ok-Insert-Schedule" class="btn-ok">OK</button>
+				<button class="btn-cancel">Cancel</button>
+			</div>
+		</div>
+
+		<!-- sửa lịch trình -->
+		<div id="editModal" style="display: none;">
+			<div class="modal-content-edit">
+				<h3>Sửa Lịch Trình</h3>
+				<div class="info-edit">
+					<div class="infor-edit-schedule">
+						<label class="infor-edit-schedule-lable" for="schedule-id"><b>Schedule ID:</b> </label> 
+						<span class="infor-edit-schedule-span" type="text"  id="schedule-id" name="schedule-id"></span>
+					</div>
+
+					<div class="infor-edit-schedule">
+						<label class="infor-edit-schedule-lable" for="step-input-edit"><b>Step:</b> </label> 
+						<span class="infor-edit-schedule-span" type="text" id="step-input-edit" name="step-input-edit"></span>
+					</div>
+
+				</div>
+				<label for="activity-input-edit">Activity:</label>
+				<textarea type="text" id="activity-input-edit" name="activity"></textarea>
+				<label for="location-input-edit">Location:</label> <input
+					type="text" id="location-input-edit" name="location">
+
+				<button id="btn-Ok-Update-Schedule" class="btn-ok">OK</button>
+				<button class="btn-cancel" onclick="closeModal()">Cancel</button>
+			</div>
+		</div>
+
+
+
+	</div>
+	<script src="../js/editSchedule.js"></script>
+</body>
+</html>

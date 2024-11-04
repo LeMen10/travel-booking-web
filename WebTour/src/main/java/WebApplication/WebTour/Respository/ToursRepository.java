@@ -47,4 +47,10 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 			+ "(SELECT pd.tourId FROM Promotiondetail pd WHERE pd.promotions.promotionId = :promotionId)")
 	List<Tours> getToursAboutToBegin(@Param("promotionId") long promotionId);
 
+	//tìm kiếm tên tour với phân trang
+	@Transactional
+	@Query(value = "SELECT * FROM tours t WHERE t.tour_name LIKE CONCAT('%', :tourName, '%') AND status = true", nativeQuery = true)
+	Page<Tours> searchTourName(@Param("tourName") String tourName, Pageable pageable);
+	
+
 }

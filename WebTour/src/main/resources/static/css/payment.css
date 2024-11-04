@@ -245,3 +245,78 @@ div .div-quantity .quantity-p{
 .code-booking tour-id{
 	margin-left: 2%;
 }
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .left, .right {
+        width: 100%;
+        margin: 0 0 20px;
+    }
+
+    .order-summary .item img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .form-group input, .form-group select, .apply-coupon input {
+        width: 100%;
+    }
+
+    .payment-methods label {
+        margin-right: 20px;
+    }
+
+    .total, .total-conversion {
+        font-size: 16px;
+    }
+
+    .order-summary .apply-coupon {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .order-summary .apply-coupon input,
+    .order-summary .apply-coupon button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .actions {
+        padding: 10px;
+    }
+
+    .back-to-cart {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    /* Adjust font sizes */
+    h1, .section-title {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .order-button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Hide icons or images for smaller screens if needed */
+    .fa-money-bill-wave {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 20px;
+    }
+
+    .order-summary .total, .total-conversion {
+        font-size: 14px;
+    }
+}

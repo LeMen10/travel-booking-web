@@ -286,10 +286,6 @@ async function createBooking() {
 
 	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
 
-
-	//kiểm tra đăng nhập
-
-	/*const bookingDate = document.getElementById("book-day").value;*/
 	const today = new Date().toISOString().split('T')[0]; // lấy định dạng yyyy-MM-dd
 	const bookingDate = today;
 	console.log("bookingDate " + bookingDate);
@@ -323,9 +319,9 @@ async function createBooking() {
 	console.log("Dữ liệu booking đã lưu: ", dataBooking);
 	const bookingID = dataBooking.bookingId
 	console.log("bookingID " + bookingID);
-
-
 	console.log(totalPrice);
+	
+	//kiểm tra đăng nhập
 	if (!userId) {
 		sessionStorage.setItem("bookingID", bookingID);
 		window.location.href = `/`;
@@ -338,7 +334,6 @@ async function createBooking() {
 	sessionStorage.setItem("totalPrice", totalPrice);
 	/*mở trang payment với id của booking mới tạo*/
 	window.location.href = `/payment/${bookingID}`;
-
 }
 
 function showContent(contentId) {

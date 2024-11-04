@@ -4,8 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	//ẩn hiện ô tìm kiếm departure
 	document.getElementById("payment-status").addEventListener("change", showInput);
 	//nút ok để tìm kiếm departure
-	document.getElementById("btn-input-ok").addEventListener("click", searchDeparture);
-
+	document.getElementById("btn-input-ok").addEventListener("click", () => {
+		currentPage = 0; // Đặt lại trang về 0
+		searchDeparture();
+	})
 
 	// ấn nút thanh toán trên table
 	const btnPayments = document.querySelectorAll(".btn-payment-status");
@@ -16,15 +18,19 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	});
 
-	/*hủy đơn*/
-	const cancelButtons = document.querySelectorAll(".btn-cancel");
+
 	/*const confirmCancelButton = document.getElementById("confirm-cancel");*/
 	const closeModalButton = document.getElementById("cancel-close");
 	const modalOverlay = document.getElementById("cancel-confirm-modal");
 
+	/*hủy đơn*/
+	const cancelButtons = document.querySelectorAll(".btn-cancel");
 	cancelButtons.forEach(button => {
 		button.addEventListener("click", function() {
-			openCancelModal(this.getAttribute("data-booking-id"));
+			//openCancelModal(this.getAttribute("data-booking-id"));
+			const bookingId = this.getAttribute("data-booking-id");
+			const departureDate = this.getAttribute("data-departure-date");
+			checkCancelOrderDate(bookingId, departureDate);
 		});
 	});
 
@@ -41,12 +47,15 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 
 //lọc paid hoặc unpaid
+let currentPage = 0;
+let pageSize = 5;
+
 async function FilterDataTable() {
 	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
 	const paymentStatus = document.getElementById("payment-status").value;
 	const btnPay = document.getElementById("btn-payment-status");
 	console.log("paymentStatus " + paymentStatus);
-	const url = `http://localhost:8080/account/filter-get-order?userId=${userId}&paymentStatus=${paymentStatus}`;
+	const url = `http://localhost:8080/account/filter-get-order?userId=${userId}&paymentStatus=${paymentStatus}&page=${currentPage}&size=${pageSize}`;
 	const request = new Request(url, {
 		method: "GET",
 		headers: {
@@ -60,20 +69,44 @@ async function FilterDataTable() {
 		return null;
 	}
 	const dataFilter = await response.json();
-	console.log(dataFilter[0][3]);
+	//console.log(dataFilter[0][3]);
 
 
 	console.log("dataFilter ", dataFilter);
-	updateDataTable(dataFilter);
+	const totalPages = dataFilter.totalPages;
 
+	updateDataTable(dataFilter.content);
+	renderPaginationControls(totalPages);
 
 }
-function navigateRefundPage(bookingId)
-{
-	window.location.href = "/refund/"+bookingId;
+function navigateRefundPage(bookingId) {
+	//const departureDate = document.getElementById("bt-cancel-order").getAttribute("data-departure-date");
+	//checkCancelOrderDate(bookingId, departureDate);
+	window.location.href = "/refund/" + bookingId;
 }
 
-//cập nhật bảng sau khi ấn lọc hoặc thay đổi
+//cập nhật lại các nút phân trang khi lọc
+function renderPaginationControls(totalPages) {
+	const paginationContainer = document.getElementById("pagination");
+	paginationContainer.innerHTML = ""; // Xóa các nút cũ
+
+	for (let i = 0; i < totalPages; i++) {
+		const pageButton = document.createElement("button");
+		pageButton.className = "pagination-button";
+		pageButton.textContent = i + 1;
+		if (i === currentPage) {
+			pageButton.classList.add("active"); // Đánh dấu trang hiện tại
+		}
+		pageButton.addEventListener("click", () => {
+			currentPage = i;  // Cập nhật trang hiện tại
+			FilterDataTable(); // Gọi lại FilterDataTable
+		});
+		paginationContainer.appendChild(pageButton);
+	}
+}
+
+
+//cập nhật bảng sau khi ấn lọc hoặc tìm kiếm
 function updateDataTable(dataTable) {
 	const tableBody = document.getElementById("user-table");
 	tableBody.innerHTML = ""; // Xóa các hàng cũ
@@ -101,15 +134,24 @@ function updateDataTable(dataTable) {
 
 		// Ngày đặt (booking_date)
 		const bookingDateCell = document.createElement("td");
-		bookingDateCell.className = "table-td";
-		bookingDateCell.textContent = new Date(booking[1]).toISOString().split('T')[0]; // Định dạng yyyy-MM-dd
+		bookingDateCell.className = "table-td table-td-date";
+
+		const bookingDate = new Date(booking[1]);
+		const year = bookingDate.getFullYear();
+		const month = String(bookingDate.getMonth() + 1).padStart(2, '0'); // Thêm số 0 nếu tháng < 10
+		const day = String(bookingDate.getDate()).padStart(2, '0'); // Thêm số 0 nếu ngày < 10
+
+		//bookingDateCell.textContent = new Date(booking[1]).toLocaleDateString().split('T')[0]; // Định dạng yyyy-MM-dd
+		bookingDateCell.textContent = `${year}-${month}-${day}`;
 		row.appendChild(bookingDateCell);
+		console.log(bookingDateCell);
 
 		// Ngày đi (start_date)
 		const startDateCell = document.createElement("td");
-		startDateCell.className = "table-td";
+		startDateCell.className = "table-td table-td-date";
 		startDateCell.textContent = new Date(booking[8]).toISOString().split('T')[0];
 		row.appendChild(startDateCell);
+		console.log(startDateCell);
 
 		// Số lượng (totalQuantity)
 		const quantityCell = document.createElement("td");
@@ -168,17 +210,18 @@ function updateDataTable(dataTable) {
 		row.appendChild(actionCell);
 
 		// Nút hủy đơn
-		if(booking[3] != 1){
+
 		const cancelButton = document.createElement("button");
 		cancelButton.className = "btn-cancel";
 		cancelButton.textContent = "Hủy đơn";
 		cancelButton.setAttribute("data-booking-id", booking[0]);
+		cancelButton.setAttribute("data-departure-date", booking[8]);
 		// Gán sự kiện click cho nút hủy đơn để mở modal xác nhận
 		cancelButton.addEventListener('click', function() {
 			openCancelModal(booking[0]);
 		});
 		actionCell.appendChild(cancelButton);
-		}
+
 		row.appendChild(actionCell);
 
 		// Thêm hàng mới vào tbody
@@ -194,6 +237,7 @@ function updateDataTable(dataTable) {
 		);
 	});
 }
+
 
 
 //ẩn hiện ô input của option departure trên filter
@@ -212,11 +256,13 @@ function showInput() {
 }
 
 //tìm kiếm departure
+let currentPageSearch = 0; // Đặt trang hiện tại
+const pageSizeSearch = 5;
 async function searchDeparture() {
 	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
 	const searchInput = document.getElementById("add-input").value;
 	console.log("searchInput " + searchInput);
-	const url = `http://localhost:8080/account/search-departure?userId=${userId}&searchInput=${searchInput}`;
+	const url = `http://localhost:8080/account/search-departure?userId=${userId}&searchInput=${searchInput}&page=${currentPageSearch}&size=${pageSizeSearch}`;
 	const request = new Request(url, {
 		method: "GET",
 		headers: {
@@ -231,7 +277,32 @@ async function searchDeparture() {
 	}
 	const dataSearch = await response.json();
 	console.log("dataSearch " + dataSearch);
-	updateDataTable(dataSearch);
+	updateDataTable(dataSearch.content);
+	renderPaginationControlsSearch(dataSearch.totalPages);
+}
+
+//cập nhật lại các nút phân trang khi tìm kiếm
+function renderPaginationControlsSearch(totalPages) {
+	const paginationContainer = document.getElementById("pagination");
+	paginationContainer.innerHTML = ""; // Xóa các nút cũ
+
+	for (let i = 0; i < totalPages; i++) {
+		const pageButton = document.createElement("button");
+		pageButton.className = "pagination-button";
+		pageButton.textContent = i + 1;
+
+		// Đánh dấu trang hiện tại
+		if (i === currentPageSearch) {
+			pageButton.classList.add("active");
+		}
+
+		// Xử lý sự kiện click để cập nhật trang hiện tại và gọi lại searchDeparture
+		pageButton.addEventListener("click", () => {
+			currentPageSearch = i;  // Cập nhật trang hiện tại
+			searchDeparture(); // Gọi lại searchDeparture với trang mới
+		});
+		paginationContainer.appendChild(pageButton);
+	}
 }
 
 //ấn nút thanh toán trên mỗi dòng sẽ chuyển đến trang thanh toán (payment)
@@ -242,20 +313,42 @@ async function navigateToPaymentPage(button) {
 	/*window.location.href = `/payment/${bookingId}`;*/
 }
 
-/*hủy đơn*/
-let selectedBookingId = null;
-function openCancelModal(bookingId) {
-
-	const modal = document.getElementById("cancel-confirm-modal");
-	selectedBookingId = bookingId;
-	modal.classList.add("show");
-}
-
-
-
 // Hàm đóng modal
 function closeCancelModal() {
 	const modal = document.getElementById("cancel-confirm-modal");
 	modal.classList.remove("show");
 }
+
+/*hiện modal hủy đơn*/
+let selectedBookingId = null;
+function openCancelModal(bookingId) {
+	const modal = document.getElementById("cancel-confirm-modal");
+	selectedBookingId = bookingId;
+	modal.classList.add("show"); //css dòng 268
+}
+
+//kiểm tra ngày hủy đơn
+async function checkCancelOrderDate(bookingId, startDate) {
+	console.log("hàm checkCancelOrderDate đươc gọi ");
+	//const btCancelOrder = querySelectorAll(".btn-cancel");
+	const departureDate = new Date(startDate);
+	const currentDate = new Date();
+
+	const lastCancelDate = new Date(departureDate);
+	lastCancelDate.setDate(lastCancelDate.getDate() - 3);
+
+	console.log("Ngày khởi hành:", departureDate);
+	console.log("Ngày hiện tại:", currentDate);
+	console.log("Ngày hủy cuối cùng:", lastCancelDate);
+
+	if (currentDate > lastCancelDate) {
+		alert("Đã quá thời hạn hủy đơn.");
+	} else {
+		console.log("gọi modal");
+		// Hiển thị modal xác nhận
+		openCancelModal(bookingId);
+	}
+}
+
+
 

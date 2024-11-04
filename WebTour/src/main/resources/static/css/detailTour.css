@@ -469,3 +469,81 @@ span {
 .schedule-p-span{
 	margin: 0;
 }
+
+@media (max-width: 768px) {
+    .first-main-content {
+        flex-direction: column; /* Chuyển sang cột khi màn hình nhỏ */
+        align-items: center; /* Căn giữa */
+    }
+
+    .main-content .image-gallery {
+        width: 100%; /* Chiếm toàn bộ chiều rộng */
+        margin-left: 0; /* Bỏ lề trái */
+    }
+
+    .main-content .booking-info {
+        width: 100%; /* Chiếm toàn bộ chiều rộng */
+        margin-left: 0; /* Bỏ lề trái */
+        margin-right: 0; /* Bỏ lề phải */
+    }
+
+    .main-content .image-thumbnails img {
+        width: 48%; /* Giảm kích thước hình ảnh thumbnail */
+    }
+
+    .booking-info .total-price {
+        font-size: 20px; /* Giảm kích thước chữ */
+    }
+
+    .booking-info .buttons {
+        flex-direction: column; /* Xếp dọc các nút */
+        padding: 0; /* Bỏ padding */
+    }
+
+    .button {
+        width: 100%; /* Chiếm toàn bộ chiều rộng */
+        margin-top: 10px; /* Thêm khoảng cách giữa các nút */
+    }
+
+    .review-container {
+        width: 90%; /* Chiếm 90% chiều rộng */
+    }
+
+    #schedule {
+        padding: 10px; /* Giảm padding */
+    }
+    .sub-image{
+    margin-right: 1%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 20px; /* Giảm kích thước chữ tiêu đề */
+    }
+
+    .info div i {
+        font-size: 20px; /* Giảm kích thước biểu tượng */
+    }
+
+    .total {
+        font-size: 16px; /* Giảm kích thước chữ tổng cộng */
+    }
+
+    .booking-info .total-price {
+        font-size: 18px; /* Giảm kích thước chữ tổng giá */
+    }
+
+    .review-container {
+        width: 100%; /* Chiếm toàn bộ chiều rộng */
+    }
+
+    .tabs {
+        flex-direction: column; /* Xếp dọc các tab */
+    }
+
+    .tab {
+        padding: 10px; /* Giảm padding của tab */
+    }
+}
+

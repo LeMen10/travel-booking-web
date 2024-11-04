@@ -8,10 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	console.log("User ID: " + userID);
 	console.log("totalPrice : " + totalPrice);
 
-
-	
-	
-	
 	
 	document.getElementById('payment-online').addEventListener("change", function(event) {
 		showMethodPaypal(event.target.checked);
@@ -97,12 +93,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert("Vui lòng chọn phương thức thanh toán.");
 			return;
 		}
+		removePaypalButtons();
 		if (paymentMethod === 2) { //online
 			if (!isPayPalInitialized) {
 				await createPayment();
 				div_paypal.style.display = "block";
 				payPal();
 				isPayPalInitialized = true;
+				
 			} else {
 				div_paypal.style.display = "block";
 			}
@@ -482,7 +480,6 @@ async function updatePaymentStatus(bookingId) {
 
 //tạo thanh toán paypal
 async function payPal() {
-
 	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 	const totalPriceText = document.getElementById('total-price').innerText;
 	console.log("totalPriceText trong hàm paypal " + totalPriceText);
@@ -529,6 +526,7 @@ async function payPal() {
 //ẩn hiện nút paypal
 function showMethodPaypal(isOnline) {
 	if (isOnline) {
+		
 		document.getElementById("bt-pay").style.display = "none"; // Ẩn nút thanh toán tiền mặt
 		var div_paypal = document.getElementById("paypal-button-container");
 		div_paypal.style.display = "block";
@@ -537,6 +535,16 @@ function showMethodPaypal(isOnline) {
 		document.getElementById("bt-pay").style.display = "block"; // Hiện nút thanh toán tiền mặt
 		document.getElementById("paypal-button-container").style.display = "none"; // Ẩn container nút PayPal
 	}
+}
+
+//reset lại nút paypal khi vô lại trang (trở về trang trước và vào lại trang payment)
+async function removePaypalButtons() {
+	const container = document.getElementById("paypal-button-container");
+	// Kiểm tra và xóa các nút PayPal hiện có, nếu có
+	while (container.firstChild) {
+		container.removeChild(container.firstChild);
+	}
+	container.style.display = "none"; // Đảm bảo container ẩn sau khi xóa
 }
 
 //kiểm tra mã giảm giá có thuộc về tour, có dùng chưa
@@ -578,7 +586,7 @@ async function createAddress() {
 	const detail = document.getElementById('optional-address').value.trim();
 	console.log(detail);
 	console.log(`Detail: ${detail}`);
-	const provinceId = document.getElementById('city').value;
+	const provinceId = document.getElementById('province').value;
 	const districtId = document.getElementById('district').value;
 	const wardId = document.getElementById('ward').value;
 
@@ -600,10 +608,5 @@ async function createAddress() {
 	console.log("Address được tạo", dataAddress);
 
 }
-
-
-
-
-
 
 

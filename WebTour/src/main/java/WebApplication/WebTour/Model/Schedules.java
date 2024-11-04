@@ -26,10 +26,6 @@ public class Schedules implements Serializable{
     private Long scheduleId;
 
 	@ManyToOne(cascade = CascadeType.ALL, optional = true)
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user;
-    
-	@ManyToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "tour_id", nullable = true)
     private Tours Tours;
 	
@@ -46,12 +42,12 @@ public class Schedules implements Serializable{
     private boolean status;
 
 
-	public User getUser() {
-		return user;
+	public Tours getTours() {
+		return Tours;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setTours(Tours tours) {
+		Tours = tours;
 	}
 
 	public String getActivity() {
