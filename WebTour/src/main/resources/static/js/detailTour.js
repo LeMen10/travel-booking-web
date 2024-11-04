@@ -321,6 +321,9 @@ async function createBooking() {
 	console.log("bookingID " + bookingID);
 	console.log(totalPrice);
 	
+	sessionStorage.setItem("bookingID", bookingID);
+	sessionStorage.setItem("tourID", tourId);
+	sessionStorage.setItem("totalPrice", totalPrice);
 	//kiểm tra đăng nhập
 	if (!userId) {
 		sessionStorage.setItem("bookingID", bookingID);

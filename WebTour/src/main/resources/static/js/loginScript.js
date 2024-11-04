@@ -77,8 +77,9 @@ async function handleLogin(event) {
 			const bookingId =  sessionStorage.getItem("bookingID");
 			if(bookingId != null && data.user.role.roleId == 3)
 				{
-					sessionStorage.removeItem("bookingID");
-					window.location.href = `/payment/${bookingId}`;
+					const isSuccess = await addUserToBooking(data.user.user_id, bookingId);
+					if(isSuccess) window.location.href = `/payment/${bookingId}`;
+					else openDialogError("Can't found booking ToT");
 				} 
 			else window.location.href =linkHomePages[data.user.role.roleId + ""];
 
@@ -142,6 +143,18 @@ async function handleRegisterAccont(event)
 	}
 	else openDialogError("500 server error");
 	}
+}
+
+async function addUserToBooking(userId, bookingId)
+{
+	const response = await fetch(`http://localhost:8080/api-add-user-to-booking?userId=${userId}&bookingId=${bookingId}`, {
+			method: 'PUT',
+			headers: {
+				"Content-Type": "application/json",
+			}
+		});
+
+		return response.ok;
 }
 
 function checkFullName(fullName)

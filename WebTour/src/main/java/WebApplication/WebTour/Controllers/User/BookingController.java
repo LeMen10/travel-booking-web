@@ -1,14 +1,17 @@
 package WebApplication.WebTour.Controllers.User;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import WebApplication.WebTour.Model.Bookings;
 import WebApplication.WebTour.Service.BookingService;
@@ -26,6 +29,15 @@ public class BookingController {
         
         if (booking != null) {
             return ResponseEntity.ok(booking.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
+    @PutMapping("/api-add-user-to-booking")
+    public ResponseEntity<?> addUserToBooking(@RequestParam("userId") Long userId,
+			@RequestParam("bookingId") long bookingId) {
+        if (bookingService.addUserToBooking(userId, bookingId)) {
+            return ResponseEntity.ok("success");
         }
         return ResponseEntity.notFound().build();
     }

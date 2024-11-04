@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	console.log("User ID: " + userID);
 	console.log("totalPrice : " + totalPrice);
 
+	sessionStorage.removeItem("bookingID");
 	
 	document.getElementById('payment-online').addEventListener("change", function(event) {
 		showMethodPaypal(event.target.checked);
