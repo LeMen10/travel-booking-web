@@ -47,7 +47,7 @@ body {
 }
 
 .info div i {
-	color: #007bff;
+	color: #50e0eb;
 	font-size: 24px;
 }
 
@@ -67,8 +67,7 @@ body {
 }
 
 .main-content .image-gallery {
-	width: 54%;
-	margin-left: 8%;
+	width: 56%;
 }
 
 .main-content .image-gallery img {
@@ -89,16 +88,14 @@ body {
 }
 
 .main-content .booking-info {
-	width: 35%;
-	margin-left: 2%;
-	margin-right: 8%;
-	background-color: #e6f7ff;
+	width: 40%;
+	background-color: #50e0eb;
 	padding: 20px;
 	border-radius: 10px;
 }
 
 .booking-info h2 {
-	color: #007bff;
+	color: red;
 	font-size: 24px;
 	margin: 0;
 }
@@ -114,7 +111,7 @@ body {
 }
 
 .booking-info .discount-codes button {
-	background-color: #007bff;
+	background-color: #7cb342;
 	color: #fff;
 	border: none;
 	padding: 5px 10px;
@@ -124,7 +121,7 @@ body {
 }
 
 .booking-info .date-picker input {
-	width: 92%;
+	width: 96%;
 	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
@@ -158,7 +155,7 @@ body {
 }
 
 .booking-info .buttons button {
-	background-color: #007bff;
+	background-color: #7cb342;
 	color: #fff;
 	border: none;
 	padding: 10px 20px;
@@ -176,9 +173,8 @@ body {
 }
 
 .container2 {
-	width: 90%;
 	margin: 18px auto;
-	background-color: #e6f7ff;
+	background-color: white;
 	padding: 20px;
 	border-radius: 10px;
 	/*box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);*/
@@ -259,10 +255,6 @@ body {
 	display: flex;
 }
 
-.date-picker {
-	padding-left: 3%;
-}
-
 .tabs {
 	display: flex;
 	justify-content: space-around; /* Phân chia đều các tab */
@@ -287,8 +279,8 @@ body {
 }
 
 .tab.active {
-	background-color: #007bff;
-	border-bottom: 3px solid #0056b3;
+	background-color: #50e0eb;
+	border-bottom: 3px solid #007bff;
 }
 
 .tab:hover {
@@ -314,8 +306,6 @@ body {
 	border: 1px solid #e0e0e0;
 	padding: 20px;
 	text-align: center;
-	width: 80%;
-	max-width: 600px;
 }
 
 .message {
@@ -324,7 +314,7 @@ body {
 }
 
 .button {
-	background-color: #8bc34a;
+	background-color: #7cb342;
 	color: white;
 	border: none;
 	padding: 10px 20px;

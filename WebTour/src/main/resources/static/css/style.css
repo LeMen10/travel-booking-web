@@ -13113,9 +13113,6 @@ td.fc-header-center {
 }
 
 @media (min-width: 1400px) {
-  .dashboard-main-body {
-    padding: 1.5rem;
-  }
 }
 .dashboard-main.active {
   margin-inline-start: 4.875rem;

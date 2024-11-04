@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -26,7 +27,7 @@ public class Account implements Serializable{
 	@Column(name = "account_id")
     private Long accountId;
 
-	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+	@OneToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
     

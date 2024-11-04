@@ -413,7 +413,7 @@ function checkPaymentMethod() {
 	}
 }
 //tạo payment
-async function createPayment() {
+async function createPayment(captureId, totalPriceUSD) {
 	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 	var date = document.getElementById("date").innerText;
 	console.log("date  " + date);
@@ -435,7 +435,7 @@ async function createPayment() {
 	}
 
 
-	const url = `http://localhost:8080/api-create-payment?bookingId=${bookingId}&paymentDate=${date}&amount=${amount}&paymentMethodId=${paymentMethod}&promotionCode=${promotionCode}`;
+	const url = `http://localhost:8080/api-create-payment?bookingId=${bookingId}&paymentDate=${date}&amount=${amount}&paymentMethodId=${paymentMethod}&promotionCode=${promotionCode}&captureId=${captureId}&totalUSD=${totalPriceUSD}`;
 	console.log(url);
 	const request = new Request(url, {
 		method: "POST",
@@ -509,8 +509,10 @@ async function payPal() {
 		onApprove: function(data, actions) {
 			// Thanh toán thành công
 			return actions.order.capture().then(async function(details) {
-				alert('Thanh toán thành công, ' + details.payer.name.given_name);
-				await createPayment();
+				const captureId = details.purchase_units[0].payments.captures[0].id;
+				        console.log('Capture ID:', captureId, totalPriceUSD);
+				//openDialogSuccess('Thanh toán thành công, ' + details.payer.name.given_name);
+				await createPayment(captureId, totalPriceUSD);
 				await updatePaymentStatus(bookingId);
 
 				window.location.href = `/notificationSuccess/${bookingId}`;

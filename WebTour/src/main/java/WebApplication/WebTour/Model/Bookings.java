@@ -43,7 +43,6 @@ public class Bookings implements Serializable{
     
     @ManyToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "payment_id", nullable = true)
-    @JsonIgnore
     private Payments payment;
     
     @Column(name = "people_nums")

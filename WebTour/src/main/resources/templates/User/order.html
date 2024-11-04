@@ -90,7 +90,7 @@
             						th:attr="data-booking-id=${booking[0]} , data-total-price=${booking[7]}">
          						</button> 
          						 <!-- Hiển thị nút hủy đơn chỉ khi đơn hàng chưa thanh toán -->
-           					<button id="bt-cancel-order" class="btn-cancel" 
+           					<button id="bt-cancel-order" class="btn-cancel" th:onclick="'navigateRefundPage(' + ${booking[0]} + ')'"
 					                th:if="${booking[3] != 1}" 
 					                th:attr="data-booking-id=${booking[0]}">Hủy đơn
 				                </button>

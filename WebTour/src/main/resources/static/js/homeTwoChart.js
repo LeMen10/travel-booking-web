@@ -1,5 +1,88 @@
-  // ================================== Crm Home widgets charts Start =================================
-  function createChart(chartId, chartColor) {
+const chartDefaultValue = [0,0,0,0,0,0,0];
+document.addEventListener("DOMContentLoaded", async function() {
+	const desiredRevenue = 10000000;
+	const customerData = await getStatisticsList("customer");
+	const revenueData = await getStatisticsList("revenue");
+	const newAccountData = await getStatisticsList("new-account");
+	const bookingData = await getStatisticsList("booking");
+	const rateTourData = await getStatisticsList("rate-tour");
+	
+	const revenueRateList = getPercentageMonths(revenueData != null? revenueData:chartDefaultValue, desiredRevenue);
+	
+	const sumCustomer = sumValue(customerData != null? customerData:chartDefaultValue);
+	const sumRevenue = sumValue(revenueData != null? revenueData:chartDefaultValue);
+	const sumNewUser = sumValue(newAccountData != null? newAccountData: dchartDefaultValue);
+	const sumBooking = sumValue(bookingData != null? bookingData : chartDefaultValue);
+	const sumRate = sumValue(rateTourData != null? rateTourData : chartDefaultValue);
+	
+	console.log(sumCustomer, sumNewUser, sumRevenue)
+	
+	setValueToMiniChart("total-new-user-value", sumNewUser);
+	setValueToMiniChart("total-cutomer-value", sumCustomer);
+	setValueToMiniChart("total-revenue-value", sumRevenue);
+	setValueToMiniChart("total-booking-value", sumBooking);
+	setValueToMiniChart("total-rate-tour-value", sumRate);
+	
+	createChart('new-user-chart', '#487fff', newAccountData != null? newAccountData: dchartDefaultValue);
+	createChart('active-user-chart', '#45b369', customerData != null? customerData:chartDefaultValue);
+	createChart('total-sales-chart', '#f4941e', bookingData != null? bookingData : chartDefaultValue);
+	createChart('conversion-user-chart', '#8252e9', revenueRateList);
+	createChart('leads-chart', '#de3ace', rateTourData != null? rateTourData : chartDefaultValue);
+	createChart('total-profit-chart', '#00b8f2', chartDefaultValue);
+});
+
+function setValueToMiniChart(elementId, value)
+{
+	const element = document.getElementById(elementId);
+	element.innerText = value;
+}
+
+function sumValue(listData)
+{
+	var sum = 0;
+	for(index in listData)
+		{
+			console.log(sum, listData[index]);
+			sum += listData[index];
+		}
+	return sum;
+}
+
+async function getStatisticsList(nameStattistics)
+{
+	const response = await fetch(`http://localhost:8080/api-get-statistics-${nameStattistics}-7-months` , {
+			    method: 'GET',
+			    headers: {
+			        'Content-Type': 'application/json'
+			    },
+			});
+		
+		if(response.ok)
+		{
+			const data = await response.json();
+			if(data != null)
+			{
+				const listData = data.map(item =>item[0]);
+				
+				return listData.reverse();
+			}
+		}
+
+		return null;
+}
+
+function getPercentageMonths(lisData, desiredRevenue)
+{
+	var newList = [];
+	for(index in lisData)
+	{
+		const rate = (lisData[index]-desiredRevenue)/desiredRevenue*100;
+		console.log(rate);
+		newList.push(rate);
+	}
+	return newList;
+}
+function createChart(chartId, chartColor, listData) {
 
     let currentYear = new Date().getFullYear();
 
@@ -7,12 +90,12 @@
       series: [
           {
               name: 'series1',
-              data: [35, 45, 38, 41, 36, 43, 37, 55, 40],
+              data: listData,
           },
       ],
       chart: {
           type: 'area',
-          width: 80,
+          width: 200,
           height: 42,
           sparkline: {
             enabled: true // Remove whitespace
@@ -115,16 +198,6 @@
     chart.render();
   }
 
-  // Call the function for each chart with the desired ID and color
-  createChart('new-user-chart', '#487fff');
-  createChart('active-user-chart', '#45b369');
-  createChart('total-sales-chart', '#f4941e');
-  createChart('conversion-user-chart', '#8252e9');
-  createChart('leads-chart', '#de3ace');
-  createChart('total-profit-chart', '#00b8f2');
-  // ================================== Crm Home widgets charts End =================================
-
-
   // ================================ Revenue Growth Area Chart Start ================================ 
   function createChartTwo(chartId, chartColor) {
     
@@ -132,7 +205,7 @@
       series: [
           {
             name: 'This Day',
-            data: [4, 18, 13, 40, 30, 50, 30, 60, 40, 75, 45, 90],
+            data: [4, 18, 13, 40],
           },
       ],
       chart: {

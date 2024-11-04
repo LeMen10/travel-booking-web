@@ -1,10 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    fetch("/api-get-header-admin")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("header-main-content").innerHTML = data;
-            
-        });
+document.addEventListener("DOMContentLoaded", function() {
+	fetch("/api-get-header-admin")
+		.then(response => response.text())
+		.then(data => {
+			document.querySelector(".header").innerHTML = data;
+
+		});
+
+	fetch("/api-get-side-bar-admin")
+		.then(response => response.text())
+		.then(data => {
+			document.querySelector(".sidebar").innerHTML = data;
+
+		});
 });
 
 

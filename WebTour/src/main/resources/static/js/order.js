@@ -68,6 +68,10 @@ async function FilterDataTable() {
 
 
 }
+function navigateRefundPage(bookingId)
+{
+	window.location.href = "/refund/"+bookingId;
+}
 
 //cập nhật bảng sau khi ấn lọc hoặc thay đổi
 function updateDataTable(dataTable) {

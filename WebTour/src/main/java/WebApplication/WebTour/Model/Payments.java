@@ -25,10 +25,6 @@ public class Payments implements Serializable{
 	@Column(name = "payment_id")
     private Long paymentId ;
 
-	@ManyToOne
-	@JoinColumn(name = "booking_id", nullable = true)
-	private Bookings booking;
-
     @Column(name = "payment_date")
     private Date paymentDate;
     
@@ -39,25 +35,28 @@ public class Payments implements Serializable{
     @JoinColumn(name = "paymentMethod", nullable = true)
     private Paymentmethod paymentMethod ;
     
-    @Column(name = "payment_status ")
+    @Column(name = "payment_status")
     private int paymentStatus ;
     
     @JoinColumn(name = "promotion_code", nullable = true)
     private String promotionCode ;
     
-    @Column(name = "status ")
+    @JoinColumn(name = "capture_id", nullable = true)
+    private String captureId ;
+    
+    @JoinColumn(name = "total_price_dolar", nullable = true)
+    private float totalPriceDolar;
+    
+	@Column(name = "status ")
     private boolean status ;
-
-
-
-
-
-	public Bookings getBooking() {
-		return booking;
+	
+    
+    public String getCaptureId() {
+		return captureId;
 	}
 
-	public void setBooking(Bookings booking) {
-		this.booking = booking;
+	public void setCaptureId(String captureId) {
+		this.captureId = captureId;
 	}
 
 	public Date getPaymentDate() {
@@ -125,7 +124,12 @@ public class Payments implements Serializable{
 		this.promotionCode = promotionCode;
 	}
 
+	public float getTotalPriceDolar() {
+		return totalPriceDolar;
+	}
 
-	
-	
+	public void setTotalPriceDolar(float totalPriceDolar) {
+		this.totalPriceDolar = totalPriceDolar;
+	}
+
 }

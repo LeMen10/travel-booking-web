@@ -249,7 +249,9 @@ public class PaymentController {
 	public ResponseEntity<Payments> createPayment(@RequestParam("bookingId") Long bookingId,
 			@RequestParam("paymentDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date paymentDate,
 			@RequestParam("amount") float amount, @RequestParam("paymentMethodId") long paymentMethodId,
-			@RequestParam("promotionCode") String promotionCode) {
+			@RequestParam("promotionCode") String promotionCode, 
+			@RequestParam("captureId") String captureId,
+			@RequestParam("totalUSD") float totalPriceUSD) {
 		System.out.println("Amount received from request: " + amount);
 		Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
 		if (!bookingPayment.isPresent()) {
@@ -258,7 +260,6 @@ public class PaymentController {
 		Bookings existingBooking = bookingPayment.get();
 
 		Payments payment = new Payments();
-		payment.setBooking(existingBooking);
 		payment.setPaymentDate(paymentDate);
 		payment.setAmount(amount);
 
@@ -266,6 +267,8 @@ public class PaymentController {
 		payment.setPaymentMethod(paymentMethod);
 		payment.setPaymentStatus(2);
 		payment.setPromotionCode(promotionCode);
+		payment.setCaptureId(captureId);
+		payment.setTotalPriceDolar(totalPriceUSD);
 		payment.setStatus(true);
 
 		Payments savePayment = paymentsRepository.save(payment);
@@ -280,7 +283,16 @@ public class PaymentController {
 	// dùng để cập nhật paymentStatus sau khi thanh toán thành công
 	@PutMapping("/update-status/{bookingId}")
 	public ResponseEntity<String> updatePaymentStatus(@PathVariable Long bookingId) {
-		paymentsRepository.updatePaymentStatus(bookingId);
+		Optional<Bookings> booking = bookingsRespository.findById(bookingId);
+		if(booking.isPresent())
+		{
+			Payments payment = booking.get().getPayment();
+			if(payment != null)
+			{
+				payment.setPaymentStatus(1);
+				paymentsRepository.save(payment);
+			}
+		}
 		return ResponseEntity.ok("update successfully");
 	}
 
@@ -366,4 +378,48 @@ public class PaymentController {
 	    }
 	}
 
+	@GetMapping("/refund/{bookingid}")
+	public String navigateRefundPage(@PathVariable("bookingid") Long bookingid, Model model) {
+		Optional<Bookings> bookingOpt = bookingsRespository.findById(bookingid);
+		if (!bookingOpt.isPresent()) {
+			return "bookingOpt notificationSuccess không tồn tại!";
+		}
+		Bookings booking = bookingOpt.get();
+
+		// Tìm user theo userId của booking
+		User userOpt =  booking.getUser();
+		if (userOpt==null) {
+			return "userOpt notificationSuccess không tồn tại!";
+		}
+		
+
+		// Tìm payment theo paymentId của booking
+		Payments paymentOpt = booking.getPayment();
+		if (paymentOpt==null) {
+			return "paymentOpt notificationSuccess không tồn tại!";
+		}
+		
+
+		// Tìm tour theo paymentId của booking
+		Tours tourtOpt = booking.getTour();
+		if (tourtOpt==null) {
+			return "tourtOpt notificationSuccess không tồn tại!";
+		}
+		
+		
+		//hiển thị số lượng người lớn và trẻ em
+		List<TicketBooking> ticketBookingList = ticketBookingRepository.findTicketBookingById(booking.getBookingId());
+		if(ticketBookingList.isEmpty()) {
+			return "ticketBookingList notificationSuccess không tồn tại!";
+		}
+		
+		
+		model.addAttribute("bookingNotification", booking);
+		model.addAttribute("paymentNotification", paymentOpt);
+		model.addAttribute("userNotification", userOpt);
+		model.addAttribute("tourNotification", tourtOpt);
+		model.addAttribute("ticketBookingList", ticketBookingList);
+		return "/User/refund";
+	}
+	
 }

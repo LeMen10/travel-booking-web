@@ -51,7 +51,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	        + "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
 	        + "b.total_price, tours.start_date, tours.departure, p.payment_id "
 	        + "FROM bookings b "
-	        + "LEFT JOIN payments p ON p.booking_id = b.booking_id "
+	        + "LEFT JOIN payments p ON p.payment_id = b.payment_id "
 	        + "LEFT JOIN ticketbooking tb ON tb.booking_id = b.booking_id "
 	        + "LEFT JOIN ticket t ON t.ticket_id = tb.ticket_id "
 	        + "JOIN tours tours ON tours.tour_id = b.tour_id "
@@ -70,7 +70,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	        + "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
 	        + "b.total_price, tours.start_date, tours.departure, p.payment_id "
 	        + "FROM bookings b "
-	        + "LEFT JOIN payments p ON p.booking_id = b.booking_id "
+	        + "LEFT JOIN payments p ON p.payment_id = b.payment_id "
 	        + "JOIN ticketbooking tb ON tb.booking_id = b.booking_id "
 	        + "JOIN ticket t ON t.ticket_id = tb.ticket_id "
 	        + "JOIN tours tours ON tours.tour_id = b.tour_id "
@@ -92,7 +92,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	        + "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
 	        + "b.total_price, tours.start_date, tours.departure, p.payment_id "
 	        + "FROM bookings b "
-	        + "LEFT JOIN payments p ON p.booking_id = b.booking_id "
+	        + "LEFT JOIN payments p ON p.payment_id = b.payment_id "
 	        + "LEFT JOIN ticketbooking tb ON tb.booking_id = b.booking_id "
 	        + "LEFT JOIN ticket t ON t.ticket_id = tb.ticket_id "
 	        + "JOIN tours tours ON tours.tour_id = b.tour_id "
@@ -104,19 +104,31 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	        nativeQuery = true)
 	List<Object[]> searchDeparture(@Param("userId") Long userId, @Param("searchTerm") String search);
 
-
-
-
+	@Query(value = "SELECT COALESCE(SUM(b.people_nums), 0), m.month, YEAR(CURDATE()) AS year "
+			+ "FROM (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION "
+			+ " SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION "
+			+ " SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS m "
+			+ "LEFT JOIN Bookings b ON m.month = MONTH(b.booking_date) AND YEAR(b.booking_date) = YEAR(CURDATE()) AND b.status = 1 "
+			+ "WHERE m.month <= MONTH(CURDATE()) "
+			+ "GROUP BY  m.month ORDER BY  m.month DESC LIMIT 7", nativeQuery = true)
+	Optional<List<Object>> getSatisticsCustomersLast7Months();
 	
-
-	 
-
-
-
-
-	 
+	@Query(value = "SELECT COALESCE(SUM(b.total_price), 0), m.month,  YEAR(CURDATE()) AS year "
+			+ "FROM (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION "
+			+ " SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION "
+			+ " SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS m "
+			+ "LEFT JOIN Bookings b ON m.month = MONTH(b.booking_date) AND YEAR(b.booking_date) = YEAR(CURDATE()) AND b.status = 1 "
+			+ "WHERE m.month <= MONTH(CURDATE()) "
+			+ "GROUP BY  m.month ORDER BY  m.month DESC LIMIT 7", nativeQuery = true)
+	Optional<List<Object>> getSatisticsRevenueLast7Months();
 	
-
-	
-
+	@Query(value = "SELECT COALESCE(COUNT(b.booking_id), 0), m.month,  YEAR(CURDATE()) AS year "
+			+ "FROM (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION "
+			+ " SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION "
+			+ " SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS m "
+			+ "LEFT JOIN Bookings b ON m.month = MONTH(b.booking_date) AND YEAR(b.booking_date) = YEAR(CURDATE()) AND b.status = 1 "
+			+ "LEFT JOIN Payments p ON b.payment_id = p.payment_id AND p.status = 1 AND p.payment_status = 1 "
+			+ "WHERE m.month <= MONTH(CURDATE()) "
+			+ "GROUP BY  m.month ORDER BY  m.month DESC LIMIT 7", nativeQuery = true)
+	Optional<List<Object>> getSatisticsBookingsLast7Months();
 }

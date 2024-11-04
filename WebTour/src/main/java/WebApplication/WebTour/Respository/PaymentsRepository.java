@@ -11,12 +11,6 @@ import WebApplication.WebTour.Model.Payments;
 
 @Repository
 public interface PaymentsRepository extends JpaRepository<Payments, Long>{
-	//dùng để cập nhật paymentStatus sau khi thanh toán thành công
-	@Transactional
-	@Modifying
-	@Query("UPDATE Payments p SET p.paymentStatus = 1 WHERE p.booking.bookingId = :bookingId")
-	int updatePaymentStatus(@Param("bookingId") Long bookingId);
 
-	
 	
 }
