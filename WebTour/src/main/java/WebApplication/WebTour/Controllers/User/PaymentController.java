@@ -124,6 +124,7 @@ public class PaymentController {
 			} else {
 				model.addAttribute("error", "Payment không tồn tại!");
 			}
+			
 			// lấy thông tin của tour
 			Tours tourPayment = booking.getTour();
 			if (tourPayment != null) {
