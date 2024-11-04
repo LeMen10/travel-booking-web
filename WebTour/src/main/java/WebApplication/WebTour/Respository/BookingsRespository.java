@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 
-// cập nhật giá khi 
+	//cập nhật giá cuối cùng khi thanh toán
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE bookings SET total_price = :totalPrice WHERE booking_id = :bookingId AND status = true", nativeQuery = true)
@@ -61,6 +61,27 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 			+ "ORDER BY b.booking_date DESC", countQuery = "SELECT COUNT(*) FROM bookings b WHERE b.user_id = :userId AND b.status = true", nativeQuery = true)
 	Page<Object[]> showDataTable(@Param("userId") Long userId, Pageable pageable);
 	
+	
+	@Query(value = "SELECT * FROM  Bookings   WHERE user_id = :userId AND status = true", nativeQuery = true)
+	Optional<List<Bookings>> getUserByBookingId(@Param("userId") Long userId);
+
+	// lọc theo paid hoặc unpaid
+	@Transactional
+	@Query(value = "SELECT b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
+			+ "SUM(tb.quantity) AS totalQuantity, "
+			+ "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
+			+ "b.total_price, tours.start_date, tours.departure, p.payment_id " + "FROM bookings b "
+			+ "LEFT JOIN payments p ON p.payment_id = b.payment_id "
+			+ "JOIN ticketbooking tb ON tb.booking_id = b.booking_id " + "JOIN ticket t ON t.ticket_id = tb.ticket_id "
+			+ "JOIN tours tours ON tours.tour_id = b.tour_id " + "WHERE b.user_id = :userId AND b.status = true "
+			+ "AND (:paymentStatus IS NULL " // lấy hết
+			+ "OR (:paymentStatus = 1 AND p.payment_id IS NOT NULL) "
+			+ "OR (:paymentStatus = 2 AND p.payment_id IS NULL)) "
+			+ "GROUP BY b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
+			+ "b.total_price, tours.start_date, tours.departure, p.payment_id "
+			+ "ORDER BY b.booking_date DESC", nativeQuery = true)
+	Page<Object[]> filterOrderPage(@Param("userId") Long userId, 
+			@Param("paymentStatus") Integer paymentStatus, Pageable pageable);
 	/*
 	 * @Transactional
 	 * @Modifying
@@ -83,23 +104,6 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	 * filterOrderPage(@Param("userId") Long userId, @Param("paymentStatus") Integer
 	 * paymentStatus);
 	 */
-	// lọc theo paid hoặc unpaid
-	@Transactional
-	@Query(value = "SELECT b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
-			+ "SUM(tb.quantity) AS totalQuantity, "
-			+ "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
-			+ "b.total_price, tours.start_date, tours.departure, p.payment_id " + "FROM bookings b "
-			+ "LEFT JOIN payments p ON p.payment_id = b.payment_id "
-			+ "JOIN ticketbooking tb ON tb.booking_id = b.booking_id " + "JOIN ticket t ON t.ticket_id = tb.ticket_id "
-			+ "JOIN tours tours ON tours.tour_id = b.tour_id " + "WHERE b.user_id = :userId AND b.status = true "
-			+ "AND (:paymentStatus IS NULL " // lấy hết
-			+ "OR (:paymentStatus = 1 AND p.payment_id IS NOT NULL) "
-			+ "OR (:paymentStatus = 2 AND p.payment_id IS NULL)) "
-			+ "GROUP BY b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
-			+ "b.total_price, tours.start_date, tours.departure, p.payment_id "
-			+ "ORDER BY b.booking_date DESC", nativeQuery = true)
-	Page<Object[]> filterOrderPage(@Param("userId") Long userId, 
-			@Param("paymentStatus") Integer paymentStatus, Pageable pageable);
 	
 
 	@Query(value = "SELECT COALESCE(SUM(b.people_nums), 0), m.month, YEAR(CURDATE()) AS year "
@@ -129,7 +133,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 			+ "WHERE m.month <= MONTH(CURDATE()) "
 			+ "GROUP BY  m.month ORDER BY  m.month DESC LIMIT 7", nativeQuery = true)
 	Optional<List<Object>> getSatisticsBookingsLast7Months();
-
+	
 	
 	// tìm kiếm theo khởi hành
 	@Transactional
@@ -137,7 +141,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 			+ "SUM(tb.quantity) AS totalQuantity, "
 			+ "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
 			+ "b.total_price, tours.start_date, tours.departure, p.payment_id " + "FROM bookings b "
-			+ "LEFT JOIN payments p ON p.payment_id = b.payment_id "
+			+ "LEFT JOIN payments p ON p.booking_id = b.booking_id "
 			+ "LEFT JOIN ticketbooking tb ON tb.booking_id = b.booking_id "
 			+ "LEFT JOIN ticket t ON t.ticket_id = tb.ticket_id " + "JOIN tours tours ON tours.tour_id = b.tour_id "
 			+ "WHERE b.user_id = :userId AND b.status = true "
@@ -150,9 +154,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 
 	/*
 	 * @Transactional
-	 * 
 	 * @Modifying
-	 * 
 	 * @Query(value =
 	 * "SELECT b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
 	 * + "SUM(tb.quantity) AS totalQuantity, " +
@@ -170,4 +172,5 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	 * searchDeparture(@Param("userId") Long userId, @Param("searchTerm") String
 	 * search);
 	 */
+	
 }
