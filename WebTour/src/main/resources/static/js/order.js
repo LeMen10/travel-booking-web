@@ -347,6 +347,7 @@ async function checkCancelOrderDate(bookingId, startDate) {
 		console.log("gọi modal");
 		// Hiển thị modal xác nhận
 		openCancelModal(bookingId);
+		navigateRefundPage(bookingId);
 	}
 }
 

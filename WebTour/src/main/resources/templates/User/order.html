@@ -93,6 +93,7 @@
 							<button class="btn-payment-status"
 								th:text="${booking[3] == 1 ? 'Đã thanh toán' : 'Thanh toán'}"
 								th:disabled="${booking[3] == 1 || booking[3] == 3}"
+								th:if="${booking[3] != 1}"
 								th:classappend="${booking[3] == 1} ? 'paid-status' : ''"
 								th:attr="data-booking-id=${booking[0]} , data-total-price=${booking[7]}">
 							</button> 
@@ -100,7 +101,7 @@
 							<button id="bt-cancel-order" class="btn-cancel"
 								th:if="${booking[3] == 1}"
 								th:attr="data-booking-id=${booking[0]}, data-departure-date=${#dates.format(booking[8], 'yyyy-MM-dd')}"
-								th:onclick="'navigateRefundPage(' + ${booking[0]} + ')'" >Hủy đơn</button>
+								>Hủy đơn</button>
 						</td>
 					</tr>
 					<!--modal hủy đơn -->

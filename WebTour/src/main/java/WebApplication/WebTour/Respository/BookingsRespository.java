@@ -58,7 +58,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 			+ "WHERE b.user_id = :userId AND b.status = true "
 			+ "GROUP BY b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
 			+ "b.total_price, tours.start_date, tours.departure, p.payment_id "
-			+ "ORDER BY b.booking_date DESC", countQuery = "SELECT COUNT(*) FROM bookings b WHERE b.user_id = :userId AND b.status = true", nativeQuery = true)
+			+ "ORDER BY b.booking_date DESC, b.booking_id DESC ", countQuery = "SELECT COUNT(*) FROM bookings b WHERE b.user_id = :userId AND b.status = true", nativeQuery = true)
 	Page<Object[]> showDataTable(@Param("userId") Long userId, Pageable pageable);
 	
 	
@@ -79,7 +79,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 			+ "OR (:paymentStatus = 2 AND p.payment_id IS NULL)) "
 			+ "GROUP BY b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
 			+ "b.total_price, tours.start_date, tours.departure, p.payment_id "
-			+ "ORDER BY b.booking_date DESC", nativeQuery = true)
+			+ "ORDER BY b.booking_date DESC, b.booking_id DESC ", nativeQuery = true)
 	Page<Object[]> filterOrderPage(@Param("userId") Long userId, 
 			@Param("paymentStatus") Integer paymentStatus, Pageable pageable);
 	/*
@@ -148,7 +148,7 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 			+ "AND tours.departure LIKE CONCAT('%', :searchTerm, '%') "
 			+ "GROUP BY b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
 			+ "b.total_price, tours.start_date, tours.departure, p.payment_id "
-			+ "ORDER BY b.booking_date DESC", nativeQuery = true)
+			+ "ORDER BY b.booking_date DESC, b.booking_id DESC ", nativeQuery = true)
 	Page<Object[]> searchDeparture(@Param("userId") Long userId, 
 			@Param("searchTerm") String search, Pageable pageable);
 

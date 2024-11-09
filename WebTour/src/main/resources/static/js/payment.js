@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 			await createPayment();
-			await updateTotalPrice();
+			//await updateTotalPrice();
 
 			const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 			await updatePaymentStatus(bookingId);
@@ -354,7 +354,7 @@ function checkInformationInput() {
 //dùng để tính giá tiền khi dùng mã giảm giá
 async function updateTotalPrice() {
 	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
-	const totalPriceText = document.getElementById("total-price").innerText || document.getElementById("total-price").textContent;
+	const totalPriceText = document.getElementById("temp-price").innerText || document.getElementById("temp-price").textContent;
 	const totalPrice = parseFloat(totalPriceText.replace(/[^0-9]/g, '')) || 0;
 
 	console.log("Booking ID:", bookingId);
@@ -450,7 +450,7 @@ async function createPayment(captureId, totalPriceUSD) {
 		return null;
 	}
 	const dataPayment = await response.json();
-	updateTotalPrice();
+	//updateTotalPrice();
 	console.log("Payment đã được tạo: ", dataPayment);
 
 
