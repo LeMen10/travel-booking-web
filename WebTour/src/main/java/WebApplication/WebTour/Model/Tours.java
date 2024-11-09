@@ -54,12 +54,36 @@ public class Tours implements Serializable{
     @Column(name = "people_max")
     private int peopleMax;
     
+    @Column(name = "original_id")
+    private Long originalId;
+    
     @Column(name = "status")
     private boolean status;
 
 	public int getGuidedId() {
 		return guidedId;
 	}
+	
+	public Tours() {
+		super();
+	}
+
+	public Tours(Tours t) {
+		super();
+		this.guidedId = t.guidedId;
+		this.tourName = t.tourName;
+		this.transport = t.transport;
+		this.departure = t.departure;
+		this.destination = t.destination;
+		this.detail = t.detail;
+		this.startDate = t.startDate;
+		this.endDate = t.endDate;
+		this.price = t.price;
+		this.peopleMax = t.peopleMax;
+		this.status = t.status;
+	}
+
+
 
 	public void setGuidedId(int guidedId) {
 		this.guidedId = guidedId;
@@ -73,7 +97,18 @@ public class Tours implements Serializable{
 		this.tourName = tourName;
 	}
 
-	
+
+	public Long getOriginalId() {
+		return originalId;
+	}
+
+
+
+	public void setOriginalId(Long originalId) {
+		this.originalId = originalId;
+	}
+
+
 
 	public String getDeparture() {
 		return departure;

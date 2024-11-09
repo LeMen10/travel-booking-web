@@ -36,6 +36,11 @@ public class HomeController {
     		return "/components/header";
     }
     
+    @GetMapping("/api-get-footer")
+    public String getFooterHTML(Model model) {
+    		return "/components/footer";
+    }
+    
     @GetMapping("/api-get-header-employee")
     public String getHeaderEmployeeHTML(Model model) {
     		return "/components/headerEmployee";
@@ -48,8 +53,8 @@ public class HomeController {
     
 	@GetMapping("/home")
     public String navigateHomePage(Model model) {
-			model.addAttribute(provinceRepository.findAll());
-			model.addAttribute(toursRepository.listOfCheapestTours());
+			model.addAttribute("province",provinceRepository.findAll());
+			model.addAttribute("tours", toursRepository.listOfCheapestTours());
             return "home";
     }
 	

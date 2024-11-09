@@ -74,7 +74,7 @@
 			<div class="section-title">Thanh toán</div>
 			<div class="payment-methods">
 				<label> 
-					<input  id="payment-online" name="payment" type="radio" value="online" />Online 
+					<input  id="payment-online" name="payment" type="radio" value="online" checked />Online 
 					<i class="fas fa-money-bill-wave"> </i>
 				</label> 
 				<label> 
@@ -98,7 +98,7 @@
 						</div>
 						<div class="code-tour">
 							<label>Mã tour: </label>
-							<p th:text="${tourPayment.tourId}" id="id-booking-info" th:attr="data-id=${tourPayment.tourId}" class="tour-id" ></p>
+							<p th:text="${tourPayment.originalId}" id="id-booking-info" th:attr="data-id=${tourPayment.tourId}" class="tour-id" ></p>
 						</div>
 						
 							<p th:text="${tourPayment.tourName}">Du Lịch 4 Đảo Phú Quốc: Hành Trình 1 ngày</p>
@@ -148,6 +148,7 @@
 			</div>
 		</div>
 	</div>
+	<div id="footer"></div>
 	<script src="/js/header.js"></script>
 	<script src="../js/payment.js"></script>
 	<script type="text/javascript">

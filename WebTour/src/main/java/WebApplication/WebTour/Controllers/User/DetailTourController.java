@@ -74,15 +74,23 @@ public class DetailTourController {
 		// Kiểm tra nếu có giá trị trong Optional
 		if (detailTour.isPresent()) {
 			Tours tour = detailTour.get();
+			Long tourId = id;
+			if(tour.getOriginalId() != null)
+			{
+				tourId = tour.getOriginalId();
+				tour = toursRepository.findById(tourId).get();
+				
+			}
 			List<Schedules> schedules = schedulesRepository.findSchedulesByTourId(tour.getTourId().intValue());
-			List<Reviews> reviews = reviewsRepository.findReviewsByTourId(tour.getTourId());
+			List<Reviews> reviews = reviewsRepository.findReviewsByTourId(tourId);
 			List<Image> images = imageRepository.findByTours(tour);
 			
 			System.out.println("Số lượng ảnh: " + images.size());
-			model.addAttribute("tour", tour);
+			model.addAttribute("tour", detailTour.get());
 			model.addAttribute("schedules", schedules);
 			model.addAttribute("reviews", reviews);
 			model.addAttribute("images", images);
+			model.addAttribute("tourId", tourId);
 		} else {
 			model.addAttribute("error", "Tour không tồn tại!");
 		}
@@ -125,8 +133,13 @@ public class DetailTourController {
 			@RequestParam("totalPrice") float totalPrice) {
 
 		Bookings booking = new Bookings();
+		//-----------------
 		Tours tour = toursRepository.findById(tourId).get();
-		booking.setTour(tour);
+		Tours cloneTour = new Tours(tour);
+		cloneTour.setOriginalId(tour.getTourId());
+		toursRepository.save(cloneTour);
+		booking.setTour(cloneTour);
+		//------------------
 		
 		User user = userId == 0 ? null: userRepository.findById(userId).get();
 		booking.setUser(user);

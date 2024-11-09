@@ -125,12 +125,14 @@ public class PaymentController {
 				model.addAttribute("error", "Payment không tồn tại!");
 			}
 			
-			// lấy thông tin của tour
+			// lấy thông tin của tour từ clone
 			Tours tourPayment = booking.getTour();
+			Tours orginalTour = toursRepository.findById(tourPayment.getOriginalId()).get();
+			
 			if (tourPayment != null) {
 				model.addAttribute("tourPayment", tourPayment);
 				// Lấy hình ảnh của tour
-				List<Image> images = imageRepository.findByTours(tourPayment);
+				List<Image> images = imageRepository.findByTours(orginalTour);
 				if (!images.isEmpty()) {
 
 					Image imagePayment = images.get(0); // hình đầu

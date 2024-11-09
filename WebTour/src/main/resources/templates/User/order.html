@@ -8,12 +8,13 @@
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="/css/home_user.css">
-	
+
 </head>
 <body>
-<header id="header"></header>
+	<header id="header"></header>
 	<div class="container-content">
 		<div class="header-content">
 
@@ -58,7 +59,8 @@
 					<tr th:each="booking : ${bookings}">
 						<td class="table-td" th:text="${booking[0]}"></td>
 						<!-- Mã đơn -->
-						<td class="table-td" th:text="${booking[4]}"></td>
+						<td class="table-td"><a th:text="${booking[4]}"
+							th:href="@{/detail-tour/{id}(id=${booking[11]})}"></a></td>
 						<!-- Tour -->
 						<td class="table-td" th:text="${booking[10]}"></td>
 						<!-- Mã thanh toán -->
@@ -81,13 +83,11 @@
 							<span th:if="${booking[2] == 2}">Online</span>
 						</td>
 						<td class="table-td">
-							<!-- Trạng thái --> 
-							<span th:if="${booking[3] == 1}">Paid</span>
-							<span th:if="${booking[3] == 2}">Unpaid</span> 
-							<span th:if="${booking[3] == 3}">Cancel</span>
-							<span th:if="${booking[3] == null or booking[3] == ''}">Unpaid</span>
+							<!-- Trạng thái --> <span th:if="${booking[3] == 1}">Paid</span>
+							<span th:if="${booking[3] == 2}">Unpaid</span> <span
+							th:if="${booking[3] == 3}">Cancel</span> <span
+							th:if="${booking[3] == null or booking[3] == ''}">Unpaid</span>
 						</td>
-						<!-- hiện nút action -->
 						<td class="table-td table-td-action">
 							<!-- nút thanh toán -->
 							<button class="btn-payment-status"
@@ -96,53 +96,50 @@
 								th:if="${booking[3] != 1}"
 								th:classappend="${booking[3] == 1} ? 'paid-status' : ''"
 								th:attr="data-booking-id=${booking[0]} , data-total-price=${booking[7]}">
-							</button> 
-							<!-- nút hủy đơn -->
+							</button> <!-- nút hủy đơn -->
 							<button id="bt-cancel-order" class="btn-cancel"
 								th:if="${booking[3] == 1}"
-								th:attr="data-booking-id=${booking[0]}, data-departure-date=${#dates.format(booking[8], 'yyyy-MM-dd')}"
-								>Hủy đơn</button>
+								th:attr="data-booking-id=${booking[0]}, data-departure-date=${#dates.format(booking[8], 'yyyy-MM-dd')}">Hủy
+								đơn</button>
 						</td>
 					</tr>
 					<!--modal hủy đơn -->
 					<div id="cancel-confirm-modal" class="modal-overlay">
 						<div class="modal-content">
 							<p>Bạn có chắc chắn muốn hủy đơn này không?</p>
-							<button id="confirm-cancel" >Xác nhận</button>
-							<button id="cancel-close" >Hủy</button>
+							<button id="confirm-cancel">Xác nhận</button>
+							<button id="cancel-close">Hủy</button>
 						</div>
 					</div>
 
 				</tbody>
 			</table>
 		</div>
-		
+
 		<!-- Pagination -->
 		<div class="pagination-container">
-				<ul class="pagination" id="pagination">
-				
-					<li th:if="${currentPage > 0}">
-						<a th:href="@{/account/get-order(userId=${user.user_id}, page=${currentPage - 1}, size=5)}">
-							<i class="fas fa-chevron-left icon"></i> 
-						</a>
-					</li>
+			<ul class="pagination" id="pagination">
 
-					<li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-						<a th:href="@{/account/get-order(userId=${user.user_id}, page=${i}, size=5)}"
-							th:class="${currentPage == i} ? 'active' : ''" th:text="${i + 1}">
-						</a>
-					</li>
+				<li th:if="${currentPage > 0}"><a
+					th:href="@{/account/get-order(userId=${user.user_id}, page=${currentPage - 1}, size=5)}">
+						<i class="fas fa-chevron-left icon"></i>
+				</a></li>
 
-					<li th:if="${currentPage + 1 < totalPages}">
-						<a th:href="@{/account/get-order(userId=${user.user_id}, page=${currentPage + 1}, size=5)}">
-						 <i class="fas fa-chevron-right icon"></i>
-						</a>
-					</li>
-				</ul>
-			</div>
+				<li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"><a
+					th:href="@{/account/get-order(userId=${user.user_id}, page=${i}, size=5)}"
+					th:class="${currentPage == i} ? 'active' : ''" th:text="${i + 1}">
+				</a></li>
+
+				<li th:if="${currentPage + 1 < totalPages}"><a
+					th:href="@{/account/get-order(userId=${user.user_id}, page=${currentPage + 1}, size=5)}">
+						<i class="fas fa-chevron-right icon"></i>
+				</a></li>
+			</ul>
+		</div>
 
 	</div>
+	<div id="footer"></div>
 	<script src="/js/header.js"></script>
-		<script src="../js/order.js"></script>
+	<script src="../js/order.js"></script>
 </body>
 </html>

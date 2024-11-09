@@ -315,7 +315,7 @@ async function paymentByDiscount(code) {
 				const total = totalPrice - discount;
 				document.getElementById("total-price").innerHTML = total.toLocaleString() + "₫";
 
-				updateTotalPrice();
+				//updateTotalPrice();
 			}
 			else {
 				console.log("Mã giảm giá đã hết hạn.");

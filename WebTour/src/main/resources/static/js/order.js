@@ -120,10 +120,11 @@ function updateDataTable(dataTable) {
 		bookingIdCell.textContent = booking[0];
 		row.appendChild(bookingIdCell);
 
+		console.error(booking);
 		// Tour
 		const tourNameCell = document.createElement("td");
 		tourNameCell.className = "table-td";
-		tourNameCell.textContent = booking[4];
+		tourNameCell.innerHTML = `<a href="/detail-tour/${booking[11]}">${booking[4]}</a>`;
 		row.appendChild(tourNameCell);
 
 		// Mã thanh toán

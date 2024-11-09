@@ -15,6 +15,8 @@ import WebApplication.WebTour.Respository.ReviewsRepository;
 @Service
 public class StatictisService {
 	
+	final int GUIDE_ROLE_ID = 2;
+	
 	@Autowired
 	AccountRespository accountRespository;
 	
