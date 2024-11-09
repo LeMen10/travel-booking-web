@@ -11,11 +11,13 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!-- <link rel="stylesheet" href="/css/home_user.css"> -->
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/css/home_user.css">
 </head>
 <body>
-	<div class="container">
-		<div class="header">
+<header id="header"></header>
+	<div class="container-content">
+		<div class="header-content">
 			<h1 th:text="${tour.tourName}">Tour Name</h1>
 		</div>
 		<div class="info">
@@ -141,15 +143,21 @@
 
 						</div>
 
-						<div id="schedule" class="tab-content">
-							<div th:each="schedule : ${schedules}">
-								<p class="schedule-p">
-									Ngày thứ <span class="schedule-p-span"
-										th:text="${schedule.step}"> </span>: <span
-										class="schedule-p-span" th:text="${schedule.activity}"></span>
-								</p>
-							</div>
-						</div>
+					<div id="schedule" class="tab-content">
+					    <div th:each="schedule : ${schedules}">
+					        <p class="schedule-p">
+					            <div class="schedule-day-container">
+					                <span class="schedule-p-span"> <b>Ngày thứ</b> </span>
+					                <div class="schedule-step" th:text="${schedule.step}"></div>
+					            </div>
+					            <div class="schedule-activity-container">
+					                <pre class="schedule-activity" th:text="${schedule.activity}"></pre>
+					            </div>
+					        </p>
+					    </div>
+					</div>
+
+						
 						<div id="reviews" class="tab-content">
 							<div class="container4">
 								<div class="message">Đánh giá tour theo cảm nhận của bạn
@@ -215,7 +223,8 @@
 			</div>
 		</div>
 	</div>
-	<script src="../js/detailTour.js"></script>
 	<script src="/js/header.js"></script>
+	<script src="../js/detailTour.js"></script>
+	
 </body>
 </html>
