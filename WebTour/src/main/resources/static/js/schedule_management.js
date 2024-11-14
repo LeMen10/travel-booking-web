@@ -38,7 +38,6 @@ async function showPerPage(page) {
 			const data = await response.json();
 			const tourTable = document.getElementById("tour-table");
 			tourTable.innerHTML = ""; // Xóa dữ liệu hiện tại
-
 			data.content.forEach(tour => {
 				const row = document.createElement("tr");
 				row.innerHTML = `

@@ -27,12 +27,16 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 //	@Query("SELECT t FROM Tours t WHERE LOWER(t.tourName) LIKE LOWER(CONCAT('%', :tourName, '%'))")
 //	Page<Tours> findByTourNameContainingIgnoreCase(@Param("tourName") String tourName, Pageable pageable);
 
-	@Query("SELECT t FROM Tours t WHERE "
+	@Query("SELECT t.tourId, t.departure, t.tourName, t.price, t.endDate, t.startDate, i.imageId"
+			+ " FROM Tours t JOIN Image i ON i.tours.tourId = t.tourId WHERE "
 	        + "(:tourName IS NULL OR LOWER(t.tourName) LIKE LOWER(CONCAT('%', :tourName, '%'))) "
 	        + "AND (:startDate IS NULL OR t.startDate = :startDate) "
 	        + "AND (:departure IS NULL OR LOWER(t.departure) LIKE LOWER(CONCAT('%', :departure, '%'))) "
-	        + "AND (:destination IS NULL OR LOWER(t.destination) LIKE LOWER(CONCAT('%', :destination, '%')))")
-	Page<Tours> findTours(@Param("tourName") String tourName,
+	        + "AND (:destination IS NULL OR LOWER(t.destination) LIKE LOWER(CONCAT('%', :destination, '%'))) "
+	        + "AND t.status = true "
+	        + "AND t.originalId IS NULL "
+	        + "GROUP BY t.tourId")
+	Page<Object[]> findTours(@Param("tourName") String tourName,
 	                      @Param("startDate") Date startDate,
 	                      @Param("departure") String departure,
 	                      @Param("destination") String destination,
@@ -46,11 +50,29 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	@Query("SELECT t FROM Tours t WHERE t.startDate > CURRENT_DATE AND t.tourId NOT IN "
 			+ "(SELECT pd.tourId FROM Promotiondetail pd WHERE pd.promotions.promotionId = :promotionId)")
 	List<Tours> getToursAboutToBegin(@Param("promotionId") long promotionId);
+	
+	@Transactional
+	@Modifying
+	@Query(value = "SELECT * FROM tours\r\n"
+			+ "ORDER BY tours.tour_id ASC", 
+	        nativeQuery = true)
+	List<Object[]> getTours();
 
 	//tìm kiếm tên tour với phân trang
 	@Transactional
 	@Query(value = "SELECT * FROM tours t WHERE t.tour_name LIKE CONCAT('%', :tourName, '%') AND status = true", nativeQuery = true)
 	Page<Tours> searchTourName(@Param("tourName") String tourName, Pageable pageable);
 	
+	@Query("SELECT t FROM Tours t WHERE t.originalId IS NULL AND t.status = true")
+	Page<Tours> findAllByOriginalIdIsNull(Pageable pageable);
+	
+	@Query("SELECT t FROM Tours t WHERE t.originalId IS NULL AND t.status = true")
+	List<Tours> findAllByOriginalIdIsNullNoPage();
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE Tours t SET t.status = false WHERE t.tourId = :tourId")
+	void updateStatusByTourId(@Param("tourId") Long tourId);
+
 
 }

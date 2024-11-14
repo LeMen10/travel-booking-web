@@ -19,7 +19,9 @@
 			    gap: 20px; /* Khoảng cách giữa các tour */
 			    justify-content: flex-start; /* Căn đều các thẻ tour */
 			}
-			
+			#list-tour{
+			    justify-content: flex-start;
+			    }
 			.card {
 			    background-color: #fff;
 			    border: 1px solid #e0e0e0;
@@ -46,14 +48,14 @@
 			}
 			
 			.card img {
-			    transition: transform 0.3s ease; /* Hiệu ứng chuyển đổi cho ảnh */
-    width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều rộng */
-    height: auto;
-    object-fit: cover; /* Đảm bảo ảnh không bị méo */
-			}
-			.card:hover img {
-    transform: scale(1.1); /* Phóng to nhẹ ảnh khi hover */
-}
+			transition: transform 0.3s ease; /* Hiệu ứng chuyển đổi cho ảnh */
+		    width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều rộng */
+		    height: 185px;
+		    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+					}
+					.card:hover img {
+		    transform: scale(1.1); /* Phóng to nhẹ ảnh khi hover */
+		}
 			
 			.card-content {
 			    padding: 15px;
@@ -132,16 +134,16 @@
 </head>
 <body>
 	<header id="header"></header>
-    <div class="container">
+    <div id="list-tour" class="container">
         
-            <div  class="card" th:each="tour : ${searchResults}" onclick="linktoDetailTour(this)" th:attr="data-id=${tour.tourId}">
-                <img src="/imagess/vinhhalong.jpg">
+            <div  class="card" th:each="tour : ${searchResults}" onclick="linktoDetailTour(this)" th:attr="data-id=${tour[0]}">
+                <img th:src="@{'/image/' + ${tour[6]}}">
                 <div class="card-content" >
                     <p>
                         <i class="fas fa-map-marker-alt icon"></i>
-                        Khởi hành từ: <span th:text="${tour.departure}">Địa điểm khởi hành</span>
+                        Khởi hành từ: <span th:text="${tour[1]}">Địa điểm khởi hành</span>
                     </p>
-                    <h3  th:text="${tour.tourName}">Tên tour</h3>
+                    <h3  th:text="${tour[2]}">Tên tour</h3>
                     <p class="rating">
                         <i class="fas fa-star"></i>    
                         <i class="fas fa-star"></i>
@@ -150,13 +152,13 @@
                         <i class="fas fa-star"></i>
                     </p>
                     <p class="price">
-                        <span class="tourPrice" th:text="${tour.price}"></span>
+                        <span class="tourPrice" th:text="${tour[3]}"></span>
                     </p>
                     <p class="time">
                         <i class="fas fa-clock icon"></i>
                         Thời gian:
 					    <span class="tour-duration"
-					          th:attr="data-start-date=${tour.startDate}, data-end-date=${tour.endDate}">
+					          th:attr="data-start-date=${tour[4]}, data-end-date=${tour[5]}">
 					    </span>
                     </p>
                 </div>
@@ -165,71 +167,28 @@
 
     <!-- Pagination -->
     <div class="pagination-container">
-        <ul class="pagination">
+        <ul class="pagination" id="pagination">
             <li th:if="${currentPage > 0}">
-                <button th:onclick="|window.location.href='@{/search(s=${searchParam}, page=${currentPage - 1}, size=8)}'|">
+                <button th:attr="onclick='loadPage(' + (${currentPage - 1}) + ')'">
                     <i class="fas fa-chevron-left icon"></i>
                 </button>
             </li>
 
             <li th:each="i : ${#numbers.sequence(1, totalPages)}">
-                <a th:href="@{/search(s=${searchParam}, page=${i - 1}, size=8)}"
+                <a th:attr="onclick='loadPage(' + (${i - 1}) + ')'"
                    th:text="${i}"
                    th:class="${currentPage == i - 1} ? 'current' : ''"></a>
             </li>
 
             <li th:if="${currentPage + 1 < totalPages}">
-                <button th:onclick="|window.location.href='@{/search(s=${searchParam}, page=${currentPage + 1}, size=8)}'|">
+                <button th:attr="onclick='loadPage(' + (${currentPage + 1}) + ')'">
                     <i class="fas fa-chevron-right icon"></i>
                 </button>
             </li>
         </ul>
     </div>
     <div id="footer"></div>
-    <script type="text/javascript">document.addEventListener("DOMContentLoaded", function() {
-        // Lấy tất cả các phần tử có chứa tour-duration
-        const tourDurations = document.querySelectorAll('.tour-duration');
-        
-        tourDurations.forEach(function(element) {
-            // Lấy giá trị ngày bắt đầu và ngày kết thúc từ data attributes
-            const startDate = new Date(element.getAttribute('data-start-date'));
-            const endDate = new Date(element.getAttribute('data-end-date'));
-			
-            // Tính khoảng thời gian giữa ngày kết thúc và ngày bắt đầu (đơn vị là milliseconds)
-            const timeDifference = endDate - startDate;
-            
-            // Tính số ngày bằng cách chia milliseconds cho số milliseconds trong 1 ngày
-            const days = timeDifference / (1000 * 60 * 60 * 24)+1;
-            
-            // Định dạng thời gian hiển thị theo dạng 'XN YĐ'
-            // Thông thường số đêm sẽ bằng số ngày trừ đi 1
-            const nights = days - 1;
-            
-            // Kiểm tra nếu days >= 0 thì hiển thị, nếu không sẽ hiển thị giá trị mặc định
-            if (days > 0) {
-                element.textContent = `${days}N${nights}Đ`; // Ví dụ: 3N2Đ
-            } else {
-                element.textContent = 'N/A'; // Nếu không hợp lệ
-            }
-        });
-    });
-    function linktoDetailTour(pram){
-    	var tourId = pram.getAttribute("data-id");
-    	console.log(pram);
-    	window.location.href="detail-tour/" + tourId; 
-    }
-    document.addEventListener("DOMContentLoaded", function() {
-        const priceElements = document.querySelectorAll('.tourPrice');
-        priceElements.forEach(function(priceElement) {
-            let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
-            if (!isNaN(price)) {
-                // Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
-                priceElement.textContent = price.toLocaleString('vi-VN') + '₫';
-            }
-        });
-    });
-	
-</script>
 <script src="/js/header.js"></script>
+<script src="/js/search.js"></script>
 </body>
 </html>

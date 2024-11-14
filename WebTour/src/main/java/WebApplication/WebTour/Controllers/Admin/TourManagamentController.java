@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 //import ch.qos.logback.core.model.Model;
 import WebApplication.WebTour.Model.Tours;
@@ -34,11 +38,36 @@ public class TourManagamentController {
 	    return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	@GetMapping("/admin/tours-management")
-    public String toursManagementPage(Model model) {
-    	 	List<Tours> tours = toursRepository.findAll();
-    	 	
-    	 	model.addAttribute("tours", tours);
+    public String toursManagementPage(
+    		@RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "8") int size,
+	        Model model) {
+    	 	Pageable pageable = PageRequest.of(page, size);
+    		Page<Tours> searchResults = toursRepository.findAllByOriginalIdIsNull(pageable);
+    		model.addAttribute("tours", searchResults);
+    		model.addAttribute("currentPage", page);
+    	    model.addAttribute("totalPages", searchResults.getTotalPages());
     		return "/Admin/tours_management";
     }
-
+	@GetMapping("/admin/update-status")
+	public ResponseEntity<String> updateTourStatus(@RequestParam Long tourId) {
+	    try {
+	        // Giả sử updateStatusByTourId là phương thức trong repository thực hiện việc cập nhật
+	        toursRepository.updateStatusByTourId(tourId);
+	        return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>("Xóa thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+	@GetMapping("/api-get-tour-management")
+	@ResponseBody
+	public Page<Tours> getToursManagementPage(
+	        @RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "8") int size,
+	        Model model) {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Tours> searchResults = toursRepository.findAllByOriginalIdIsNull(pageable);
+		
+		return searchResults; 
+	}
 }

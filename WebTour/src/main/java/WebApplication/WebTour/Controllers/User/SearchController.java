@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import WebApplication.WebTour.Model.Tours;
 import WebApplication.WebTour.Respository.ToursRepository;
@@ -69,7 +70,7 @@ public class SearchController {
 	    Pageable pageable = PageRequest.of(page, size);
 
 	    // Gọi repository để tìm kiếm theo các điều kiện nếu có
-	    Page<Tours> searchResults = toursRepository.findTours(
+	    Page<Object[]> searchResults = toursRepository.findTours(
 	            tourName != null && !tourName.isEmpty() ? tourName : null,
 	            sqlStartDate, // Sử dụng biến đã chuyển đổi
 	            departure != null && !departure.isEmpty() ? departure : null,
@@ -87,6 +88,36 @@ public class SearchController {
 	    model.addAttribute("totalPages", searchResults.getTotalPages());
 
 	    return "/User/search"; // Trả về trang search.html
+	}
+	
+	@GetMapping("/api-get-search-tour")
+	@ResponseBody
+	public Page<Object[]> getSearchToursData(@RequestParam(value = "tourName", required = false) String tourName,
+	        @RequestParam(value = "startDate", required = false) String startDate,
+	        @RequestParam(value = "departure", required = false) String departure,
+	        @RequestParam(value = "destination", required = false) String destination,
+	        @RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "8") int size,
+	        Model model) {
+		java.sql.Date sqlStartDate = null;
+	    if (startDate != null && !startDate.isEmpty()) {
+	        try {
+	            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày người dùng nhập
+	            java.util.Date parsedDate = sdf.parse(startDate); // Phân tích ngày tháng
+	            sqlStartDate = new java.sql.Date(parsedDate.getTime()); // Chuyển đổi sang java.sql.Date
+	        } catch (ParseException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    // Tạo đối tượng Pageable để thực hiện phân trang
+	    Pageable pageable = PageRequest.of(page, size);
+	    return  toursRepository.findTours(
+	            tourName != null && !tourName.isEmpty() ? tourName : null,
+	            sqlStartDate, // Sử dụng biến đã chuyển đổi
+	            departure != null && !departure.isEmpty() ? departure : null,
+	            destination != null && !destination.isEmpty() ? destination : null,
+	            pageable
+	    );
 	}
 	
 }

@@ -78,6 +78,8 @@ public class PaymentController {
 	PromotiondetailRepository promotiondetailRepository;
 	@Autowired
 	ImageRepository imageRepository;
+	
+	
 
 	// lấy id booking (có user trong đó để hiện thị t/tin user lên trang) vừa tạo và
 	// mở trang payment
