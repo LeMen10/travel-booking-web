@@ -14,4 +14,5 @@ import WebApplication.WebTour.Model.Tours;
 public interface ImageRepository extends JpaRepository<Image, Long>{
 	// sql của hàm List<Image> findByTours với tour là thực thể : select * from image where tour_id=?
 	List<Image> findByTours(Tours tours);
+	
 }

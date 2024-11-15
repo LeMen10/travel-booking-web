@@ -166,7 +166,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="pagination-container">
+    <div class="pagination-container" th:if="${totalPages > 1}">
         <ul class="pagination" id="pagination">
             <li th:if="${currentPage > 0}">
                 <button th:attr="onclick='loadPage(' + (${currentPage - 1}) + ')'">
