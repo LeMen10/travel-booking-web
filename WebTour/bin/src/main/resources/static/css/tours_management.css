@@ -1,0 +1,371 @@
+@charset "UTF-8";
+
+.tabs {
+	display: flex;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 20px;
+}
+
+button.applied {
+    background-color: #28a745;
+    color: white;             
+    cursor: not-allowed;  
+}
+
+
+.tabs a {
+	padding: 10px 20px;
+	text-decoration: none;
+	color: #3498db;
+	border: 1px solid #ddd;
+	border-bottom: none;
+	border-radius: 5px 5px 0 0;
+	margin-right: 10px;
+}
+
+.small-column {
+    width: 25%;
+}
+
+.mid-column{
+	width: 6%;
+}
+
+.large-column {
+    width: 8%;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+
+.tabs a.active {
+	background-color: white;
+	color: #333;
+	border-bottom: 1px solid white;
+}
+
+.title-promotion {
+	margin: 0;
+}
+
+.tab-title-promotion {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.random-string {
+	font-size: 13px;
+	text-decoration: underline;
+	color: #1b5ec7;
+}
+
+.random-string:hover {
+	cursor: pointer;
+}
+
+.datetime-start, .datetime-end {
+	border: 1px solid var(--border-color);
+    border-radius: 6px;
+	padding: 4px;
+}
+
+
+.datetime-start:hover, .datetime-end:hover {
+	cursor: pointer;
+}
+
+.description{
+	border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 4px 12px;
+}
+
+.create-promotion-btn {
+	padding: 10px;
+	border-radius: 4px;
+	background-color: #3498db;
+	color: white;
+	font-weight: 500;
+}
+
+.create-promotion-btn:hover {
+	cursor: pointer;
+	background-color: #3288de;
+}
+
+.filter {
+	display: flex;
+	margin-bottom: 20px;
+}
+
+.filter input[type="text"] {
+	width: 300px;
+	padding: 5px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+}
+
+.filter button {
+	padding: 5px 18px;
+	background-color: #3498db;
+	color: white;
+	border: none;
+	border-radius: 4px;
+}
+
+.filter button:hover {
+	cursor: pointer;
+	background-color: #3288de;
+	padding: 5px 18px;
+	color: white;
+	border: none;
+	border-radius: 3px;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.status {
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 3px;
+	color: white;
+}
+
+.status.active {
+	background-color: #2ecc71;
+}
+
+.status.inactive {
+	background-color: #e74c3c;
+}
+
+.status.pending {
+	background-color: #f1c40f;
+}
+#id{
+	width: 4%;
+}
+.icon-action {
+    color: #666; /* Màu sắc mặc định cho icon */
+    font-size: 26px;
+    margin: 0 5px;
+    transition: color 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+
+.icon-action:hover {
+    color: #007bff; /* Màu sắc khi hover, có thể thay đổi tùy ý */
+    transform: scale(1.2); /* Tăng kích thước icon khi hover */
+}
+
+.edit-icon:hover {
+    color: #28a745; /* Màu cho icon chỉnh sửa khi hover */
+}
+
+.delete-icon:hover {
+    color: #dc3545; /* Màu cho icon xóa khi hover */
+}
+.table-container table {
+    font-size: 16px; /* Kích thước chữ mặc định, bạn có thể thay đổi theo ý muốn */
+}
+.table-container th, .table-container td {
+    font-size: 12px; /* Thừa hưởng kích thước chữ từ thẻ <table> */
+    padding: 8px 12px; /* Tùy chỉnh khoảng cách trong ô bảng */
+}
+
+/* Tuỳ chỉnh kích thước chữ của tiêu đề bảng */
+.table-container thead th {
+    font-size: 16px; /* Kích thước chữ lớn hơn cho tiêu đề nếu cần */
+    font-weight: 500; /* Độ đậm chữ cho tiêu đề */
+}
+
+/* Tạo hiệu ứng hover cho các hàng */
+.table-container tbody tr:hover {
+    background-color: #f1f1f1; /* Màu nền khi hover */
+}
+.header-content {
+    display: flex;
+    justify-content: space-between; /* Đẩy h2 và nút sang hai bên */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    margin-bottom: 20px;
+}
+
+/* Tùy chỉnh phong cách cho nút "Tạo Tour" */
+.create-tours-btn {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hiệu ứng khi hover vào nút */
+.create-tours-btn:hover {
+    background-color: #0056b3;
+}
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px; /* Kích thước icon */
+    color: #333; /* Màu của icon */
+    cursor: pointer;
+    transition: color 0.3s; /* Hiệu ứng màu khi hover */
+}
+
+.close-icon:hover {
+    color: #f44336; /* Màu khi hover */
+}
+/* Định dạng căn chỉnh ngang cho các cặp trường nhập liệu */
+.form-row {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa các cột */
+    margin-top: 10px;
+}
+/* Vùng tối bao quanh */
+.overlay {
+    display: none; /* Ẩn mặc định */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Màu tối */
+    z-index: 100; /* Trên cùng */
+}
+
+/* Form hiển thị ở giữa màn hình */
+.form-popup {
+    display: none; /* Ẩn mặc định */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+     border-radius: 5px; 
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    z-index: 101; /* Trên vùng tối */
+    width: 40%;
+    height: 90%;
+    overflow-y: auto;
+}
+.form-popup::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px; /* Bo tròn thanh cuộn */
+}
+.form-popup::-webkit-scrollbar {
+    width: 8px; /* Độ rộng của thanh cuộn */
+}
+.form-popup::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px; /* Bo tròn phần trượt */
+}
+/* Các thành phần trong form */
+.form-popup h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.form-popup label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.form-popup input, .form-popup textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-popup button {
+    margin-top: 15px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Nút Lưu */
+.form-popup button[type="submit"] {
+     margin-top: 15px;
+    padding: 10px;
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a,
+        .pagination button {
+            text-decoration: none;
+            color: #1e88e5;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        .pagination a:hover,
+        .pagination button:hover {
+            background-color: #eee;
+        }
+
+        .pagination .current {
+            background-color: #1e88e5;
+            color: white;
+        }
+
+        .pagination .icon {
+            font-size: 18px;
+        }
+
+.col-id { width: 5%; }
+.col-tour-name { width: 15%; }
+.col-departure { width: 10%; }
+.col-destination { width: 10%; }
+.col-start-date { width: 10%; }
+.col-end-date { width: 10%; }
+.col-transport { width: 9%; }
+.col-description { width: 15%; }
+.col-quantity { width: 5%; }
+.col-price { width: 10%; }
+.col-action { width: 10%; }

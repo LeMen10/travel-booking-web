@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Refund</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<link rel="stylesheet" type="text/css" href="../css/refund.css">
+<body>
+	<header id="header"></header>
+	<div class="order-container" id="booking-id" th:attr="data-id=${bookingNotification.bookingId}">
+		<div class="order-header">
+			<strong>M&N Travel Cảm ơn bạn đã tin tưởng chúng tôi <i
+				class="fa-regular fa-face-kiss-wink-heart icon-heart"></i>
+			</strong>
+		</div>
+		<div class="order-confirmation">
+			<i class="fas fa-check-circle icon-check" id="icon-status"></i>
+			<strong class="info-title"> THÔNG  TIN BOOKING</strong>
+			<div class="confirmation-text"></div>
+		</div>
+		<div class="order-info">
+			<div>
+				<div class="info-item">
+					<label class="info-label"><b>Khách hàng: </b></label>
+					<p class="info-content" th:text="${userNotification.fullName}"></p>
+				</div>
+				<div class="info-item">
+					<label class="info-label"><b>Email: </b></label>
+					<p class="info-content" th:text="${userNotification.email}"></p>
+				</div>
+				<div class="info-item">
+					<p class="info-subtitle">Phương thức thanh toán</p>
+					<p class="info-content"
+						th:text="${paymentNotification.paymentMethod.name}">0</p>
+				</div>
+			</div>
+		</div>
+		<div class="order-summary">
+			<div class="summary-item">
+				<label class="summary-label"><b>Mã tour: </b></label>
+				<p class="summary-content"
+					th:text="${bookingNotification.bookingId}"></p>
+			</div>
+			<div class="item-details">
+				<b class="item-name" th:text="${tourNotification.tourName}">Du
+					Lịch</b>
+				<div th:each="ticketBooking : ${ticketBookingList}">
+					<div class="item-quantity">
+						<p class="item-label" th:text="${ticketBooking.ticket.name}">: </p>
+						<p class="item-value" th:text="${ticketBooking.quantity}"></p>
+					</div>
+				</div>
+				<div class="item-departure">
+					<label class="departure-label">Ngày đi: </label>
+					<p class="departure-content"
+						th:text="${tourNotification.startDate}"></p>
+				</div>
+				<div class="item-departure">
+					<label class="departure-label">khởi hành: </label>
+					<p class="departure-content"
+						th:text="${tourNotification.departure}"></p>
+				</div>
+				<div class="item-departure">
+					<label class="departure-label">Đến: </label>
+					<p class="departure-content"
+						th:text="${tourNotification.destination}"></p>
+				</div>
+			</div>
+			<div class="order-total">
+				<b>Thành tiền</b> <b class="total-price"
+					th:text="${bookingNotification.totalPrice}">0đ</b>
+			</div>
+		</div>
+		<div class="order-actions">
+			<button class="btn-continue" id="button-refund">
+				<i class="fa-regular fa-credit-card"></i> Trả tiền cho bố
+			</button>
+			<button class="btn-back">
+				<i class="fa-solid fa-circle-left"></i> Hôi đổi ý gòi
+			</button>
+		</div>
+	</div>
+<div id="footer"></div>
+	<div id="notification"></div>
+	<script src="/js/header.js"></script>
+	<script src="/js/notification.js"></script>
+	<script src="/js/refund.js"></script>
+</body>
+</html>
