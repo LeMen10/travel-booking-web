@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import WebApplication.WebTour.Model.Promotions;
 
 @Controller
-public class PromotionProgramController {
-	@GetMapping("/promotion-program")
-	public String customerManagementPage(Model model) {
-		return "/User/promotion_program";
+public class voucherController {
+	@GetMapping("/vouchers")
+	public String voucherPage(Model model) {
+		return "/User/vouchers";
 	}
 }

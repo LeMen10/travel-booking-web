@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import WebApplication.WebTour.Model.PromotionProgram;
-import WebApplication.WebTour.Model.Promotions;
 import WebApplication.WebTour.Respository.PromotiondetailRepository;
 import WebApplication.WebTour.Respository.PromotionsRepository;
 import WebApplication.WebTour.Service.PromotionProgramService;
