@@ -1,0 +1,118 @@
+@charset "UTF-8";
+body {
+	background: url("../imagess/bg2.png");
+	background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#header {
+	background: #fffffff0;
+}
+
+.order-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fffffff0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.order-header {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #50e0eb;
+}
+
+.icon-heart {
+    color: #ff5757;
+}
+
+.order-confirmation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.icon-check {
+    font-size: 2rem;
+    color: #05991e;
+    margin-right: 10px;
+}
+
+.order-info, .order-summary {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.info-item, .item-quantity, .item-departure, .item-details {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-label, .departure-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.info-content, .departure-content, .item-value {
+    margin: 0;
+    color: #555;
+}
+
+.item-name {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.order-total {
+    margin-top: 20px;
+    text-align: right;
+    font-size: 1.2rem;
+    color: #d9534f;
+}
+
+.order-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-continue {
+    background-color: #ff4949;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-back {
+    background-color: #05991e;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-continue:hover {
+    background-color: #047a15;
+}
+
+.icon-card {
+    margin-right: 5px;
+}

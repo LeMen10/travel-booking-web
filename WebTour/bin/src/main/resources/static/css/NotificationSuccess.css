@@ -1,0 +1,244 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+    display: block;
+}
+
+.container-content {
+	margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 30px;
+    width: 850px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    font-size: 28px;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.confirmation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.confirmation i {
+    font-size: 30px;
+    color: #4caf50;
+    margin-right: 10px;
+}
+
+.confirmation-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+}
+
+.order-info {
+    margin-bottom: 30px;
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.order-info p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.lable-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 5px;
+}
+
+.lable-info p {
+    margin: 0;
+}
+
+.order-summary {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+}
+
+.order-summary .item {
+	margin-top: 3%;
+	padding-left: 14%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.order-summary img {
+    border-radius: 8px;
+    margin-right: 15px;
+    border: 1px solid #ddd;
+}
+
+.item-info {
+    font-size: 16px;
+}
+
+.item-info b {
+    font-size: 18px;
+    color: #333;
+}
+
+.div-quantity {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    width: 30%;
+}
+
+.order-summary .total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #007bff;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.actions button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.actions button:hover {
+    background-color: #0056b3;
+}
+
+.actions button i {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+.actions button:last-child {
+    background-color: #28a745;
+}
+
+.actions button:last-child:hover {
+    background-color: #218838;
+}
+
+.item-info {
+	width: 76%;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.item-info b {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.div-quantity {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.div-quantity p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.div-departure {
+	margin-top: 4%;
+	justify-content: space-between;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.div-departure label {
+    font-weight: bold;
+    width: 120px;
+    color: #333;
+}
+
+.departure-p {
+    margin: 0;
+    color: #555;
+}
+
+.quantity-p {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.item-info .div-quantity:last-child {
+    margin-bottom: 0;
+    width: 94%;
+}
+
+ .lable-bookingId{
+	display: flex;
+}
+.lable-p{
+	padding-left: 82%;
+    margin: 0;
+}
+/*.div-departure{
+	display: flex;
+	margin: 5% 0;
+}
+.departure-p{
+	margin: 0 6%;
+}
+.div-quantity {
+    margin: 0;
+    padding: 0;
+}
+.div-quantity p {
+    margin: 0;
+    padding: 5% 0 ;
+} */

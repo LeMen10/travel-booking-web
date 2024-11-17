@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Schedule Management</title>
+<link rel="stylesheet" href="../css/schedule_management.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/css/home_user.css">
+</head>
+<body>
+<header id="header"></header>
+	<div class="container-content">
+
+		<div class="main-content">
+			<div class="header-content">
+				<div class="search-bar">
+					<input id="search-input" placeholder="Search..." type="text" /> <i
+						class="fas fa-search" id="search-icon"> </i>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="table-container">
+			<table>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Tour</th>
+						<th>Phương tiện</th>
+						<th>Khởi hành</th>
+						<th>Đến</th>
+						<th>Ngày đi</th>
+						<th>Ngày kết thúc</th>
+						<th>Giá</th>
+						<th>Trạng thái</th>
+					</tr>
+				</thead>
+				<tbody id="tour-table">
+					<tr th:each="tour : ${tourPage.content}">
+						<td th:text="${tour.tourId}">Tour ID</td>
+						<td th:text="${tour.tourName}">Tên Tour</td>
+						<td th:text="${tour.transport}">Phương tiện</td>
+						<td th:text="${tour.departure}">Điểm khởi hành</td>
+						<td th:text="${tour.destination}">Điểm đến</td>
+						<td th:text="${#dates.format(tour.startDate, 'yyyy-MM-dd')}">Ngày
+							bắt đầu</td>
+						<td th:text="${#dates.format(tour.endDate, 'yyyy-MM-dd')}">Ngày
+							kết thúc</td>
+						<td th:text="${tour.price}">Giá</td>
+						<td>
+							<button type="button" class="btn-edit btn-primary"
+								 th:onclick="'window.location.href=\'/api-edit-schedule/' + ${tour.tourId} + '\''">
+								Edit
+							</button>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+		</div>
+
+
+		<!-- Pagination -->
+		<div class="pagination-container">
+			<ul class="pagination" id="pagination">
+				<li th:if="${currentPage > 0}">
+					<button
+						th:attr="onclick='showPerPage(' + (${currentPage - 1}) + ')'">
+						<i class="fas fa-chevron-left icon"></i>
+					</button>
+				</li>
+
+				<li th:each="i : ${#numbers.sequence(1, totalPages)}">
+					<button th:attr="onclick='showPerPage(' + (${i - 1}) + ')'"
+						th:class="${currentPage == i - 1} ? 'current' : ''">
+						<span th:text="${i}"></span>
+					</button>
+				</li>
+
+				<li th:if="${currentPage + 1 < totalPages}">
+					<button
+						th:attr="onclick='showPerPage(' + (${currentPage + 1}) + ')'">
+						<i class="fas fa-chevron-right icon"></i>
+					</button>
+				</li>
+			</ul>
+		</div>
+
+		</ul>
+	</div>
+
+	</div>
+	<script src="/js/header.js"></script>
+	<script src="../js/schedule_management.js"></script>
+</body>
+</html>
