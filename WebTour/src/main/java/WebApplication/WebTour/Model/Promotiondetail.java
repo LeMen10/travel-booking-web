@@ -57,7 +57,7 @@ public class Promotiondetail implements Serializable{
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		this.status = status;
 	}
 
 	public Long getPromotionDetailId() {
