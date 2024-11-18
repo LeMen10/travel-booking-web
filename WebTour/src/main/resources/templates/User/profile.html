@@ -142,6 +142,7 @@
             <p><a th:href="@{/account(userId=${user.user_id})}">Thông tin tài khoản</a></p>
             <p><a th:href="@{/account/get-order(userId=${user.user_id})}">Đơn hàng của bạn</a></p>
             <p><a href="\account\change-password">Đổi mật khẩu</a></p>
+            <p><a th:href="@{/account/get-vouchers(userId=${user.user_id})}">Mã giảm giá của bạn</a></p>
         </div>
         <div class="right">
             <h2>THÔNG TIN TÀI KHOẢN</h2>
@@ -150,10 +151,10 @@
 		    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
 		    <p><strong>Điện thoại:</strong> <span th:text="${user.phone}"></span></p>
 		    <p><strong>Địa chỉ:</strong> 
-		        <span th:text="${address.detail}"></span>, 
-		        <span th:text="${wardUser.name}"></span>, 
+		        <!-- <span th:text="${address.detail}"></span>,  -->
+		        <!-- <span th:text="${wardUser.name}"></span>, 
 		        <span th:text="${districtUser.name}"></span>, 
-		        <span th:text="${provinceUser.name}"></span>
+		        <span th:text="${provinceUser.name}"></span> -->
 		    </p>
 		    <button id="btn-fix-info">Sửa thông tin</button>
         </div>
@@ -190,7 +191,7 @@
         
         <!-- Hiển thị địa chỉ người dùng -->
         <label for="address">Địa chỉ:</label>
-        <input type="text" id="address" name="address" th:value="${address.detail}">
+        <!-- <input type="text" id="address" name="address" th:value="${address.detail}"> -->
 
         <!-- Hiển thị tỉnh/thành phố -->
         <label for="province">Tỉnh/Thành phố:</label>

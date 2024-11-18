@@ -58,22 +58,22 @@ public class ProfileController {
 	public String showPageProfile( @RequestParam(value = "userId", required = false) Long userId,Model model) {
 		
 		Optional<User> user = userRepository.findById(userId);
-		Address address = user.get().getAddress();
-		Province provinceUser = address.getProvince();
-		Ward wardUser = address.getWard();
-		District districtUser = address.getDistrict();
-		List<Province> province = provinceRepository.findAll();
-		List<District> district = districtRepository.findAll();
-		List<Ward> ward = wardRepository.findAll();
-		model.addAttribute("province",province);
-		model.addAttribute("district",district);
-		model.addAttribute("ward",ward);
+//		Address address = user.get().getAddress();
+//		Province provinceUser = address.getProvince();
+//		Ward wardUser = address.getWard();
+//		District districtUser = address.getDistrict();
+//		List<Province> province = provinceRepository.findAll();
+//		List<District> district = districtRepository.findAll();
+//		List<Ward> ward = wardRepository.findAll();
+//		model.addAttribute("province",province);
+//		model.addAttribute("district",district);
+//		model.addAttribute("ward",ward);
 		
 		model.addAttribute("user", user.get());
-		model.addAttribute("address", address);
-		model.addAttribute("provinceUser", provinceUser);
-		model.addAttribute("wardUser", wardUser);
-		model.addAttribute("districtUser", districtUser);
+//		model.addAttribute("address", address);
+//		model.addAttribute("provinceUser", provinceUser);
+//		model.addAttribute("wardUser", wardUser);
+//		model.addAttribute("districtUser", districtUser);
 		
 		
         return "/User/profile";

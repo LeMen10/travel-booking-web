@@ -40,6 +40,9 @@ public class Promotions implements Serializable{
     
     @Column(name = "status")
     private boolean status = true;
+    
+    @Column(name = "cumulative_points")
+    private int cumulativePoints;
 
 	public Long getPromotionId() {
 		return promotionId;
@@ -97,6 +100,12 @@ public class Promotions implements Serializable{
 		this.status = status;
 	}
 
-	
+	public int getCumulativePoints() {
+		return cumulativePoints;
+	}
+
+	public void setCumulativePoints(int cumulativePoints) {
+		this.cumulativePoints = cumulativePoints;
+	}
     
 }

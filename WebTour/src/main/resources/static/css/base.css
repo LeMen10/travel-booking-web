@@ -135,6 +135,14 @@ ul {
 	margin-right: 10px;
 }
 
+.mt-10{
+	margin-top: 10px;
+}
+
 .mr-50{
 	margin-right: 50px;
+}
+
+.fs-14{
+	font-size: 14px;
 }
