@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
+	const loadingScreen = document.getElementById('loading-screen');
+	    if (loadingScreen) {
+	        loadingScreen.style.display = 'none';
+	    }
+
 	const bookingID = sessionStorage.getItem("bookingID");
 	const tourID = sessionStorage.getItem("tourID");
 	const userID = sessionStorage.getItem("userID");
@@ -9,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	console.log("totalPrice : " + totalPrice);
 
 	sessionStorage.removeItem("bookingID");
-	
+
 	document.getElementById('payment-online').addEventListener("change", function(event) {
 		showMethodPaypal(event.target.checked);
 	});
@@ -65,25 +70,26 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	})
 
-
+	//lấy các dữ liệu trên url khi ấn nút thanh toán từ trang đơn hàng của bạn sang thanh toán
 	const urlParams = new URLSearchParams(window.location.search);
 	const totalPriceOrder = urlParams.get('totalPrice');
-	console.log("totalPriceOrder" , totalPriceOrder);
+	console.log("totalPriceOrder", totalPriceOrder);
 	if (totalPriceOrder) { // Kiểm tra biến totalPriceOrder
-	        // Định dạng totalPrice thành tiền tệ VND
-	        const formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPriceOrder);
-			console.log("formattedPrice" , formattedPrice);
-	        // Cập nhật vào các phần tử HTML
-	        document.getElementById("temp-price").innerText = formattedPrice;
-	        document.getElementById("total-price").innerText = formattedPrice;
-	    } else {
-	        console.warn("Không tìm thấy totalPrice trong URL.");
-	    }
+		// Định dạng totalPrice thành tiền tệ VND
+		const formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPriceOrder);
+		console.log("formattedPrice", formattedPrice);
+		// Cập nhật vào các phần tử HTML
+		document.getElementById("temp-price").innerText = formattedPrice;
+		document.getElementById("total-price").innerText = formattedPrice;
+	} else {
+		console.warn("Không tìm thấy totalPrice trong URL.");
+	}
 	let isPayPalInitialized = false;
 	var bt_pay = document.getElementById("bt-pay").addEventListener("click", async function() {
-		/*if(!checkInformationInput()){
+		if (!checkInformationInput()) {
 			return;
-		}*/
+		}
+		console.log("Button Pay clicked!");
 		var div_paypal = document.getElementById("paypal-button-container");
 
 		// Kiểm tra phương thức thanh toán
@@ -94,38 +100,28 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert("Vui lòng chọn phương thức thanh toán.");
 			return;
 		}
-		removePaypalButtons();
 		if (paymentMethod === 2) { //online
 			if (!isPayPalInitialized) {
 				await createPayment();
-				div_paypal.style.display = "block";
 				payPal();
-				isPayPalInitialized = true;
-				
-			} else {
 				div_paypal.style.display = "block";
+				isPayPalInitialized = true;
+
 			}
-		} else if (paymentMethod === 1) { //cash
-			div_paypal.style.display = "none";
+			else {
+				if (div_paypal.style.display === "none") {
+					div_paypal.style.display = "block";  // Hiển thị PayPal
+				} else {
+					div_paypal.style.display = "none";  // Ẩn PayPal
+				}
+			}
 
-
-			await createPayment();
-			//await updateTotalPrice();
-
-			const bookingId = document.getElementById("id-booking").getAttribute("data-id");
-			await updatePaymentStatus(bookingId);
-			await createAddress();
-			alert("Thanh toán thành công!");
-
-			window.location.href = `/notificationSuccess/${bookingId}`;
 		}
+
 	});
 
 	document.getElementById("paypal-button-container").style.display = "none"; // Ẩn div PayPal ban đầu
-
-
 	getAllProvince();
-	payPal();
 
 })
 // Hàm kiểm tra email
@@ -339,7 +335,7 @@ function checkInformationInput() {
 	let name = document.getElementById("name").value.trim();
 	let phone = document.getElementById("phone").value.trim();
 	let address = document.getElementById("optional-address").value.trim();
-	let city = document.getElementById("city").value.trim();
+	let city = document.getElementById("province").value.trim();
 	let district = document.getElementById("district").value.trim();
 	let ward = document.getElementById("ward").value.trim();
 
@@ -416,11 +412,11 @@ async function createPayment(captureId, totalPriceUSD) {
 	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
 	var date = document.getElementById("date").innerText;
 	console.log("date  " + date);
-	
+
 	const totalPriceText = document.getElementById("total-price").innerText || document.getElementById("total-price").textContent;
 	const amount = parseFloat(totalPriceText.replace(/[^0-9]/g, '')) || 0;
 	console.log(amount);
-	
+
 	const paymentOnline = document.getElementById('payment-online');
 	const paymentCash = document.getElementById('payment-cash');
 	let promotionCode = document.getElementById("discount-code").value;
@@ -508,7 +504,7 @@ async function payPal() {
 			// Thanh toán thành công
 			return actions.order.capture().then(async function(details) {
 				const captureId = details.purchase_units[0].payments.captures[0].id;
-				        console.log('Capture ID:', captureId, totalPriceUSD);
+				console.log('Capture ID:', captureId, totalPriceUSD);
 				//openDialogSuccess('Thanh toán thành công, ' + details.payer.name.given_name);
 				await createPayment(captureId, totalPriceUSD);
 				await updatePaymentStatus(bookingId);
@@ -527,7 +523,7 @@ async function payPal() {
 //ẩn hiện nút paypal
 function showMethodPaypal(isOnline) {
 	if (isOnline) {
-		
+
 		document.getElementById("bt-pay").style.display = "none"; // Ẩn nút thanh toán tiền mặt
 		var div_paypal = document.getElementById("paypal-button-container");
 		div_paypal.style.display = "block";
@@ -546,6 +542,7 @@ async function removePaypalButtons() {
 		container.removeChild(container.firstChild);
 	}
 	container.style.display = "none"; // Đảm bảo container ẩn sau khi xóa
+	isPayPalInitialized = false;
 }
 
 //kiểm tra mã giảm giá có thuộc về tour, có dùng chưa

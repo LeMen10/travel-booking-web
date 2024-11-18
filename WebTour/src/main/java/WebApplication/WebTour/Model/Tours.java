@@ -3,11 +3,14 @@ package WebApplication.WebTour.Model;
 import java.io.Serializable;
 import java.sql.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -23,8 +26,13 @@ public class Tours implements Serializable{
 	@Column(name = "tour_id")
     private Long tourId;
 
-    @Column(name = "guided_id")
-    private int guidedId;
+	/*
+	 * @Column(name = "guided_id") private int guidedId;
+	 */
+    
+    @ManyToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "guided_id", nullable = true)
+    private Guides guides;
     
     @Column(name = "tour_name")
     private String tourName;
@@ -60,9 +68,7 @@ public class Tours implements Serializable{
     @Column(name = "status")
     private boolean status;
 
-	public int getGuidedId() {
-		return guidedId;
-	}
+
 	
 	public Tours() {
 		super();
@@ -70,7 +76,7 @@ public class Tours implements Serializable{
 
 	public Tours(Tours t) {
 		super();
-		this.guidedId = t.guidedId;
+		this.guides = t.guides;
 		this.tourName = t.tourName;
 		this.transport = t.transport;
 		this.departure = t.departure;
@@ -85,8 +91,14 @@ public class Tours implements Serializable{
 
 
 
-	public void setGuidedId(int guidedId) {
-		this.guidedId = guidedId;
+
+
+	public Guides getGuides() {
+		return guides;
+	}
+
+	public void setGuides(Guides guides) {
+		this.guides = guides;
 	}
 
 	public String getTourName() {
@@ -187,7 +199,7 @@ public class Tours implements Serializable{
 	}
 
 	public void setStatus(boolean status) {
-		status = status;
+		this.status = status;
 	}
 
 	public Long getTourId() {

@@ -50,13 +50,13 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	@Query(value = "SELECT b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
 			+ "SUM(tb.quantity) AS totalQuantity, "
 			+ "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
-			+ "b.total_price, tours.start_date, tours.departure, p.payment_id, tours.tour_id " + "FROM bookings b "
+			+ "b.total_price, tours.start_date, tours.departure, p.payment_id, tours.tour_id, tours.end_date " + "FROM bookings b "
 			+ "LEFT JOIN payments p ON p.payment_id = b.payment_id "
 			+ "LEFT JOIN ticketbooking tb ON tb.booking_id = b.booking_id "
 			+ "LEFT JOIN ticket t ON t.ticket_id = tb.ticket_id " + "JOIN tours tours ON tours.tour_id = b.tour_id "
 			+ "WHERE b.user_id = :userId AND b.status = true "
 			+ "GROUP BY b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
-			+ "b.total_price, tours.start_date, tours.departure, p.payment_id "
+			+ "b.total_price, tours.start_date, tours.departure, p.payment_id, tours.end_date "
 			+ "ORDER BY b.booking_date DESC, b.booking_id DESC ", countQuery = "SELECT COUNT(*) FROM bookings b WHERE b.user_id = :userId AND b.status = true", nativeQuery = true)
 	Page<Object[]> showDataTable(@Param("userId") Long userId, Pageable pageable);
 
@@ -68,15 +68,17 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	@Query(value = "SELECT b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
 			+ "SUM(tb.quantity) AS totalQuantity, "
 			+ "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
-			+ "b.total_price, tours.start_date, tours.departure, p.payment_id, tours.tour_id " + "FROM bookings b "
+			+ "b.total_price, tours.start_date, tours.departure, p.payment_id, tours.tour_id, tours.end_date " + "FROM bookings b "
 			+ "LEFT JOIN payments p ON p.payment_id = b.payment_id "
 			+ "JOIN ticketbooking tb ON tb.booking_id = b.booking_id " + "JOIN ticket t ON t.ticket_id = tb.ticket_id "
-			+ "JOIN tours tours ON tours.tour_id = b.tour_id " + "WHERE b.user_id = :userId AND b.status = true "
+			+ "JOIN tours tours ON tours.tour_id = b.tour_id " 
+			+ "WHERE b.user_id = :userId AND b.status = true "
 			+ "AND (:paymentStatus IS NULL " // lấy hết
-			+ "OR (:paymentStatus = 1 AND p.payment_id IS NOT NULL) "
-			+ "OR (:paymentStatus = 2 AND p.payment_id IS NULL)) "
+			+ "OR (:paymentStatus = 1 AND p.payment_id IS NOT NULL AND p.payment_status != 3 ) "
+			+ "OR (:paymentStatus = 2 AND p.payment_id IS NULL) "
+			+ "OR (:paymentStatus = 3 AND p.payment_id IS NOT NULL AND p.payment_status != 1)) "
 			+ "GROUP BY b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
-			+ "b.total_price, tours.start_date, tours.departure, p.payment_id "
+			+ "b.total_price, tours.start_date, tours.departure, p.payment_id, tours.end_date "
 			+ "ORDER BY b.booking_date DESC, b.booking_id DESC ", nativeQuery = true)
 	Page<Object[]> filterOrderPage(@Param("userId") Long userId, 
 			@Param("paymentStatus") Integer paymentStatus, Pageable pageable);
@@ -150,14 +152,14 @@ public interface BookingsRespository extends JpaRepository<Bookings, Long> {
 	@Query(value = "SELECT b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
 			+ "SUM(tb.quantity) AS totalQuantity, "
 			+ "GROUP_CONCAT(CONCAT(t.name, ': ', tb.quantity) SEPARATOR ', ') AS ticketDetails, "
-			+ "b.total_price, tours.start_date, tours.departure, p.payment_id, tours.tour_id " + "FROM bookings b "
+			+ "b.total_price, tours.start_date, tours.departure, p.payment_id, tours.tour_id, tours.end_date " + "FROM bookings b "
 			+ "LEFT JOIN payments p ON p.booking_id = b.booking_id "
 			+ "LEFT JOIN ticketbooking tb ON tb.booking_id = b.booking_id "
 			+ "LEFT JOIN ticket t ON t.ticket_id = tb.ticket_id " + "JOIN tours tours ON tours.tour_id = b.tour_id "
 			+ "WHERE b.user_id = :userId AND b.status = true "
 			+ "AND tours.departure LIKE CONCAT('%', :searchTerm, '%') "
 			+ "GROUP BY b.booking_id, b.booking_date, p.payment_method, p.payment_status, tours.tour_name, "
-			+ "b.total_price, tours.start_date, tours.departure, p.payment_id "
+			+ "b.total_price, tours.start_date, tours.departure, p.payment_id , tours.end_date "
 			+ "ORDER BY b.booking_date DESC, b.booking_id DESC ", nativeQuery = true)
 	Page<Object[]> searchDeparture(@Param("userId") Long userId, 
 			@Param("searchTerm") String search, Pageable pageable);

@@ -46,6 +46,8 @@ import WebApplication.WebTour.Respository.TicketRepository;
 import WebApplication.WebTour.Respository.ToursRepository;
 import WebApplication.WebTour.Respository.UserRepository;
 import WebApplication.WebTour.Respository.WardRepository;
+import WebApplication.WebTour.Service.BookingService;
+import WebApplication.WebTour.Service.TicketBookingService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,8 +80,10 @@ public class PaymentController {
 	PromotiondetailRepository promotiondetailRepository;
 	@Autowired
 	ImageRepository imageRepository;
-	
-	
+	@Autowired
+	BookingService bookingService;
+	@Autowired
+	TicketBookingService ticketBookingService;
 
 	// lấy id booking (có user trong đó để hiện thị t/tin user lên trang) vừa tạo và
 	// mở trang payment
@@ -146,7 +150,7 @@ public class PaymentController {
 				model.addAttribute("error", "TourPayment không tồn tại!");
 			}
 			// lấy ticketBooking để hiển thị số lượng người lớn và trẻ em
-			List<TicketBooking> ticketBooking = ticketBookingRepository.findTicketBookingById(booking.getBookingId());
+			List<TicketBooking> ticketBooking = ticketBookingService.FindTicketBookingById(booking.getBookingId());
 			if (!ticketBooking.isEmpty()) {
 				model.addAttribute("ticketBookings", ticketBooking);
 				System.out.println(ticketBooking);
@@ -237,7 +241,7 @@ public class PaymentController {
 			@RequestParam("bookingId") Long bookingId) {
 
 		try {
-			int updatedRows = bookingsRespository.updateTotalPrice(totalPrice, bookingId);
+			int updatedRows = bookingService.UpdateTotalPrice(totalPrice, bookingId);
 			if (updatedRows > 0) {
 				return ResponseEntity.ok("Cập nhật totalPrice thành công cho booking với ID: " + bookingId);
 			} else {

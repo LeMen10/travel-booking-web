@@ -532,6 +532,13 @@ pre {
     .sub-image{
     margin-right: 1%;
     }
+    #book-now{
+    	margin-top: 1%;
+    }
+    .main-content .image-thumbnails{
+    	display: block;
+    	width: 102%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -562,5 +569,30 @@ pre {
     .tab {
         padding: 10px; /* Giảm padding của tab */
     }
+    #book-now{
+    	margin-top: 1%;
+    }
+    .main-content .image-thumbnails{
+    	display: block;
+    	width: 102%;
+    }
 }
 
+/* Mã CSS cho màn hình loading */
+.overlay-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Nền mờ */
+    display: none; /* Ẩn mặc định */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Đảm bảo overlay ở trên cùng */
+}
+
+.overlay-loading h1 {
+    width: 50px; /* Kích thước của ảnh loading */
+    height: 50px;
+}

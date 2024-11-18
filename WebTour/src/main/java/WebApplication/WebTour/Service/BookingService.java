@@ -51,4 +51,8 @@ public class BookingService {
         }
         return false;
 	}
+	
+	public int UpdateTotalPrice (float totalPrice, Long bookingId) {
+		return bookingsRespository.updateTotalPrice(totalPrice, bookingId);
+	}
 }
