@@ -29,7 +29,22 @@ document.addEventListener('DOMContentLoaded', function() {
 	var deleteButtons = document.querySelectorAll(".btDelete-in-table");
 	deleteButtons.forEach(function(button) {
 		button.addEventListener('click', function(event) {
-			deleteSchedule(event); 
+			Swal.fire({
+				title: 'Bạn có chắc chắn muốn xóa lịch trình này không?',
+				text: 'Lịch trình sẽ không thể phục hồi sau khi xóa!',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Xóa',
+				cancelButtonText: 'Hủy',
+				reverseButtons: true
+			}).then((result) => {
+				// xác nhận xóa (isConfirmed nút OK)
+				if (result.isConfirmed) {
+					deleteSchedule(event);  
+				} else {
+					console.log("Thao tác xóa đã bị hủy.");
+				}
+			});
 		});
 	});
 
@@ -129,7 +144,7 @@ async function updateSchedule() {
 
 
 // Xóa Schedule
-async function deleteSchedule() {
+async function deleteSchedule(event) {
 	console.log("hàm deleteSchedule được gọi");
 	const scheduleId = event.target.closest('tr').querySelector('[data-id]').getAttribute("data-id");
 	const tourId = document.getElementById("tourId").getAttribute("data-id");

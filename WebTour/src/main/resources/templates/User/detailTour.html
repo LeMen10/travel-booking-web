@@ -65,7 +65,9 @@
 					<!-- Hiển thị hình ảnh chính (hình lớn) -->
 					<img id="main-image" th:if="${images.size() > 0}" th:alt="${images[0].imageCode}"
 						height="400" th:src="@{'/image/' + ${images[0].imageId}}"
-						width="800" /> <img th:if="${images.size() == 0}"
+						width="800" /> 
+						
+						<img th:if="${images.size() == 0}"
 						src="path/to/default-image.jpg" height="400" width="800"
 						alt="Hình ảnh mặc định" />
 
@@ -120,7 +122,7 @@
 						</div>
 					</div>
 					<div class="buttons">
-						<button>Liên hệ tư vấn</button>
+						<button class="btn-contract">Liên hệ tư vấn</button>
 						<button type="button" id="book-now">Đặt ngay</button>
 					</div>
 				</div>
@@ -222,6 +224,10 @@
 				</div>
 			</div>
 		</div>
+		<div id="overlay-loading" class="overlay-loading">
+   			<h1>Đang load</h1>
+		</div>
+		
 	</div>
 	<div id="footer"></div>
 	<script src="/js/header.js"></script>

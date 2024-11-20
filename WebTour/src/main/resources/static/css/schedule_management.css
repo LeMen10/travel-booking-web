@@ -244,6 +244,11 @@ th {
 	margin: 0 2%;
 }
 
+.tour-name{
+	width: 32%;
+}
+
+/*phân trang  */
 .pagination {
 	display: flex;
 	justify-content: center;
@@ -287,6 +292,7 @@ th {
 .current,
 .bt-pre{
 	margin-right: 1%;
+	margin-left: 1%;
 }
 
 .bt-next{

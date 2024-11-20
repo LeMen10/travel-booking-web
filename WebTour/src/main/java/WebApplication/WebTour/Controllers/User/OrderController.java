@@ -27,6 +27,8 @@ import WebApplication.WebTour.Model.User;
 import WebApplication.WebTour.Model.Ward;
 import WebApplication.WebTour.Respository.BookingsRespository;
 import WebApplication.WebTour.Respository.UserRepository;
+import WebApplication.WebTour.Service.BookingService;
+import WebApplication.WebTour.Service.OrderService;
 
 @Controller
 public class OrderController {
@@ -34,6 +36,8 @@ public class OrderController {
 	UserRepository userRepository;
 	@Autowired
 	BookingsRespository bookingsRepository;
+	@Autowired
+	OrderService orderService;
 
 	// hiện trang order theo userId trên url
 	@GetMapping("/account/get-order")
@@ -44,11 +48,12 @@ public class OrderController {
 		if (user.isPresent()) {
 			model.addAttribute("user", user.get());
 
-			Page<Object[]> bookingsPage = bookingsRepository.showDataTable(userId, PageRequest.of(page, size));
-			for (Object[] booking : bookingsPage.getContent()) {
-			    System.out.println("Payment ID: " + booking[10]);
-			    System.out.println("Thanh toán: " + booking[2]);
-			}
+			Page<Object[]> bookingsPage = orderService.ShowDataTable(userId, PageRequest.of(page, size));
+			/*
+			 * for (Object[] booking : bookingsPage.getContent()) {
+			 * System.out.println("Payment ID: " + booking[10]);
+			 * System.out.println("Thanh toán: " + booking[2]); }
+			 */
 
 			model.addAttribute("bookings", bookingsPage.getContent());
 			model.addAttribute("currentPage", page);
@@ -71,7 +76,7 @@ public class OrderController {
 	        @RequestParam(value = "size", defaultValue = "5") int size) {
 
 	    Pageable pageable = PageRequest.of(page, size);
-	    return bookingsRepository.filterOrderPage(userId, paymentStatus, pageable);
+	    return orderService.FilterOrderPage(userId, paymentStatus, pageable);
 	}
 
 	/*
@@ -96,7 +101,7 @@ public class OrderController {
 	        @RequestParam(value = "size", defaultValue = "5") int size) {
 
 		Pageable pageable = PageRequest.of(page, size);
-		return bookingsRepository.searchDeparture(userId, searchInput ,pageable);
+		return orderService.SearchDeparture(userId, searchInput ,pageable);
 
 	}
 	/*

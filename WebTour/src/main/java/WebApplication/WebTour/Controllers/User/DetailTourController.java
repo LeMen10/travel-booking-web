@@ -50,7 +50,7 @@ public class DetailTourController {
 	@Autowired
 	TicketBookingRepository ticketBookingRepository;
 	@Autowired
-    SchedulesRepository schedulesRepository;
+	SchedulesRepository schedulesRepository;
 	@Autowired
 	ReviewsRepository reviewsRepository;
 	@Autowired
@@ -59,32 +59,31 @@ public class DetailTourController {
 	public DetailTourController(TicketRepository ticketRepository) {
 		this.ticketRepository = ticketRepository;
 	}
-	
+
 	@GetMapping("/detail-tour")
 	public String GetDetailTour(Model model) {
 		Optional<Tours> detailTour = toursRepository.findById(1l);
 		model.addAttribute(detailTour);
 		return "/User/detailTour";
 	}
-	
+
 	// hiển thị dữ liêu lên trang detail-tour
-	@GetMapping("/detail-tour/{id}") 
+	@GetMapping("/detail-tour/{id}")
 	public String getDetailTour(@PathVariable("id") Long id, Model model) {
 		Optional<Tours> detailTour = toursRepository.findById(id);
 		// Kiểm tra nếu có giá trị trong Optional
 		if (detailTour.isPresent()) {
 			Tours tour = detailTour.get();
 			Long tourId = id;
-			if(tour.getOriginalId() != null)
-			{
+			if (tour.getOriginalId() != null) {
 				tourId = tour.getOriginalId();
 				tour = toursRepository.findById(tourId).get();
-				
+
 			}
 			List<Schedules> schedules = schedulesRepository.findSchedulesByTourId(tour.getTourId().intValue());
 			List<Reviews> reviews = reviewsRepository.findReviewsByTourId(tourId);
 			List<Image> images = imageRepository.findByTours(tour);
-			
+
 			System.out.println("Số lượng ảnh: " + images.size());
 			model.addAttribute("tour", detailTour.get());
 			model.addAttribute("schedules", schedules);
@@ -94,8 +93,7 @@ public class DetailTourController {
 		} else {
 			model.addAttribute("error", "Tour không tồn tại!");
 		}
-		
-		
+
 		return "/User/detailTour";
 	}
 
@@ -128,79 +126,75 @@ public class DetailTourController {
 	public ResponseEntity<Bookings> createBooking(@RequestParam("tourId") long tourId,
 			@RequestParam("userId") long userId,
 			@RequestParam("bookingDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date bookingDate,
-			@RequestParam("quantityAdult") int quantityAdult, 
-			@RequestParam("quantityChild") int quantityChild,
+			@RequestParam("quantityAdult") int quantityAdult, @RequestParam("quantityChild") int quantityChild,
 			@RequestParam("totalPrice") float totalPrice) {
 
 		Bookings booking = new Bookings();
-		//-----------------
+		// -----------------
 		Tours tour = toursRepository.findById(tourId).get();
 		Tours cloneTour = new Tours(tour);
 		cloneTour.setOriginalId(tour.getTourId());
 		toursRepository.save(cloneTour);
 		booking.setTour(cloneTour);
-		//------------------
-		
-		User user = userId == 0 ? null: userRepository.findById(userId).get();
+		// ------------------
+
+		User user = userId == 0 ? null : userRepository.findById(userId).get();
 		booking.setUser(user);
 		booking.setBookingDate(bookingDate);
-		
-		booking.setPeopleNums(quantityAdult+quantityChild); 
+
+		booking.setPeopleNums(quantityAdult + quantityChild);
 		booking.setTotalPrice(totalPrice);
-		
-		// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên không cần viết hàm insert ở file respository
+
+		// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên
+		// không cần viết hàm insert ở file respository
 		Bookings savedBooking = bookingsRespository.save(booking);
-		handleQuantityTicket(Integer.parseInt(savedBooking.getBookingId().toString())  , quantityAdult, quantityChild);
+		handleQuantityTicket(Integer.parseInt(savedBooking.getBookingId().toString()), quantityAdult, quantityChild);
 		return ResponseEntity.ok(savedBooking);
 	}
-	
-	public void handleQuantityTicket(int bookingId,int quantityAdult, int quantityChild) {
-		 if(quantityAdult > 0) {
-			TicketBooking  ticketAdult = new TicketBooking();
+
+	public void handleQuantityTicket(int bookingId, int quantityAdult, int quantityChild) {
+		if (quantityAdult > 0) {
+			TicketBooking ticketAdult = new TicketBooking();
 			Ticket ticket = ticketRepository.findById(2l).get();
 			ticketAdult.setTicket(ticket);
 			ticketAdult.setBookingId(bookingId);
 			ticketAdult.setQuantity(quantityAdult);
 			TicketBooking saveticketBooking = ticketBookingRepository.save(ticketAdult);
 		}
-		if (quantityChild > 0){
-			TicketBooking  ticketChild = new TicketBooking();
+		if (quantityChild > 0) {
+			TicketBooking ticketChild = new TicketBooking();
 			Ticket ticket = ticketRepository.findById(1l).get();
 			ticketChild.setTicket(ticket);
 			ticketChild.setBookingId(bookingId);
 			ticketChild.setQuantity(quantityChild);
 			TicketBooking saveticketBooking = ticketBookingRepository.save(ticketChild);
-		
+
 		}
 	}
 
 	// tạo review
-		@PostMapping("/create-review")
-		public ResponseEntity<Reviews> createReview(
-				@RequestParam("userId") long userId,
-				@RequestParam("tourId") long tourId,
-				@RequestParam("rate") int rate,
-				@RequestParam("comment") String comment,
-				@RequestParam("reviewDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reviewDate) {
+	@PostMapping("/create-review")
+	public ResponseEntity<Reviews> createReview(@RequestParam("userId") long userId,
+			@RequestParam("tourId") long tourId, @RequestParam("rate") int rate,
+			@RequestParam("comment") String comment,
+			@RequestParam("reviewDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reviewDate) {
 
-			//lấy user và tour trong reviews.model thì cái thuộc tính đó là thực thể
-			User user = userRepository.findById(userId).get();
-			Tours tour = toursRepository.findById(tourId).get();
-			
-			Reviews review = new Reviews();
-			review.setUser(user);
-			review.setTours(tour);
-			review.setRate(rate);
-			review.setComment(comment);
-			review.setReviewDate(reviewDate);
-			
-			// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên không cần viết hàm insert ở file respository
-			Reviews savedReviews = reviewsRepository.save(review);
-			return ResponseEntity.ok(savedReviews);
-		}
+		// lấy user và tour trong reviews.model thì cái thuộc tính đó là thực thể
+		User user = userRepository.findById(userId).get();
+		Tours tour = toursRepository.findById(tourId).get();
 
-	
-	
+		Reviews review = new Reviews();
+		review.setUser(user);
+		review.setTours(tour);
+		review.setRate(rate);
+		review.setComment(comment);
+		review.setReviewDate(reviewDate);
+
+		// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên
+		// không cần viết hàm insert ở file respository
+		Reviews savedReviews = reviewsRepository.save(review);
+		return ResponseEntity.ok(savedReviews);
+	}
 
 //	@GetMapping("/api-get-type-ticket")
 //	public ResponseEntity<List<Ticket>> getTypeTicket(@RequestParam("userId") long userId) {

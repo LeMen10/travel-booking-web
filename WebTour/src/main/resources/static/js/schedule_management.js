@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
 			searchTours(tourName, 0); // tìm kiếm từ trang đầu 
 		}
 		else {
-				console.log("Ô tìm kiếm rỗng, hiển thị tất cả tour");
-				showPerPage(0); // Hiển thị tất cả tour
-			}
+			console.log("Ô tìm kiếm rỗng, hiển thị tất cả tour");
+			showPerPage(0); // Hiển thị tất cả tour
+		}
 	});
 })
 
-
+//hiện tất cả tour 
 async function showPerPage(page) {
 	const size = 5;
 	const url = `http://localhost:8080/admin/schedule_management/data?page=${page}&size=${size}`; // Endpoint mới
@@ -42,20 +42,31 @@ async function showPerPage(page) {
 				const row = document.createElement("tr");
 				row.innerHTML = `
                     <td>${tour.tourId}</td>
-                    <td>${tour.tourName}</td>
+                    <td class="tour-name">${tour.tourName}</td>
                     <td>${tour.transport}</td>
                     <td>${tour.departure}</td>
                     <td>${tour.destination}</td>
                     <td>${new Date(tour.startDate).toLocaleDateString('vi-VN')}</td>
                     <td>${new Date(tour.endDate).toLocaleDateString('vi-VN')}</td>
                     <td>${tour.price}</td>
-                    <td>${tour.status}</td>
+                    <td>
+						<button type="button" class="btn-edit btn-primary" data-tour-id="${tour.tourId}">
+						                Edit
+			            </button>
+					</td>
                 `;
+				//tạo sự kiện khi ấn nút edit khi chuyển đến các trang khác của phân trang
+				const editButton = row.querySelector(".btn-edit");
+				editButton.onclick = function() {
+					const tourId = editButton.getAttribute("data-tour-id");
+					window.location.href = `/api-edit-schedule/${tourId}`;
+				};
+				
 				tourTable.appendChild(row);
 			});
 
 			// Cập nhật phân trang
-			updatePerPage(data.totalPages, page);
+			//updatePerPage(data.totalPages, page);
 			updateSearchTour(data.totalPages, page, showPerPage); // Cập nhật phân trang cho hiển thị
 		}
 	} catch (error) {
@@ -63,6 +74,7 @@ async function showPerPage(page) {
 	}
 }
 
+// cập nhật lại phân trang khi chuyển trang ở hiện tất cả tour
 function updatePerPage(totalPages, currentPage) {
 	const paginationContainer = document.getElementById("pagination");
 	paginationContainer.innerHTML = ""; // Xóa nội dung hiện tại
@@ -70,26 +82,50 @@ function updatePerPage(totalPages, currentPage) {
 	// Previous Button
 	if (currentPage > 0) {
 		const previousButton = document.createElement('li');
-		previousButton.innerHTML = `<button onclick="fetchTours(${currentPage - 1})">
+		previousButton.innerHTML = `<button >
                                         <i class="fas fa-chevron-left icon"></i>
                                     </button>`;
 		paginationContainer.appendChild(previousButton);
 	}
 
-	// Page Buttons
-	for (let i = 1; i <= totalPages; i++) {
+	// First Page Button
+	if (currentPage > 2) {
+		const firstButton = document.createElement('li');
+		firstButton.innerHTML = `<button ">1</button>`;
+		paginationContainer.appendChild(firstButton);
+
+		// Dots before the current range
+		const dotsBefore = document.createElement('li');
+		dotsBefore.innerHTML = `<span>...</span>`;
+		paginationContainer.appendChild(dotsBefore);
+	}
+
+	// Middle Page Buttons (currentPage - 1 to currentPage + 1)
+	for (let i = Math.max(0, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
 		const pageButton = document.createElement('li');
-		pageButton.innerHTML = `<button  onclick="showPerPage(${i - 1})" 
-                                    class="pre ${currentPage === i - 1 ? 'current' : ''}">
-                                    <span>${i}</span>
+		pageButton.innerHTML = `<button  
+                                    class="${currentPage === i ? 'current' : ''}">
+                                    ${i + 1}
                                 </button>`;
 		paginationContainer.appendChild(pageButton);
+	}
+
+	// Last Page Button
+	if (currentPage < totalPages - 3) {
+		// Dots after the current range
+		const dotsAfter = document.createElement('li');
+		dotsAfter.innerHTML = `<span>...</span>`;
+		paginationContainer.appendChild(dotsAfter);
+
+		const lastButton = document.createElement('li');
+		lastButton.innerHTML = `<button >${totalPages}</button>`;
+		paginationContainer.appendChild(lastButton);
 	}
 
 	// Next Button
 	if (currentPage + 1 < totalPages) {
 		const nextButton = document.createElement('li');
-		nextButton.innerHTML = `<button onclick="showPerPage(${currentPage + 1})">
+		nextButton.innerHTML = `<button >
                                     <i class="fas fa-chevron-right icon"></i>
                                 </button>`;
 		paginationContainer.appendChild(nextButton);
@@ -99,7 +135,7 @@ function updatePerPage(totalPages, currentPage) {
 //tìm kiếm 
 async function searchTours(tourName, page) {
 	const size = 5;
-	
+
 	const url = `/admin/schedule_management-search/search?tourName=${encodeURIComponent(tourName)}&page=${page}&size=${size}`;
 	try {
 		const response = await fetch(url);
@@ -116,14 +152,19 @@ async function searchTours(tourName, page) {
 			const row = document.createElement("tr");
 			row.innerHTML = `
 		                <td>${tour.tourId}</td>
-		                <td>${tour.tourName}</td>
+		                <td class="tour-name">${tour.tourName}</td>
 		                <td>${tour.transport}</td>
 		                <td>${tour.departure}</td>
 		                <td>${tour.destination}</td>
 		                <td>${new Date(tour.startDate).toLocaleDateString('vi-VN')}</td>
 		                <td>${new Date(tour.endDate).toLocaleDateString('vi-VN')}</td>
 		                <td>${tour.price}</td>
-		                <td>${tour.status}</td>
+		                <td>
+							<button type="button" class="btn-edit btn-primary" 
+					            onclick="window.location.href='/api-edit-schedule/${tour.tourId}'">
+					            Edit
+					        </button>
+						</td>
 		            `;
 			tourTable.appendChild(row);
 		});
@@ -134,6 +175,8 @@ async function searchTours(tourName, page) {
 		console.error("Lỗi trong searchTours:", error);
 	}
 }
+
+//cập nhật lại phân trang khi tìm kiếm
 function updateSearchTour(totalPages, currentPage, onPageClick) {
 	const paginationContainer = document.getElementById("pagination");
 	paginationContainer.innerHTML = "";
@@ -141,14 +184,29 @@ function updateSearchTour(totalPages, currentPage, onPageClick) {
 	// Nút Previous
 	if (currentPage > 0) {
 		const prevButton = document.createElement("button");
-		prevButton.textContent = "Previous";
+		prevButton.innerHTML = '<i class="fas fa-chevron-left icon"></i>';
 		prevButton.classList.add("bt-pre");
 		prevButton.onclick = () => onPageClick(currentPage - 1);
 		paginationContainer.appendChild(prevButton);
 	}
 
-	// Nút trang
-	for (let i = 0; i < totalPages; i++) {
+	// Nút trang đầu tiên
+	if (currentPage > 2) {
+		const firstButton = document.createElement("button");
+		firstButton.textContent = "1";
+		firstButton.onclick = () => onPageClick(0);
+		paginationContainer.appendChild(firstButton);
+
+		// Dấu ...
+		if (currentPage > 3) {
+			const dots = document.createElement("span");
+			dots.textContent = "...";
+			paginationContainer.appendChild(dots);
+		}
+	}
+
+	// Nút trang ở giữa (trang hiện tại +/- 1)
+	for (let i = Math.max(0, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
 		const pageButton = document.createElement("button");
 		pageButton.textContent = i + 1;
 		pageButton.className = i === currentPage ? "current" : "";
@@ -156,15 +214,30 @@ function updateSearchTour(totalPages, currentPage, onPageClick) {
 		paginationContainer.appendChild(pageButton);
 	}
 
+	// Nút trang cuối cùng
+	if (currentPage < totalPages - 3) {
+		if (currentPage < totalPages - 4) {
+			const dots = document.createElement("span");
+			dots.textContent = "...";
+			paginationContainer.appendChild(dots);
+		}
+
+		const lastButton = document.createElement("button");
+		lastButton.textContent = totalPages;
+		lastButton.onclick = () => onPageClick(totalPages - 1);
+		paginationContainer.appendChild(lastButton);
+	}
+
 	// Nút Next
 	if (currentPage + 1 < totalPages) {
 		const nextButton = document.createElement("button");
-		nextButton.textContent = "Next";
+		nextButton.innerHTML = '<i class="fas fa-chevron-right icon"></i>';
 		nextButton.classList.add("bt-next");
 		nextButton.onclick = () => onPageClick(currentPage + 1);
 		paginationContainer.appendChild(nextButton);
 	}
 }
+
 
 
 

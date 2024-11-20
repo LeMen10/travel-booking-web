@@ -21,11 +21,13 @@
 
 			<div class="filter">
 				<!-- <i class="fas fa-filter"></i> -->
-				<label>Lọc theo: </label> <select id="payment-status">
+				<label>Lọc theo: </label> 
+				<select id="payment-status">
 					<option value="">ALL</option>
 					<option value="1">Paid</option>
 					<option value="2">UnPaid</option>
-					<option value="3">Departure</option>
+					<option value="3">Cancelled</option>
+					<option value="4">Departure</option>
 				</select>
 
 				<div class="div-search-departture">
@@ -47,6 +49,7 @@
 						<th>Mã thanh toán</th>
 						<th>Ngày đặt</th>
 						<th>Ngày đi</th>
+						<th>Ngày về</th>
 						<th>Số lượng</th>
 						<th>Loại vé</th>
 						<th>Khởi hành</th>
@@ -54,11 +57,13 @@
 						<th>Thanh toán</th>
 						<th>Trạng thái</th>
 						<th>Action</th>
+						<th>Chi tiết</th>
+						
 					</tr>
 				</thead>
 				<tbody id="user-table">
 					<tr th:each="booking : ${bookings}">
-						<td class="table-td" th:text="${booking[0]}"></td>
+						<td class="table-td" th:text="${booking[0]}" th:attr="data-booking-id=${booking[0]}"></td>
 						<!-- Mã đơn -->
 						<td class="table-td"><a th:text="${booking[4]}"
 							th:href="@{/detail-tour/{id}(id=${booking[11]})}"></a></td>
@@ -71,6 +76,10 @@
 						<td class="table-td table-td-date"
 							th:text="${#dates.format(booking[8], 'yyyy-MM-dd')}"></td>
 						<!-- Ngày đi -->
+						<td class="table-td table-td-date"
+							th:text="${#dates.format(booking[12], 'yyyy-MM-dd')}">
+						</td>
+						<!-- Ngày về -->
 						<td class="table-td" th:text="${booking[5]}"></td>
 						<!-- Số lượng -->
 						<td class="table-td" th:text="${booking[6]}"></td>
@@ -83,10 +92,11 @@
 							<!-- Thanh toán --> <span th:if="${booking[2] == 1}">Cash</span>
 							<span th:if="${booking[2] == 2}">Online</span>
 						</td>
+						
 						<td class="table-td">
 							<!-- Trạng thái --> <span th:if="${booking[3] == 1}">Paid</span>
 							<span th:if="${booking[3] == 2}">Unpaid</span> <span
-							th:if="${booking[3] == 3}">Cancel</span> <span
+							th:if="${booking[3] == 3}">Cancelled</span> <span
 							th:if="${booking[3] == null or booking[3] == ''}">Unpaid</span>
 						</td>
 						<td class="table-td table-td-action">
@@ -103,6 +113,14 @@
 								th:attr="data-booking-id=${booking[0]}, data-departure-date=${#dates.format(booking[8], 'yyyy-MM-dd')}">Hủy
 								đơn</button>
 						</td>
+						<!--ấn để xem chi tiết hóa đơn (trang notificationSuccess)-->
+						<td class="table-td table-td-action">
+							<i class="fa-solid fa-eye show-notification"
+							th:attr="data-booking-id=${booking[0]}"></i>
+
+						</td>
+						
+						
 					</tr>
 					<!--modal hủy đơn -->
 					<div id="cancel-confirm-modal" class="modal-overlay">
@@ -119,24 +137,56 @@
 
 		<!-- Pagination -->
 		<div class="pagination-container">
-			<ul class="pagination" id="pagination">
-
-				<li th:if="${currentPage > 0}"><a
-					th:href="@{/account/get-order(userId=${user.user_id}, page=${currentPage - 1}, size=5)}">
-						<i class="fas fa-chevron-left icon"></i>
-				</a></li>
-
-				<li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"><a
-					th:href="@{/account/get-order(userId=${user.user_id}, page=${i}, size=5)}"
-					th:class="${currentPage == i} ? 'active' : ''" th:text="${i + 1}">
-				</a></li>
-
-				<li th:if="${currentPage + 1 < totalPages}"><a
-					th:href="@{/account/get-order(userId=${user.user_id}, page=${currentPage + 1}, size=5)}">
-						<i class="fas fa-chevron-right icon"></i>
-				</a></li>
-			</ul>
+		    <ul class="pagination" id="pagination">
+		        <!-- Prev Icon -->
+		        <li th:if="${currentPage > 0}">
+		            <a th:href="@{/account/get-order(userId=${user.user_id}, page=${currentPage - 1}, size=5)}">
+		                <i class="fas fa-chevron-left icon"></i>
+		            </a>
+		        </li>
+		
+		        <!-- First Page -->
+		        <li>
+		            <a th:href="@{/account/get-order(userId=${user.user_id}, page=0, size=5)}"
+		               th:class="${currentPage == 0} ? 'active' : ''">1</a>
+		        </li>
+		
+		        <!-- Dots before current range -->
+		        <li th:if="${currentPage > 2}">
+		            <span>...</span>
+		        </li>
+		
+		        <!-- Middle Pages -->
+		        <li th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+		            th:if="${i > 0 and i < totalPages - 1}">
+		            <a th:href="@{/account/get-order(userId=${user.user_id}, page=${i}, size=5)}"
+		               th:class="${currentPage == i} ? 'active' : ''" 
+		               th:text="${i + 1}">
+	               </a>
+		        </li>
+		
+		        <!-- Dots after current range -->
+		        <li th:if="${currentPage < totalPages - 3}">
+		            <span>...</span>
+		        </li>
+		
+		        <!-- Last Page -->
+		        <li th:if="${totalPages > 1}">
+		            <a th:href="@{/account/get-order(userId=${user.user_id}, page=${totalPages - 1}, size=5)}"
+		               th:class="${currentPage == totalPages - 1} ? 'active' : ''"
+		               th:text="${totalPages}">
+	               </a>
+		        </li>
+		
+		        <!-- Next Icon -->
+		        <li th:if="${currentPage + 1 < totalPages}">
+		            <a th:href="@{/account/get-order(userId=${user.user_id}, page=${currentPage + 1}, size=5)}">
+		                <i class="fas fa-chevron-right icon"></i>
+		            </a>
+		        </li>
+		    </ul>
 		</div>
+
 
 	</div>
 	<div id="footer"></div>

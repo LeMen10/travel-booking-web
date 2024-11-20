@@ -17,9 +17,10 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface PromotionsRepository extends JpaRepository<Promotions, Long> {
 
+	//lấy mã khuyến mãi để kiểm tra khi nhập mã ở trang payment
 	@Modifying
 	@Transactional
-	@Query(value = "SELECT * FROM promotions WHERE code = :code", nativeQuery = true)
+	@Query(value = "SELECT * FROM promotions WHERE code = :code AND status = true", nativeQuery = true)
 	Optional<Promotions> findByCode(@Param("code") String code);
 
 	@Query("SELECT p FROM Promotions p WHERE p.status = true")

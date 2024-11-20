@@ -18,7 +18,7 @@ public class TourService {
 
     //hiển thị tour trang schedule management (admin) có phân trang
     public Page<Tours> getToursByPage(Pageable pageable) {
-        return toursRepository.findAll(pageable);
+        return toursRepository.ShowTour(pageable);
     }
     
     //tìm kiếm tên tour có phân trang

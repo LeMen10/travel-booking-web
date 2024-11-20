@@ -29,17 +29,22 @@ document.addEventListener('DOMContentLoaded', function() {
 		HandleDecrease("value-quantity1");
 	});
 
-
+	var btn_contract = document.querySelector(".btn-contract");
+	btn_contract.addEventListener("click", navigateContractPage) ;
+	
 	var book_now = document.getElementById("book-now");
 	console.log("Book Now button:", book_now);
 	book_now.addEventListener("click", async function(event) {
 		event.preventDefault();
+		showLoading();
 		const isValidQuantity = await checkQuantity();
 		if (!isValidQuantity) {
+			hideLoading();
 			return;
 		}
 		await createBooking();
 		console.log("Booking created");
+		hideLoading();
 	});
 
 	HandleGetDay();
@@ -51,7 +56,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 })
 
+function navigateContractPage() {
+    window.location.href = `http://localhost:8080/contract`;
+}
 
+function showLoading() {
+    document.getElementById('overlay-loading').style.display = 'flex'; // Hiển thị màn hình loading
+}
+
+// Hàm ẩn màn hình loading
+function hideLoading() {
+    document.getElementById('overlay-loading').style.display = 'none'; // Ẩn màn hình loading
+}
 
 //xử lý dấu cộng
 async function HandleIncrement(inputId) {

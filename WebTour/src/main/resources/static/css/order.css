@@ -193,8 +193,8 @@ th {
 }
 
 .btn-payment-status {
+    width: 100%;
 	background: yellow;
-	width: 46%;
 	border-radius: 12px;
 	padding: 12px;
 	background-color: #fac71e;
@@ -231,12 +231,11 @@ th {
 }
 /*css cho nút hủy đơn */
 .btn-cancel {
+    width: 100%;
 	background-color: #ff4d4f;
 	color: white;
 	cursor: pointer;
-	margin-left: 5px;
 	transition: background-color 0.3s;
-	width: 46%;
 	padding: 12px;
 	border-radius: 4px;
 	border: none;
@@ -274,70 +273,12 @@ th {
 }
 
 .table-td-action {
-	width: 15%;
+	width: 4%;
 }
 
 .pre {
 	margin: 0 2%;
 }
-
-<<<<<<< Updated upstream
-/* các nút phân trang */
-.pagination {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	list-style-type: none;
-	padding: 0;
-	margin-top: 20px;
-}
-
-.pagination li {
-	margin: 0 5px;
-}
-
-.pagination-button {
-	margin: 0 5px;
-}
-
-.pagination a, .pagination button {
-	text-decoration: none;
-	color: #1e88e5;
-	padding: 10px 15px;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	background-color: #fff;
-}
-
-.pagination a:hover, .pagination button:hover {
-	background-color: #eee;
-}
-
-.pagination .current {
-	margin-left: 1%;
-	margin-right: 1%;
-	background-color: #1e88e5;
-	color: white;
-}
-
-.pagination .active {
-	color: white;
-	background-color: #1e88e5;
-}
-
-.pagination .icon {
-	font-size: 18px;
-}
-
-.current, .bt-pre {
-	margin-right: 1%;
-}
-
-.bt-next {
-	margin-left: 1%;
-}
-=======
-
 
 
 /*  ===============================================================*/
@@ -361,5 +302,3 @@ th {
    }
 }
 
-
->>>>>>> Stashed changes
