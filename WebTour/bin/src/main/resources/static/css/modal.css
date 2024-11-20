@@ -28,6 +28,8 @@
 	position: relative;
 	z-index: 3;
 	animation: growth linear .1s;
+	max-height: 96vh;
+    overflow: hidden;
 }
 
 .auth-form {
@@ -35,16 +37,19 @@
 	background-color: var(--white-color);
 	overflow: hidden;
 	border-radius: 5px;
+	max-height: 100%; 
+    overflow-y: auto;
 }
 
 .auth-form__container {
-	padding: 30px 32px;
+	padding: 24px 32px;
+	max-height: 96vh;
+	overflow-y: auto;
 }
 
 .auth-form__header {
 	display: flex;
 	align-items: center;
-	padding: 0 12px;
 	justify-content: space-between;
 }
 
@@ -71,8 +76,8 @@
 
 .auth-form__input {
 	width: 100%;
-	height: 40px;
-	margin-top: 16px;
+	height: 36px;
+	margin-top: 7px;
 	padding: 0 12px;
 	font-size: 14px;
 	border: 1px solid var(--border-color);
@@ -98,7 +103,7 @@
 .auth-form__control {
 	display: flex;
 	justify-content: flex-end;
-	margin-top: 40px;
+	margin-top: 20px;
 }
 
 .auth-form__control button {
@@ -163,4 +168,13 @@
 
 .auth-form__help-forgot:hover {
 	cursor: pointer;
+}
+
+.auth-form-program {
+	width: 1100px;
+	background-color: var(--white-color);
+	overflow: hidden;
+	border-radius: 5px;
+	max-height: 100%; 
+    overflow-y: auto;
 }

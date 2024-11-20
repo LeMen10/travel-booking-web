@@ -5,7 +5,8 @@
 }
 
 body {
-	background: #f6f5f7;
+	background: url('../imagess/bg.jpg');
+	background-size: cover;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -45,8 +46,8 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #ff4b2b;
-	background-color: #ff4b2b;
+	border: 1px solid;
+	background: linear-gradient(45deg, #4ad4ead1, #eb57e691);
 	color: #ffffff;
 	font-size: 12px;
 	font-weight: bold;
@@ -87,11 +88,21 @@ input {
 	margin: 8px 0;
 	width: 100%;
 }
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* Chừa khoảng trống cho icon */
+}
+
 
 .container {
-	background-color: #fff;
+	background-color: #ffffffe0;
 	border-radius: 10px;
-	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+	box-shadow: 0 14px 28px rgb(0 0 0), 0 10px 10px rgb(0 0 0 / 54%);
 	position: relative;
 	overflow: hidden;
 	width: 768px;
@@ -129,6 +140,14 @@ input {
 	z-index: 5;
 	animation: show 0.6s;
 }
+.gender-wrapper
+{
+	display: flex;
+	width: 100%;
+    justify-content: space-around;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
 
 @keyframes show {
 	0%,
@@ -160,9 +179,7 @@ input {
 }
 
 .overlay {
-	background: #ff416c;
-	background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
-	background: linear-gradient(to right, #ff4b2b, #ff416c);
+	background: linear-gradient(45deg,#4ad4ead1, #eb57e691);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -224,29 +241,4 @@ input {
 	margin: 0 5px;
 	height: 40px;
 	width: 40px;
-}
-
-footer {
-	background-color: #222;
-	color: #fff;
-	font-size: 14px;
-	bottom: 0;
-	position: fixed;
-	left: 0;
-	right: 0;
-	text-align: center;
-	z-index: 999;
-}
-
-footer p {
-	margin: 10px 0;
-}
-
-footer i {
-	color: red;
-}
-
-footer a {
-	color: #3c97bf;
-	text-decoration: none;
 }

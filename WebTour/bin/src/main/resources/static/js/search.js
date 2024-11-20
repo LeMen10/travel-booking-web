@@ -1,4 +1,9 @@
 // Lấy tất cả các phần tử có chứa tour-duration
+document.addEventListener('DOMContentLoaded', function() {
+	fomatDay();
+	fomatPrice();
+	})	
+function fomatDay(){
         const tourDurations = document.querySelectorAll('.tour-duration');
         
         tourDurations.forEach(function(element) {
@@ -7,15 +12,13 @@
             const endDate = new Date(element.getAttribute('data-end-date'));
 			
             // Tính khoảng thời gian giữa ngày kết thúc và ngày bắt đầu (đơn vị là milliseconds)
-            const timeDifference = endDate - startDate;
+            const timeDifference = startDate - endDate;
             
             // Tính số ngày bằng cách chia milliseconds cho số milliseconds trong 1 ngày
             const days = timeDifference / (1000 * 60 * 60 * 24)+1;
-            
             // Định dạng thời gian hiển thị theo dạng 'XN YĐ'
             // Thông thường số đêm sẽ bằng số ngày trừ đi 1
             const nights = days - 1;
-            
             // Kiểm tra nếu days >= 0 thì hiển thị, nếu không sẽ hiển thị giá trị mặc định
             if (days > 0) {
                 element.textContent = `${days}N${nights}Đ`; // Ví dụ: 3N2Đ
@@ -23,14 +26,16 @@
                 element.textContent = 'N/A'; // Nếu không hợp lệ
             }
         });
-  
+  	}
     function linktoDetailTour(pram){
     	var tourId = pram.getAttribute("data-id");
     	console.log(pram);
     	window.location.href="detail-tour/" + tourId; 
     }
-    document.addEventListener("DOMContentLoaded", function() {
+	function fomatPrice(){
+   
         const priceElements = document.querySelectorAll('.tourPrice');
+		console.log(priceElements);
         priceElements.forEach(function(priceElement) {
             let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
             if (!isNaN(price)) {
@@ -38,9 +43,9 @@
                 priceElement.textContent = price.toLocaleString('vi-VN') + '₫';
             }
         });
-    });
-	
+}
     async function loadPage(page) {
+		
     	const size = 8;
     	const url = `http://localhost:8080/api-get-search-tour?page=${page}&size=${size}`; // Endpoint mới
 		console.log(url)
@@ -97,7 +102,8 @@
 
 				    
 				});
-    			
+				fomatDay();
+				fomatPrice();
     			updatePerPage(data.totalPages, page);
     			console.log(data.totalPages+"aaaa"+ page)
     		}

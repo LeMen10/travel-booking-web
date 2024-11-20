@@ -1,34 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Vouchers</title>
+<title>Vouchers</title>
+<link rel="stylesheet" href="../css/pagination.css">
+<link rel="stylesheet" href="../css/vouchers.css">
 </head>
 <body>
-    <h1>Danh sách Voucher</h1>
+	<header id="header"></header>
 
-    <div th:if="${errorMessage}">
-        <p th:text="${errorMessage}"></p>
-    </div>
+	<div class="content">
+		<h3>Danh sách các mã khuyến mãi của bạn.</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="large-column">Mã khuyến mãi</th>
+					<th class="small-column">Chi tiết</th>
+					<th class="mid-column">Phần trăm</th>
+					<th class="large-column">Bắt đầu</th>
+					<th class="large-column">Kết thúc</th>
+				</tr>
+			</thead>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Mã Voucher</th>
-                <th>Mô tả</th>
-                <th>Giảm giá</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="booking : ${bookings}">
-                <td th:text="${booking[0]}"></td> <!-- Promotion ID -->
-                <td th:text="${booking[1]}"></td> <!-- Code -->
-                <td th:text="${booking[2]}"></td> <!-- Description -->
-                <td th:text="${booking[3]}"></td> <!-- Discount -->
-            </tr>
-        </tbody>
-    </table>
+			<tbody id="promotion-table-body">
+				<tr th:each="voucher : ${vouchers}"
+					th:attr="data-id=${voucher.promotionId}">
+					<td th:text="${voucher.code}"></td>
+					<td th:text="${voucher.description}" class="text-left"></td>
+					<td th:text="${voucher.discount + '%'}">
+					<td th:text="${voucher.startDate}"></td>
+					<td th:text="${voucher.endDate}"></td>
+				</tr>
+		</table>
+	</div>
+	<div class="pagination-container">
+		<ul class="pagination" id="pagination">
+			<!-- Prev Icon -->
+			<li th:if="${currentPage > 0}"><a
+				th:href="@{/account/get-vouchers(userId=${user.user_id}, page=${currentPage - 1}, size=5)}">
+					<i class="fas fa-chevron-left icon"></i>
+			</a></li>
 
-    
+			<!-- First Page -->
+			<li><a
+				th:href="@{/account/get-vouchers(userId=${user.user_id}, page=0, size=5)}"
+				th:class="${currentPage == 0} ? 'active' : ''">1</a></li>
+
+			<!-- Dots before current range -->
+			<li th:if="${currentPage > 2}"><span>...</span></li>
+
+			<!-- Middle Pages -->
+			<li
+				th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+				th:if="${i > 0 and i < totalPages - 1}"><a
+				th:href="@{/account/get-vouchers(userId=${user.user_id}, page=${i}, size=5)}"
+				th:class="${currentPage == i} ? 'active' : ''" th:text="${i + 1}">
+			</a></li>
+
+			<!-- Dots after current range -->
+			<li th:if="${currentPage < totalPages - 3}"><span>...</span></li>
+
+			<!-- Last Page -->
+			<li th:if="${totalPages > 1}"><a
+				th:href="@{/account/get-vouchers(userId=${user.user_id}, page=${totalPages - 1}, size=5)}"
+				th:class="${currentPage == totalPages - 1} ? 'active' : ''"
+				th:text="${totalPages}"> </a></li>
+
+			<!-- Next Icon -->
+			<li th:if="${currentPage + 1 < totalPages}"><a
+				th:href="@{/account/get-vouchers(userId=${user.user_id}, page=${currentPage + 1}, size=5)}">
+					<i class="fas fa-chevron-right icon"></i>
+			</a></li>
+		</ul>
+	</div>
+
+	<script src="/js/header.js"></script>
+
+
 </body>
 </html>

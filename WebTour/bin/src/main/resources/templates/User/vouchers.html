@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vouchers</title>
+</head>
+<body>
+    <h1>Danh sách Voucher</h1>
+
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Mã Voucher</th>
+                <th>Mô tả</th>
+                <th>Giảm giá</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="booking : ${bookings}">
+                <td th:text="${booking[0]}"></td> <!-- Promotion ID -->
+                <td th:text="${booking[1]}"></td> <!-- Code -->
+                <td th:text="${booking[2]}"></td> <!-- Description -->
+                <td th:text="${booking[3]}"></td> <!-- Discount -->
+            </tr>
+        </tbody>
+    </table>
+
+    
+</body>
+</html>

@@ -280,63 +280,6 @@ th {
 	margin: 0 2%;
 }
 
-/* các nút phân trang */
-.pagination {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	list-style-type: none;
-	padding: 0;
-	margin-top: 20px;
-}
-
-.pagination li {
-	margin: 0 5px;
-}
-
-.pagination-button {
-	margin: 0 5px;
-}
-
-.pagination a, .pagination button {
-	text-decoration: none;
-	color: #1e88e5;
-	padding: 10px 15px;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	background-color: #fff;
-}
-
-.pagination a:hover, .pagination button:hover {
-	background-color: #eee;
-}
-
-.pagination .current {
-	margin-left: 1%;
-	margin-right: 1%;
-	background-color: #1e88e5;
-	color: white;
-}
-
-.pagination .active {
-	color: white;
-	background-color: #1e88e5;
-}
-
-.pagination .icon {
-	font-size: 18px;
-}
-
-.current, .bt-pre {
-	margin-right: 1%;
-}
-
-.bt-next {
-	margin-left: 1%;
-}
-
-
-
 
 /*  ===============================================================*/
 /* Media Query for smaller screens (tablets and phones) */
@@ -358,5 +301,4 @@ th {
    		width: 100%;
    }
 }
-
 

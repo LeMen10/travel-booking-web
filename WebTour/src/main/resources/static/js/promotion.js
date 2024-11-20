@@ -239,3 +239,34 @@ const loadPromotions = (promotions) => {
 	});
 };
 
+/*let currentPage = 0;
+let pageSize = 5;
+
+async function FilterDataTable() {
+	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
+	const paymentStatus = document.getElementById("payment-status").value;
+	const btnPay = document.getElementById("btn-payment-status");
+	console.log("paymentStatus " + paymentStatus);
+	const url = `http://localhost:8080/account/filter-get-order?userId=${userId}&paymentStatus=${paymentStatus}&page=${currentPage}&size=${pageSize}`;
+	const request = new Request(url, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+	const response = await fetch(request);
+	console.log("Phản hồi từ server FilterDataTable:", response);
+	if (!response.ok) {
+		console.log(response);
+		return null;
+	}
+	const dataFilter = await response.json();
+	//console.log(dataFilter[0][3]);
+
+	console.log("dataFilter ", dataFilter);
+	const totalPages = dataFilter.totalPages;
+
+	updateDataTable(dataFilter.content);
+	renderPaginationControls(totalPages);
+
+}*/

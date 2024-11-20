@@ -104,7 +104,7 @@
 		</div>
 	</div>
 	<!-- Pagination -->
-    <div class="pagination-container">
+    <div class="pagination-container" th:if="${totalPages > 1}">
         <ul class="pagination" id="pagination">
             <li th:if="${currentPage > 0}">
                 <button th:attr="onclick='loadPage(' + (${currentPage - 1}) + ')'">
@@ -169,8 +169,11 @@
                 <input type="number" id="price" required>
             </div>
         </div>
-
-        <button type="submit">Lưu</button>
+		<label>Chọn ảnh</label>
+        <input type="file" id="imageInput" accept="image/*" multiple onchange="previewImages()">
+        <div id="imagePreviewContainer" class="image-preview-container"></div>
+        
+        <button type="submit" onclick="uploadImage()">Lưu</button>
     </form>
 </div>
 

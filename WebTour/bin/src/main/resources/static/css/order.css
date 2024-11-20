@@ -193,8 +193,8 @@ th {
 }
 
 .btn-payment-status {
+    width: 100%;
 	background: yellow;
-	width: 46%;
 	border-radius: 12px;
 	padding: 12px;
 	background-color: #fac71e;
@@ -231,12 +231,11 @@ th {
 }
 /*css cho nút hủy đơn */
 .btn-cancel {
+    width: 100%;
 	background-color: #ff4d4f;
 	color: white;
 	cursor: pointer;
-	margin-left: 5px;
 	transition: background-color 0.3s;
-	width: 46%;
 	padding: 12px;
 	border-radius: 4px;
 	border: none;
@@ -274,7 +273,7 @@ th {
 }
 
 .table-td-action {
-	width: 15%;
+	width: 4%;
 }
 
 .pre {
@@ -335,3 +334,29 @@ th {
 .bt-next {
 	margin-left: 1%;
 }
+
+
+
+
+/*  ===============================================================*/
+/* Media Query for smaller screens (tablets and phones) */
+@media (max-width: 768px) {
+    .table-container{
+   		width: 134%;
+   }
+}
+
+/* Media Query for very small screens (phones) */
+@media (max-width: 480px) {
+   .btn-cancel {
+   		width: 100%;
+   }
+   .table-container{
+   		width: 134%;
+   }
+   .btn-payment-status{
+   		width: 100%;
+   }
+}
+
+
