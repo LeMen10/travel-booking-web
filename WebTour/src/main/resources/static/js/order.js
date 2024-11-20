@@ -100,7 +100,8 @@ function renderPaginationControls(totalPages) {
         prevButton.className = "pagination-button";
         prevButton.innerHTML = '<i class="fas fa-chevron-left icon"></i>';
         prevButton.addEventListener("click", () => {
-            currentPage--;
+			
+			currentPage--;
             FilterDataTable(); // Gọi lại FilterDataTable
         });
         paginationContainer.appendChild(prevButton);
@@ -177,7 +178,8 @@ function renderPaginationControls(totalPages) {
         nextButton.className = "pagination-button";
         nextButton.innerHTML = '<i class="fas fa-chevron-right icon"></i>';
         nextButton.addEventListener("click", () => {
-            currentPage++;
+			
+			currentPage++;
             FilterDataTable(); // Gọi lại FilterDataTable
         });
         paginationContainer.appendChild(nextButton);

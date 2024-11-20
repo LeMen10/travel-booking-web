@@ -328,7 +328,6 @@ public class PaymentController {
 				if (booking.getPayment().getPromotionCode() == null)
 					continue;
 				if (booking.getPayment().getPromotionCode().equals(promotionCode)) {
-
 					return ResponseEntity.ok(Collections.singletonMap("message", "Mã đã được dùng"));
 				}
 			}

@@ -160,6 +160,10 @@ body {
     cursor: pointer;
 }
 
+.bt-action{
+	background-color:transparent;
+}
+
 .info-edit{
 	margin-bottom: 2%;
 }

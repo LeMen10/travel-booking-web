@@ -29,7 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		HandleDecrease("value-quantity1");
 	});
 
-
+	var btn_contract = document.querySelector(".btn-contract");
+	btn_contract.addEventListener("click", navigateContractPage) ;
+	
 	var book_now = document.getElementById("book-now");
 	console.log("Book Now button:", book_now);
 	book_now.addEventListener("click", async function(event) {
@@ -53,6 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		await createReview();
 	});
 })
+
+function navigateContractPage() {
+    window.location.href = `http://localhost:8080/contract`;
+}
 
 function showLoading() {
     document.getElementById('overlay-loading').style.display = 'flex'; // Hiển thị màn hình loading

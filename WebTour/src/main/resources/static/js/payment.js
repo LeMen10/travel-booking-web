@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
 	const loadingScreen = document.getElementById('loading-screen');
-	    if (loadingScreen) {
-	        loadingScreen.style.display = 'none';
-	    }
+	window.onload = function() {
+		const loadingScreen = document.getElementById("loading-screen");
+		loadingScreen.style.display = "none"; // Ẩn màn hình loading
+	};
 
 	const bookingID = sessionStorage.getItem("bookingID");
 	const tourID = sessionStorage.getItem("tourID");
@@ -115,9 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					div_paypal.style.display = "none";  // Ẩn PayPal
 				}
 			}
-
 		}
-
 	});
 
 	document.getElementById("paypal-button-container").style.display = "none"; // Ẩn div PayPal ban đầu
@@ -448,8 +447,6 @@ async function createPayment(captureId, totalPriceUSD) {
 	const dataPayment = await response.json();
 	//updateTotalPrice();
 	console.log("Payment đã được tạo: ", dataPayment);
-
-
 
 }
 

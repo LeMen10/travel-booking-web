@@ -36,13 +36,13 @@
 						<th>Ngày đi</th>
 						<th>Ngày kết thúc</th>
 						<th>Giá</th>
-						<th>Trạng thái</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody id="tour-table">
 					<tr th:each="tour : ${tourPage.content}">
 						<td th:text="${tour.tourId}">Tour ID</td>
-						<td th:text="${tour.tourName}">Tên Tour</td>
+						<td class="tour-name" th:text="${tour.tourName}">Tên Tour</td>
 						<td th:text="${tour.transport}">Phương tiện</td>
 						<td th:text="${tour.departure}">Điểm khởi hành</td>
 						<td th:text="${tour.destination}">Điểm đến</td>
@@ -68,29 +68,58 @@
 
 		<!-- Pagination -->
 		<div class="pagination-container">
-			<ul class="pagination" id="pagination">
-				<li th:if="${currentPage > 0}">
-					<button
-						th:attr="onclick='showPerPage(' + (${currentPage - 1}) + ')'">
-						<i class="fas fa-chevron-left icon"></i>
-					</button>
-				</li>
-
-				<li th:each="i : ${#numbers.sequence(1, totalPages)}">
-					<button th:attr="onclick='showPerPage(' + (${i - 1}) + ')'"
-						th:class="${currentPage == i - 1} ? 'current' : ''">
-						<span th:text="${i}"></span>
-					</button>
-				</li>
-
-				<li th:if="${currentPage + 1 < totalPages}">
-					<button
-						th:attr="onclick='showPerPage(' + (${currentPage + 1}) + ')'">
-						<i class="fas fa-chevron-right icon"></i>
-					</button>
-				</li>
-			</ul>
+		    <ul class="pagination" id="pagination">
+		        <!-- Prev Icon (Trang trước) -->
+		        <li th:if="${currentPage > 0}">
+		            <button th:attr="onclick='showPerPage(' + (${currentPage - 1}) + ')'">
+		                <i class="fas fa-chevron-left icon"></i>
+		            </button>
+		        </li>
+		
+		        <!-- First Page (Trang đầu tiên) -->
+		        <li>
+		            <button th:attr="onclick='showPerPage(0)'"
+		                th:class="${currentPage == 0} ? 'current' : ''">
+		                <span>1</span>
+		            </button>
+		        </li>
+		
+		        <!-- Dots before current range (Dấu ba chấm trước phạm vi hiện tại) -->
+		        <li th:if="${currentPage > 2}">
+		            <span>...</span>
+		        </li>
+		
+		        <!-- Middle Pages (Các trang giữa) -->
+		        <li th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+		            th:if="${i > 0 and i < totalPages - 1}">
+		            <button th:attr="onclick='showPerPage(' + (${i}) + ')'"
+		                th:class="${currentPage == i} ? 'current' : ''">
+		                <span th:text="${i + 1}"></span>
+		            </button>
+		        </li>
+		
+		        <!-- Dots after current range (Dấu ba chấm sau phạm vi hiện tại) -->
+		        <li th:if="${currentPage < totalPages - 3}">
+		            <span>...</span>
+		        </li>
+		
+		        <!-- Last Page (Trang cuối cùng) -->
+		        <li th:if="${totalPages > 1}">
+		            <button th:attr="onclick='showPerPage(' + (${totalPages - 1}) + ')'"
+		                th:class="${currentPage == totalPages - 1} ? 'current' : ''">
+		                <span th:text="${totalPages}"></span>
+		            </button>
+		        </li>
+		
+		        <!-- Next Icon (Trang sau) -->
+		        <li th:if="${currentPage + 1 < totalPages}">
+		            <button th:attr="onclick='showPerPage(' + (${currentPage + 1}) + ')'">
+		                <i class="fas fa-chevron-right icon"></i>
+		            </button>
+		        </li>
+		    </ul>
 		</div>
+
 
 		</ul>
 	</div>
