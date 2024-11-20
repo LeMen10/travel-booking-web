@@ -33,11 +33,10 @@ public class VouchersController {
 			model.addAttribute("user", user.get());
 
 			Page<Promotions> data = vouchersService.showDataTable(userId, PageRequest.of(page, size));
-			for (Promotions voucher : data.getContent()) {
-	            System.out.println("Voucher ID: " + voucher.getPromotionId());
-	        }
-
 			model.addAttribute("vouchers", data.getContent());
+			model.addAttribute("currentPage", page);
+			model.addAttribute("totalPages", data.getTotalPages());
+			
 		} else {
 			model.addAttribute("errorMessage", "User không tồn tại.");
 		}

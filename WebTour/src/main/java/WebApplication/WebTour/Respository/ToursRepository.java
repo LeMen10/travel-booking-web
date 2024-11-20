@@ -35,7 +35,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	        + "AND (:destination IS NULL OR LOWER(t.destination) LIKE LOWER(CONCAT('%', :destination, '%'))) "
 	        + "AND t.status = true "
 	        + "AND t.originalId IS NULL "
-	        + "GROUP BY t.tourId")
+	        + "GROUP BY t.tourId, i.imageId")
 	Page<Object[]> findTours(@Param("tourName") String tourName,
 	                      @Param("startDate") Date startDate,
 	                      @Param("departure") String departure,
@@ -47,7 +47,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	List<Tours> listOfCheapestTours();
 
 	// lấy ra những tour chưa bắt đầu và những tour đó chưa được áp mã đang xem xét áp dụng
-	@Query("SELECT t FROM Tours t WHERE t.startDate > CURRENT_DATE AND t.tourId NOT IN "
+	@Query("SELECT t FROM Tours t WHERE t.startDate > CURRENT_DATE AND t.originalId IS NULL AND t.tourId NOT IN "
 			+ "(SELECT pd.tourId FROM Promotiondetail pd WHERE pd.promotions.promotionId = :promotionId)")
 	List<Tours> getToursAboutToBegin(@Param("promotionId") long promotionId);
 	

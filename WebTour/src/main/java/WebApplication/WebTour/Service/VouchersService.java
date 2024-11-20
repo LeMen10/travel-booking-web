@@ -25,6 +25,6 @@ public class VouchersService {
     public Page<Promotions> showDataTable(Long userId, Pageable pageable) {
     	List<Point> points = pointRepository.findByUserId(userId);
     	int userPoints = points.stream().mapToInt(Point::getPoint).sum();
-        return promotionsRepository.findPromotionsByUserIdAndPoints(userPoints, pageable);
+        return promotionsRepository.findPromotionsByUserIdAndPoints(userPoints, userId, pageable);
     }	
 }

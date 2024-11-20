@@ -4,7 +4,7 @@ const discount = document.getElementById("discount");
 const startTime = document.getElementById("datetime-start");
 const endTime = document.getElementById("datetime-end");
 const description = document.getElementById("description");
-
+const cumulativePoints = document.getElementById("cumulative-points");
 let randomString = document.getElementById('random-string');
 let modal = document.getElementById('add-promotion-modal');
 let close = document.getElementById('close-modal-btn');
@@ -48,7 +48,8 @@ close.addEventListener("click", async function(event) {
 		discount.value = '',
 		startTime.value = '',
 		endTime.value = '',
-		description.value = ''
+		description.value = '',
+		cumulativePoints = ''
 });
 
 document.getElementById("getData").addEventListener("click", async (event) => {
@@ -59,7 +60,8 @@ document.getElementById("getData").addEventListener("click", async (event) => {
 		discount: discount.value,
 		startDate: startTime.value,
 		endDate: endTime.value,
-		description: description.value
+		description: description.value,
+		cumulativePoints: cumulativePoints.value
 	};
 
 	try {

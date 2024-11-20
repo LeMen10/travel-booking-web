@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ND Travel</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link rel="shortcut icon" href="/image/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/home_user.css">
     <style>
         body {
             margin: 0;
@@ -135,6 +138,7 @@
 		    align-items: center;
 		    padding: 10px 0; /* Đệm để tạo khoảng trống trên dưới */
 		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Tạo đổ bóng cho thanh header */
+		    height: 15%;
 		}
 		
 		/* Search container trong thanh search-top */
@@ -178,7 +182,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background-color: #0056b3;
+           
         }
         .search-box-main {
             display: flex;
@@ -203,6 +207,9 @@
             padding: 10px 20px;
             cursor: pointer;
             margin-left: 5px;
+        }
+        #main-btn-search:hover{
+        	background-color: #0396ff;
         }
         .search-box-main i {
             color: #17a2b8;
@@ -298,47 +305,185 @@
 		    cursor: text;
 		    margin: 0 2px;
 		}
+		.submenu {
+		    display: none;
+		    position: absolute; /* Cho phép định vị submenu chính xác */
+		    background-color: #fff;
+		    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+		    padding: 10px 0;
+		    z-index: 1;
+		    top: 100%; /* Đặt submenu nằm ngay dưới chữ "Giới thiệu" */
+		    left: 120px;   /* Căn chỉnh submenu nằm bên dưới từ mép trái của mục "Giới thiệu" */
+		    width: 150px; /* Đặt chiều rộng cố định cho menu (tuỳ chỉnh theo ý bạn) */
+		}
+		
+		.submenu a {
+		    color: #333;
+		    padding: 10px 20px;
+		    text-decoration: none;
+		    display: block;
+		}
+		
+		.submenu a:hover {
+		    background-color: #f1f1f1;
+		}
+
+		/* Đảm bảo phần tử chứa mục Giới thiệu có relative để submenu định vị đúng */
+		
+		.btn-search:hover{
+			cursor: pointer;
+		}
+		.fa-user:hover {
+			cursor: pointer;
+		}
+		nav ul {
+		    list-style-type: none;
+		    margin: 0;
+		    padding: 0;
+		}
+		
+		nav ul li {
+		    display: inline-block;
+		    position: relative; /* Đặt position: relative để định vị menu con */
+		}
+		
+		nav ul li a {
+		    text-decoration: none;
+		    padding: 10px;
+		    display: inline-block;
+		}
+		
+		.submenu {
+		    display: none; /* Ban đầu ẩn menu con */
+		    position: absolute;
+		    background-color: #f9f9f9;
+		    min-width: 160px;
+		    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+		    z-index: 1;
+		    top: 100%; /* Đặt menu con nằm ngay dưới mục "Giới thiệu" */
+		    left: 0;    /* Căn chỉnh menu con thẳng hàng với mục "Giới thiệu" */
+		}
+		
+		.submenu a {
+		    padding: 12px 16px;
+		    display: block;
+		    color: black;
+		    text-decoration: none;
+		}
+		
+		.submenu a:hover {
+		    background-color: #ddd;
+		}
+		
+		/* Khi hover vào mục Giới thiệu, hiển thị menu con */
+		.dropdown:hover .submenu {
+		    display: block;
+		}
+		/* Định dạng cho user menu */
+		.user-menu {
+		    position: relative;
+		    display: inline-block;
+		}
+		
+		/* Menu con (ban đầu ẩn) */
+		.user-submenu {
+		    display: none; /* Ẩn menu con ban đầu */
+		    position: absolute;
+		    top: 100%; /* Đặt menu ngay dưới icon người dùng */
+		    left: 0;
+		    background-color: white;
+		    min-width: 160px;
+		    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+		    z-index: 1002; /* Cao hơn các thành phần khác */
+		    font-size: 14px;
+		}
+		
+		/* Các mục trong menu */
+		.user-submenu a {
+		    padding: 12px 16px;
+		    display: block;
+		    color: black;
+		    text-decoration: none;
+		    font-size: 14px;
+		     width: 100%; 
+		}
+		
+		/* Hiển thị menu khi hover vào icon người dùng */
+		.user-menu:hover .user-submenu {
+		    display: block;
+		}
+		
+		/* Đổi màu nền khi hover vào mục trong menu */
+		.user-submenu a:hover {
+		    background-color: #ddd;
+		}
+
     </style>
 </head>
 <body>
+	<header>
     <div class="container">
-        <div class="maindiv"> 
-            <div class="navbar">
-                <div class="logo">
-                    <img alt="ND Travel Logo" height="40" src="https://storage.googleapis.com/a1aa/image/3pQMfiOOuNwtBSFcG9IzxF69ugFpysTerz4cgiPVJNBu5OlTA.jpg" width="100"/>
-                </div>
-                <div class="menu">
-                    <a class="active" href="#">Trang chủ</a>
-                    <a href="#">Giới thiệu</a>
-                    <a href="#">Tour du lịch</a>
-                    <a href="#">Tin tức</a>
-                    <a href="#">Faqs</a>
-                    <a href="#">Liên hệ</a>
-                </div>
-                <div class="icons">
-                    <i class="fas fa-search btn-search"></i>
-                    <i class="fas fa-user"></i>
-                    <div class="badge">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <div class="hotline">
-                        <i class="fas fa-headset"></i>
-                        Hotline
-                        <span>1900 6750</span>
-                    </div>
-                </div>
+        <div class="container">
+            <div class="logo">
+                <a href="home.html"><img src="/imagess/background_light_v1.jpg" alt="ND Travel Logo"></a>
             </div>
+            <nav>
+                <ul>
+                    <li><a href="/home" id="home-link">Trang chủ</a></li>
+                    <li class="dropdown">
+                        <a href="#" id="aboutLink">Giới thiệu</a>
+	                    <div id="aboutSubmenu" class="submenu">
+					        <a href="/insurance-tour">Bảo hiểm tour</a>
+					        <a href="/visa">Visa</a>
+					    </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="/search?s=" class="dropbtn" id="tour-link">Tour du lịch</a>
+                    </li>
+                    <li><a href="#" id="news-link">Tin tức</a></li>
+                    <li><a href="#" id="faq-link">FAQs</a></li>
+                    <li><a href="/contract" id="contact-link">Liên hệ</a></li>
+                </ul>
+            </nav>            
+            <div class="icons">
+                <a href="#"><i class="fas fa-search btn-search"></i></a>
+                <div class="user-menu">
+			        <a href="#"><i class="fa-regular fa-circle-user"></i></a>
+			        <div class="user-submenu">
+			            <a id="login" href="/">Đăng nhập</a>
+			            <a id="register" href="/">Đăng ký</a>
+			            <a href="/cart">Giỏ hàng</a>
+			        </div>
+			    </div>      
+                <a href="#"><i class="fas fa-shopping-cart"></i></a>
+                <span class="hotline">
+                    <i class="fa-solid fa-headset"></i>
+                    Hotline 1900 9999
+                </span>
+            </div>         
+        </div>
 
-            <div class="hero">
-                <div class="content">
-                    <h1>Du lịch cùng ND TRAVEL</h1>
-                    <p>Vinh hạnh của chúng tôi là mang đến cho bạn những chuyến đi đáng nhớ. Mang đến cho bạn những chuyến đi đầy cảm hứng. Khám phá những vùng đất mới. Tự do khám phá cùng chúng tôi.</p>
-                    <a class="btn" href="#">Tìm hiểu ngay <i class="fas fa-arrow-right"></i></a>
+        <!-- Div phụ (search-box) -->
+        <div class="search-box" id="searchBox">
+            <div class="empty-box" id="emptyBox"></div>
+            <div class="search-top">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Nhập tên tour...">
+                    <i class="fas fa-search" id="searchIcon"></i>
                 </div>
             </div>
         </div>
-        <!-- Main Search (search-box) -->
-		<div class="search-container-main">
+      </div>
+     </header>
+	        <header class="header">
+	        <div class="overlay">
+	            <div class="content">
+	                <h1>Du lịch cùng M & N TRAVEL</h1>
+	                <p>Vinh hạnh của chúng tôi là mang đến cho bạn những chuyến đi đáng nhớ. 
+	                Mang đến cho bạn những chuyến đi đầy cảm hứng. Khám phá những vùng đất mới. Tự do khám phá cùng chúng tôi.</p>
+	            </div>
+	        </div>
+	        <div class="search-container-main">
 	        <div class="search-box-main">
 	            <div >
 	                <input id="mainSearchInput" type="text" placeholder="Bạn muốn đi đâu?">
@@ -368,162 +513,288 @@
 	       
 	        </div>
     	</div>
-        <!-- Div phụ (search-box) -->
-        <div class="search-box" id="searchBox">
-            <div class="empty-box" id="emptyBox"></div>
-            <div class="search-top">
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Nhập tên tour...">
-                    <i class="fas fa-search" id="searchIcon"></i>
-                </div>
-            </div>
-        </div>
+	    </header>
+	    
+	    <section class="why-choose-section">
+	        <h2>Vì sao bạn nên chọn ND Travel</h2>
+	        <div class="features">
+	            <div class="feature">
+	                <i class="fa-solid fa-filter-circle-dollar"></i>
+	                <div class="text">
+	                    <h3>Giá tốt nhất cho bạn</h3>
+	                    <p>Có nhiều mức giá đa dạng phù hợp với ngân sách và nhu cầu của bạn.</p>
+	                </div>
+	            </div>
+	            <div class="feature">
+	                <i class="fa-solid fa-ticket"></i>
+	                <div class="text">
+	                    <h3>Booking dễ dàng</h3>
+	                    <p>Các bước booking và chăm sóc khách hàng nhanh chóng và thuận tiện.</p>
+	                </div>
+	            </div>
+	            <div class="feature">
+	                <i class="fa-solid fa-suitcase-rolling"></i>
+	                <div class="text">
+	                    <h3>Tour du lịch tối ưu</h3>
+	                    <p>Đa dạng các loại hình tour du lịch với nhiều mức giá khác nhau.</p>
+	                </div>
+	                
+	            </div>
+	        </div>
+	    </section>
+	    
+	    <section class="booking-process-section">
+	        <h2>Booking cùng ND Travel</h2>
+	        <p>Chỉ với 3 bước đơn giản và dễ dàng có ngay trải nghiệm tuyệt vời!</p>
+	        <div class="steps">
+	            <div class="step">
+	                <div class="step-number">1</div>
+	                <img src="/imagess/location.png" alt="Find Destination Icon">
+	                <h3>Tìm nơi muốn đến</h3>
+	                <p>Bất cứ nơi đâu bạn muốn đến, chúng tôi có tất cả những gì bạn cần.</p>
+	            </div>
+	            <div class="step">
+	                <div class="step-number">2</div>
+	                <img src="/imagess/ticket.png" alt="Book Ticket Icon">
+	                <h3>Đặt vé</h3>
+	                <p>ND Travel sẽ hỗ trợ bạn đặt vé trực tiếp nhanh chóng và thuận tiện.</p>
+	            </div>
+	            <div class="step">
+	                <div class="step-number">3</div>
+	                <img src="/imagess/payment.png" alt="Payment Icon">
+	                <h3>Thanh toán</h3>
+	                <p>Hoàn thành bước thanh toán và sẵn sàng cho chuyến đi ngay thôi.</p>
+	            </div>
+	        </div>
+	    </section>
+	    <section class="tour-deals">
+	        <h2>Tour giá tốt</h2>
+	        <p>Hơn 1.000 tour đa dạng giá hời có hạn</p>
+	        <div class="tour-cards">
+	            <div th:each="tour : ${tours}" class="tour-card">
+	                <!-- <img th:src="@{${tour.image}}" alt="Tour Image"> -->
+	                <div class="tour-info">
+	                    <p class="departure"><i class="fa-solid fa-location-dot"></i> Khởi hành từ: <span th:text="${tour.departure}"></span></p>
+	                    <h3 th:text="${tour.tourName}"></h3>
+	                    <p class="price" th:text="${tour.price} + ' VNĐ'"></p>
+	                    <p class="duration">Ngày đi: <span th:text="${tour.startDate}"></span></p>
+	                    <p class="duration">Ngày về: <span th:text="${tour.endDate}"></span></p>
+	                </div>
+	            </div>
+	        </div>
+	        <a href="#" class="see-more">Xem thêm →</a>
+	    </section>
+    
+<div id="footer"></div>
+        <script>
+            const searchBox = document.getElementById('searchBox');
+            const emptyBox = document.getElementById('emptyBox');
+            const searchBtn = document.querySelector('.btn-search');
         
-    </div>
-
-    <script>
-    const searchBox = document.getElementById('searchBox');
-    const emptyBox = document.getElementById('emptyBox');
-    const searchBtn = document.querySelector('.btn-search');
-
-    // Hàm để hiển thị hoặc ẩn search-box với hiệu ứng
-    const toggleSearchBox = () => {
-        if (searchBox.classList.contains('active')) {
-            // Nếu đang hiển thị, ẩn đi
-            searchBox.classList.remove('active');
-            setTimeout(() => {
-                searchBox.style.display = 'none'; // Ẩn hoàn toàn sau khi hiệu ứng kết thúc
-            }, 300); // Thời gian trùng khớp với thời gian hiệu ứng CSS
-        } else {
-            // Nếu đang ẩn, hiển thị
-            searchBox.style.display = 'flex'; // Hiển thị trước khi thêm lớp active
-            setTimeout(() => {
-                searchBox.classList.add('active'); // Thêm lớp active để hiển thị hiệu ứng
-            }, 10); // Thời gian nhỏ để đảm bảo display: flex đã được áp dụng
-        }
-    };
-
-    // Hiển thị search-box khi nhấn vào nút tìm kiếm
-    searchBtn.addEventListener('click', toggleSearchBox);
-
-    // Ẩn search-box khi nhấn vào nền (empty-box)
-    emptyBox.addEventListener('click', () => {
-        searchBox.classList.remove('active'); // Xóa lớp active khi nhấn vào nền
-        setTimeout(() => {
-            searchBox.style.display = 'none'; // Ẩn hoàn toàn sau khi hiệu ứng kết thúc
-        }, 300); // Thời gian trùng khớp với thời gian hiệu ứng CSS
-    });
-     // Lấy các phần tử
-        const searchInput = document.getElementById('searchInput');
-        const mainsearchInput = document.getElementById('mainSearchInput');
-        const searchIcon = document.getElementById('searchIcon');
-
-        // Hàm chuyển hướng
-        function redirectToSearch() {
-            const query = searchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
-            if (query) {
-                // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
-                window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
-            }
-        }
-        // Hàm chuyển hướng có đối số
-        function redirectToSearch2() {
-            const query = mainsearchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
-            if (query) {
-                // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
-                window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
-            }
-        }
-        // Sự kiện nhấn Enter trong input
-        searchInput.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {
-                redirectToSearch();
-            }
-        });
-
-        // Sự kiện click vào icon tìm kiếm
-        searchIcon.addEventListener('click', redirectToSearch);
-		//Chỉnh placeholder cho chọn ngày đi
-		flatpickr("#departureDate", {
-            dateFormat: "d-m-Y", // Định dạng ngày hiển thị
-            onChange: function(selectedDates, dateStr, instance) {
-                // Cập nhật giá trị cho ô input khi chọn ngày
-                document.getElementById('departureDate').value = dateStr;
-            }
-        });
-		//Khởi tạo Select2
-		$(document).ready(function() {
-    		$('.location-select').each(function() {
-        var type = $(this).data('type'); // Lấy type từ thuộc tính data-type
-        var placeholderText = type === 'departure' ? "Chọn điểm đi" : "Chọn điểm đến"; // Đặt placeholder tương ứng
-
-        $(this).select2({
-            placeholder: placeholderText,
-            allowClear: true
-        		});
-    		});
-		});
-		$('.location-select').on('select2:open', function(e) {
-	        $('.select2-results__options').hide().fadeIn(200); // 300ms là thời gian hiệu ứng
-	    });
-
-	    // Hiệu ứng Fade Out khi đóng select2
-	    $('.location-select').on('select2:close', function(e) {
-	        $('.select2-results__options').fadeOut(200, function() {
-	            $(this).hide(); // Sau khi hiệu ứng kết thúc, ẩn dropdown
-	        });
-	    });
-	 // xử lý sự kiện ấn nút "tìm kiếm"
-		document.getElementById('main-btn-search').addEventListener('click', function() {
-	    // Lấy giá trị từ các ô input và select
-	    var tourName = document.getElementById('mainSearchInput').value;
-	    var startDate = document.getElementById('departureDate').value;
-	 // Chuyển đổi định dạng ngày từ dd-MM-yyyy sang yyyy-MM-dd
-	    var formattedStartDate = "";
-	    if (startDate) {
-	        var dateParts = startDate.split('-'); // Tách ngày, tháng, năm
-	        if (dateParts.length === 3) {
-	            formattedStartDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]; // Chuyển đổi sang yyyy-MM-dd
-	        }
-	    }
-	 // Lấy text từ departureSelect
-	    var departureSelect = document.getElementById('departureSelect');
-	    var departureText = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
-	    var departure = (departureText === "Chọn điểm đi") ? "" : departureText; // Nếu chọn "Chọn điểm đi" thì gán rỗng
+            // Hàm để hiển thị hoặc ẩn search-box với hiệu ứng
+            const toggleSearchBox = () => {
+                if (searchBox.classList.contains('active')) {
+                    // Nếu đang hiển thị, ẩn đi
+                    searchBox.classList.remove('active');
+                    setTimeout(() => {
+                        searchBox.style.display = 'none'; // Ẩn hoàn toàn sau khi hiệu ứng kết thúc
+                    }, 300); // Thời gian trùng khớp với thời gian hiệu ứng CSS
+                } else {
+                    // Nếu đang ẩn, hiển thị
+                    searchBox.style.display = 'flex'; // Hiển thị trước khi thêm lớp active
+                    setTimeout(() => {
+                        searchBox.classList.add('active'); // Thêm lớp active để hiển thị hiệu ứng
+                    }, 10); // Thời gian nhỏ để đảm bảo display: flex đã được áp dụng
+                }
+            };
+        
+            // Hiển thị search-box khi nhấn vào nút tìm kiếm
+            searchBtn.addEventListener('click', toggleSearchBox);
+        
+            // Ẩn search-box khi nhấn vào nền (empty-box)
+            emptyBox.addEventListener('click', () => {
+                searchBox.classList.remove('active'); // Xóa lớp active khi nhấn vào nền
+                setTimeout(() => {
+                    searchBox.style.display = 'none'; // Ẩn hoàn toàn sau khi hiệu ứng kết thúc
+                }, 300); // Thời gian trùng khớp với thời gian hiệu ứng CSS
+            });
+             // Lấy các phần tử
+                const searchInput = document.getElementById('searchInput');
+                const mainsearchInput = document.getElementById('mainSearchInput');
+                const searchIcon = document.getElementById('searchIcon');
+        		
+                // Hàm chuyển hướng
+                function redirectToSearch() {
+                    const query = searchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
+                    if (query) {
+                        // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
+                        window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
+                    }else{
+                	    alert("Vui lòng nhập thông tin tìm kiếm");
+                	    return;
+                    }
+                }
+                // Hàm chuyển hướng có đối số
+                function redirectToSearch2() {
+                    const query = mainsearchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
+                    if (query) {
+                        // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
+                        window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
+                    }
+                }
+                // Sự kiện nhấn Enter trong input
+                searchInput.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        redirectToSearch();
+                    }
+                });
+        
+                // Sự kiện click vào icon tìm kiếm
+                searchIcon.addEventListener('click', redirectToSearch);
+                //Chỉnh placeholder cho chọn ngày đi
+                flatpickr("#departureDate", {
+                    dateFormat: "d-m-Y", // Định dạng ngày hiển thị
+                    onChange: function(selectedDates, dateStr, instance) {
+                        // Cập nhật giá trị cho ô input khi chọn ngày
+                        document.getElementById('departureDate').value = dateStr;
+                    }
+                });
+                //Khởi tạo Select2
+                $(document).ready(function() {
+                    $('.location-select').each(function() {
+                var type = $(this).data('type'); // Lấy type từ thuộc tính data-type
+                var placeholderText = type === 'departure' ? "Chọn điểm đi" : "Chọn điểm đến"; // Đặt placeholder tương ứng
+        
+                $(this).select2({
+                    placeholder: placeholderText,
+                    allowClear: true
+                        });
+                    });
+                });
+                $('.location-select').on('select2:open', function(e) {
+                    $('.select2-results__options').hide().fadeIn(200); // 300ms là thời gian hiệu ứng
+                });
+        
+                // Hiệu ứng Fade Out khi đóng select2
+                $('.location-select').on('select2:close', function(e) {
+                    $('.select2-results__options').fadeOut(200, function() {
+                        $(this).hide(); // Sau khi hiệu ứng kết thúc, ẩn dropdown
+                    });
+                });
+             // xử lý sự kiện ấn nút "tìm kiếm"
+                document.getElementById('main-btn-search').addEventListener('click', function() {
+                // Lấy giá trị từ các ô input và select
+	                var tourName = document.getElementById('mainSearchInput').value;
+	                var startDate = document.getElementById('departureDate').value;
+	             // Chuyển đổi định dạng ngày từ dd-MM-yyyy sang yyyy-MM-dd
+	                var formattedStartDate = "";
+	                if (startDate) {
+	                    var dateParts = startDate.split('-'); // Tách ngày, tháng, năm
+	                    if (dateParts.length === 3) {
+	                        formattedStartDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]; // Chuyển đổi sang yyyy-MM-dd
+	                    }
+	                }
+	             // Lấy text từ departureSelect
+	                var departureSelect = document.getElementById('departureSelect');
+	                var departureText = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+	                var departure = (departureText === "Chọn điểm đi") ? "" : departureText; // Nếu chọn "Chọn điểm đi" thì gán rỗng
+	            
+	                // Lấy text từ destinationSelect
+	                var destinationSelect = document.getElementById('destinationSelect');
+	                var destinationText = destinationSelect.options[destinationSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+	                var destination = (destinationText === "Chọn điểm đến") ? "" : destinationText; // Nếu chọn "Chọn điểm đến" thì gán rỗng // Lấy text của tùy chọn đã chọn
+	                
+	                console.log("Tour Name: ", tourName);
+	                console.log("Start Date: ", formattedStartDate);
+	                console.log("Departure: ", departure);
+	                console.log("Destination: ", destination);
+	        
+	                // Tạo URL với các tham số
+	                var searchUrl = '/search?'; // Đường dẫn tới trang tìm kiếm
+	        
+	                // Thêm các điều kiện vào URL nếu có giá trị
+	                if (tourName) {
+	                    searchUrl += 'tourName=' + encodeURIComponent(tourName) + '&';
+	                }
+	                if (startDate) {
+	                    searchUrl += 'startDate=' + encodeURIComponent(formattedStartDate) + '&';
+	                }
+	                if (departure) {
+	                    searchUrl += 'departure=' + encodeURIComponent(departure) + '&';
+	                }
+	                if (destination) {
+	                    searchUrl += 'destination=' + encodeURIComponent(destination) + '&';
+	                }
+	        
+	                // Loại bỏ dấu "&" cuối cùng
+	                searchUrl = searchUrl.slice(0, -1);
+	        
+	                // Redirect đến URL mới
+	                if(tourName=="" && startDate=="" && departure=="" && destination==""){
+	        	    	alert("Vui lòng nhập thông tin tìm kiếm");
+	        	    	return;
+	        	    }else{
+	        	    	window.location.href = searchUrl;	
+	        	    }
+	                
+                });
+             
+                async function getUser(){
+                	let userId = sessionStorage.getItem("userId");
+	                
+	                if (userId) {
+	                    // URL để gọi API
+	                    const url = `http://localhost:8080/api-get-user?userId=${userId}`;
+	                    try {
+	                        // Thực hiện request tới API
+	                        const request = new Request(url, {
+	                            method: "GET",
+	                            headers: {
+	                                "Content-Type": "application/json",
+	                            }
+	                        });
 	
-	    // Lấy text từ destinationSelect
-	    var destinationSelect = document.getElementById('destinationSelect');
-	    var destinationText = destinationSelect.options[destinationSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
-	    var destination = (destinationText === "Chọn điểm đến") ? "" : destinationText; // Nếu chọn "Chọn điểm đến" thì gán rỗng // Lấy text của tùy chọn đã chọn
-		
-	    console.log("Tour Name: ", tourName);
-	    console.log("Start Date: ", formattedStartDate);
-	    console.log("Departure: ", departure);
-	    console.log("Destination: ", destination);
-
-	    // Tạo URL với các tham số
-	    var searchUrl = '/search?'; // Đường dẫn tới trang tìm kiếm
-
-	    // Thêm các điều kiện vào URL nếu có giá trị
-	    if (tourName) {
-	        searchUrl += 'tourName=' + encodeURIComponent(tourName) + '&';
-	    }
-	    if (startDate) {
-	        searchUrl += 'startDate=' + encodeURIComponent(formattedStartDate) + '&';
-	    }
-	    if (departure) {
-	        searchUrl += 'departure=' + encodeURIComponent(departure) + '&';
-	    }
-	    if (destination) {
-	        searchUrl += 'destination=' + encodeURIComponent(destination) + '&';
-	    }
-
-	    // Loại bỏ dấu "&" cuối cùng
-	    searchUrl = searchUrl.slice(0, -1);
-
-	    // Redirect đến URL mới
-	   	window.location.href = searchUrl;
-		});
-    </script>
+	                        // Gọi API và đợi kết quả trả về
+	                        const response = await fetch(request);
+	
+	                        // Kiểm tra nếu có lỗi khi gọi API
+	                        if (!response.ok) {
+	                            console.log("Error with API response", response);
+	                            return;
+	                        }
+	
+	                        // Lấy dữ liệu user từ API
+	                        const user = await response.json();
+	                        console.log(user);
+	                        var userName = user.fullName;
+	                        console.log(userName);
+	                        
+	                        var login = document.getElementById("login");
+	                        login.innerHTML=userName;
+	                        login.href = "/account?userId="+userId;
+	                        var register = document.getElementById("register");
+	                        register.innerHTML='Đăng xuất';
+	                        register.href = "/home";
+	                        register.addEventListener('click', function(event) {
+	                        	sessionStorage.removeItem('userId');
+	               
+	                        });
+	                        
+	                        
+	                    } catch (error) {
+	                        console.error("Error fetching user data:", error);
+	                    }
+	                } else {
+	                    console.log("userId is null or empty");
+	                }
+                }
+                getUser();
+                fetch("/api-get-footer")
+        		.then(response => response.text())
+        		.then(data => {
+        			document.getElementById("footer").innerHTML = data;
+        		})
+            </script>
+    
 </body>
 </html>
