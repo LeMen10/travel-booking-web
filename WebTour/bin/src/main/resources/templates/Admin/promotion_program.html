@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý khuyến mãi</title>
+<link rel="stylesheet" href="/css/home_admin.css">
+<link rel="stylesheet" href="/css/modal.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/promotion_program.css">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+	rel="stylesheet" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap"
+	rel="stylesheet" />
+</head>
+
+<body>
+	<div class="sidebar"></div>
+	<div class="main-content">
+		<div class="header"></div>
+		<div class="tab-content">
+			<div class="tab-title-promotion mb-20">
+				<h1 class="title-promotion">Chương trình khuyến mãi</h1>
+				<p class="create-promotion-btn" id="add-promotion-program-btn">Tạo
+					chương trình</p>
+			</div>
+
+			<div class="filter">
+				<div class="d-flex space-between">
+					<label for="" class="align-center d-flex mr-10">Ngày bắt
+						đầu</label> <input type="date" id="datetime-start-filter"
+						class="datetime-start mr-50" name="datetime">
+				</div>
+				<div class="d-flex space-between">
+					<label for="" class="align-center d-flex mr-10">Ngày hết
+						hạn</label> <input type="date" id="datetime-end-filter"
+						class="datetime-end mr-10" name="datetime">
+				</div>
+				<button id="filter-promotion-byDate">Lọc</button>
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="small-column">Chương trình khuyến mãi</th>
+						<th class="large-column">Loại giảm giá</th>
+						<th class="mid-column">Giá trị</th>
+						<th class="large-column">Bắt đầu</th>
+						<th class="large-column">Kết thúc</th>
+					</tr>
+					<tr th:each="program : ${promotionPrograms}">
+						<td th:text="${program.title}" class="text-left"></td>
+						<td th:text="${program.promotionType}"></td>
+						<td th:text="${program.promotionValue}"></td>
+						<td th:text="${program.startDate}"></td>
+						<td th:text="${program.endDate}"></td>
+					</tr>
+				</thead>
+
+
+			</table>
+		</div>
+	</div>
+
+	<div class="modal" id="add-promotion-program-modal">
+		<div class="modal__overlay"></div>
+		<div class="modal__body">
+			<!-- Login form  -->
+			<div class="auth-form ">
+				<div class="auth-form__container js-modal-container-quen">
+					<div class="auth-form__header">
+						<h3 class="auth-form__heading">Thêm mới chương trình khuyến
+							mãi</h3>
+					</div>
+
+					<div class="auth-form__form">
+						<div class="auth-form__group">
+							<div class="d-flex space-between">
+								<label for="name" class="weight-6">Tên chương trình
+									khuyến mãi *</label>
+							</div>
+							<input type="text" placeholder=" " class="auth-form__input mt-8"
+								id="program-title">
+							<div class="error"></div>
+						</div>
+
+						<div class="auth-form__group mt-16">
+							<p for="name" class="pro-cate weight-6">Loại khuyến mãi *</p>
+							<div class="mt-12">
+								<div class="radio-group d-flex space-between">
+									<label> <input type="radio" name="promotion"
+										value="percent" id="promotion-by-percent"> Theo phần
+										trăm
+									</label> <label> <input type="radio" name="promotion"
+										value="money" id="promotion-by-money" checked> Theo
+										số tiền
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="auth-form__group mt-16">
+							<p for="name" class="pro-cate weight-6">Giá trị khuyến mãi *</p>
+							<div class="pd-bt-6px promotion-value-wr">
+								<input type="text" name="promotion" value="" id="discount"
+									class="auth-form__input"> <span
+									class="promotion-value-icon">đ</span>
+							</div>
+						</div>
+
+						<div class="auth-form__group mt-16">
+							<p class="weight-6">Thời gian *</p>
+							<div class="mt-8">
+								<div class="d-flex space-between">
+									<label for="" class="align-center d-flex">Thời gian bắt
+										đầu</label> <input type="date" id="datetime-start"
+										class="datetime-start" name="datetime">
+								</div>
+								<div class="d-flex space-between mt-8">
+									<label for="" class="align-center d-flex">Thời gian kết
+										thúc</label> <input type="date" id="datetime-end" class="datetime-end"
+										name="datetime">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="auth-form__control">
+						<button class="btn auth-form__control-back btn--normal btn-cancel"
+							id="close-modal-btn">Trở lại</button>
+						<button class="btn btn--primary view-cart btn-confirm"
+							id="create-program-btn">Xác nhận</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="promotional-program-modal">
+		<div class="modal__overlay"></div>
+		<div class="modal__body">
+			<!-- Login form  -->
+			<div class="auth-form-program">
+				<div class="auth-form__container">
+					<div class="auth-form__header">
+						<h3 class="auth-form__heading">Dánh sách các tuyến du lịch</h3>
+					</div>
+
+					<div class="auth-form__form">
+						<table class="table">
+							<thead>
+								<tr>
+									<th class="small-column">Chuyến du lịch</th>
+									<th class="mid-column">Giá</th>
+									<th class="large-column">Bắt đầu</th>
+									<th class="large-column">Kết thúc</th>
+									<th class="large-column">Hành động</th>
+								</tr>
+							</thead>
+							<tbody id="tours-body">
+
+							</tbody>
+						</table>
+					</div>
+
+					<div class="auth-form__control">
+						<button class="btn auth-form__control-back btn--normal btn-cancel"
+							id="close-promotional-program-btn">Trở lại</button>
+						<button class="btn btn--primary view-cart btn-confirm"
+							id="savePromotionDetails">Xác nhận</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../js/headerAdmin.js"></script>
+	<script src="../js/promotion_program.js"></script>
+</body>
+</html>
+
+
+

@@ -7,11 +7,10 @@
 }
 
 button.applied {
-    background-color: #28a745;
-    color: white;             
-    cursor: not-allowed;  
+	background-color: #28a745;
+	color: white;
+	cursor: not-allowed;
 }
-
 
 .tabs a {
 	padding: 10px 20px;
@@ -24,32 +23,31 @@ button.applied {
 }
 
 .small-column {
-    width: 25%;
+	width: 25%;
 }
 
-.mid-column{
+.mid-column {
 	width: 6%;
 }
 
 .large-column {
-    width: 8%;
+	width: 8%;
 }
 
 table {
-    width: 100%;
-    table-layout: fixed;
+	width: 100%;
+	table-layout: fixed;
 }
 
 th, td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+	text-align: center;
 }
 
 .text-left {
-    text-align: left;
+	text-align: left;
 }
-
 
 .tabs a.active {
 	background-color: white;
@@ -79,19 +77,18 @@ th, td {
 
 .datetime-start, .datetime-end {
 	border: 1px solid var(--border-color);
-    border-radius: 6px;
+	border-radius: 6px;
 	padding: 4px;
 }
-
 
 .datetime-start:hover, .datetime-end:hover {
 	cursor: pointer;
 }
 
-.description{
+.description {
 	border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 4px 12px;
+	border-radius: 6px;
+	padding: 4px 12px;
 }
 
 .create-promotion-btn {
@@ -158,4 +155,14 @@ th, td {
 
 .status.pending {
 	background-color: #f1c40f;
+}
+
+.create-promotion-wr {
+	display: flex;
+	align-items: end;
+}
+
+.promotion-program{
+	text-decoration: underline;
+    margin-right: 10px;
 }

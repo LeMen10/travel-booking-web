@@ -44,6 +44,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 
+	document.querySelectorAll(".show-notification").forEach((element) => {
+		element.addEventListener("click", showDetailPayment);
+	});
+
 })
 
 //lọc paid hoặc unpaid
@@ -71,7 +75,6 @@ async function FilterDataTable() {
 	const dataFilter = await response.json();
 	//console.log(dataFilter[0][3]);
 
-
 	console.log("dataFilter ", dataFilter);
 	const totalPages = dataFilter.totalPages;
 
@@ -79,6 +82,7 @@ async function FilterDataTable() {
 	renderPaginationControls(totalPages);
 
 }
+
 function navigateRefundPage(bookingId) {
 	//const departureDate = document.getElementById("bt-cancel-order").getAttribute("data-departure-date");
 	//checkCancelOrderDate(bookingId, departureDate);
@@ -87,23 +91,99 @@ function navigateRefundPage(bookingId) {
 
 //cập nhật lại các nút phân trang khi lọc
 function renderPaginationControls(totalPages) {
-	const paginationContainer = document.getElementById("pagination");
-	paginationContainer.innerHTML = ""; // Xóa các nút cũ
+    const paginationContainer = document.getElementById("pagination");
+    paginationContainer.innerHTML = ""; // Xóa các nút cũ
 
-	for (let i = 0; i < totalPages; i++) {
-		const pageButton = document.createElement("button");
-		pageButton.className = "pagination-button";
-		pageButton.textContent = i + 1;
-		if (i === currentPage) {
-			pageButton.classList.add("active"); // Đánh dấu trang hiện tại
-		}
-		pageButton.addEventListener("click", () => {
-			currentPage = i;  // Cập nhật trang hiện tại
-			FilterDataTable(); // Gọi lại FilterDataTable
-		});
-		paginationContainer.appendChild(pageButton);
-	}
+    // Tạo nút "Prev"
+    if (currentPage > 0) {
+        const prevButton = document.createElement("button");
+        prevButton.className = "pagination-button";
+        prevButton.innerHTML = '<i class="fas fa-chevron-left icon"></i>';
+        prevButton.addEventListener("click", () => {
+            currentPage--;
+            FilterDataTable(); // Gọi lại FilterDataTable
+        });
+        paginationContainer.appendChild(prevButton);
+    }
+
+    // Trang đầu tiên
+    const firstPageButton = document.createElement("button");
+    firstPageButton.className = "pagination-button";
+    firstPageButton.textContent = 1;
+    if (currentPage === 0) {
+        firstPageButton.classList.add("active");
+    }
+    firstPageButton.addEventListener("click", () => {
+        currentPage = 0;
+        FilterDataTable();
+    });
+    paginationContainer.appendChild(firstPageButton);
+
+    // Dấu "..." trước dải trang giữa
+    if (currentPage > 2) {
+        const dotsBefore = document.createElement("span");
+        dotsBefore.textContent = "...";
+        dotsBefore.className = "pagination-dots";
+        paginationContainer.appendChild(dotsBefore);
+    }
+
+    // Các trang giữa
+    for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages - 2, currentPage + 1); i++) {
+        const middlePageButton = document.createElement("button");
+        middlePageButton.className = "pagination-button";
+        middlePageButton.textContent = i + 1;
+
+        if (i === currentPage) {
+            middlePageButton.classList.add("active");
+        }
+
+        middlePageButton.addEventListener("click", () => {
+            currentPage = i;
+            FilterDataTable();
+        });
+
+        paginationContainer.appendChild(middlePageButton);
+    }
+
+    // Dấu "..." sau dải trang giữa
+    if (currentPage < totalPages - 3) {
+        const dotsAfter = document.createElement("span");
+        dotsAfter.textContent = "...";
+        dotsAfter.className = "pagination-dots";
+        paginationContainer.appendChild(dotsAfter);
+    }
+
+    // Trang cuối cùng
+    if (totalPages > 1) {
+        const lastPageButton = document.createElement("button");
+        lastPageButton.className = "pagination-button";
+        lastPageButton.textContent = totalPages;
+
+        if (currentPage === totalPages - 1) {
+            lastPageButton.classList.add("active");
+        }
+
+        lastPageButton.addEventListener("click", () => {
+            currentPage = totalPages - 1;
+            FilterDataTable();
+        });
+
+        paginationContainer.appendChild(lastPageButton);
+    }
+
+    // Tạo nút "Next"
+    if (currentPage < totalPages - 1) {
+        const nextButton = document.createElement("button");
+        nextButton.className = "pagination-button";
+        nextButton.innerHTML = '<i class="fas fa-chevron-right icon"></i>';
+        nextButton.addEventListener("click", () => {
+            currentPage++;
+            FilterDataTable(); // Gọi lại FilterDataTable
+        });
+        paginationContainer.appendChild(nextButton);
+    }
 }
+
 
 
 //cập nhật bảng sau khi ấn lọc hoặc tìm kiếm
@@ -117,6 +197,7 @@ function updateDataTable(dataTable) {
 		// Mã đơn (booking_id)
 		const bookingIdCell = document.createElement("td");
 		bookingIdCell.className = "table-td";
+		bookingIdCell.setAttribute('data-booking-id', booking[0]);
 		bookingIdCell.textContent = booking[0];
 		row.appendChild(bookingIdCell);
 
@@ -154,6 +235,13 @@ function updateDataTable(dataTable) {
 		row.appendChild(startDateCell);
 		console.log(startDateCell);
 
+		// Ngày về (end_date)
+		const endDateCell = document.createElement("td");
+		endDateCell.className = "table-td table-td-date";
+		endDateCell.textContent = new Date(booking[12]).toISOString().split('T')[0];
+		row.appendChild(endDateCell);
+		console.log(endDateCell);
+
 		// Số lượng (totalQuantity)
 		const quantityCell = document.createElement("td");
 		quantityCell.className = "table-td";
@@ -187,43 +275,65 @@ function updateDataTable(dataTable) {
 		// Trạng thái (payment_status)
 		const paymentStatusCell = document.createElement("td");
 		paymentStatusCell.className = "table-td";
-		paymentStatusCell.textContent = booking[3] === 1 ? "Paid" : "Unpaid";
+		//paymentStatusCell.textContent = booking[3] === 1 ? "Paid" : "Unpaid";
+		paymentStatusCell.textContent = booking[3] === 1 ? "Paid" : booking[3] === null ? "Unpaid" : booking[3] === 3 ? "Cancelled" : "Unknown";
 		row.appendChild(paymentStatusCell);
 
 		//cột Action . Tạo nút thanh toán 
 		const actionCell = document.createElement("td");
-		actionCell.className = "table-td";
-		const paymentButton = document.createElement("button");
-		paymentButton.className = "btn-payment-status";
-		paymentButton.textContent = booking[3] === 1 ? "Đã thanh toán" : "Thanh toán";
-		// Thêm class paid-status nếu booking[3] là 1 (Đã thanh toán)
-		if (booking[3] === 1) {
-			paymentButton.classList.add("paid-status"); //thêm css (dòng 203) cho nút khi có thay đổi
+		actionCell.className = "table-td table-td-action";
+
+		if (booking[3] !== 1) {
+			const paymentButton = document.createElement("button");
+			paymentButton.className = "btn-payment-status";
+			paymentButton.textContent = "Thanh toán";
+			paymentButton.disabled = booking[3] === 3 || booking[3] === 1;
+			paymentButton.textContent = booking[3] === 1 ? "Đã thanh toán" : booking[3] === null ? "Thanh toán" : booking[3] === 3 ? "Thanh toán" : "Unknown";
+			// Thêm class paid-status nếu booking[3] là 1 (Đã thanh toán)
+			if (booking[3] === 1) {
+				paymentButton.classList.add("paid-status"); //thêm css (dòng 203) cho nút khi có thay đổi
+			}
+			// Gán thuộc tính dữ liệu
+			paymentButton.setAttribute("data-booking-id", booking[0]);
+			paymentButton.setAttribute("data-total-price", booking[7]);
+			// Gán sự kiện click cho nút thanh toán
+			paymentButton.addEventListener('click', async function() {
+				await navigateToPaymentPage(paymentButton);
+			});
+			actionCell.appendChild(paymentButton);
+			row.appendChild(actionCell);
 		}
-		// Gán thuộc tính dữ liệu
-		paymentButton.setAttribute("data-booking-id", booking[0]);
-		paymentButton.setAttribute("data-total-price", booking[7]);
-		// Gán sự kiện click cho nút thanh toán
-		paymentButton.addEventListener('click', async function() {
-			await navigateToPaymentPage(paymentButton);
-		});
-		actionCell.appendChild(paymentButton);
-		row.appendChild(actionCell);
 
 		// Nút hủy đơn
-
 		const cancelButton = document.createElement("button");
-		cancelButton.className = "btn-cancel";
-		cancelButton.textContent = "Hủy đơn";
-		cancelButton.setAttribute("data-booking-id", booking[0]);
-		cancelButton.setAttribute("data-departure-date", booking[8]);
-		// Gán sự kiện click cho nút hủy đơn để mở modal xác nhận
-		cancelButton.addEventListener('click', function() {
-			openCancelModal(booking[0]);
-		});
-		actionCell.appendChild(cancelButton);
+		if (booking[3] == 1) {
 
+			cancelButton.className = "btn-cancel";
+			cancelButton.textContent = "Hủy đơn";
+			cancelButton.setAttribute("data-booking-id", booking[0]);
+			cancelButton.setAttribute("data-departure-date", booking[8]);
+			// Gán sự kiện click cho nút hủy đơn để mở modal xác nhận
+			/*cancelButton.addEventListener('click', function() {
+			openCancelModal(booking[0]);
+			});*/
+
+		}
+		actionCell.appendChild(cancelButton);
 		row.appendChild(actionCell);
+
+		// Cột Action với biểu tượng "fa-eye"
+		const eyesCell = document.createElement("td");
+		eyesCell.className = "table-td table-td-action";
+		const viewIcon = document.createElement("i");
+		viewIcon.id = "show-notification";
+		viewIcon.setAttribute('data-booking-id', booking[0]);
+		viewIcon.className = "fa-solid fa-eye";
+		// Thêm sự kiện click cho biểu tượng
+		viewIcon.addEventListener('click', function() {
+			showDetailPayment(booking[0]); 
+		});
+		eyesCell.appendChild(viewIcon);
+		row.appendChild(eyesCell);
 
 		// Thêm hàng mới vào tbody
 		tableBody.appendChild(row);
@@ -234,7 +344,7 @@ function updateDataTable(dataTable) {
 			`bookingDate: ${new Date(booking[1]).toISOString().split('T')[0]}, startDate: ${new Date(booking[8]).toISOString().split('T')[0]}, ` +
 			`totalQuantity: ${booking[5]}, ticketDetails: ${booking[6]}, departure: ${booking[9]}, ` +
 			`totalPrice: ${booking[7]}, paymentMethod: ${booking[2] === 1 ? "Cash" : "Online"}, ` +
-			`paymentStatus: ${booking[3] === 1 ? "Paid" : "Unpaid"}`
+			`paymentStatus: ${booking[3] === 1 ? "Paid" : booking[3] === 2 ? "Unpaid" : booking[3] === 3 ? "Cancelled" : 'Unknown'}`
 		);
 	});
 }
@@ -247,7 +357,7 @@ function showInput() {
 	const inputElement = document.getElementById("add-input");
 	const btnInputOk = document.getElementById("btn-input-ok");
 
-	if (selectElement.value == 3) {
+	if (selectElement.value == 4) {
 		inputElement.style.display = "block"; //hiện
 		btnInputOk.style.display = "block";
 	} else {
@@ -284,27 +394,99 @@ async function searchDeparture() {
 
 //cập nhật lại các nút phân trang khi tìm kiếm
 function renderPaginationControlsSearch(totalPages) {
-	const paginationContainer = document.getElementById("pagination");
-	paginationContainer.innerHTML = ""; // Xóa các nút cũ
+    const paginationContainer = document.getElementById("pagination");
+    paginationContainer.innerHTML = ""; // Xóa các nút cũ
 
-	for (let i = 0; i < totalPages; i++) {
-		const pageButton = document.createElement("button");
-		pageButton.className = "pagination-button";
-		pageButton.textContent = i + 1;
+    // Tạo nút "Prev"
+    if (currentPageSearch > 0) {
+        const prevButton = document.createElement("button");
+        prevButton.className = "pagination-button";
+        prevButton.innerHTML = '<i class="fas fa-chevron-left icon"></i>';
+        prevButton.addEventListener("click", () => {
+            currentPageSearch--;
+            searchDeparture();
+        });
+        paginationContainer.appendChild(prevButton);
+    }
 
-		// Đánh dấu trang hiện tại
-		if (i === currentPageSearch) {
-			pageButton.classList.add("active");
-		}
+    // Trang đầu tiên
+    const firstPageButton = document.createElement("button");
+    firstPageButton.className = "pagination-button";
+    firstPageButton.textContent = 1;
+    if (currentPageSearch === 0) {
+        firstPageButton.classList.add("active");
+    }
+    firstPageButton.addEventListener("click", () => {
+        currentPageSearch = 0;
+        searchDeparture();
+    });
+    paginationContainer.appendChild(firstPageButton);
 
-		// Xử lý sự kiện click để cập nhật trang hiện tại và gọi lại searchDeparture
-		pageButton.addEventListener("click", () => {
-			currentPageSearch = i;  // Cập nhật trang hiện tại
-			searchDeparture(); // Gọi lại searchDeparture với trang mới
-		});
-		paginationContainer.appendChild(pageButton);
-	}
+    // Dấu "..." trước dải trang giữa
+    if (currentPageSearch > 2) {
+        const dotsBefore = document.createElement("span");
+        dotsBefore.textContent = "...";
+        dotsBefore.className = "pagination-dots";
+        paginationContainer.appendChild(dotsBefore);
+    }
+
+    // Các trang giữa
+    for (let i = Math.max(1, currentPageSearch - 1); i <= Math.min(totalPages - 2, currentPageSearch + 1); i++) {
+        const middlePageButton = document.createElement("button");
+        middlePageButton.className = "pagination-button";
+        middlePageButton.textContent = i + 1;
+
+        if (i === currentPageSearch) {
+            middlePageButton.classList.add("active");
+        }
+
+        middlePageButton.addEventListener("click", () => {
+            currentPageSearch = i;
+            searchDeparture();
+        });
+
+        paginationContainer.appendChild(middlePageButton);
+    }
+
+    // Dấu "..." sau dải trang giữa
+    if (currentPageSearch < totalPages - 3) {
+        const dotsAfter = document.createElement("span");
+        dotsAfter.textContent = "...";
+        dotsAfter.className = "pagination-dots";
+        paginationContainer.appendChild(dotsAfter);
+    }
+
+    // Trang cuối cùng
+    if (totalPages > 1) {
+        const lastPageButton = document.createElement("button");
+        lastPageButton.className = "pagination-button";
+        lastPageButton.textContent = totalPages;
+
+        if (currentPageSearch === totalPages - 1) {
+            lastPageButton.classList.add("active");
+        }
+
+        lastPageButton.addEventListener("click", () => {
+            currentPageSearch = totalPages - 1;
+            searchDeparture();
+        });
+
+        paginationContainer.appendChild(lastPageButton);
+    }
+
+    // Tạo nút "Next"
+    if (currentPageSearch < totalPages - 1) {
+        const nextButton = document.createElement("button");
+        nextButton.className = "pagination-button";
+        nextButton.innerHTML = '<i class="fas fa-chevron-right icon"></i>';
+        nextButton.addEventListener("click", () => {
+            currentPageSearch++;
+            searchDeparture();
+        });
+        paginationContainer.appendChild(nextButton);
+    }
 }
+
 
 //ấn nút thanh toán trên mỗi dòng sẽ chuyển đến trang thanh toán (payment)
 async function navigateToPaymentPage(button) {
@@ -350,6 +532,20 @@ async function checkCancelOrderDate(bookingId, startDate) {
 		openCancelModal(bookingId);
 		navigateRefundPage(bookingId);
 	}
+}
+
+//ấn để xem chi tiết hóa đơn (trang notificationSuccess)
+async function showDetailPayment() {
+	const bookingId = event.target.getAttribute('data-booking-id');
+	const paymentIdCell = event.target.closest('tr').querySelector('td:nth-child(3)'); // Cột Mã thanh toán
+	const paymentId = paymentIdCell ? paymentIdCell.textContent.trim() : null;
+	
+	if (!paymentId || paymentId === 'null' || paymentId === '') {
+		alert('Vui lòng thanh toán trước khi xem chi tiết hóa đơn.');
+		return;
+	}
+	console.log(bookingId);
+	window.location.href = `/notificationSuccess/${bookingId}`;
 }
 
 

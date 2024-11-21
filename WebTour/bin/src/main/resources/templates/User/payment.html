@@ -2,25 +2,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Thanh toán</title>
 <link rel="stylesheet" href="../css/payment.css">
 <link rel="stylesheet" href="../js/payment.js">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://www.paypal.com/sdk/js?client-id=ARW6b-dLanvCGRATvXwTqwf2KkcQNm11tPjKinXLalb7UD1PJV2OVsOSOhx1l6bM6BBPsSDYNagdR6Uu&currency=USD"></script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/css/home_user.css">
 </head>
 <body>
-	<div class="container">
+<header id="header"></header>
+	<div class="container-content">
 		<div class="left">
-			<h1>ND Travel</h1>
-			<!-- <div class="section-title">
-				Thông tin khách hàng <a href="#"
-					style="float: right; color: #007bff;"> Đăng xuất </a>
-			</div> -->
-			<!-- <div class="form-group">
-				<label for="address"> Số địa chỉ </label> 
-				<input id="address" type="address" value="" />
-			</div> -->
+			<h1>M&N Travel</h1>
+
 			<div class="form-group">
 				<label for="email"> Email </label> <input th:value="${user.email}"
 					id="email" type="email" /> <span id="email-error"
@@ -40,38 +36,50 @@
 			<div class="form-group">
 				<label for="optional-address"> Địa chỉ (Số nhà, tên
 					đường...) </label> <input th:value="${user.address.detail}"
-					id="optional-address" type="text" />
+					id="optional-address" type="text" name="detail" />
 			</div>
 
 			<div class="form-group">
 				<label for="city"> Tỉnh thành </label> 
-				<select th:each="users: ${user}" id="city">
-					<option th:value="${users.address.province.provinceId}" th:text="${users.address.province.name}">---</option>
-				</select>
+				<select id="province" name="provinceId" onchange="updateDistricts()">
+		            <option th:each="prov : ${province}" 
+		                    th:value="${prov.provinceId}" 
+		                    th:text="${prov.name}"
+		                    th:selected="${prov.provinceId == provinceUser.provinceId}">
+		            </option>
+		        </select>
 			</div>
 			<div class="form-group">
 				<label for="district"> Quận huyện </label> 
-				<select th:each="users: ${user}" id="district">
-					<option th:value="${users.address.district.districtId}" th:text="${users.address.district.name}">---</option>
-				</select>
+				<select id="district" name="districtId" onchange="updateWards()">
+		            <option th:each="dist : ${district}" 
+		                    th:value="${dist.districtId}" 
+		                    th:text="${dist.name}"
+		                    th:selected="${dist.districtId == districtUser.districtId}">
+		            </option>
+		        </select>
 			</div>
 			<div class="form-group">
 				<label for="ward"> Phường xã </label> 
-				<select th:each="users: ${user}" id="ward">
-					<option th:value="${users.address.ward.wardId}" th:text="${users.address.ward.name}">---</option>
-				</select>
+				<select id="ward" name="wardId">
+		            <option th:each="w : ${ward}" 
+		                    th:value="${w.wardId}" 
+		                    th:text="${w.name}"
+		                    th:selected="${w.wardId == wardUser.wardId}">
+		            </option>
+		        </select>
 			</div>
 
-			<!-- <div class="section-title">Vận chuyển</div>
-			<div class="shipping-info">Vui lòng nhập thông tin giao hàng</div> -->
+			
 			<div class="section-title">Thanh toán</div>
 			<div class="payment-methods">
-				<label> <input id="payment-online" name="payment"
-					type="radio" value="bank" />Online <i
-					class="fas fa-money-bill-wave"> </i>
-				</label> <label> <input id="payment-cash" name="payment"
-					type="radio" value="cod" />Cash <i class="fas fa-money-bill-wave">
-				</i>
+				<label> 
+					<input  id="payment-online" name="payment" type="radio" value="online" checked />Online 
+					<i class="fas fa-money-bill-wave"> </i>
+				</label> 
+				<label> 
+					<input id="payment-cash" name="payment" type="radio" value="cash" disabled  />Cash 
+					<i class="fas fa-money-bill-wave"></i>
 				</label>
 			</div>
 		</div>
@@ -81,11 +89,8 @@
 			<div class="section-title">Đơn hàng</div>
 			<div class="order-summary">
 				<div class="item">
-					<img
-						alt="Image of a beautiful beach with clear blue water and white sand"
-						height="50"
-						src="https://storage.googleapis.com/a1aa/image/oqgWqTIWzj6BHhMp9dwUieDNUzA68MxOwsjm2kBWoISepujTA.jpg"
-						width="50" />
+					<img th:src="@{'/image/' + ${imagePayment.imageId}}" alt="Tour Image" height="70" width="50" />
+
 					<div th:object="${ticketBooking}" class="item-details">
 						<div class="code-booking">
 							<label>Mã đơn: </label>
@@ -93,7 +98,7 @@
 						</div>
 						<div class="code-tour">
 							<label>Mã tour: </label>
-							<p th:text="${tourPayment.tourId}" id="id-booking-info" th:attr="data-id=${tourPayment.tourId}" class="tour-id" ></p>
+							<p th:text="${tourPayment.originalId}" id="id-booking-info" th:attr="data-id=${tourPayment.tourId}" class="tour-id" ></p>
 						</div>
 						
 							<p th:text="${tourPayment.tourName}">Du Lịch 4 Đảo Phú Quốc: Hành Trình 1 ngày</p>
@@ -105,7 +110,7 @@
 							</div>
 						</div>
 
-						<p th:text="${ #dates.format(tourPayment.startDate, 'yyyy-MM-dd') }" >Ngày đi: 2019-10-12</p> 
+						<p id="date" th:text="${ #dates.format(tourPayment.startDate, 'yyyy-MM-dd') }" >Ngày đi: 2019-10-12</p> 
 						<!-- <p th:text="${tourPayment.startDate != null ? #dates.format(tourPayment.startDate, 'yyyy-MM-dd') : 'Chưa có ngày đi'}">Ngày đi: </p> -->
 						
 					</div>
@@ -123,23 +128,122 @@
 				<div class="total">
 					<span>Tổng cộng</span> 
 					<span id="total-price" class="total-amount">0₫</span>
+					
 				</div>
+				<div class="total-conversion">
+					<div>Quy đổi</div>
+					<div id="conversion-value" class="amount">0₫</div>
+					
+				</div>
+				<!-- nút thanh toán (dùng paypal) -->
 				<div class="actions">
-					
-					<button id="bt-pay" class="order-button">Thanh toán</button>
-					
+					<button  id="bt-pay" class="order-button">Thanh toán</button>
 				</div>
+				
+				<!-- paypal -->
 				<div id="paypal-button-container"></div>
+				
 				<a href="#" class="back-to-cart">‹ Quay về giỏ hàng</a>
 			</div>
 		</div>
+		<div id="loading-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); color: white; font-size: 20px; display: flex; justify-content: center; align-items: center;">
+	   		 Đang chuyển đến trang thanh toán...
+		</div>
 	</div>
-	
+	<div id="footer"></div>
+	<script src="/js/header.js"></script>
 	<script src="../js/payment.js"></script>
+	
 	<script type="text/javascript">
 		window.onload = function() {
 			console.log("Bạn đã vào trang payment thành công!");
 		}
+		function updateDistricts() {
+            var provinceId = document.getElementById("province").value; 
+            var districtSelect = document.getElementById("district");
+            
+            // Reset district và ward với "--"
+            districtSelect.innerHTML = "<option value=''>--</option>";
+            document.getElementById("ward").innerHTML = "<option value=''>--</option>";
+
+            fetch(`/districts-by-province?provinceId=` + provinceId)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(function (district) {
+                        var option = document.createElement("option");
+                        option.value = district.districtId;
+                        option.text = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                    updateWards();
+                });
+        }
+
+        function updateWards() {
+            var districtId = document.getElementById("district").value;
+            var wardSelect = document.getElementById("ward");
+
+            // Reset ward với "--" chỉ khi district được thay đổi
+            if (districtId !== "") {
+                wardSelect.innerHTML = "<option value=''>--</option>";
+            }
+
+            fetch(`/wards-by-district?districtId=` + districtId)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(function (ward) {
+                        var option = document.createElement("option");
+                        option.value = ward.wardId;
+                        option.text = ward.name;
+                        wardSelect.appendChild(option);
+                    });
+                });
+        }
+
+        function loadInitialDistrictAndWard() {
+            var provinceId = document.getElementById("province").value;
+            var districtId = document.getElementById("district").value;
+            var wardId = document.getElementById("ward").value;
+
+            fetch(`/districts-by-province?provinceId=` + provinceId)
+                .then(response => response.json())
+                .then(data => {
+                    var districtSelect = document.getElementById("district");
+                    districtSelect.innerHTML = "<option value=''>--</option>";
+                    data.forEach(function(district) {
+                        var option = document.createElement("option");
+                        option.value = district.districtId;
+                        option.text = district.name;
+                        if (district.districtId == districtId) {
+                            option.selected = true;
+                        }
+                        districtSelect.appendChild(option);
+                    });
+
+                    // Load wards ngay lập tức khi district có giá trị
+                    if (districtId !== "") {
+                        fetch(`/wards-by-district?districtId=` + districtId)
+                            .then(response => response.json())
+                            .then(wards => {
+                                var wardSelect = document.getElementById("ward");
+                                wardSelect.innerHTML = "<option value=''>--</option>";
+                                wards.forEach(function(ward) {
+                                    var option = document.createElement("option");
+                                    option.value = ward.wardId;
+                                    option.text = ward.name;
+                                    if (ward.wardId == wardId) {
+                                        option.selected = true;
+                                    }
+                                    wardSelect.appendChild(option);
+                                });
+                            });
+                    }
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadInitialDistrictAndWard();
+        });
 	</script>
 </body>
 </html>

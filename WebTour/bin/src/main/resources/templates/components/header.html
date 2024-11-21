@@ -1,72 +1,497 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ND Travel</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/css/header.css">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <a href="#"><img src="/image/logo.png" alt="ND Travel Logo"></a>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#" id="home-link">Trang chủ</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropbtn" id="about-link">Giới thiệu <i class="fa-solid fa-caret-down"></i></a>
-                        <div class="dropdown-content">
-                            <div class="column">
-                                <a href="#">Bảo hiểm tour</a>
-                            </div>
-                            <div class="column">
-                                <a href="#">Visa</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropbtn" id="tour-link">Tour du lịch <i class="fa-solid fa-caret-down"></i></a>
-                        <div class="dropdown-content">
-                            <div class="column">
-                                <a href="#" class="title"><b>Tour trong nước</b></a>
-                                <a href="#">Phú Quốc</a>
-                                <a href="#">Nha Trang</a>
-                                <a href="#">Đà Nẵng</a>
-                            </div>
-                            <div class="column">
-                                <a href="#"><b>Tour nước ngoài</b></a>
-                                <a href="#">Hàn Quốc</a>
-                                <a href="#">Trung Quốc</a>
-                                <a href="#">Thái Lan</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li><a href="#" id="news-link">Tin tức</a></li>
-                    <li><a href="#" id="faq-link">FAQs</a></li>
-                    <li><a href="#" id="contact-link">Liên hệ</a></li>
-                </ul>
-            </nav>            
-            <div class="icons">
-                <a href="#"><i class="fas fa-search"></i></a>
-                <a href="#"><i class="fa-regular fa-circle-user"></i></a>
-                <a href="#"><i class="fas fa-shopping-cart"></i></a>
-                <span class="hotline">
-                    <i class="fa-solid fa-headset"></i>
-                    Hotline 1900 9999
-                </span>
-            </div>         
-        </div>
-    </header>
-    <div class="hero">
-        <div class="bread">
-            <div id="breadcrumb">
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 
-            </div> 
-        </div>  
-    </div>
-    <script src="/js/header.js"></script>
-</body>
-</html>
+body {
+	font-family: Arial, sans-serif;
+}
+
+header {
+	padding: 15px 0;
+}
+
+.container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+.logo img {
+	height: 50px;
+	margin-right: 10px;
+}
+
+nav ul {
+	display: flex;
+	list-style: none;
+}
+
+nav ul li {
+	margin: 0 15px;
+}
+
+nav ul li a {
+	text-decoration: none;
+	color: #333;
+	font-weight: 500;
+	font-size: 16px;
+}
+
+nav ul li a:hover {
+	color: #00aaff;
+}
+
+.icons a {
+	color: #00aaff;
+	margin-right: 20px;
+	font-size: 25px;
+	text-decoration: none;
+}
+
+.icons .hotline {
+	font-size: 16px;
+	color: #00aaff;
+	font-weight: bold;
+}
+
+.icons .hotline i {
+	font-size: 25px;
+}
+.icons{
+	display: flex; 
+}
+.hotline {
+	margin: 0;
+}
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #fff;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+	min-width: 200px;
+	z-index: 1;
+}
+
+.dropdown-content a {
+	display: block;
+	padding: 10px 20px;
+	text-decoration: none;
+	color: #333;
+}
+
+.dropdown-content .column {
+	margin-left: 5px;
+}
+
+.dropdown-content a:hover {
+	background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+.dropdown-content.show {
+	display: block;
+}
+
+nav ul li a:hover i {
+	transform: rotate(180deg); /* Quay biểu tượng */
+	transition: transform 0.3s; /* Hiệu ứng chuyển động */
+}
+
+.column {
+	margin-right: 20px;
+}
+
+.column a {
+	padding: 5px 0;
+}
+
+.column a:hover {
+	color: #00aaff;
+}
+
+/* Màn hình lớn (Desktop) */
+@media ( min-width : 992px) {
+	.container {
+		max-width: 1200px;
+	}
+	nav ul li a {
+		font-size: 16px;
+	}
+}
+
+/* Màn hình vừa (Tablets) */
+@media ( max-width : 991px) {
+	.container {
+		padding: 0 15px;
+	}
+	nav ul {
+		flex-direction: column; /* Menu dọc trên tablet */
+		align-items: flex-start;
+	}
+	nav ul li {
+		margin: 10px 0;
+	}
+	.icons a {
+		font-size: 20px;
+	}
+}
+
+/* Màn hình nhỏ (Mobile) */
+@media ( max-width : 576px) {
+	.container {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.logo img {
+		height: 40px; /* Giảm kích thước logo */
+	}
+	nav ul {
+		flex-direction: column; /* Menu dọc trên mobile */
+		width: 100%;
+		padding-left: 0;
+	}
+	nav ul li {
+		margin: 8px 0;
+	}
+	nav ul li a {
+		font-size: 14px;
+		padding: 8px 0;
+	}
+	.icons a {
+		font-size: 18px;
+	}
+	.icons .hotline {
+		font-size: 14px;
+	}
+}
+
+/* Search Box and Overlay Styles */
+.search-box {
+	display: none; /* Initially hidden */
+	justify-content: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+}
+/* Thanh header search-top */
+.search-top {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-color: #fff; /* Màu nền trắng cho thanh search */
+	z-index: 1001; /* Đặt z-index cao hơn navbar để che nó */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 0; /* Đệm để tạo khoảng trống trên dưới */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	/* Tạo đổ bóng cho thanh header */
+}
+
+/* Search container trong thanh search-top */
+.search-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #00a0e3;
+	border-radius: 25px;
+	padding: 5px 10px;
+	width: 50%; /* Đặt kích thước thanh search tùy theo ý muốn */
+	background-color: white;
+}
+
+.search-container input {
+	border: none;
+	outline: none;
+	flex: 1;
+	padding: 10px;
+	font-size: 16px;
+}
+
+.search-container .fa-search {
+	color: #00a0e3;
+	font-size: 20px;
+}
+
+/* Làm tối nền khi hiển thị search-box */
+.empty-box {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối */
+	z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
+}
+
+/*home*/
+.header {
+	color: white;
+	padding: 50px;
+	position: relative;
+	text-align: center;
+	align-content: center;
+	height: 550px;
+	background-image: url('/imagess/bg.jpg');
+	/* background-repeat: no-repeat; */
+	background-size: cover;
+}
+
+.overlay {
+	position: relative;
+	max-width: 1200px;
+	margin: 0 auto;
+	margin-bottom: 50px;
+}
+
+.content {
+	position: relative;
+	z-index: 1;
+}
+
+.header h1 {
+	font-size: 36px;
+	margin-bottom: 10px;
+}
+
+.header p {
+	font-size: 18px;
+	margin-bottom: 20px;
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.select2-container--default .select2-selection--single {
+	border: 1px solid #17a2b8; /* Đường viền */
+	border-radius: 5px; /* Bo tròn góc */
+	padding: 10px; /* Khoảng cách bên trong */
+	height: 35px; /* Chiều cao của select */
+	display: flex; /* Để căn giữa nội dung */
+	align-items: center; /* Căn giữa theo chiều dọc */
+	font-size: 13px;
+}
+
+.select2-container .select2-selection--single {
+	color: #76809B; /* Màu chữ của ô select */
+	border: 1px solid #17a2b8; /* Giữ nguyên border */
+	border-radius: 5px; /* Giữ nguyên border-radius */
+}
+
+/* Thay đổi màu chữ của placeholder */
+.select2-container .select2-selection--single .select2-selection__placeholder
+	{
+	color: #76809B; /* Màu chữ của placeholder */
+}
+
+/* Thay đổi màu chữ khi người dùng chọn giá trị */
+.select2-container--default .select2-selection--single .select2-selection__rendered
+	{
+	color: #76809B; /* Màu chữ khi có giá trị đã chọn */
+}
+
+/* Thay đổi màu chữ của dropdown list */
+.select2-container--default .select2-results__option {
+	color: #76809B; /* Màu chữ của các tùy chọn trong dropdown */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear
+	{
+	margin-left: 5px; /* Khoảng cách bên trái của icon x */
+}
+
+.flatpickr-input {
+	color: #76809B; /* Màu chữ của ô input */
+}
+
+/* Thay đổi màu chữ của các ngày trong calendar */
+.flatpickr-calendar .flatpickr-day {
+	color: #76809B; /* Màu chữ của các ngày */
+}
+
+/* Thay đổi màu chữ của ngày được chọn */
+.flatpickr-calendar .flatpickr-day.selected {
+	color: #fff; /* Màu chữ cho ngày được chọn */
+	background-color: #007bff; /* Màu nền cho ngày được chọn */
+}
+
+/* Thay đổi màu chữ cho ngày hiện tại */
+.flatpickr-calendar .flatpickr-day.today {
+	color: #e60000; /* Màu chữ cho ngày hôm nay */
+}
+
+/* Thay đổi màu chữ cho tháng và năm */
+.flatpickr-calendar .flatpickr-month {
+	color: #333; /* Màu chữ cho tháng */
+}
+
+.flatpickr-input[readonly] {
+	cursor: text;
+	margin: 0 2px;
+}
+
+.submenu {
+	display: none;
+	position: absolute; /* Cho phép định vị submenu chính xác */
+	background-color: #fff;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+	padding: 10px 0;
+	z-index: 1;
+	top: 100%; /* Đặt submenu nằm ngay dưới chữ "Giới thiệu" */
+	left: 120px;
+	/* Căn chỉnh submenu nằm bên dưới từ mép trái của mục "Giới thiệu" */
+	width: 150px;
+	/* Đặt chiều rộng cố định cho menu (tuỳ chỉnh theo ý bạn) */
+}
+
+.submenu a {
+	color: #333;
+	padding: 10px 20px;
+	text-decoration: none;
+	display: block;
+}
+
+.submenu a:hover {
+	background-color: #f1f1f1;
+}
+
+/* Đảm bảo phần tử chứa mục Giới thiệu có relative để submenu định vị đúng */
+.btn-search:hover {
+	cursor: pointer;
+}
+
+.fa-user:hover {
+	cursor: pointer;
+}
+
+nav ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+nav ul li {
+	display: inline-block;
+	position: relative; /* Đặt position: relative để định vị menu con */
+}
+
+nav ul li a {
+	text-decoration: none;
+	padding: 10px;
+	display: inline-block;
+}
+
+.submenu {
+	display: none; /* Ban đầu ẩn menu con */
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+	top: 100%; /* Đặt menu con nằm ngay dưới mục "Giới thiệu" */
+	left: 0; /* Căn chỉnh menu con thẳng hàng với mục "Giới thiệu" */
+}
+
+.submenu a {
+	padding: 12px 16px;
+	display: block;
+	color: black;
+	text-decoration: none;
+}
+
+.submenu a:hover {
+	background-color: #ddd;
+}
+
+/* Khi hover vào mục Giới thiệu, hiển thị menu con */
+.dropdown:hover .submenu {
+	display: block;
+}
+/* Định dạng cho user menu */
+.user-menu {
+	position: relative;
+	display: inline-block;
+}
+
+/* Menu con (ban đầu ẩn) */
+.user-submenu {
+	display: none; /* Ẩn menu con ban đầu */
+	position: absolute;
+	top: 100%; /* Đặt menu ngay dưới icon người dùng */
+	left: 0;
+	background-color: white;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+	z-index: 1002; /* Cao hơn các thành phần khác */
+	font-size: 14px;
+}
+
+/* Các mục trong menu */
+.user-submenu a {
+	padding: 12px 16px;
+	display: block;
+	color: black;
+	text-decoration: none;
+	font-size: 14px;
+	width: 100%;
+}
+
+/* Hiển thị menu khi hover vào icon người dùng */
+.user-menu:hover .user-submenu {
+	display: block;
+}
+
+/* Đổi màu nền khi hover vào mục trong menu */
+.user-submenu a:hover {
+	background-color: #ddd;
+}
+</style>
+<div class="container">
+	<div class="container">
+		<div class="logo">
+			<a href="home.html"><img src="/imagess/background_light_v1.jpg"
+				alt="ND Travel Logo"></a>
+		</div>
+		<nav>
+			<ul>
+				<li><a href="/home" id="home-link">Trang chủ</a></li>
+				<li class="dropdown"><a href="#" id="aboutLink">Giới thiệu</a>
+					<div id="aboutSubmenu" class="submenu">
+						<a href="/insurance-tour">Bảo hiểm tour</a> <a href="/visa">Visa</a>
+					</div></li>
+				<li class="dropdown"><a href="/search?s=" class="dropbtn"
+					id="tour-link">Tour du lịch</a></li>
+				<li><a href="#" id="news-link">Tin tức</a></li>
+				<li><a href="#" id="faq-link">FAQs</a></li>
+				<li><a href="/contract" id="contact-link">Liên hệ</a></li>
+			</ul>
+		</nav>
+		<div class="icons">
+			<a href="#"><i class="fas fa-search btn-search"></i></a>
+			<div class="user-menu">
+				<a href="#"><i class="fa-regular fa-circle-user"></i></a>
+				<div class="user-submenu">
+					<a id="login" href="/">Đăng nhập</a> <a id="register" href="/">Đăng
+						ký</a> <a href="/account/tour-booking">Giỏ hàng</a>
+				</div>
+			</div>
+			<a href="#"><i class="fas fa-shopping-cart"></i></a> <span
+				class="hotline"> <i class="fa-solid fa-headset"></i> Hotline
+				1900 9999
+			</span>
+		</div>
+	</div>
+</div>

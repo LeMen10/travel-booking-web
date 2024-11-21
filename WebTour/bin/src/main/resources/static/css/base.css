@@ -15,7 +15,8 @@ ul {
 }
 
 :root {
-	--primary-color: rgba(0, 186, 131, 1);
+	--primary-color: #50e0eb;
+	--yellow-color: #fac71e;
 	--height-header: 124px;
 	--white-color: #fff;
 	--black-color: #000;
@@ -24,6 +25,124 @@ ul {
 	--font-family-quicksand: 'Quicksand', sans-serif;
 }
 
+::-webkit-scrollbar {
+	width: 6px;
+	/* background-color: #F5F5F5; */
+}
+
+::-webkit-scrollbar-track {
+	border-radius: 14px;
+	background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	border-radius: 14px;
+}
+
 .wrapper {
 	overflow: hidden;
+}
+
+.main-content {
+	margin-left: 250px;
+	padding: 20px;
+}
+
+.main-content h1 {
+	font-size: 24px;
+}
+
+.tab-content {
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin-top: 20px;
+}
+
+.mb-20 {
+	margin-bottom: 20px;
+}
+
+.mt-20 {
+	margin-top: 20px;
+}
+
+.mt-16 {
+	margin-top: 16px;
+}
+
+.mt-14 {
+	margin-top: 14px;
+}
+
+.mt-12 {
+	margin-top: 12px;
+}
+
+.mt-8 {
+	margin-top: 8px;
+}
+
+.d-flex {
+	display: flex;
+}
+
+.direction-col {
+	flex-direction: column;
+}
+
+.w-max {
+	width: 100%;
+}
+
+.weight-6 {
+	font-weight: 600;
+}
+
+.pd-bt-6px {
+	padding-bottom: 6px;
+}
+
+.space-between {
+	justify-content: space-between;
+}
+
+.align-center{
+	align-items: center;
+}
+
+.btn-cancel {
+	padding: 12px;
+	background-color: #eeeeee;
+	border-radius: 4px;
+	border: none;
+}
+
+.btn-confirm {
+	padding: 12px;
+	background-color: var(--yellow-color);
+	border-radius: 4px;
+	border: none;
+}
+
+.btn-cancel:hover, .btn-confirm:hover {
+	cursor: pointer;
+}
+
+.mr-10{
+	margin-right: 10px;
+}
+
+.mt-10{
+	margin-top: 10px;
+}
+
+.mr-50{
+	margin-right: 50px;
+}
+
+.fs-14{
+	font-size: 14px;
 }
