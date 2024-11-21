@@ -160,8 +160,12 @@ body {
     cursor: pointer;
 }
 
+.action{
+	display: flex;
+}
 .bt-action{
 	background-color:transparent;
+	margin: 0 1%;
 }
 
 .info-edit{

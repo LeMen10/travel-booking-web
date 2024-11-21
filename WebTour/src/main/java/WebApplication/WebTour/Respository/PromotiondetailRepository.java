@@ -24,16 +24,12 @@ public interface PromotiondetailRepository extends JpaRepository<Promotiondetail
 
 
 	// lấy promotion detail theo tour và id
-
-	
-//	  @Query(value = "SELECT * FROM Promotiondetail   WHERE tour_id = :tourId " +
-//	  "AND promotions.code = :name AND status = true", nativeQuery = true)
-//	  Optional<Promotiondetail>
-//	  getPromotionByTourIdAndPromotionName(@Param("tourId") int tourId, @Param("name") String name);
-
 	@Query(value = "SELECT pd.* FROM promotiondetail pd " +
             "JOIN promotions p ON pd.promotion_id = p.promotion_id " +
             "WHERE pd.tour_id = :tourId AND p.code = :name AND pd.status = true", nativeQuery = true)
-Optional<Promotiondetail> getPromotionByTourIdAndPromotionName(@Param("tourId") int tourId, @Param("name") String name);
+	Optional<Promotiondetail> getPromotionByTourIdAndPromotionName(@Param("tourId") int tourId, @Param("name") String name);
+	
+
+	
 
 }

@@ -20,7 +20,6 @@
 					<input id="search-input" placeholder="Search..." type="text" /> <i
 						class="fas fa-search" id="search-icon"> </i>
 				</div>
-
 			</div>
 		</div>
 
@@ -41,17 +40,17 @@
 				</thead>
 				<tbody id="tour-table">
 					<tr th:each="tour : ${tourPage.content}">
-						<td th:text="${tour.tourId}">Tour ID</td>
-						<td class="tour-name" th:text="${tour.tourName}">Tên Tour</td>
-						<td th:text="${tour.transport}">Phương tiện</td>
-						<td th:text="${tour.departure}">Điểm khởi hành</td>
-						<td th:text="${tour.destination}">Điểm đến</td>
-						<td th:text="${#dates.format(tour.startDate, 'yyyy-MM-dd')}">Ngày
+						<td class="td-table" th:text="${tour.tourId}">Tour ID</td>
+						<td class="td-table tour-name" th:text="${tour.tourName}">Tên Tour</td>
+						<td class="td-table" th:text="${tour.transport}">Phương tiện</td>
+						<td class="td-table" th:text="${tour.departure}">Điểm khởi hành</td>
+						<td class="td-table" th:text="${tour.destination}">Điểm đến</td>
+						<td class="td-table" th:text="${#dates.format(tour.startDate, 'yyyy-MM-dd')}">Ngày
 							bắt đầu</td>
-						<td th:text="${#dates.format(tour.endDate, 'yyyy-MM-dd')}">Ngày
+						<td class="td-table" th:text="${#dates.format(tour.endDate, 'yyyy-MM-dd')}">Ngày
 							kết thúc</td>
-						<td th:text="${tour.price}">Giá</td>
-						<td>
+						<td class="td-table" th:text="${tour.price}">Giá</td>
+						<td class="td-table">
 							<button type="button" class="btn-edit btn-primary"
 								 th:onclick="'window.location.href=\'/api-edit-schedule/' + ${tour.tourId} + '\''">
 								Edit
@@ -61,10 +60,7 @@
 					</tr>
 				</tbody>
 			</table>
-
-
 		</div>
-
 
 		<!-- Pagination -->
 		<div class="pagination-container">
@@ -94,7 +90,7 @@
 		            th:if="${i > 0 and i < totalPages - 1}">
 		            <button th:attr="onclick='showPerPage(' + (${i}) + ')'"
 		                th:class="${currentPage == i} ? 'current' : ''">
-		                <span th:text="${i + 1}"></span>
+		                <span  th:text="${i + 1}"></span>
 		            </button>
 		        </li>
 		
@@ -107,7 +103,7 @@
 		        <li th:if="${totalPages > 1}">
 		            <button th:attr="onclick='showPerPage(' + (${totalPages - 1}) + ')'"
 		                th:class="${currentPage == totalPages - 1} ? 'current' : ''">
-		                <span th:text="${totalPages}"></span>
+		                <span class="page-after" th:text="${totalPages}"></span>
 		            </button>
 		        </li>
 		
@@ -119,8 +115,6 @@
 		        </li>
 		    </ul>
 		</div>
-
-
 		</ul>
 	</div>
 

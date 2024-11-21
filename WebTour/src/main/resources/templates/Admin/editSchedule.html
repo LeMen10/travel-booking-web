@@ -34,7 +34,6 @@
 					<th>Activity</th>
 					<th>Location</th>
 					<th>Action</th>
-					<th>Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -44,12 +43,11 @@
 					<td th:text="${schedule.step}">Step</td>
 					<td th:text="${schedule.activity}">Activity</td>
 					<td th:text="${schedule.location}">Location</td>
-					<td>
+					<td class="action">
 						<button id="btEditScheduleInTable" class="bt-action bt-edit-in-table">
 							<i class="fas fa-pencil-alt"></i>
 						</button>
-					</td>
-					<td>
+					
 						<button id="bt-delete-schedule-in-table" class="bt-action btDelete-in-table">
 							<i class="fas fa-trash-alt"></i>
 						</button>

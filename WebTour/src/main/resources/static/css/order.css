@@ -280,6 +280,9 @@ th {
 	margin: 0 2%;
 }
 
+.tour-name{
+	width: 18%;
+}
 
 /*  ===============================================================*/
 /* Media Query for smaller screens (tablets and phones) */

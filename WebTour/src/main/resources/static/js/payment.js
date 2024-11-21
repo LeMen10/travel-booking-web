@@ -546,8 +546,9 @@ async function removePaypalButtons() {
 async function checkPromotion() {
 	let promotionCode = document.getElementById("discount-code").value;
 	let userId = sessionStorage.getItem("userId");
+	//th:attr="data-id=${tourPayment.originalId}" sử dụng originalId để lưu khi thực hiện kiểm tra mã giảm giá vì bảng promotonDetail lưu tourId gốc là originalId 
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
-
+	console.log("tourId ", tourId);
 	const url = `http://localhost:8080/api-check-promotion?code=${promotionCode}&userId=${userId}&tourId=${tourId}`;
 	const request = new Request(url, {
 		method: "GET",

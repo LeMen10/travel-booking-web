@@ -65,7 +65,7 @@
 					<tr th:each="booking : ${bookings}">
 						<td class="table-td" th:text="${booking[0]}" th:attr="data-booking-id=${booking[0]}"></td>
 						<!-- Mã đơn -->
-						<td class="table-td"><a th:text="${booking[4]}"
+						<td class="tour-name table-td"><a th:text="${booking[4]}"
 							th:href="@{/detail-tour/{id}(id=${booking[11]})}"></a></td>
 						<!-- Tour -->
 						<td class="table-td" th:text="${booking[10]}"></td>

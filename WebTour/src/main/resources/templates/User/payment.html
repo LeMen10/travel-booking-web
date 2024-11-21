@@ -98,7 +98,8 @@
 						</div>
 						<div class="code-tour">
 							<label>Mã tour: </label>
-							<p th:text="${tourPayment.originalId}" id="id-booking-info" th:attr="data-id=${tourPayment.tourId}" class="tour-id" ></p>
+							<!--th:attr="data-id=${tourPayment.originalId}" sử dụng originalId để lưu khi thực hiện kiểm tra mã giảm giá vì bảng promotonDetail lưu tourId gốc là originalId  -->
+							<p th:text="${tourPayment.tourId}" id="id-booking-info" th:attr="data-id=${tourPayment.originalId}" class="tour-id" ></p>
 						</div>
 						
 							<p th:text="${tourPayment.tourName}">Du Lịch 4 Đảo Phú Quốc: Hành Trình 1 ngày</p>

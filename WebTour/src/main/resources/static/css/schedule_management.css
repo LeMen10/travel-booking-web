@@ -230,6 +230,10 @@ th {
 	display: flex;
 	margin-top: 2%;
 }
+
+.td-table {
+	text-align: center;
+}
 /* dùng để đổi màu khi payment_status là paid (đã thanh toán) */
 .paid-status {
 	background-color: green;
@@ -246,6 +250,9 @@ th {
 
 .tour-name{
 	width: 32%;
+}
+.page-after{
+	margin-left: 1%;
 }
 
 /*phân trang  */

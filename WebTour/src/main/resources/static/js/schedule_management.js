@@ -41,15 +41,15 @@ async function showPerPage(page) {
 			data.content.forEach(tour => {
 				const row = document.createElement("tr");
 				row.innerHTML = `
-                    <td>${tour.tourId}</td>
-                    <td class="tour-name">${tour.tourName}</td>
-                    <td>${tour.transport}</td>
-                    <td>${tour.departure}</td>
-                    <td>${tour.destination}</td>
-                    <td>${new Date(tour.startDate).toLocaleDateString('vi-VN')}</td>
-                    <td>${new Date(tour.endDate).toLocaleDateString('vi-VN')}</td>
-                    <td>${tour.price}</td>
-                    <td>
+                    <td class="td-table">${tour.tourId}</td>
+                    <td class="td-table tour-name">${tour.tourName}</td>
+                    <td class="td-table">${tour.transport}</td>
+                    <td class="td-table">${tour.departure}</td>
+                    <td class="td-table">${tour.destination}</td>
+                    <td class="td-table">${new Date(tour.startDate).toLocaleDateString('vi-VN')}</td>
+                    <td class="td-table">${new Date(tour.endDate).toLocaleDateString('vi-VN')}</td>
+                    <td class="td-table">${tour.price}</td>
+                    <td class="td-table">
 						<button type="button" class="btn-edit btn-primary" data-tour-id="${tour.tourId}">
 						                Edit
 			            </button>
@@ -152,14 +152,14 @@ async function searchTours(tourName, page) {
 			const row = document.createElement("tr");
 			row.innerHTML = `
 		                <td>${tour.tourId}</td>
-		                <td class="tour-name">${tour.tourName}</td>
-		                <td>${tour.transport}</td>
-		                <td>${tour.departure}</td>
-		                <td>${tour.destination}</td>
-		                <td>${new Date(tour.startDate).toLocaleDateString('vi-VN')}</td>
-		                <td>${new Date(tour.endDate).toLocaleDateString('vi-VN')}</td>
-		                <td>${tour.price}</td>
-		                <td>
+		                <td class="td-table tour-name">${tour.tourName}</td>
+		                <td class="td-table">${tour.transport}</td>
+		                <td class="td-table">${tour.departure}</td>
+		                <td class="td-table">${tour.destination}</td>
+		                <td class="td-table">${new Date(tour.startDate).toLocaleDateString('vi-VN')}</td>
+		                <td class="td-table">${new Date(tour.endDate).toLocaleDateString('vi-VN')}</td>
+		                <td class="td-table">${tour.price}</td>
+		                <td class="td-table">
 							<button type="button" class="btn-edit btn-primary" 
 					            onclick="window.location.href='/api-edit-schedule/${tour.tourId}'">
 					            Edit
