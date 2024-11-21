@@ -33,7 +33,9 @@ public class Image {
     @Column(name = "image_data")
     private byte[] imageData;
 	
-	
+	@Column(name = "is_background")
+	private boolean isBackground;
+	 
 	public byte[] getImageData() {
 		return imageData;
 	}
@@ -50,8 +52,6 @@ public class Image {
 		this.imageId = imageId;
 	}
 
-
-
 	public Tours getTours() {
 		return tours;
 	}
@@ -67,6 +67,12 @@ public class Image {
 	public void setImageCode(String imageCode) {
 		this.imageCode = imageCode;
 	}
-	
+	public boolean isBackground() {
+        return isBackground;
+    }
+
+    public void setBackground(boolean isBackground) {
+        this.isBackground = isBackground;
+    }
 	
 }

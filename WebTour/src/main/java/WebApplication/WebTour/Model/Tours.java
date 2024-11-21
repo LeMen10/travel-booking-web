@@ -159,7 +159,7 @@ public class Tours implements Serializable{
 	}
 
 	public void setDetail(String detail) {
-		detail = detail;
+		this.detail = detail;
 	}
 
 	public Date getStartDate() {
@@ -183,7 +183,7 @@ public class Tours implements Serializable{
 	}
 
 	public void setPrice(float price) {
-		price = price;
+		this.price = price;
 	}
 
 	public int getPeopleMax() {

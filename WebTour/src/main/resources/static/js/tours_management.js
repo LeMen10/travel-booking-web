@@ -55,6 +55,8 @@ function closeForm() {
     document.getElementById("overlay").style.display = "none";
     document.getElementById("form-popup").style.display = "none";
 }
+
+
 function abbreviate(text, maxLength) {
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
 }
@@ -154,10 +156,10 @@ async function loadPage(page) {
 	}
 
 	
-	let selectedBackgroundIndex = null;
+	let selectedBackground = null; // Lưu trữ ảnh background
 	let selectedImages = []; // Mảng lưu trữ các ảnh đã chọn
+
 	function previewImages() {
-		console.log(selectedBackgroundIndex);
 	    const imageInput = document.getElementById("imageInput");
 	    const imagePreviewContainer = document.getElementById("imagePreviewContainer");
 
@@ -170,7 +172,7 @@ async function loadPage(page) {
 	    imagePreviewContainer.innerHTML = "";
 	    selectedImages.forEach((file, index) => {
 	        const reader = new FileReader();
-	        
+
 	        reader.onload = function(event) {
 	            const imageWrapper = document.createElement("div");
 	            imageWrapper.classList.add("image-preview");
@@ -194,70 +196,373 @@ async function loadPage(page) {
 	            backgroundToggle.onclick = function() {
 	                selectBackground(index);
 	            };
-				
-				if (index === selectedBackgroundIndex) {
-					imageWrapper.classList.add("selected");
-				}
+
+	            // Thêm class nếu ảnh này là background
+	            if (selectedBackground === index) {
+	                imageWrapper.classList.add("selected");
+	            }
+
 	            imageWrapper.appendChild(img);
 	            imageWrapper.appendChild(removeButton);
 	            imageWrapper.appendChild(backgroundToggle);
 	            imagePreviewContainer.appendChild(imageWrapper);
 	        };
-			
+
 	        reader.readAsDataURL(file);
 	    });
-	    
+
 	    // Reset input để người dùng có thể chọn lại file khác nếu muốn
 	    imageInput.value = "";
 	}
 
 	function removeImage(index) {
 	    selectedImages.splice(index, 1); // Xóa ảnh khỏi mảng selectedImages
-		// Điều chỉnh selectedBackgroundIndex nếu ảnh background bị xóa
-		    if (selectedBackgroundIndex === index) {
-		        selectedBackgroundIndex = null;
-		    } else if (selectedBackgroundIndex > index) {
-		        selectedBackgroundIndex--; // Điều chỉnh lại index background nếu ảnh phía trước bị xóa
-		    }
 
-		    previewImages(); // Hiển thị lại ảnh
+	    // Điều chỉnh selectedBackground nếu ảnh background bị xóa
+	    if (selectedBackground === index) {
+	        selectedBackground = null;
+	    } else if (selectedBackground > index) {
+	        selectedBackground--; // Điều chỉnh lại index background nếu ảnh phía trước bị xóa
+	    }
+
+	    previewImages(); // Hiển thị lại ảnh
 	}
 
 	function selectBackground(index) {
-		const imagePreviews = document.querySelectorAll(".image-preview");
+	    const imagePreviews = document.querySelectorAll(".image-preview");
 
-		   // Bỏ chọn ảnh background hiện tại nếu có
-		   if (selectedBackgroundIndex !== null) {
-		       imagePreviews[selectedBackgroundIndex].classList.remove("selected");
-		   }
+	    // Bỏ chọn ảnh background hiện tại nếu có
+	    if (selectedBackground !== null) {
+	        imagePreviews[selectedBackground].classList.remove("selected");
+	    }
 
-		   // Chọn ảnh mới làm background
-		   selectedBackgroundIndex = index;
-		   imagePreviews[selectedBackgroundIndex].classList.add("selected");
+	    // Chọn ảnh mới làm background
+	    selectedBackground = index;
+	    imagePreviews[selectedBackground].classList.add("selected");
 	}
-	async function uploadImage() {
-	    const fileInput = selectedImages;
-	    const tourId = 1; // Giả sử ID tour là 1, bạn có thể lấy giá trị này động từ dữ liệu tour của bạn
+	//Hàm giảm kích thước ảnh
+	async function compressImage(file) {
+	    return new Promise((resolve, reject) => {
+	        const reader = new FileReader();
+	        reader.onload = () => {
+	            const img = new Image();
+	            img.src = reader.result;
+	            img.onload = () => {
+	                const canvas = document.createElement("canvas");
+	                // Giữ nguyên kích thước gốc
+	                canvas.width = img.width;
+	                canvas.height = img.height;
 
-	    if (fileInput.files.length === 0) {
-	        alert("Please select an image to upload");
+	                const ctx = canvas.getContext("2d");
+	                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+	                // Giảm chất lượng để giảm kích thước
+	                canvas.toBlob(
+	                    (blob) => {
+	                        if (blob.size > 40 * 1024 * 1024) {
+	                            console.warn("Kích thước ảnh vượt quá 40 MiB sau khi nén!");
+	                        }
+	                        resolve(new File([blob], file.name, { type: "image/jpeg" }));
+	                    },
+	                    "image/jpeg",
+	                    0.5 // Chất lượng nén (0 - 1)
+	                );
+	            };
+	        };
+	        reader.onerror = (error) => reject(error);
+	        reader.readAsDataURL(file);
+	    });
+	}
+	// Hàm lưu trữ ảnh
+	async function saveImagesToServer(tourId) {
+		console.log('Tour created with ID:', tourId);
+		const backgroundImage = selectedBackground !== null ? selectedImages[selectedBackground] : null;
+			    const otherImages = selectedImages.filter((_, index) => index !== selectedBackground);
+
+			    console.log("Background Image:", backgroundImage);
+			    console.log("Other Images:", otherImages);
+	    if (!selectedBackground && selectedImages.length === 0) {
+	        alert("No images to save!");
 	        return;
 	    }
 
-	    const formData = new FormData();
-	    formData.append("file", fileInput.files[0]);
-	    formData.append("tourId", tourId);
-		alert(fileInput.files[0],tourId)
-	    try {
-	        const response = await fetch("/api/images/upload", {
-	            method: "POST",
-	            body: formData,
-	        });
+		const compressedBackground = await compressImage(backgroundImage);
+		const compressedOthers = await Promise.all(otherImages.map(file => compressImage(file)));
+		const formData = new FormData();
+		formData.append("backgroundImage", compressedBackground);
+		compressedOthers.forEach(file => formData.append("otherImages", file));
 
-	        const result = await response.text();
-	        alert(result); // Thông báo kết quả
-	    } catch (error) {
-	        console.error("Error uploading image:", error);
-	        alert("Failed to upload image");
-	    }
+	    // Gửi yêu cầu đến server
+		 await fetch(`/image/upload/${tourId}`, {
+		            method: "POST",
+		            body: formData,
+		        })
+	        .then((response) => {
+	            if (response.ok) {
+	                alert("Tạo tour thành công");
+	            } else {
+	                alert("Failed to upload images.");
+	            }
+	        })
+	        .catch((error) => {
+	            console.error("Error uploading images:", error);
+	            alert("Error uploading images.");
+	        });
 	}
+	var tourID = null;
+	async function submitForm() {
+	    // Lấy giá trị từ các trường input trong form
+	    const tourName = document.getElementById('tourName').value;
+	    		
+		var departureSelect = document.getElementById('departureSelect');
+		var departure = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+		var destinationSelect = document.getElementById('destinationSelect');
+		var destination = destinationSelect.options[destinationSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+								
+	    const startDate = document.getElementById('startDate').value;
+	    const endDate = document.getElementById('endDate').value;
+	    const detail = document.getElementById('detail').value;
+	    const peopleMax = document.getElementById('peopleMax').value;
+	    const price = document.getElementById('price').value;
+		const transport = document.getElementById('transport').value;
+		
+
+	    // Chuyển dữ liệu thành x-www-form-urlencoded
+	    const formData = new URLSearchParams();
+	    formData.append('tourName', tourName);
+	    formData.append('departure', departure);
+	    formData.append('destination', destination);
+	    formData.append('startDate', startDate);
+	    formData.append('endDate', endDate);
+	    formData.append('detail', detail);
+	    formData.append('peopleMax', peopleMax);
+	    formData.append('price', price);
+		formData.append('transport', transport);
+	    // Gửi dữ liệu qua API
+	    fetch('/api-create-tours', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/x-www-form-urlencoded'  // Định dạng dữ liệu là x-www-form-urlencoded
+	        },
+	        body: formData  // Gửi dữ liệu dưới dạng x-www-form-urlencoded
+	    })
+	    .then(response => response.json())  // Nhận phản hồi từ server
+	    .then(tourId => {
+			tourID = tourId;
+			console.log('Tour created with ID:', tourId);
+			CreateSchedule(tourId);
+			saveImagesToServer(tourId);
+	    })
+	    .catch((error) => {
+	        console.error('Error:', error);
+	    });
+	}
+	async function creatTour(){
+		submitForm();
+		console.log('Tour created with ID 111:', tourID);
+	}
+
+	    const createButton = document.querySelector(".btn-insert-schedule");
+	    const createmodal = document.getElementById("createModal");
+		const editmodal = document.getElementById("editModal");
+	    const overlay = document.getElementById("overlay1");
+	    const cancelButtons = document.querySelectorAll(".btn-cancel");
+
+	    // Hiển thị modal và overlay
+	    createButton.addEventListener("click", () => {
+	        createmodal.style.display = "block";
+	        overlay.style.display = "block";
+	    });
+
+	    // Ẩn modal và overlay
+	    const closeModal = () => {
+	        createmodal.style.display = "none";
+	        overlay.style.display = "none";
+	    };
+
+	    // Xử lý nút Cancel
+	    cancelButtons.forEach(button => {
+	        button.addEventListener("click", closeModal);
+	    });
+
+	    // Ẩn modal khi click vào overlay
+	    overlay.addEventListener("click", closeModal);
+		
+		//==============================
+		const scheduleTableBody = document.querySelector("#schedule-table tbody");
+		    const okButton = document.getElementById("btn-Ok-Insert-Schedule");
+		    const activityInput = document.getElementById("activity-input");
+		    const locationInput = document.getElementById("location-input");
+			
+			const activityInputEdit = document.getElementById("activity-input-edit");
+			const locationInputEdit = document.getElementById("location-input-edit");
+					
+			const okButtonEdit = document.getElementById("btn-Ok-Update-Schedule");
+			const cancelButtonEdit = document.getElementById("btn-Cancel-Update-Schedule");
+		    let schedules = []; // Lưu dữ liệu lịch trình
+			
+		    overlay.addEventListener("click", closeModal);
+
+		    // Thêm dữ liệu vào bảng
+		    okButton.addEventListener("click", () => {
+		        const activity = activityInput.value.trim();
+		        const location = locationInput.value.trim();
+
+		        if (activity === "" || location === "") {
+		            alert("Vui lòng điền đầy đủ thông tin.");
+		            return;
+		        }
+
+		        const step = schedules.length + 1;
+
+		        const schedule = { step, activity, location };
+		        schedules.push(schedule); // Lưu vào mảng
+
+		        // Thêm dòng dữ liệu mới vào bảng
+		        const row = document.createElement("tr");
+		        row.innerHTML = `
+		            <td>${step}</td>
+		            <td>${activity}</td>
+		            <td>${location}</td>
+		            <td><button type="button" class="edit-btn">Sửa</button></td>
+		            <td><button class="delete-btn">Xóa</button></td>
+		        `;
+		        scheduleTableBody.appendChild(row);
+
+		        
+
+		        // Xử lý nút sửa
+				row.querySelector(".edit-btn").addEventListener("click", () => {
+							document.getElementById("step-input-edit").textContent = schedule.step;
+				            activityInputEdit.value = schedule.activity;
+				            locationInputEdit.value = schedule.location;
+				            editmodal.style.display = "block";
+				            overlay.style.display = "block";
+
+				            okButtonEdit.onclick = () => {
+				                schedule.activity = activityInputEdit.value.trim();
+				                schedule.location = locationInputEdit.value.trim();
+
+				                if (schedule.activity === "" || schedule.location === "") {
+				                    alert("Vui lòng điền đầy đủ thông tin.");
+				                    return;
+				                }
+
+				                row.children[1].textContent = schedule.activity;
+				                row.children[2].textContent = schedule.location;
+								console.log(schedule);
+								updateTable();
+								editmodal.style.display = "none";
+								overlay.style.display = "none";
+				            };
+							cancelButtonEdit.onclick = () => {
+								editmodal.style.display = "none";
+								overlay.style.display = "none";
+							};
+							overlay.onclick = () => {
+								editmodal.style.display = "none";
+								overlay.style.display = "none";
+							};
+				        });
+
+		        // Xử lý nút xóa
+		        row.querySelector(".delete-btn").addEventListener("click", () => {
+		            const index = schedules.indexOf(schedule);
+		            schedules.splice(index, 1); // Xóa khỏi mảng
+		            row.remove();
+
+		            // Cập nhật lại step trong bảng
+		            Array.from(scheduleTableBody.children).forEach((r, idx) => {
+		                r.children[0].textContent = idx + 1;
+		                schedules[idx].step = idx + 1;
+		            });
+		        });
+		    });
+		    // Gửi dữ liệu qua controller
+			function CreateSchedule(TourId) {
+				const scheduleTableBody = document.querySelector("#schedule-table tbody");
+			    // Tạo object chứa cả TourId và schedules
+				if(scheduleTableBody==null){
+					return;
+				}
+			    const dataToSend = {
+			        tourId: TourId,
+			        schedules: schedules // Mảng các lịch trình
+			    };
+
+			    console.log("Dữ liệu gửi đi:", JSON.stringify(dataToSend)); // Log lại dữ liệu trước khi gửi
+
+			    fetch("/api-schedule-tour-management", {
+			        method: "POST",
+			        headers: {
+			            "Content-Type": "application/json",
+			        },
+			        body: JSON.stringify(dataToSend), // Gửi dữ liệu bao gồm TourId và schedules
+			    })
+			    .then(response => response.json())
+			    .then(data => {
+			        console.log("Dữ liệu đã gửi thành công:", data);
+			    })
+			    .catch(error => {
+			        console.error("Lỗi khi gửi dữ liệu:", error);
+			    });
+			}
+
+			function updateTable() {
+			    // Xóa toàn bộ nội dung bảng
+			    scheduleTableBody.innerHTML = "";
+
+			    // Lặp qua mảng schedules để tạo lại bảng
+			    schedules.forEach((schedule, index) => {
+			        schedule.step = index + 1; // Cập nhật step
+			        const row = document.createElement("tr");
+			        row.innerHTML = `
+			            <td>${schedule.step}</td>
+			            <td>${schedule.activity}</td>
+			            <td>${schedule.location}</td>
+			            <td><button type="button" class="edit-btn">Sửa</button></td>
+			            <td><button class="delete-btn">Xóa</button></td>
+			        `;
+			        scheduleTableBody.appendChild(row);
+
+			        // Xử lý nút sửa
+			        row.querySelector(".edit-btn").addEventListener("click", () => {
+						document.getElementById("step-input-edit").textContent = schedule.step;
+						activityInputEdit.value = schedule.activity;
+						locationInputEdit.value = schedule.location;
+			            editmodal.style.display = "block";
+			            overlay.style.display = "block";
+
+			            okButtonEdit.onclick = () => {
+			                schedule.activity = activityInputEdit.value.trim();
+			                schedule.location = locationInputEdit.value.trim();
+
+			                if (schedule.activity === "" || schedule.location === "") {
+			                    alert("Vui lòng điền đầy đủ thông tin.");
+			                    return;
+			                }
+
+			                editmodal.style.display = "none";
+			                overlay.style.display = "none";
+			                updateTable();
+							cancelButtonEdit.onclick = () => {
+								editmodal.style.display = "none";
+								overlay.style.display = "none";
+							};
+							overlay.onclick = () => {
+								editmodal.style.display = "none";
+								overlay.style.display = "none";
+							};
+			            };
+			        });
+
+			        // Xử lý nút xóa
+			        row.querySelector(".delete-btn").addEventListener("click", () => {
+			            schedules.splice(index, 1); // Xóa khỏi mảng
+			            updateTable(); // Cập nhật lại bảng sau khi xóa
+			        });
+			    });
+			}
+
+
+

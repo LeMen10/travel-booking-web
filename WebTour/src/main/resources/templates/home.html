@@ -628,18 +628,10 @@
                     const query = searchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
                     if (query) {
                         // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
-                        window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
+                        window.location.href = `http://localhost:8080/search?tourName=${encodeURIComponent(query)}`;
                     }else{
                 	    alert("Vui lòng nhập thông tin tìm kiếm");
                 	    return;
-                    }
-                }
-                // Hàm chuyển hướng có đối số
-                function redirectToSearch2() {
-                    const query = mainsearchInput.value.trim(); // Lấy giá trị nhập vào và loại bỏ khoảng trắng thừa
-                    if (query) {
-                        // Chuyển hướng đến URL mới, có thể tùy chỉnh URL này theo nhu cầu
-                        window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
                     }
                 }
                 // Sự kiện nhấn Enter trong input
