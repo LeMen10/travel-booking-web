@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			showImage(image);
 		});
 	});
+	
 	var plus = document.getElementById("bt-plus");
 	plus.addEventListener("click", function() {
 
@@ -55,6 +56,28 @@ document.addEventListener('DOMContentLoaded', function() {
 		await createReview();
 	});
 })
+
+let scrollPosition = 0; // Vị trí cuộn hiện tại
+const scrollAmount = 160; // Độ dài mỗi lần cuộn (150px width + 10px gap)
+const thumbnails = document.querySelector(".image-thumbnails");
+const thumbnailContainer = document.querySelector(".thumbnail-container");
+
+function scrollThumbnails(direction) {
+    // Tổng độ rộng của tất cả các ảnh
+    const thumbnailsWidth = thumbnails.scrollWidth;
+    // Độ rộng hiển thị của container
+    const containerWidth = thumbnailContainer.offsetWidth;
+
+    // Tính vị trí cuộn mới
+    scrollPosition += direction * scrollAmount;
+
+    // Đảm bảo không cuộn vượt quá giới hạn
+    scrollPosition = Math.max(0, Math.min(scrollPosition, thumbnailsWidth - containerWidth));
+
+    // Cập nhật vị trí cuộn bằng CSS transform
+    thumbnails.style.transform = `translateX(-${scrollPosition}px)`;
+}
+
 
 function navigateContractPage() {
     window.location.href = `http://localhost:8080/contract`;

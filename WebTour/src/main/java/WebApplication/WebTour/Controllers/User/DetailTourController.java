@@ -82,7 +82,7 @@ public class DetailTourController {
 			}
 			List<Schedules> schedules = schedulesRepository.findSchedulesByTourId(tour.getTourId().intValue());
 			List<Reviews> reviews = reviewsRepository.findReviewsByTourId(tourId);
-			List<Image> images = imageRepository.findByTours(tour);
+			List<Image> images = imageRepository.getImageOfTour(tour.getTourId());
 
 			System.out.println("Số lượng ảnh: " + images.size());
 			model.addAttribute("tour", detailTour.get());

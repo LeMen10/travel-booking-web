@@ -35,6 +35,9 @@ public class Image {
 	
 	@Column(name = "is_background")
 	private boolean isBackground;
+	
+	@Column(name = "status")
+	private boolean status;
 	 
 	public byte[] getImageData() {
 		return imageData;
@@ -62,6 +65,14 @@ public class Image {
 
 	public String getImageCode() {
 		return imageCode;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public void setImageCode(String imageCode) {

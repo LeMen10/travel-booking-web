@@ -65,8 +65,8 @@ body {
 	display: flex;
 	justify-content: space-between;
 }
-
-.main-content .image-gallery {
+/* ================================================================================= */
+/* .main-content .image-gallery {
 	width: 56%;
 }
 
@@ -85,8 +85,64 @@ body {
 	width: 24%;
 	border-radius: 10px;
 	cursor: pointer;
+} */
+.image-gallery {
+	margin-right: 1%;
+}
+.thumbnail-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 800px; /* Độ rộng tổng thể cho 4 ảnh */
+    overflow: hidden; /* Ẩn các ảnh bị tràn */
+}
+#main-image{
+	border-radius: 14px;
+	width: 800px;
+}
+.image-thumbnails {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa các ảnh */
+    transition: transform 0.3s ease-in-out;
 }
 
+.sub-image {
+	border-radius: 14px;
+    flex-shrink: 0; /* Không co lại khi bị tràn */
+    cursor: pointer;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #C8A8E9;
+    color: white; 
+    border: none; 
+    border-radius: 50%; 
+    padding: 15px; 
+    cursor: pointer;
+    z-index: 1; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Tạo bóng đổ nhẹ cho nút */
+    transition: all 0.3s ease; /* Hiệu ứng mượt khi hover */
+}
+
+/* Nút mũi tên khi hover */
+.arrow:hover {
+    background-color: #50e0eb; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Tăng độ bóng khi hover */
+    transform: translateY(-50%) scale(1.1); /* Tăng kích thước khi hover */
+}
+
+.left-arrow {
+    left: 10px; 
+}
+
+.right-arrow {
+    right: 10px; 
+}
+
+/* ================================================================================= */
 .main-content .booking-info {
 	width: 40%;
 	background-color: #50e0eb;
@@ -302,6 +358,7 @@ body {
 }
 
 .container4 {
+	
 	background-color: #f5fdf4;
 	border: 1px solid #e0e0e0;
 	padding: 20px;
@@ -499,75 +556,86 @@ pre {
     }
 
     .main-content .booking-info {
-        width: 100%; 
-        margin-left: 0; 
+        width: 111%; 
+        margin-left: 9%; 
         margin-right: 0; 
     }
 
+	#main-image, .second-main-content 
+	{
+		width: 111%; 
+	}
     .main-content .image-thumbnails img {
-        width: 48%; /* Giảm kích thước hình ảnh thumbnail */
+    	 
+    }
+    
+    .thumbnail-container {
+        width: 110%; 
+        height: 30%;
+    }
+
+    .sub-image {
+        width: auto; 
     }
 
     .booking-info .total-price {
-        font-size: 20px; /* Giảm kích thước chữ */
+        font-size: 20px; 
     }
 
     .booking-info .buttons {
         flex-direction: column; /* Xếp dọc các nút */
-        padding: 0; /* Bỏ padding */
+        padding: 0;
     }
 
     .button {
-        width: 100%; /* Chiếm toàn bộ chiều rộng */
-        margin-top: 10px; /* Thêm khoảng cách giữa các nút */
+        width: 100%; 
+        margin-top: 10px;
     }
 
     .review-container {
-        width: 90%; /* Chiếm 90% chiều rộng */
+        width: 90%;
     }
 
     #schedule {
-        padding: 10px; /* Giảm padding */
+        padding: 10px; 
     }
-    .sub-image{
-    margin-right: 1%;
-    }
+    
     #book-now{
     	margin-top: 1%;
     }
     .main-content .image-thumbnails{
-    	display: block;
+    	margin-bottom: 1%;
     	width: 102%;
     }
 }
 
 @media (max-width: 480px) {
     .header-content h1 {
-        font-size: 20px; /* Giảm kích thước chữ tiêu đề */
+        font-size: 20px;
     }
 
     .info div i {
-        font-size: 20px; /* Giảm kích thước biểu tượng */
+        font-size: 20px; 
     }
 
     .total {
-        font-size: 16px; /* Giảm kích thước chữ tổng cộng */
+        font-size: 16px;
     }
 
     .booking-info .total-price {
-        font-size: 18px; /* Giảm kích thước chữ tổng giá */
+        font-size: 18px; 
     }
 
     .review-container {
-        width: 100%; /* Chiếm toàn bộ chiều rộng */
+        width: 100%; 
     }
 
     .tabs {
-        flex-direction: column; /* Xếp dọc các tab */
+        flex-direction: column; 
     }
 
     .tab {
-        padding: 10px; /* Giảm padding của tab */
+        padding: 10px; 
     }
     #book-now{
     	margin-top: 1%;
