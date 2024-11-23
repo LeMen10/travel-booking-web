@@ -120,6 +120,7 @@ th, td {
 }
 
 .filter button {
+	margin-right: 1%;
 	padding: 5px 18px;
 	background-color: #3498db;
 	color: white;
@@ -269,31 +270,46 @@ th, td {
     height: 90%;
     overflow-y: auto;
 }
-.form-popup::-webkit-scrollbar-track {
+.form-popup-update-tour {
+    display: none; /* Ẩn mặc định */
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    /* transform: translate(-50%, -50%); */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px; 
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    z-index: 101; /* Trên vùng tối */
+    width: 90%;
+    height: 90%;
+    overflow-y: auto;
+}
+.form-popup::-webkit-scrollbar-track,.form-popup-update-tour::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 5px; /* Bo tròn thanh cuộn */
 }
-.form-popup::-webkit-scrollbar {
+.form-popup::-webkit-scrollbar,.form-popup-update-tour::-webkit-scrollbar {
     width: 8px; /* Độ rộng của thanh cuộn */
 }
-.form-popup::-webkit-scrollbar-thumb {
+.form-popup::-webkit-scrollbar-thumb,.form-popup-update-tour::-webkit-scrollbar-thumb {
     background-color: #888;
     border-radius: 5px; /* Bo tròn phần trượt */
 }
 /* Các thành phần trong form */
-.form-popup h3 {
+.form-popup h3,.form-popup-update-tour h3 {
     margin-top: 10px;
     font-size: 1.2em;
     text-align: center;
 }
 
-.form-popup label {
+.form-popup label,.form-popup-update-tour label {
     display: block;
     margin-top: 10px;
     font-weight: bold;
 }
 
-.form-popup input, .form-popup textarea {
+.form-popup input, .form-popup textarea,.form-popup-update-tour input,.form-popup-update-tour textarea {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -304,7 +320,7 @@ th, td {
 
 
 /* Nút Lưu */
-.form-popup button[type="submit"] {
+.form-popup button[type="submit"],.form-popup-update-tour button[type="submit"]{
      margin-top: 15px;
     padding: 10px;
     width: 100%;
@@ -356,8 +372,9 @@ th, td {
         gap: 10px;
         margin-top: 10px;
     }
-
+	
     .image-preview {
+    	margin: 5px;
         position: relative;
         display: inline-block;
     }
@@ -454,6 +471,7 @@ th, td {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin: 0 5%;	
 }
 .btn-insert-schedule{
 	margin-top: 10px;
@@ -482,6 +500,9 @@ th, td {
     margin-top: 5px;
     border: 1px solid #ddd;
     border-radius: 4px;
+}
+#detail-update{
+	height: 150px;
 }
 .col-id { width: 5%; }
 .col-tour-name { width: 15%; }

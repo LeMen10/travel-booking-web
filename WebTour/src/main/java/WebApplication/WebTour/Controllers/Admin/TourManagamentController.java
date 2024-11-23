@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import WebApplication.WebTour.Model.Account;
 import WebApplication.WebTour.Model.Guides;
 import WebApplication.WebTour.Model.Image;
 import WebApplication.WebTour.Model.Schedules;
@@ -62,6 +64,37 @@ public class TourManagamentController {
 
 	    return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	@GetMapping("/api-get-tour-by-id")
+	public ResponseEntity<Tours> getTourById(@RequestParam Long tourId) {
+	    Optional<Tours> tourOptional = toursRepository.findById(tourId);
+
+	    if (tourOptional.isPresent()) {
+	        return new ResponseEntity<>(tourOptional.get(), HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	}
+	@GetMapping("/api-get-image-by-id")
+	public ResponseEntity<List<Image>> getImageById(@RequestParam Long tourId) {
+		Optional<Tours> tour = toursRepository.findById(tourId);
+	    List<Image> imageOptional = imageRepository.getImageOfTour(tour.get().getTourId());
+
+	    if (imageOptional!=null) {
+	        return new ResponseEntity<>(imageOptional, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	}
+	@GetMapping("/api-update-status-image")
+	public ResponseEntity<?> deleteImage(@RequestParam Long imageId) {
+	    try {
+	        imageRepository.updateStatusByImageId(imageId);
+	        return ResponseEntity.ok("Image deleted successfully");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image");
+	    }
+	}
+
 	@GetMapping("/admin/tours-management")
     public String toursManagementPage(
     		@RequestParam(defaultValue = "0") int page,
@@ -133,6 +166,46 @@ public class TourManagamentController {
 	    System.out.println("aaaaaaaaaaa"+newTour.getTourId());
 	    // Trả về TourId sau khi lưu
 	    return ResponseEntity.ok(newTour.getTourId());
+	}
+	@PostMapping("/api-update-tours/{tourId}")
+	public ResponseEntity<Long> updateTour(
+			@PathVariable Long tourId,
+	        @RequestParam String tourName,
+	        @RequestParam String departure,
+	        @RequestParam String destination,
+	        @RequestParam String startDate,
+	        @RequestParam String endDate,
+	        @RequestParam String detail,
+	        @RequestParam int peopleMax,
+	        @RequestParam float price,
+	        @RequestParam String transport) {
+
+	    // Chuyển đổi String thành Date
+	    Date sqlStartDate = Date.valueOf(startDate);
+	    Date sqlEndDate = Date.valueOf(endDate);
+
+	    // Tạo đối tượng Tour và set giá trị từ các tham số
+	    Optional<Tours> newTour = toursRepository.findById(tourId);
+	    newTour.get().setTourName(tourName);
+	    newTour.get().setDeparture(departure);
+	    newTour.get().setDestination(destination);
+	    newTour.get().setStartDate(sqlStartDate);  // Set giá trị startDate
+	    newTour.get().setEndDate(sqlEndDate);      // Set giá trị endDate
+	    newTour.get().setDetail(detail);
+	    newTour.get().setPeopleMax(peopleMax);
+	    newTour.get().setPrice(price);
+	    
+	    newTour.get().setStatus(true);
+	    newTour.get().setTransport(transport);
+	    
+	    Optional<Guides> guide = guidesRepository.findById((long) 1);
+	    newTour.get().setGuides(guide.get());
+
+	    // Lưu Tour mới vào cơ sở dữ liệu
+	    toursRepository.save(newTour.get());
+	    
+	    // Trả về TourId sau khi lưu
+	    return ResponseEntity.ok(newTour.get().getTourId());
 	}
 	@PostMapping("/api-schedule-tour-management")
     public ResponseEntity<?> saveSchedules(@RequestBody Map<String, Object> requestData) {

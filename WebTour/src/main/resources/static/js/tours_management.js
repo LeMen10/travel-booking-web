@@ -1,12 +1,85 @@
 // Gọi hàm khi trang được tải xong
-document.addEventListener("DOMContentLoaded", formatPriceColumn);
+document.addEventListener("DOMContentLoaded", function(){
+	formatPriceColumn();
+	
+});
+
 let currentPage=0;
-function editTour(element) {
-    const tourId = element.getAttribute("data-tourid");
-    // Thực hiện các thao tác chỉnh sửa với tourId
-    console.log("Editing tour with ID:", tourId);
+async function loadTourById(tourId) {
+    const url = `http://localhost:8080/api-get-tour-by-id?tourId=` + tourId;
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            console.error("Có lỗi xảy ra khi lấy dữ liệu tour:", response.status);
+            return;
+        }
+
+        const data = await response.json(); // Parse JSON từ phản hồi
+        console.log("Dữ liệu tour:", data);
+
+        // Hiển thị dữ liệu lên form
+		document.getElementById("tourName-update").value = data.tourName || "";
+		document.getElementById("startDate-update").value = data.startDate || "";
+		document.getElementById("endDate-update").value = data.endDate || "";
+		document.getElementById("detail-update").value = data.detail || "";
+		document.getElementById("transport-update").value = data.transport || "";
+		document.getElementById("peopleMax-update").value = data.peopleMax || "";
+		document.getElementById("price-update").value = data.price || "";
+		
+		const departureSelect = document.getElementById("departureSelect-update");
+		const departureValue = data.departure || "";
+		Array.from(departureSelect.options).forEach(option => {
+		    if (option.text === departureValue) {
+		        option.selected = true;
+		    }
+		});
+
+
+		// Xử lý hiển thị giá trị "Điểm đến"
+		const destinationSelect = document.getElementById("destinationSelect-update");
+		const destinationValue = data.destination || "";
+		Array.from(destinationSelect.options).forEach(option => {
+		    if (option.text === destinationValue) {
+		        option.selected = true;
+		    }
+		});
+
+    } catch (error) {
+        console.error("Lỗi trong loadTourById:", error);
+    }
 }
 
+function editTour(element) {
+	
+    const tourId = element.getAttribute("data-tourid");
+	loadTourById(tourId);
+	tourID = tourId;
+    // Thực hiện các thao tác chỉnh sửa với tourId
+    console.log("Editing tour with ID:", tourId);
+	document.getElementById("overlay").style.display = "block";
+	document.getElementById("form-popup-update-tour").style.display = "block";
+	document.getElementById("btn-close").addEventListener("click", closeForm);
+	document.getElementById("overlay").addEventListener("click", closeForm);
+			// Ẩn form và vùng tối
+	function closeForm() {
+		document.getElementById("overlay").style.display = "none";
+		document.getElementById("form-popup-update-tour").style.display = "none";
+	}
+
+	existingImages = [];
+	selectedImagesUpdate = [];
+	loadTourImages(tourId);
+	selectedBackgroundCreate=null;
+	const imagePreviewContainer = document.getElementById(`createImagePreviewContainer`);
+	imagePreviewContainer.innerHTML = "";
+}
 function deleteTour(element) {
 	const tourId = element.getAttribute("data-tourid");
 	    console.log("Deleting tour with ID:", tourId);
@@ -47,6 +120,7 @@ function formatPriceColumn() {
 document.getElementById("add-tours-btn").addEventListener("click", function() {
     document.getElementById("overlay").style.display = "block";
     document.getElementById("form-popup").style.display = "block";
+
 });
 // Đóng form khi nhấn vào vùng tối
 document.getElementById("overlay").addEventListener("click", closeForm);
@@ -85,6 +159,7 @@ async function loadPage(page) {
 				           listTour.innerHTML = ""; // Clear current table data
 				           data.content.forEach(tour => {
 								const row = document.createElement("tr");
+								
 				               	row.innerHTML = `
 				                   
 				                       <td>${tour.tourId}</td>
@@ -156,20 +231,81 @@ async function loadPage(page) {
 	}
 
 	
-	let selectedBackground = null; // Lưu trữ ảnh background
-	let selectedImages = []; // Mảng lưu trữ các ảnh đã chọn
+	let selectedImagesCreate = []; // Ảnh trong form tạo
+	let selectedImagesUpdate = []; // Ảnh trong form cập nhật
+	let selectedBackgroundCreate = null; // Background trong form tạo
+	let selectedBackgroundUpdate = null; // Background trong form cập nhật
+	let existingImages = [];
+	let luuBackgroundID = null;
+	let deletedImageIds = [];
+	function previewImages(context) {
+	    // Xác định mảng và DOM dựa trên context
+	    const imageInput = document.getElementById(`${context}ImageInput`);
+	    const imagePreviewContainer = document.getElementById(`${context}ImagePreviewContainer`);
 
-	function previewImages() {
-	    const imageInput = document.getElementById("imageInput");
-	    const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+	    const selectedImages = context === "create" ? selectedImagesCreate : selectedImagesUpdate;
+	    const selectedBackground = context === "create" ? selectedBackgroundCreate : selectedBackgroundUpdate;
 
 	    // Duyệt qua các file được chọn và thêm vào mảng selectedImages
 	    Array.from(imageInput.files).forEach((file) => {
 	        selectedImages.push(file);
 	    });
-
+		
 	    // Xóa nội dung cũ và hiển thị lại toàn bộ ảnh trong selectedImages
-	    imagePreviewContainer.innerHTML = "";
+	   	imagePreviewContainer.innerHTML = "";
+		existingImages = context === "create" ? [] : existingImages;
+		console.log(existingImages);
+		if(existingImages.length>0){
+			console.log(selectedBackgroundUpdate);
+			existingImages.forEach((image,index) => {
+						        const imageWrapper = document.createElement("div");
+						        imageWrapper.classList.add("image-preview");
+
+						        const img = document.createElement("img");
+						        img.src = `/image/${image.imageId}`;
+								img.alt = `Image ${image.imageId}`;
+								 // Hiển thị ảnh từ server
+
+						        // Nút xóa
+						        const removeButton = document.createElement("button");
+						        removeButton.classList.add("remove-image");
+						        removeButton.type = "button";
+						        removeButton.innerHTML = "×";
+						        removeButton.onclick = function () {
+									deletedImageIds.push(image.imageId); // Lưu ID ảnh bị xóa
+															if(existingImages.length>0){
+																console.log("trcccccc"+selectedBackgroundUpdate);
+																if (selectedBackgroundUpdate === index) {
+																        selectedBackgroundUpdate = null;
+																    } else if (selectedBackgroundUpdate > index) {
+																        selectedBackgroundUpdate--; // Điều chỉnh lại index background nếu ảnh phía trước bị xóa
+																    }
+																	console.log("sauuuu"+selectedBackgroundUpdate);
+																existingImages.splice(index, 1);
+																previewImages("update");
+															}
+								    };
+						        // Nút chọn background
+						        const backgroundToggle = document.createElement("button");
+						        backgroundToggle.classList.add("background-toggle");
+						        backgroundToggle.type = "button";
+						        backgroundToggle.innerHTML = "✔";
+								if(selectedBackgroundUpdate==index){
+									imageWrapper.classList.add("selected");
+								}
+						        
+								
+						        backgroundToggle.onclick = function () {							
+									selectBackground(index, context);
+									luuBackgroundID=image.imageId;
+									
+								}
+						        imageWrapper.appendChild(img);
+						        imageWrapper.appendChild(removeButton);
+						        imageWrapper.appendChild(backgroundToggle);
+						        imagePreviewContainer.appendChild(imageWrapper);
+						    });
+		}
 	    selectedImages.forEach((file, index) => {
 	        const reader = new FileReader();
 
@@ -185,20 +321,25 @@ async function loadPage(page) {
 	            removeButton.type = "button";
 	            removeButton.innerHTML = "×";
 	            removeButton.onclick = function() {
-	                removeImage(index);
+					console.log("trc"+selectedBackgroundCreate);
+	                removeImage(index, context);
+					console.log("lalalala"+context);
+					console.log("sau"+selectedBackgroundCreate);
 	            };
 
 	            // Nút chọn background
+				
 	            const backgroundToggle = document.createElement("button");
 	            backgroundToggle.classList.add("background-toggle");
 	            backgroundToggle.type = "button";
 	            backgroundToggle.innerHTML = "✔";
 	            backgroundToggle.onclick = function() {
-	                selectBackground(index);
+	                selectBackground(index + existingImages.length, context);
+					luuBackgroundID = null;
 	            };
-
+				console.log("newwww"+selectedBackgroundCreate);
 	            // Thêm class nếu ảnh này là background
-	            if (selectedBackground === index) {
+	            if (selectedBackgroundCreate == index) {
 	                imageWrapper.classList.add("selected");
 	            }
 
@@ -213,11 +354,24 @@ async function loadPage(page) {
 
 	    // Reset input để người dùng có thể chọn lại file khác nếu muốn
 	    imageInput.value = "";
+
+	    // Cập nhật giá trị của selectedBackground cho context
+	    if (context === "create") {
+	        selectedBackgroundCreate = selectedBackground;
+	    } else {
+	        selectedBackgroundUpdate = selectedBackground;
+	    }
 	}
 
-	function removeImage(index) {
+	
+	function removeImage(index, context) {
+	    const selectedImages = context === "create" ? selectedImagesCreate : selectedImagesUpdate;
+	    let selectedBackground = context === "create" ? selectedBackgroundCreate : selectedBackgroundUpdate;
+		console.log(selectedImages);
+		console.log(selectedBackground);
+		console.log(index);
 	    selectedImages.splice(index, 1); // Xóa ảnh khỏi mảng selectedImages
-
+		
 	    // Điều chỉnh selectedBackground nếu ảnh background bị xóa
 	    if (selectedBackground === index) {
 	        selectedBackground = null;
@@ -225,20 +379,40 @@ async function loadPage(page) {
 	        selectedBackground--; // Điều chỉnh lại index background nếu ảnh phía trước bị xóa
 	    }
 
-	    previewImages(); // Hiển thị lại ảnh
-	}
-
-	function selectBackground(index) {
-	    const imagePreviews = document.querySelectorAll(".image-preview");
-
-	    // Bỏ chọn ảnh background hiện tại nếu có
-	    if (selectedBackground !== null) {
-	        imagePreviews[selectedBackground].classList.remove("selected");
+	    // Cập nhật lại selectedBackground theo context
+	    if (context === "create") {
+	        selectedBackgroundCreate = selectedBackground;
+	    } else {
+	        selectedBackgroundUpdate = selectedBackground;
 	    }
 
-	    // Chọn ảnh mới làm background
-	    selectedBackground = index;
-	    imagePreviews[selectedBackground].classList.add("selected");
+	    previewImages(context); // Hiển thị lại ảnh
+	}
+
+
+	function selectBackground(index, context) {
+		const imagePreviews = document.querySelectorAll(".image-preview");
+		console.log(imagePreviews);
+		console.log(index);
+		console.log(selectedBackgroundUpdate);
+		
+		
+	    if (context === "create") {
+			console.log("aaaa");
+			// Bỏ chọn ảnh background hiện tại nếu có
+			if (selectedBackgroundCreate !== null) {
+				        imagePreviews[selectedBackgroundCreate].classList.remove("selected");
+			}
+	        selectedBackgroundCreate = index;
+			imagePreviews[selectedBackgroundCreate].classList.add("selected");
+	    } else {
+			console.log("kkk");
+			if (selectedBackgroundUpdate !== null) {
+				        imagePreviews[selectedBackgroundUpdate].classList.remove("selected");
+				    }
+	        selectedBackgroundUpdate = index;
+			imagePreviews[selectedBackgroundUpdate].classList.add("selected");
+	    }	 
 	}
 	//Hàm giảm kích thước ảnh
 	async function compressImage(file) {
@@ -275,17 +449,14 @@ async function loadPage(page) {
 	}
 	// Hàm lưu trữ ảnh
 	async function saveImagesToServer(tourId) {
-		console.log('Tour created with ID:', tourId);
-		const backgroundImage = selectedBackground !== null ? selectedImages[selectedBackground] : null;
-			    const otherImages = selectedImages.filter((_, index) => index !== selectedBackground);
+		if (!selectedBackgroundCreate && selectedImagesCreate.length === 0) {
+		        throw new Error("Không có ảnh nào để upload!");
+		    }
+		const backgroundImage = selectedBackgroundCreate !== null ? selectedImagesCreate[selectedBackgroundCreate] : null;
+		const otherImages = selectedImagesCreate.filter((_, index) => index !== selectedBackgroundCreate);
 
-			    console.log("Background Image:", backgroundImage);
-			    console.log("Other Images:", otherImages);
-	    if (!selectedBackground && selectedImages.length === 0) {
-	        alert("No images to save!");
-	        return;
-	    }
-
+		console.log(backgroundImage);
+		console.log(otherImages);
 		const compressedBackground = await compressImage(backgroundImage);
 		const compressedOthers = await Promise.all(otherImages.map(file => compressImage(file)));
 		const formData = new FormData();
@@ -293,27 +464,28 @@ async function loadPage(page) {
 		compressedOthers.forEach(file => formData.append("otherImages", file));
 
 	    // Gửi yêu cầu đến server
-		 await fetch(`/image/upload/${tourId}`, {
+		 const response = await fetch(`/image/upload/${tourId}`, {
 		            method: "POST",
 		            body: formData,
-		        })
-	        .then((response) => {
-	            if (response.ok) {
-	                alert("Tạo tour thành công");
-	            } else {
-	                alert("Failed to upload images.");
-	            }
-	        })
-	        .catch((error) => {
-	            console.error("Error uploading images:", error);
-	            alert("Error uploading images.");
-	        });
+		        });
+				if (!response.ok) {
+				        throw new Error("Không thể upload ảnh. Vui lòng kiểm tra và thử lại.");
+				    }
 	}
 	var tourID = null;
 	async function submitForm() {
+		try {
 	    // Lấy giá trị từ các trường input trong form
+		if(selectedImagesCreate.length === 0) {
+			alert("Vui lòng chọn ảnh");
+			return;
+		}
+		if (selectedBackgroundCreate === null) {
+				    alert("Vui lòng chọn ảnh nền trước khi tạo tour.");
+				    return;
+				}
 	    const tourName = document.getElementById('tourName').value;
-	    		
+	    	
 		var departureSelect = document.getElementById('departureSelect');
 		var departure = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
 		var destinationSelect = document.getElementById('destinationSelect');
@@ -339,27 +511,35 @@ async function loadPage(page) {
 	    formData.append('price', price);
 		formData.append('transport', transport);
 	    // Gửi dữ liệu qua API
-	    fetch('/api-create-tours', {
+	    const tourResponse = await fetch('/api-create-tours', {
 	        method: 'POST',
 	        headers: {
 	            'Content-Type': 'application/x-www-form-urlencoded'  // Định dạng dữ liệu là x-www-form-urlencoded
 	        },
 	        body: formData  // Gửi dữ liệu dưới dạng x-www-form-urlencoded
 	    })
-	    .then(response => response.json())  // Nhận phản hồi từ server
-	    .then(tourId => {
-			tourID = tourId;
-			console.log('Tour created with ID:', tourId);
-			CreateSchedule(tourId);
-			saveImagesToServer(tourId);
-	    })
-	    .catch((error) => {
-	        console.error('Error:', error);
-	    });
+		if (!tourResponse.ok) {
+		            throw new Error("Không thể tạo tour. Vui lòng kiểm tra thông tin và thử lại.");
+		        }
+
+		        const tourId = await tourResponse.json();
+
+		        // Upload ảnh
+		        await saveImagesToServer(tourId);
+
+		        // Thêm lịch trình (nếu có)
+		        if (schedules.length > 0) {
+		            await CreateSchedule(tourId);
+		        }
+
+		        alert("Tạo tour thành công!");
+		    } catch (error) {
+		        console.error("Lỗi:", error.message);
+		        alert("Đã xảy ra lỗi: " + error.message);
+		    }
 	}
 	async function creatTour(){
 		submitForm();
-		console.log('Tour created with ID 111:', tourID);
 	}
 
 	    const createButton = document.querySelector(".btn-insert-schedule");
@@ -424,8 +604,8 @@ async function loadPage(page) {
 		            <td>${step}</td>
 		            <td>${activity}</td>
 		            <td>${location}</td>
-		            <td><button type="button" class="edit-btn">Sửa</button></td>
-		            <td><button class="delete-btn">Xóa</button></td>
+		            <td style="display: flex"><button type="button" class="edit-btn">Sửa</button>
+					<button class="delete-btn">Xóa</button></td>
 		        `;
 		        scheduleTableBody.appendChild(row);
 
@@ -479,8 +659,9 @@ async function loadPage(page) {
 		        });
 		    });
 		    // Gửi dữ liệu qua controller
-			function CreateSchedule(TourId) {
+			async function CreateSchedule(TourId) {
 				const scheduleTableBody = document.querySelector("#schedule-table tbody");
+				
 			    // Tạo object chứa cả TourId và schedules
 				if(scheduleTableBody==null){
 					return;
@@ -490,22 +671,18 @@ async function loadPage(page) {
 			        schedules: schedules // Mảng các lịch trình
 			    };
 
-			    console.log("Dữ liệu gửi đi:", JSON.stringify(dataToSend)); // Log lại dữ liệu trước khi gửi
 
-			    fetch("/api-schedule-tour-management", {
+
+			    const response = await fetch("/api-schedule-tour-management", {
 			        method: "POST",
 			        headers: {
 			            "Content-Type": "application/json",
 			        },
 			        body: JSON.stringify(dataToSend), // Gửi dữ liệu bao gồm TourId và schedules
-			    })
-			    .then(response => response.json())
-			    .then(data => {
-			        console.log("Dữ liệu đã gửi thành công:", data);
-			    })
-			    .catch(error => {
-			        console.error("Lỗi khi gửi dữ liệu:", error);
 			    });
+				if (!response.ok) {
+				        throw new Error("Không thể thêm lịch trình.");
+				    }
 			}
 
 			function updateTable() {
@@ -563,6 +740,190 @@ async function loadPage(page) {
 			        });
 			    });
 			}
+			
+			async function loadTourImages(tourId) {
+			    const response = await fetch(`/api-get-image-by-id?tourId=${tourId}`);
+			    if (!response.ok) {
+			        console.error("Failed to load images");
+			        return;
+			    }
 
+			    const images = await response.json();
+				
+				existingImages=images;
+			    const imagePreviewContainer = document.getElementById("updateImagePreviewContainer");
+			    imagePreviewContainer.innerHTML = ""; // Xóa nội dung cũ
 
+			    images.forEach((image,index) => {
+			        const imageWrapper = document.createElement("div");
+			        imageWrapper.classList.add("image-preview");
 
+			        const img = document.createElement("img");
+			        img.src = `/image/${image.imageId}`;
+					img.alt = `Image ${image.imageId}`;
+					 // Hiển thị ảnh từ server
+
+			        // Nút xóa
+			        const removeButton = document.createElement("button");
+			        removeButton.classList.add("remove-image");
+			        removeButton.type = "button";
+			        removeButton.innerHTML = "×";
+			        removeButton.onclick = function () {
+					 	deletedImageIds.push(image.imageId); // Lưu ID ảnh bị xóa
+						if(existingImages.length>0){
+							console.log("trcccccc"+selectedBackgroundUpdate);
+							if (selectedBackgroundUpdate === index) {
+							        selectedBackgroundUpdate = null;
+							    } else if (selectedBackgroundUpdate > index) {
+							        selectedBackgroundUpdate--; // Điều chỉnh lại index background nếu ảnh phía trước bị xóa
+							    }
+								console.log("sauuuu"+selectedBackgroundUpdate);
+							existingImages.splice(index, 1);
+							previewImages("update");
+						}
+					};
+			        // Nút chọn background
+			        const backgroundToggle = document.createElement("button");
+			        backgroundToggle.classList.add("background-toggle");
+			        backgroundToggle.type = "button";
+			        backgroundToggle.innerHTML = "✔";
+
+			        if (image.background) {
+			            imageWrapper.classList.add("selected");
+						selectedBackgroundUpdate = index;
+						luuBackgroundID= image.imageId;// Đánh dấu ảnh đang làm background
+			        }
+			        backgroundToggle.onclick= function () {	
+						console.log(index)	;					
+						selectBackground(index, "update");
+						luuBackgroundID=image.imageId;
+						
+					}
+			        imageWrapper.appendChild(img);
+			        imageWrapper.appendChild(removeButton);
+			        imageWrapper.appendChild(backgroundToggle);
+			        imagePreviewContainer.appendChild(imageWrapper);
+			    });
+			}
+			async function deleteImage(imageId) {
+			    const response = await fetch(`/api-update-status-image?imageId=${imageId}`, { method: "DELETE" });
+			    if (!response.ok) {
+			        alert("Failed to delete image");
+			        return;
+			    }
+
+			    alert("Image deleted successfully");
+			    loadTourImages(currentTourId); // Cập nhật lại danh sách ảnh
+			}
+			async function updateTour(){
+				if (selectedBackgroundUpdate == null) {
+						alert("Vui lòng chọn ảnh nền trước khi lưu.");
+						return;
+					}
+					const formData = new FormData();
+					const backgroundImage = selectedBackgroundUpdate !== null ? selectedImagesUpdate[selectedBackgroundUpdate-existingImages.length] : null;
+					var otherImages = selectedImagesUpdate;
+					var compressedBackground;
+					var compressedOthers =[];
+					if(	otherImages.length > 0 ){
+						compressedOthers = await Promise.all(otherImages.map(file => compressImage(file)));
+					}
+					if(selectedBackgroundUpdate>=existingImages.length){
+						otherImages = selectedImagesUpdate.filter((_, index) => index !== selectedBackgroundUpdate-existingImages.length);
+						compressedOthers = await Promise.all(otherImages.map(file => compressImage(file)));
+						compressedBackground = await compressImage(backgroundImage);
+					}
+					/*else{
+						compressedBackground=luuBackgroundID;					
+					}*/
+					console.log(selectedImagesUpdate);
+					console.log(deletedImageIds);
+					console.log(backgroundImage);
+					
+					console.log(otherImages);
+					console.log(compressedOthers);
+					console.log(compressedBackground);
+					console.log(tourID);
+					console.log(selectedBackgroundUpdate);
+					
+					
+					if (compressedBackground!=null) {
+					    formData.append("backgroundImage", compressedBackground); // File ảnh
+					} else {
+					    formData.append("backgroundImageId", luuBackgroundID);
+						console.log("ádasd"); // ID ảnh
+					}
+				
+					
+					deletedImageIds.forEach(id => formData.append("deletedImageIds", id));;
+							
+					compressedOthers.forEach(file => formData.append("otherImages", file));
+
+						    // Gửi yêu cầu đến server
+					const response = await fetch(`/image/update/${tourID}`, {
+						method: "POST",
+						body: formData,
+					});
+					if (!response.ok) {
+						throw new Error("Không thể upload ảnh. Vui lòng kiểm tra và thử lại.");
+					}else{
+						updateInformationTour();
+					}
+					
+				}
+
+				async function updateInformationTour() {
+						try {
+					    const tourName = document.getElementById('tourName-update').value;
+					    	
+						var departureSelect = document.getElementById('departureSelect-update');
+						var departure = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+						var destinationSelect = document.getElementById('destinationSelect-update');
+						var destination = destinationSelect.options[destinationSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+												
+					    const startDate = document.getElementById('startDate-update').value;
+					    const endDate = document.getElementById('endDate-update').value;
+					    const detail = document.getElementById('detail-update').value;
+					    const peopleMax = document.getElementById('peopleMax-update').value;
+					    const price = document.getElementById('price-update').value;
+						const transport = document.getElementById('transport-update').value;
+						
+
+					    // Chuyển dữ liệu thành x-www-form-urlencoded
+					    const formData = new URLSearchParams();
+					    formData.append('tourName', tourName);
+					    formData.append('departure', departure);
+					    formData.append('destination', destination);
+					    formData.append('startDate', startDate);
+					    formData.append('endDate', endDate);
+					    formData.append('detail', detail);
+					    formData.append('peopleMax', peopleMax);
+					    formData.append('price', price);
+						formData.append('transport', transport);
+					    // Gửi dữ liệu qua API
+					    const tourResponse = await fetch(`/api-update-tours/${tourID}`, {
+					        method: 'POST',
+					        headers: {
+					            'Content-Type': 'application/x-www-form-urlencoded'  // Định dạng dữ liệu là x-www-form-urlencoded
+					        },
+					        body: formData  // Gửi dữ liệu dưới dạng x-www-form-urlencoded
+					    })
+						if (!tourResponse.ok) {
+						            throw new Error("Không thể update tour. Vui lòng kiểm tra thông tin và thử lại.");
+						        }
+
+						        const tourId = await tourResponse.json();
+
+						        // Upload ảnh
+						       /* await saveImagesToServer(tourId)*/;
+
+						        // Thêm lịch trình (nếu có)
+						        /*if (schedules.length > 0) {
+						            await CreateSchedule(tourId);
+						        }*/
+						        alert("Update tour thành công!");
+						    } catch (error) {
+						        console.error("Lỗi:", error.message);
+						        alert("Đã xảy ra lỗi: " + error.message);
+						    }
+					}

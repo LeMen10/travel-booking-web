@@ -180,8 +180,9 @@
             </div>
         </div>
 		<label>Chọn ảnh</label>
-        <input type="file" id="imageInput" accept="image/*" multiple onchange="previewImages()">
-        <div id="imagePreviewContainer" class="image-preview-container"></div>
+        <input type="file" id="createImageInput" multiple onchange="previewImages('create')">
+		<div id="createImagePreviewContainer"></div>
+
         
         <h3>Schedules</h3>
 		<table id="schedule-table" class="table">
@@ -191,7 +192,6 @@
 					<th>Activity</th>
 					<th>Location</th>
 					<th>Action</th>
-					<th>Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -242,6 +242,65 @@
 				<button type="button" id="btn-Cancel-Update-Schedule" class="btn-cancel-edit">Cancel</button>
 			</div>
 		</div>
+		<!-- Cập nhật tour  -->
+	<div class="form-popup-update-tour" id="form-popup-update-tour">
+    <i class="fas fa-times close-icon" id="btn-close" onclick="closeForm()"></i>
+    <h3>Thông tin Tour</h3>
+    <form id="tour-form">
+        <label>Tên tour</label>
+        <input type="text" id="tourName-update" required>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label>Khởi hành</label>
+                <select id="departureSelect-update" class="location-select" data-type="departure">
+	                	<option value="" disabled selected>Chọn điểm đi</option>
+						<option th:each="provinces: ${province}" th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn điểm đi</option>
+					</select>
+            </div>
+            <div class="form-group">
+                <label>Điểm đến</label>
+                <select id="destinationSelect-update" class="location-select" data-type="destination">
+	                	 <option value="" disabled selected>Chọn điểm đến</option>
+						<option th:each="provinces: ${province}" th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn điểm đi</option>
+					</select>
+            </div>
+            <div class="form-group">
+                <label>Ngày bắt đầu</label>
+                <input type="date" id="startDate-update" required>
+            </div>
+            <div class="form-group">
+                <label>Ngày kết thúc</label>
+                <input type="date" id="endDate-update" required>
+            </div>
+            <div class="form-group">
+                <label>Phương tiện</label>
+                <input type="text" id="transport-update" required>
+            </div>
+            <div class="form-group">
+                <label>Số người</label>
+                <input type="number" id="peopleMax-update" required>
+            </div>
+            <div class="form-group">
+                <label>Giá</label>
+                <input type="number" id="price-update" required>
+            </div>
+        </div>
+
+        <label>Mô tả</label>
+        <textarea id="detail-update" required></textarea>
+
+
+		<label>Chọn ảnh</label>
+        <input type="file" id="updateImageInput" multiple onchange="previewImages('update')">
+		<div id="updateImagePreviewContainer"></div>
+
+        
+        
+
+        <button type="button" class="btn-save-all" onclick="updateTour()">Lưu</button>
+    </form>
+</div>
 	
 	<script src="../js/tours_management.js"></script>
 </body> 
