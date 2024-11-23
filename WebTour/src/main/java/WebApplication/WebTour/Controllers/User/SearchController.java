@@ -119,15 +119,6 @@ public class SearchController {
 	    model.addAttribute("totalPages", searchResults.getTotalPages());
 	    model.addAttribute("province",provinceRepository.findAll());
 
-		// Đưa kết quả vào model để đẩy lên view
-		model.addAttribute("searchResults", searchResults);
-		model.addAttribute("tourName", tourName);
-		model.addAttribute("startDate", startDate);
-		model.addAttribute("departure", departure);
-		model.addAttribute("destination", destination);
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", searchResults.getTotalPages());
-
 		return "/User/search"; // Trả về trang search.html
 	}
 

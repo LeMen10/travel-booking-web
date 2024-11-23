@@ -34,7 +34,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 			+ "AND (:departure IS NULL OR LOWER(t.departure) LIKE LOWER(CONCAT('%', :departure, '%'))) "
 			+ "AND (:destination IS NULL OR LOWER(t.destination) LIKE LOWER(CONCAT('%', :destination, '%'))) "
 			+ "AND t.status = true " 
-			//+ "AND t.originalId IS NULL " 
+			+ "AND t.originalId IS NULL " 
 			+ "AND i.isBackground = true " + "GROUP BY t.tourId")
 	Page<Object[]> findTours(@Param("tourName") String tourName, @Param("startDate") Date startDate,
 			@Param("departure") String departure, @Param("destination") String destination, Pageable pageable);
