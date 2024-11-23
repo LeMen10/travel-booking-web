@@ -8,9 +8,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import WebApplication.WebTour.Model.User;
 import WebApplication.WebTour.Respository.AccountRespository;
 import WebApplication.WebTour.Respository.BookingsRespository;
 import WebApplication.WebTour.Respository.ReviewsRepository;
+import WebApplication.WebTour.Respository.UserRepository;
 
 @Service
 public class StatictisService {
@@ -25,6 +27,9 @@ public class StatictisService {
 	
 	@Autowired
 	ReviewsRepository reviewsRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	public List<Object> getSatisticsCustomersLast7Months()
 	{
@@ -54,6 +59,18 @@ public class StatictisService {
 	{
 		Optional<List<Object>> statisticsList = reviewsRepository.getSatisticsRateAllTourLast7Months();
 		return statisticsList.isPresent() ? statisticsList.get() :  null;
+	}
+	
+	public List<Object> getSatisticsOriginalPriceAllTourLast7Months()
+	{
+		Optional<List<Object>> statisticsList = bookingsRespository.getSatisticsProfitLast7Months();
+		return statisticsList.isPresent() ? statisticsList.get() :  null;
+	}
+	
+	public int countAllEmployee()
+	{
+		List<User> countEmployee = userRepository.findAllEmployee();
+		return countEmployee != null? countEmployee.size():  0;
 	}
 
 	

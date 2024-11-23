@@ -351,7 +351,15 @@ function updateDataTable(dataTable) {
 	});
 }
 
-
+async function loadPage(event, pageIndex)
+{
+	event.preventDefault();
+	console.log(sessionStorage.getItem("userId"), pageIndex)
+	var response = await fetch(`/account/api-get-order?userId=${sessionStorage.getItem("userId")}&page=${pageIndex - 1}`);
+	var data = await response.json();
+	console.log(data);
+	updateDataTable(data);
+}
 
 //ẩn hiện ô input của option departure trên filter
 function showInput() {

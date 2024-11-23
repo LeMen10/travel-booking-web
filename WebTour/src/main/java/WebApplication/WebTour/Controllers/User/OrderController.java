@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.data.domain.Pageable;
 
 import WebApplication.WebTour.Model.Address;
+import WebApplication.WebTour.Model.Bookings;
 import WebApplication.WebTour.Model.District;
 import WebApplication.WebTour.Model.Image;
 import WebApplication.WebTour.Model.Province;
@@ -64,6 +65,23 @@ public class OrderController {
 
 		return "/User/order";
 
+	}
+	
+	@GetMapping("/account/api-get-order")
+	public ResponseEntity<?> getOrderPerPage(@RequestParam(value = "userId", required = false) Long userId,
+			@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "5") int size) {
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			Page<Object[]> bookingsPage = bookingsRepository.showDataTable(userId, PageRequest.of(page, size));
+			for (Object[] booking : bookingsPage.getContent()) {
+			    System.out.println("Payment ID: " + booking[10]);
+			    System.out.println("Thanh toán: " + booking[2]);
+			}
+
+			return ResponseEntity.ok(bookingsPage.getContent());
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
 	// lọc booking paid hoặc unpaid

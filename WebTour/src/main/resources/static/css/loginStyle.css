@@ -133,6 +133,13 @@ input {
 	opacity: 0;
 	z-index: 1;
 }
+.eye-icon
+{
+	position: absolute;
+    top: 50%;
+    right: 2%;
+    transform: translate(-50%, -6px);
+}
 
 .container.right-panel-active .sign-up-container {
 	transform: translateX(100%);

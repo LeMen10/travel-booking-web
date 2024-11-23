@@ -50,6 +50,9 @@ public class Bookings implements Serializable{
 
     @Column(name = "total_price")
     private float totalPrice;
+    
+    @Column(name = "original_price")
+    private float originalPrice;
 
 
 	public Tours getTour() {
