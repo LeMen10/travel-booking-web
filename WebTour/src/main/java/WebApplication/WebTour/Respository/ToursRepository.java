@@ -29,22 +29,18 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 
 	@Query("SELECT t.tourId, t.departure, t.tourName, t.price, t.endDate, t.startDate, i.imageId, t.originalPrice"
 			+ " FROM Tours t JOIN Image i ON i.tours.tourId = t.tourId WHERE "
-	        + "(:tourName IS NULL OR LOWER(t.tourName) LIKE LOWER(CONCAT('%', :tourName, '%'))) "
-	        + "AND (:startDate IS NULL OR t.startDate = :startDate) "
-	        + "AND (:departure IS NULL OR LOWER(t.departure) LIKE LOWER(CONCAT('%', :departure, '%'))) "
-	        + "AND (:destination IS NULL OR LOWER(t.destination) LIKE LOWER(CONCAT('%', :destination, '%'))) "
-	        + "AND t.status = true "
-	        + "AND t.originalId IS NULL "
-	        + "AND i.isBackground = true "
-	        + "GROUP BY t.tourId")
-	Page<Object[]> findTours(@Param("tourName") String tourName,
-	                      @Param("startDate") Date startDate,
-	                      @Param("departure") String departure,
-	                      @Param("destination") String destination,
-	                      Pageable pageable);
-	
-	//Get tour for home page
-    @Query(value = "SELECT t FROM Tours t WHERE t.status = true ORDER BY t.price ASC LIMIT 8")
+			+ "(:tourName IS NULL OR LOWER(t.tourName) LIKE LOWER(CONCAT('%', :tourName, '%'))) "
+			+ "AND (:startDate IS NULL OR t.startDate = :startDate) "
+			+ "AND (:departure IS NULL OR LOWER(t.departure) LIKE LOWER(CONCAT('%', :departure, '%'))) "
+			+ "AND (:destination IS NULL OR LOWER(t.destination) LIKE LOWER(CONCAT('%', :destination, '%'))) "
+			+ "AND t.status = true " 
+			//+ "AND t.originalId IS NULL " 
+			+ "AND i.isBackground = true " + "GROUP BY t.tourId")
+	Page<Object[]> findTours(@Param("tourName") String tourName, @Param("startDate") Date startDate,
+			@Param("departure") String departure, @Param("destination") String destination, Pageable pageable);
+
+	// Get tour for home page
+	@Query(value = "SELECT t FROM Tours t WHERE t.status = true ORDER BY t.price ASC LIMIT 8")
 	List<Tours> listOfCheapestTours();
 
 	// lấy ra những tour chưa bắt đầu và những tour đó chưa được áp mã đang xem xét
@@ -78,5 +74,22 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	@Modifying
 	@Query("UPDATE Tours t SET t.status = false WHERE t.tourId = :tourId")
 	void updateStatusByTourId(@Param("tourId") Long tourId);
+
+	// sắp xếp giá  tour tăng
+	@Query(value = "SELECT t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, i.image_id "
+	        + "FROM tours t "
+	        + "LEFT JOIN image i ON t.tour_id = i.tour_id "
+	        + "WHERE t.status = true AND t.original_id IS NULL "
+	        + "GROUP BY t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, t.original_id "
+	        + "ORDER BY t.price ASC", nativeQuery = true)
+	Page<Object[]> findToursSortedByPriceAsc(Pageable pageable);
+	// sắp xếp giá  tour  giảm
+	@Query(value = "SELECT t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, i.image_id "
+	        + "FROM tours t "
+	        + "LEFT JOIN image i ON t.tour_id = i.tour_id "
+	        + "WHERE t.status = true AND t.original_id IS NULL "
+	        + "GROUP BY t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, t.original_id "
+	        + "ORDER BY t.price DESC", nativeQuery = true)
+	Page<Object[]> findToursSortedByPriceDesc(Pageable pageable);
 
 }
