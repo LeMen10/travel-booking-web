@@ -57,6 +57,21 @@ public class StatisticsContronller {
 		return ResponseEntity.ok(statisticsList);
 	}
 	
+	@GetMapping("/api-get-statistics-original-price-tour-7-months")
+	public ResponseEntity<?> getSatisticOriginalPriceAllTourLast7Months()
+	{
+		List<Object> statisticsList = statictisService.getSatisticsOriginalPriceAllTourLast7Months();
+		if(statisticsList == null) return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(statisticsList);
+	}
+	
+	@GetMapping("/api-get-count-employee")
+	public ResponseEntity<?> getCountEmployee()
+	{
+		int count = statictisService.countAllEmployee();
+		return ResponseEntity.ok(count);
+	}
+	
 }
 
 

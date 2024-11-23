@@ -16,7 +16,7 @@ public interface ReviewsRepository extends JpaRepository<Reviews, Long>{
 	@Query(value= "SELECT * FROM Reviews r WHERE r.tour_id = :tourId", nativeQuery = true)
     List<Reviews> findReviewsByTourId(@Param("tourId") Long tourId);
 	
-	@Query(value = "SELECT COALESCE(SUM(r.rate), 0), m.month, YEAR(CURDATE()) AS year "
+	@Query(value = "SELECT COALESCE(AVG(r.rate), 0), m.month, YEAR(CURDATE()) AS year "
 			+ "FROM (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION "
 			+ " SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION "
 			+ " SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS m "
@@ -25,4 +25,7 @@ public interface ReviewsRepository extends JpaRepository<Reviews, Long>{
 			+ "WHERE m.month <= MONTH(CURDATE()) "
 			+ "GROUP BY  m.month ORDER BY  m.month DESC LIMIT 7", nativeQuery = true)
 	Optional<List<Object>> getSatisticsRateAllTourLast7Months();
+	
+	@Query(value = "SELECT COUNT(r.reviewsId), COALESCE(Round(AVG(r.rate), 1),5) FROM Reviews r WHERE r.tours.tourId = :tourId AND r.status = true")
+	Optional<List<Object[]>> getRateOfTour(@Param("tourId") Long tourId);
 }

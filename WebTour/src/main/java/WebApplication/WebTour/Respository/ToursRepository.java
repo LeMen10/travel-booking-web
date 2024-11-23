@@ -27,7 +27,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 //	@Query("SELECT t FROM Tours t WHERE LOWER(t.tourName) LIKE LOWER(CONCAT('%', :tourName, '%'))")
 //	Page<Tours> findByTourNameContainingIgnoreCase(@Param("tourName") String tourName, Pageable pageable);
 
-	@Query("SELECT t.tourId, t.departure, t.tourName, t.price, t.endDate, t.startDate, i.imageId"
+	@Query("SELECT t.tourId, t.departure, t.tourName, t.price, t.endDate, t.startDate, i.imageId, t.originalPrice"
 			+ " FROM Tours t JOIN Image i ON i.tours.tourId = t.tourId WHERE "
 	        + "(:tourName IS NULL OR LOWER(t.tourName) LIKE LOWER(CONCAT('%', :tourName, '%'))) "
 	        + "AND (:startDate IS NULL OR t.startDate = :startDate) "

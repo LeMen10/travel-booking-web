@@ -65,6 +65,10 @@ public class Tours implements Serializable{
     @Column(name = "original_id")
     private Long originalId;
     
+    @Column(name = "original_price")
+    private float originalPrice;
+    
+    
     @Column(name = "status")
     private boolean status;
 
@@ -88,9 +92,6 @@ public class Tours implements Serializable{
 		this.peopleMax = t.peopleMax;
 		this.status = t.status;
 	}
-
-
-
 
 
 	public Guides getGuides() {
@@ -200,6 +201,15 @@ public class Tours implements Serializable{
 
 	public void setStatus(boolean status) {
 		this.status = status;
+
+	}
+
+	public float getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(float originalPrice) {
+		this.originalPrice = originalPrice;
 	}
 
 	public Long getTourId() {
