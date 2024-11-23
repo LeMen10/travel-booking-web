@@ -130,11 +130,33 @@
         .pagination .icon {
             font-size: 18px;
         }
+        
+        .filter{
+	        margin-bottom: 1%;
+	    	margin-left: 12%;
+        }
+        
+        #price-sort{
+        	border: 1px solid #dbdbdb;
+		    border-radius: 6px;
+		    padding: 4px;
+        }
     </style>
 </head>
 <body>
 	<header id="header"></header>
+	<div class="filter">
+		<label for="price-sort">Sắp xếp theo giá:</label>
+		<select id="price-sort" name="price-sort" onchange="SortPrice()">
+			<option value="0">Chọn</option>
+		    <option value="1">Tăng giá</option>
+		    <option value="2">Giảm giá</option>
+		</select>
+    
+    </div>
+    
     <div id="list-tour" class="container">
+    
         
             <div  class="card" th:each="tour : ${searchResults}" onclick="linktoDetailTour(this)" th:attr="data-id=${tour[0]}">
                 <img th:src="@{'/image/' + ${tour[6]}}">
@@ -187,6 +209,60 @@
             </li>
         </ul>
     </div>
+    
+    <!-- ================================================================================= -->
+    <!-- 	<div class="pagination-container" th:if="${totalPages > 1}">
+	    <ul class="pagination" id="pagination">
+	
+	        Nút "Prev"
+	        <li th:if="${currentPage > 0}">
+	            <button th:attr="onclick='loadPage(${currentPage - 1})'">
+	                <i class="fas fa-chevron-left icon"></i>
+	            </button>
+	        </li>
+	
+	        Trang đầu tiên
+	        <li>
+	            <a th:attr="onclick='loadPage(0)'"
+	               th:text="|1|"
+	               th:class="${currentPage == 0} ? 'current' : ''"></a>
+	        </li>
+	
+	        Dấu "..." trước các trang giữa
+	        <li th:if="${currentPage > 2}">
+	            <span class="pagination-dots">...</span>
+	        </li>
+	
+	        Các trang giữa
+	        <li th:each="i : ${#numbers.sequence(Math.max(1, currentPage - 1), Math.min(totalPages - 2, currentPage + 1))}">
+	            <a th:attr="onclick='loadPage(${i})'"
+	               th:text="${i + 1}"
+	               th:class="${currentPage == i} ? 'current' : ''"></a>
+	        </li>
+	
+	        Dấu "..." sau các trang giữa
+	        <li th:if="${currentPage < totalPages - 3}">
+	            <span class="pagination-dots">...</span>
+	        </li>
+	
+	        Trang cuối cùng
+	        <li>
+	            <a th:attr="onclick='loadPage(${totalPages - 1})'"
+	               th:text="${totalPages}"
+	               th:class="${currentPage == totalPages - 1} ? 'current' : ''"></a>
+	        </li>
+	
+	        Nút "Next"
+	        <li th:if="${currentPage + 1 < totalPages}">
+	            <button th:attr="onclick='loadPage(${currentPage + 1})'">
+	                <i class="fas fa-chevron-right icon"></i>
+	            </button>
+	        </li>
+	
+	    </ul>
+	</div> -->
+    	
+    <!-- ================================================================================= -->
     <div id="footer"></div>
 <script src="/js/header.js"></script>
 <script src="/js/search.js"></script>

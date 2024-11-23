@@ -138,7 +138,7 @@ public class PaymentController {
 			if (tourPayment != null) {
 				model.addAttribute("tourPayment", tourPayment);
 				// Lấy hình ảnh của tour
-				List<Image> images = imageRepository.findByTours(orginalTour);
+				List<Image> images = imageRepository.getImageOfTour(orginalTour.getTourId());
 				if (!images.isEmpty()) {
 
 					Image imagePayment = images.get(0); // hình đầu
