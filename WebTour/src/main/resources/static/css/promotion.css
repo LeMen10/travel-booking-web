@@ -45,6 +45,10 @@ th, td {
 	text-align: center;
 }
 
+td:hover {
+	cursor: pointer;
+}
+
 .text-left {
 	text-align: left;
 }
@@ -162,7 +166,22 @@ th, td {
 	align-items: end;
 }
 
-.promotion-program{
-	text-decoration: underline;
-    margin-right: 10px;
+.promotion-program {
+	margin-right: 10px;
+	padding: 10px;
+	border-radius: 4px;
+	background-color: #f9aa39;
+	color: white;
+	font-weight: 500;
+}
+
+.promotion-program:hover {
+	cursor: pointer;
+	background-color: #f3a22f;
+}
+
+.random-string.disabled {
+	color: gray;
+	pointer-events: none;
+	cursor: not-allowed;
 }

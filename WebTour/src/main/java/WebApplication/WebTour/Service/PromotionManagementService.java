@@ -1,13 +1,9 @@
 package WebApplication.WebTour.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import WebApplication.WebTour.Model.Promotions;
 import WebApplication.WebTour.Model.Promotiondetail;
@@ -49,7 +45,23 @@ public class PromotionManagementService {
         promotionDetailRepository.save(promotionDetail);
     }
 
-    public List<Promotions> getPromotionsByDateRange(Date startDate, Date endDate) {
-        return promotionsRepository.findPromotionsByDateRange(startDate, endDate);
+    public Page<Object[]> getPromotionsByDateRange(Date startDate, Date endDate, Pageable pageable) {
+        return promotionsRepository.findPromotionsByDateRange(startDate, endDate, pageable);
+    }
+    
+    public Optional<Promotions> getPromotionById(Long id) {
+        return promotionsRepository.findById(id);
+    }
+    
+    public Optional<Promotions> findByCode(String code) {
+        return promotionsRepository.findByCode(code);
+    }
+    
+    public void deletePromotion(Long id) {
+        promotionsRepository.deleteById(id);
+    }
+    
+    public Optional<Promotions> findById(Long id) {
+        return promotionsRepository.findById(id);
     }
 }

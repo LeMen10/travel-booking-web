@@ -3,6 +3,8 @@ package WebApplication.WebTour.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import WebApplication.WebTour.Model.PromotionProgram;
@@ -18,7 +20,7 @@ public class PromotionProgramService {
         return promotionProgramRepository.save(promotion);
     }
     
-    public List<PromotionProgram> getPromotionPrograms() {
-        return promotionProgramRepository.getPromotionProgramsActive();
+    public Page<Object[]> getPromotionPrograms(Pageable pageable) {
+        return promotionProgramRepository.getPromotionProgramsActive(pageable);
     }
 }
