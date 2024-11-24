@@ -14,6 +14,8 @@ const savePromotionDetails = document.getElementById('savePromotionDetails');
 const filterPromotionByDate = document.getElementById('filter-promotion-byDate');
 const datetimeStartFilter = document.getElementById('datetime-start-filter');
 const datetimeEndFilter = document.getElementById('datetime-end-filter');
+const createPromotionBtn = document.getElementById('add-promotion-btn');
+const confirmModalBtn = document.getElementById('btn-confirm-modal');
 
 const generateRandomString = (length) => {
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -31,9 +33,10 @@ randomString.addEventListener('click', () => {
 	promotionCode.value = generateRandomString(12);
 });
 
-document.getElementById("add-promotion-btn").addEventListener("click", async (event) => {
+createPromotionBtn.addEventListener("click", async (event) => {
 	event.preventDefault();
 	modal.classList.add('d-flex');
+	confirmModalBtn.setAttribute("onclick", "createPromotion()");
 });
 
 promotionalProgramCloseBtn.addEventListener("click", async (event) => {
@@ -41,19 +44,23 @@ promotionalProgramCloseBtn.addEventListener("click", async (event) => {
 	promotionalProgramModal.classList.remove('d-flex')
 });
 
-close.addEventListener("click", async function(event) {
+close.addEventListener("click", async (event) => {
 	event.preventDefault();
+	const promotionCodeInput = document.getElementById("promotion-code");
+	promotionCodeInput.disabled = false;
+	const randomStringElement = document.getElementById("random-string");
+	randomStringElement.classList.remove("disabled");
 	modal.classList.remove('d-flex');
-	promotionCode.value = '',
-		discount.value = '',
-		startTime.value = '',
-		endTime.value = '',
-		description.value = '',
-		cumulativePoints = ''
+	promotionCode.value = '';
+	discount.value = '';
+	startTime.value = '';
+	endTime.value = '';
+	description.value = '';
+	cumulativePoints.value = '';
+
 });
 
-document.getElementById("getData").addEventListener("click", async (event) => {
-	event.preventDefault();
+const createPromotion = async (event) => {
 
 	const data = {
 		code: promotionCode.value,
@@ -65,7 +72,7 @@ document.getElementById("getData").addEventListener("click", async (event) => {
 	};
 
 	try {
-		const response = await fetch("/admin/add-promotion", {
+		const res = await fetch("/admin/promotion-add", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -73,18 +80,18 @@ document.getElementById("getData").addEventListener("click", async (event) => {
 			body: JSON.stringify(data)
 		});
 
-		if (!response.ok) {
-			if (response.status == 400) return alert("Mã khuyến mãi bị trùng.");
+		if (!res.ok) {
+			if (res.status == 400) return alert("Mã khuyến mãi bị trùng.");
 		}
 
-		const rs = await response.json();
+		const rs = await res.json();
 		if (rs.status == 200) location.reload();
 
 	} catch (error) {
 		console.log(error);
 		alert("Đã xảy ra lỗi khi gửi dữ liệu");
 	}
-});
+};
 
 var selectedPromotionId;
 
@@ -130,8 +137,9 @@ const loadTours = async () => {
 
 
 const getPromotionId = (row) => {
-	selectedPromotionId = row.getAttribute("data-id");
-	console.log("Selected Promotion ID:", selectedPromotionId);
+	const promotionId = getParentRowId(row)
+	selectedPromotionId = promotionId;
+	console.log("Selected Promotion ID:", promotionId);
 
 	promotionalProgramModal.classList.add('d-flex');
 
@@ -143,19 +151,17 @@ let selectedTourId;
 const applyPromotion = async (tourId, event) => {
 	event.preventDefault();
 	selectedTourId = tourId;
-	console.log("Selected Tour ID:", selectedTourId);
-	console.log("Selected promotion ID:", selectedPromotionId);
 
 	const data = {
-	    promotions: {
-	        promotionId: selectedPromotionId
-	    },
-	    tourId: selectedTourId,
-	    status: true
+		promotions: {
+			promotionId: selectedPromotionId
+		},
+		tourId: selectedTourId,
+		status: true
 	};
 
 	try {
-		const res = await fetch("/admin/add-promotion-detail", {
+		const res = await fetch("/admin/promotion-detail-add", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -186,9 +192,11 @@ savePromotionDetails.addEventListener('click', () => {
 	promotionalProgramModal.classList.remove('d-flex')
 })
 
+let currentPage = 0;
+let pageSize = 2;
 
-filterPromotionByDate.addEventListener("click", async (event) => {
-	event.preventDefault();
+const filterDataByDate = async (event) => {
+	/*	event.preventDefault();*/
 
 	const params = new URLSearchParams({
 		startDate: datetimeStartFilter.value,
@@ -196,36 +204,50 @@ filterPromotionByDate.addEventListener("click", async (event) => {
 	});
 
 	try {
-		const res = await fetch(`/admin/get-promotion-by-date?${params.toString()}`, {
+		const res = await fetch(`/admin/get-promotion-by-date?${params.toString()}&page=${currentPage}&size=${pageSize}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json"
 			}
 		});
+		if (!res.ok) {
+			const errorText = await res.text();
+			throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
+		}
+		const data = await res.json();
+		console.log(data.content)
 
-		console.log(res)
+		const totalPages = data.totalPages;
 
-		if (res.ok) {
-			const data = await res.json();
-			loadPromotions(data.promotions)
-			console.log("Promotions:", data.promotions);
-		} else alert('Có lỗi xảy ra khi áp dụng khuyến mãi');
+		updateDataTable(data.content);
+		renderPaginationControls(totalPages);
 
 	} catch (error) {
 		console.error('Error:', error);
 		alert('Đã xảy ra lỗi khi gửi dữ liệu');
 	}
 
+};
+
+filterPromotionByDate.addEventListener("click", () => {
+	filterDataByDate();
+	const fullUrl = window.location.href;
+	const baseUrl = fullUrl.split('?')[0];
+	window.history.replaceState({}, document.title, baseUrl);
 });
 
-const loadPromotions = (promotions) => {
+const updateDataTable = (promotions) => {
 	const tableBody = document.getElementById('promotion-table-body');
 	tableBody.innerHTML = '';
 
 	promotions.forEach(promotion => {
 		const row = document.createElement('tr');
 		row.setAttribute('data-id', promotion.promotionId);
-		row.setAttribute('onclick', 'getPromotionId(this)');
+		row.addEventListener('click', (event) => {
+			// Kiểm tra nếu click xảy ra trên phần tử chứa các nút "Sửa" hoặc "Xóa"
+			if (event.target.id === 'promotion-edit-btn' || event.target.id === 'promotion-delete-btn' || event.target.id === 'action') return;
+			getPromotionId(row);
+		});
 
 		row.innerHTML = `
 					<td>${promotion.code}</td>
@@ -233,40 +255,213 @@ const loadPromotions = (promotions) => {
 					<td>${promotion.discount}%</td>
 					<td>${promotion.startDate}</td>
 					<td>${promotion.endDate}</td>
+					<td id="action">
+						<span id="promotion-edit-btn" onclick="showPromotionById(this)">Sửa</span> 
+						<span id="promotion-delete-btn" onclick="deletePromotion(this)">Xóa</span>
+					</td>
 				`;
 
 		tableBody.appendChild(row);
 	});
 };
 
-/*let currentPage = 0;
-let pageSize = 5;
 
-async function FilterDataTable() {
-	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
-	const paymentStatus = document.getElementById("payment-status").value;
-	const btnPay = document.getElementById("btn-payment-status");
-	console.log("paymentStatus " + paymentStatus);
-	const url = `http://localhost:8080/account/filter-get-order?userId=${userId}&paymentStatus=${paymentStatus}&page=${currentPage}&size=${pageSize}`;
-	const request = new Request(url, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-	});
-	const response = await fetch(request);
-	console.log("Phản hồi từ server FilterDataTable:", response);
-	if (!response.ok) {
-		console.log(response);
-		return null;
+const renderPaginationControls = (totalPages) => {
+	const paginationContainer = document.getElementById("pagination");
+	paginationContainer.innerHTML = ""; // Xóa các nút cũ
+
+	// Tạo nút "Prev"
+	if (currentPage > 0) {
+		const prevButton = document.createElement("button");
+		prevButton.className = "pagination-button";
+		prevButton.innerHTML = '<i class="fas fa-chevron-left icon"></i>';
+		prevButton.addEventListener("click", () => {
+
+			currentPage--;
+			filterDataByDate();
+		});
+		paginationContainer.appendChild(prevButton);
 	}
-	const dataFilter = await response.json();
-	//console.log(dataFilter[0][3]);
 
-	console.log("dataFilter ", dataFilter);
-	const totalPages = dataFilter.totalPages;
+	// Trang đầu tiên
+	const firstPageButton = document.createElement("button");
+	firstPageButton.className = "pagination-button";
+	firstPageButton.textContent = 1;
+	if (currentPage === 0) {
+		firstPageButton.classList.add("active");
+	}
+	firstPageButton.addEventListener("click", () => {
+		currentPage = 0;
+		filterDataByDate();
+	});
+	paginationContainer.appendChild(firstPageButton);
 
-	updateDataTable(dataFilter.content);
-	renderPaginationControls(totalPages);
+	// Dấu "..." trước dải trang giữa
+	if (currentPage > 2) {
+		const dotsBefore = document.createElement("span");
+		dotsBefore.textContent = "...";
+		dotsBefore.className = "pagination-dots";
+		paginationContainer.appendChild(dotsBefore);
+	}
 
-}*/
+	// Các trang giữa
+	for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages - 2, currentPage + 1); i++) {
+		const middlePageButton = document.createElement("button");
+		middlePageButton.className = "pagination-button";
+		middlePageButton.textContent = i + 1;
+
+		if (i === currentPage) {
+			middlePageButton.classList.add("active");
+		}
+
+		middlePageButton.addEventListener("click", () => {
+			currentPage = i;
+			filterDataByDate();
+		});
+
+		paginationContainer.appendChild(middlePageButton);
+	}
+
+	// Dấu "..." sau dải trang giữa
+	if (currentPage < totalPages - 3) {
+		const dotsAfter = document.createElement("span");
+		dotsAfter.textContent = "...";
+		dotsAfter.className = "pagination-dots";
+		paginationContainer.appendChild(dotsAfter);
+	}
+
+	// Trang cuối cùng
+	if (totalPages > 1) {
+		const lastPageButton = document.createElement("button");
+		lastPageButton.className = "pagination-button";
+		lastPageButton.textContent = totalPages;
+
+		if (currentPage === totalPages - 1) {
+			lastPageButton.classList.add("active");
+		}
+
+		lastPageButton.addEventListener("click", () => {
+			currentPage = totalPages - 1;
+			filterDataByDate();
+		});
+
+		paginationContainer.appendChild(lastPageButton);
+	}
+
+	// Tạo nút "Next"
+	if (currentPage < totalPages - 1) {
+		const nextButton = document.createElement("button");
+		nextButton.className = "pagination-button";
+		nextButton.innerHTML = '<i class="fas fa-chevron-right icon"></i>';
+		nextButton.addEventListener("click", () => {
+
+			currentPage++;
+			filterDataByDate();
+		});
+		paginationContainer.appendChild(nextButton);
+	}
+}
+
+const getParentRowId = (element) => {
+	const row = element.closest("tr"); // Tìm thẻ <tr> cha
+	return row ? row.getAttribute("data-id") : null; // Lấy giá trị data-id
+}
+
+// Sửa
+const showPromotionById = async (element) => {
+	const promotionId = getParentRowId(element);
+	const promotionCodeInput = document.getElementById("promotion-code");
+	promotionCodeInput.disabled = true;
+	const randomStringElement = document.getElementById("random-string");
+	randomStringElement.classList.add("disabled");
+	randomStringElement.onclick = null;
+	try {
+		const res = await fetch(`/admin/get-promotion-by-id?id=${promotionId}`, {
+			method: "GET",
+			headers: { "Content-Type": "application/json" }
+		});
+
+		if (res.ok) {
+			const data = await res.json();
+			console.log("Promotion Details:", data);
+			confirmModalBtn.setAttribute("onclick", "edit()");
+
+			// Hiển thị thông tin promotion trên giao diện
+			modal.classList.add('d-flex');
+			promotionCode.value = data.code;
+			discount.value = data.discount;
+			startTime.value = data.startDate;
+			endTime.value = data.endDate;
+			description.value = data.description;
+			cumulativePoints.value = data.cumulativePoints;
+		} else {
+			const error = await res.text();
+			console.error("Error:", error);
+
+			// Hiển thị lỗi trên giao diện
+			alert(`Lỗi: ${error}`);
+		}
+	} catch (err) {
+		console.error("Error fetching promotion:", err);
+		alert("Đã xảy ra lỗi khi kết nối đến máy chủ.");
+	}
+}
+const edit = async () => {
+
+	const data = {
+		code: promotionCode.value,
+		discount: discount.value,
+		startDate: startTime.value,
+		endDate: endTime.value,
+		description: description.value,
+		cumulativePoints: cumulativePoints.value
+	};
+
+	try {
+		const res = await fetch("/admin/promotion-edit", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(data)
+		});
+
+		if (!res.ok) {
+			if (res.status == 400) return alert("Mã khuyến mãi bị trùng.");
+		}
+
+		const rs = await res.json();
+		if (rs.status == 200) location.reload();
+
+	} catch (error) {
+		console.log(error);
+		alert("Đã xảy ra lỗi khi gửi dữ liệu");
+	}
+
+}
+// Hàm xử lý logic khi nhấn "Xóa"
+const deletePromotion = async (element) => {
+	const promotionId = getParentRowId(element);
+
+	if (confirm(`Bạn có chắc chắn muốn xóa mã khuyến mãi này không?`)) {
+		try {
+			const data = { promotionId };
+
+			const res = await fetch("/admin/promotion-delete", {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(data)
+			});
+
+			const rs = await res.json();
+			if (rs.status === 200) location.reload();
+			else alert(rs.message || "Không thể xóa khuyến mãi.");
+
+		} catch (error) {
+			console.log(error);
+			alert("Không được phép xóa");
+		}
+	}
+};

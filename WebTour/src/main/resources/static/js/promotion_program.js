@@ -233,8 +233,9 @@ async function createNewPromotion() {
         });
 
         if (res.ok) {
-            await res.json();
+            const rs = await res.json();
 			promotionalProgramModal.classList.remove('d-flex');
+			if (rs.status == 200) location.reload();
         } else {
             alert('Có lỗi xảy ra khi áp dụng khuyến mãi');
         }
@@ -244,3 +245,160 @@ async function createNewPromotion() {
     }
 }
 
+let currentPage = 0;
+let pageSize = 2;
+
+const filterDataByDate = async (event) => {
+/*	event.preventDefault();*/
+
+	const params = new URLSearchParams({
+		startDate: datetimeStartFilter.value,
+		endDate: datetimeEndFilter.value,
+	});
+
+	try {
+		const res = await fetch(`/admin/get-promotion-by-date?${params.toString()}&page=${currentPage}&size=${pageSize}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+		if (!res.ok) {
+			// Nếu mã trạng thái không phải 200
+			const errorText = await res.text(); // Lấy nội dung phản hồi để xem lỗi
+			throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
+		}
+		const data = await res.json();
+		console.log(data.content)
+		
+		const totalPages = data.totalPages;
+
+		updateDataTable(data.content);
+		renderPaginationControls(totalPages);
+
+	} catch (error) {
+		console.error('Error:', error);
+		alert('Đã xảy ra lỗi khi gửi dữ liệu');
+	}
+
+};
+
+filterPromotionByDate.addEventListener("click",  filterDataByDate);
+
+const updateDataTable = (promotions) => {
+	const tableBody = document.getElementById('promotion-table-body');
+	tableBody.innerHTML = '';
+
+	promotions.forEach(promotion => {
+		const row = document.createElement('tr');
+		row.setAttribute('data-id', promotion.promotionId);
+		row.setAttribute('onclick', 'getPromotionId(this)');
+
+		row.innerHTML = `
+					<td>${promotion.code}</td>
+					<td class="text-left">${promotion.description}</td>
+					<td>${promotion.discount}%</td>
+					<td>${promotion.startDate}</td>
+					<td>${promotion.endDate}</td>
+				`;
+
+		tableBody.appendChild(row);
+	});
+};
+
+
+const renderPaginationControls = (totalPages) => {
+	const paginationContainer = document.getElementById("pagination");
+	paginationContainer.innerHTML = ""; // Xóa các nút cũ
+
+	// Tạo nút "Prev"
+	if (currentPage > 0) {
+		const prevButton = document.createElement("button");
+		prevButton.className = "pagination-button";
+		prevButton.innerHTML = '<i class="fas fa-chevron-left icon"></i>';
+		prevButton.addEventListener("click", () => {
+
+			currentPage--;
+			filterDataByDate();
+		});
+		paginationContainer.appendChild(prevButton);
+	}
+
+	// Trang đầu tiên
+	const firstPageButton = document.createElement("button");
+	firstPageButton.className = "pagination-button";
+	firstPageButton.textContent = 1;
+	if (currentPage === 0) {
+		firstPageButton.classList.add("active");
+	}
+	firstPageButton.addEventListener("click", () => {
+		currentPage = 0;
+		filterDataByDate();
+	});
+	paginationContainer.appendChild(firstPageButton);
+
+	// Dấu "..." trước dải trang giữa
+	if (currentPage > 2) {
+		const dotsBefore = document.createElement("span");
+		dotsBefore.textContent = "...";
+		dotsBefore.className = "pagination-dots";
+		paginationContainer.appendChild(dotsBefore);
+	}
+
+	// Các trang giữa
+	for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages - 2, currentPage + 1); i++) {
+		const middlePageButton = document.createElement("button");
+		middlePageButton.className = "pagination-button";
+		middlePageButton.textContent = i + 1;
+
+		if (i === currentPage) {
+			middlePageButton.classList.add("active");
+		}
+
+		middlePageButton.addEventListener("click", () => {
+			currentPage = i;
+			filterDataByDate();
+		});
+
+		paginationContainer.appendChild(middlePageButton);
+	}
+
+	// Dấu "..." sau dải trang giữa
+	if (currentPage < totalPages - 3) {
+		const dotsAfter = document.createElement("span");
+		dotsAfter.textContent = "...";
+		dotsAfter.className = "pagination-dots";
+		paginationContainer.appendChild(dotsAfter);
+	}
+
+	// Trang cuối cùng
+	if (totalPages > 1) {
+		const lastPageButton = document.createElement("button");
+		lastPageButton.className = "pagination-button";
+		lastPageButton.textContent = totalPages;
+
+		if (currentPage === totalPages - 1) {
+			lastPageButton.classList.add("active");
+		}
+
+		lastPageButton.addEventListener("click", () => {
+			currentPage = totalPages - 1;
+			filterDataByDate();
+		});
+
+		paginationContainer.appendChild(lastPageButton);
+	}
+
+	// Tạo nút "Next"
+	if (currentPage < totalPages - 1) {
+		const nextButton = document.createElement("button");
+		nextButton.className = "pagination-button";
+		nextButton.innerHTML = '<i class="fas fa-chevron-right icon"></i>';
+		nextButton.addEventListener("click", () => {
+
+			currentPage++;
+			filterDataByDate(); 
+		});
+		paginationContainer.appendChild(nextButton);
+	}
+}

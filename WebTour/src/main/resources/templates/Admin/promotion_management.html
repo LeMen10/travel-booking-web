@@ -25,8 +25,8 @@
 			<div class="tab-title-promotion mb-20">
 				<h1 class="title-promotion">Khuyến mãi</h1>
 				<div class="create-promotion-wr">
-					<a class="promotion-program" th:href="@{/admin/promotion-program}">Chương trình khuyến
-						mãi</a>
+					<a class="promotion-program" th:href="@{/admin/promotion-program}">Chương
+						trình khuyến mãi</a>
 					<p class="create-promotion-btn" id="add-promotion-btn">Tạo
 						khuyến mãi</p>
 				</div>
@@ -45,7 +45,7 @@
 				</div>
 				<button id="filter-promotion-byDate">Lọc</button>
 			</div>
-			<table class="table">
+			<table class="table mb-50" id="promotion-table">
 				<thead>
 					<tr>
 						<th class="large-column">Mã khuyến mãi</th>
@@ -53,32 +53,40 @@
 						<th class="mid-column">Phần trăm</th>
 						<th class="large-column">Bắt đầu</th>
 						<th class="large-column">Kết thúc</th>
+						<th class="large-column">Hành động</th>
 					</tr>
 				</thead>
 
 				<tbody id="promotion-table-body">
-					<tr th:each="promotion : ${promotions}"
-						th:attr="data-id=${promotion.promotionId}"
-						onclick="getPromotionId(this)">
-						<td th:text="${promotion.code}"></td>
-						<td th:text="${promotion.description}" class="text-left"></td>
-						<td th:text="${promotion.discount + '%'}">
-						<td th:text="${promotion.startDate}"></td>
-						<td th:text="${promotion.endDate}"></td>
+					<tr th:each="promotion : ${promotions}" th:attr="data-id=${promotion.promotionId}">
+						<td onclick="getPromotionId(this)" th:text="${promotion.code}"></td>
+						<td onclick="getPromotionId(this)" th:text="${promotion.description}"
+							class="text-left"></td>
+						<td onclick="getPromotionId(this)"
+							th:text="${promotion.discount + '%'}">
+						<td onclick="getPromotionId(this)" th:text="${promotion.startDate}"></td>
+						<td onclick="getPromotionId(this)" th:text="${promotion.endDate}"></td>
+						<td>
+							<span id="promotion-edit-btn"
+								onclick="showPromotionById(this)">Sửa</span> 
+							<span id="promotion-delete-btn"
+							onclick="deletePromotion(this)">Xóa</span>
+						</td>
 					</tr>
+				</tbody>
 			</table>
-			
+
 			<div class="pagination-container">
 				<ul class="pagination" id="pagination">
 					<!-- Prev Icon -->
 					<li th:if="${currentPage > 0}"><a
-						th:href="@{/admin/promotion-management(page=${currentPage - 1}, size=2)}">
+						th:href="@{/admin/promotion-management(page=${currentPage - 1}, size=3)}">
 							<i class="fas fa-chevron-left icon"></i>
 					</a></li>
 
 					<!-- First Page -->
 					<li><a
-						th:href="@{/admin/promotion-management(page=0, size=2)}"
+						th:href="@{/admin/promotion-management(page=0, size=3)}"
 						th:class="${currentPage == 0} ? 'active' : ''">1</a></li>
 
 					<!-- Dots before current range -->
@@ -88,7 +96,7 @@
 					<li
 						th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
 						th:if="${i > 0 and i < totalPages - 1}"><a
-						th:href="@{/admin/promotion-management(page=${i}, size=2)}"
+						th:href="@{/admin/promotion-management(page=${i}, size=3)}"
 						th:class="${currentPage == i} ? 'active' : ''" th:text="${i + 1}">
 					</a></li>
 
@@ -97,13 +105,13 @@
 
 					<!-- Last Page -->
 					<li th:if="${totalPages > 1}"><a
-						th:href="@{/admin/promotion-management(page=${totalPages - 1}, size=2)}"
+						th:href="@{/admin/promotion-management(page=${totalPages - 1}, size=3)}"
 						th:class="${currentPage == totalPages - 1} ? 'active' : ''"
 						th:text="${totalPages}"> </a></li>
 
 					<!-- Next Icon -->
 					<li th:if="${currentPage + 1 < totalPages}"><a
-						th:href="@{/admin/promotion-management(page=${currentPage + 1}, size=2)}">
+						th:href="@{/admin/promotion-management(page=${currentPage + 1}, size=3)}">
 							<i class="fas fa-chevron-right icon"></i>
 					</a></li>
 				</ul>
@@ -177,7 +185,7 @@
 						<button class="btn auth-form__control-back btn--normal btn-cancel"
 							id="close-modal-btn">Trở lại</button>
 						<button class="btn btn--primary view-cart btn-confirm"
-							id="getData">Xác nhận</button>
+							id="btn-confirm-modal">Xác nhận</button>
 					</div>
 				</div>
 			</div>
