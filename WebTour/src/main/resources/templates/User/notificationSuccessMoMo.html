@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Thông báo thanh toán MOMO</title>
+	<link rel="stylesheet" href="../css/NotificationSuccess.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	
+	<link rel="stylesheet" href="/css/home_user.css">
+	
+  
+	
+</head>
+<body>
+<header id="header"></header>
+<div id="bookingId" th:attr="data-id=${bookingId}" class="container-content">
+	<div class="sub-container-content">
+		<div class="header-content">M&N Travel</div>
+		<div class="confirmation">
+			<i class="fas fa-times-circle" style="color: red; font-size: 24px;"></i>
+
+
+			<div class="confirmation-text">
+				<b> Thanh toán thất bại. </b>
+
+			</div>
+		</div>
+		<div th:attr="data-id=${resultCode}"  class="order-info">
+			
+
+		</div>		
+	</div>
+</div>
+	
+		<div class="actions">
+			<button id="bt-continuteShop">
+				<i class="fas fa-shopping-cart"> </i> Tiếp tục mua hàng
+			</button>
+			<!-- <button id="print-button">
+				<i class="fas fa-print"> </i> In
+			</button> -->
+		</div>
+	
+	<div id="footer"></div>
+	
+	<script src="/js/header.js"></script>
+	<!-- 	xuất kiểu hình ảnh (png)
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script> -->
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<script src="../js/notificationMoMo.js"></script>
+</body>
+</html>

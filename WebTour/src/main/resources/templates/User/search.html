@@ -155,10 +155,26 @@ body {
 	-webkit-background-clip: text;
 	background-clip: text;
 }
+.filter{
+	background-color: #f8f8f8;
+    display: flex;
+    justify-content: end;
+    padding-right: 8%;
+    padding-top: 20px;
+}
 </style>
 </head>
 <body>
 	<header id="header"></header>
+	<div class="filter">
+		<label for="price-sort">Sắp xếp theo giá:</label>
+		<select id="price-sort" name="price-sort" onchange="SortPrice()">
+			<option value="0">Chọn</option>
+		    <option value="1">Tăng giá</option>
+		    <option value="2">Giảm giá</option>
+		</select>
+    
+    </div>
 	<div class="main-content">
 		<div class="filter-container">
 			<div class="search-right-box">

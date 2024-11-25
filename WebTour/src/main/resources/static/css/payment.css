@@ -203,9 +203,10 @@ h1 {
 }
 
 .actions {
+    justify-content: space-around;
 	padding: 18px 5px;
 	display: flex;
-	justify-content: center; color : #fff;
+	
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
@@ -213,12 +214,17 @@ h1 {
 }
 
 .order-button {
-	padding: 10px 20px;
-	background-color: #007bff;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
+	font-size: 16px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background: linear-gradient(135deg, #003087, #009cde);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+
 }
 .form-group select{
 	width: 99%;
@@ -245,6 +251,70 @@ div .div-quantity .quantity-p{
 .code-booking tour-id{
 	margin-left: 2%;
 }
+
+#payment-momo {
+    /* Kích thước và định dạng */
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background: linear-gradient(135deg, #d82d8b, #f9a8d4);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#payment-momo:hover {
+    /* Hiệu ứng khi hover */
+    background: linear-gradient(135deg, #ff8e53, #ff5f6d);
+    transform: scale(1.05); /* Phóng to nhẹ */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+#payment-momo:active {
+    /* Hiệu ứng khi nhấn */
+    transform: scale(0.95);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+#payment-momo:focus {
+    /* Hiệu ứng khi chọn */
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 99, 72, 0.8);
+}
+
+.order-button:hover {
+    /* Hiệu ứng khi hover */
+    background: linear-gradient(135deg, #003087, #34d399);
+
+    transform: scale(1.05); /* Phóng to nhẹ */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.order-button:active {
+    /* Hiệu ứng khi nhấn */
+    transform: scale(0.95);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.order-button:focus {
+    /* Hiệu ứng khi chọn */
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 99, 72, 0.8);
+}
+#bt-apply{
+	transition: all 0.3s ease-in-out;
+}
+
+#bt-apply:hover {
+	background: linear-gradient(135deg, #003087, #ffd700);
+
+    transform: scale(1.05); /* Phóng to nhẹ */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .container-content {
@@ -301,8 +371,9 @@ div .div-quantity .quantity-p{
     }
 
     .order-button {
-        width: 100%;
-        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 12px 24px;
     }
 
     /* Hide icons or images for smaller screens if needed */

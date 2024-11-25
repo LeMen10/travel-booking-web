@@ -190,12 +190,35 @@ public class SearchController {
 	    Page<Object[]> tours;
 	    if (sort.equals("asc")) {
 	        tours = toursRepository.findToursSortedByPriceAsc(pageable);
+	        
 	    } else {
 	        tours = toursRepository.findToursSortedByPriceDesc(pageable);
 	    }
+	    
+	    List<Object[]> updatedResults = new ArrayList<>(tours.getContent()); // Lấy danh sách từ Page
 
+	    // Cập nhật danh sách
+	    for (int i = 0; i < updatedResults.size(); i++) {
+	        Object[] tour = updatedResults.get(i);
+
+
+	        // Tạo mảng mới với 1 phần tử thêm cho đánh giá
+	        Object[] newTour = new Object[tour.length + 2];
+	        System.arraycopy(tour, 0, newTour, 0, tour.length);
+	        
+	        List<Object[]> listRate = reviewsRepository.getRateOfTour((Long.parseLong(tour[0]+"")) ).get();
+	        // Lấy đánh giá của tour
+	        newTour[tour.length] = listRate.get(0)[1];
+	        newTour[tour.length + 1] = listRate.get(0)[0];
+	        
+	        // Cập nhật lại phần tử trong danh sách
+	        updatedResults.set(i, newTour);
+	    }
+
+	    // Tạo lại Page từ List sau khi cập nhật
+	    Page<Object[]> updatedPage = new PageImpl<>(updatedResults, pageable, tours.getTotalElements());
 	    // Trả về dữ liệu dưới dạng JSON
-	    return tours;
+	    return updatedPage;
 	}
 	/*===========================================================================================*/
 

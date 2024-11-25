@@ -1,40 +1,63 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
+const crypto = require('crypto');
+const https = require('https');
+const axios = require('axios');
+
+// Middleware để phân tích JSON từ client
+// Cấu hình CORS
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Hoặc giới hạn domain cụ thể:
+app.use(cors({
+    origin: 'http://localhost:8080', // Domain của client
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+}));
+
 
 app.post('/payment', (req, res) => {
-    //https://developers.momo.vn/#/docs/en/aiov2/?id=payment-method
-    //parameters
+    // Nhận tham số từ body
+    const { amount, orderIdSuffix, bookingId } = req.body;
+
+    if (!amount || !orderIdSuffix) {
+        return res.status(400).json({ message: "Amount và orderIdSuffix là bắt buộc." });
+    }
+
+    // Thông tin cố định
     var accessKey = 'F8BBA842ECF85';
     var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
     var orderInfo = 'pay with MoMo';
     var partnerCode = 'MOMO';
-    var redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
-    var ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
+
+    
+    var ipnUrl = 'https://fb56-116-102-185-203.ngrok-free.app/payment-result';
+
     var requestType = "payWithMethod";
-    var amount = '50000';
-    var orderId = partnerCode + new Date().getTime();
-    var requestId = orderId;
     var extraData = '';
-    var paymentCode = 'T8Qii53fAXyUftPV3m9ysyRhEanUs9KlOPfHgpMR0ON50U10Bh+vZdpJU7VY4z+Z2y77fJHkoDc69scwwzLuW5MzeUKTwPo3ZMaB29imm6YulqnWfTkgzqRaion+EuD7FN9wZ4aXE1+mRt0gHsU193y+yxtRgpmY7SDMU9hCKoQtYyHsfFR5FUAOAKMdw2fzQqpToei3rnaYvZuYaxolprm9+/+WIETnPUDlxCYOiw7vPeaaYQQH0BF0TxyU3zu36ODx980rJvPAgtJzH1gUrlxcSS1HQeQ9ZaVM1eOK/jl8KJm6ijOwErHGbgf/hVymUQG65rHU2MWz9U8QUjvDWA==';
+    var orderId = partnerCode + orderIdSuffix; // Sử dụng suffix từ client
+    var redirectUrl = 'http://localhost:8080/notificationSuccess-momo?bookingId=' + bookingId + '&orderId=' + orderIdSuffix;
+    var requestId = orderId;
     var orderGroupId = '';
     var autoCapture = true;
     var lang = 'vi';
 
-    //before sign HMAC SHA256 with format
-    //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
-    var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
-    //puts raw signature
-    console.log("--------------------RAW SIGNATURE----------------")
-    console.log(rawSignature)
-    //signature
-    const crypto = require('crypto');
+    // Tạo raw signature
+    var rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
+    console.log("--------------------RAW SIGNATURE----------------");
+    console.log(rawSignature);
+
+    // Tạo signature
     var signature = crypto.createHmac('sha256', secretKey)
         .update(rawSignature)
         .digest('hex');
-    console.log("--------------------SIGNATURE----------------")
-    console.log(signature)
+    console.log("--------------------SIGNATURE----------------");
+    console.log(signature);
 
-    //json object send to MoMo endpoint
+    // Dữ liệu JSON gửi đến MoMo
     const requestBody = JSON.stringify({
         partnerCode: partnerCode,
         partnerName: "Test",
@@ -52,7 +75,8 @@ app.post('/payment', (req, res) => {
         orderGroupId: orderGroupId,
         signature: signature
     });
-    //Create the HTTPS objects
+
+    // Tạo HTTPS request
     const https = require('https');
     const options = {
         hostname: 'test-payment.momo.vn',
@@ -63,32 +87,91 @@ app.post('/payment', (req, res) => {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(requestBody)
         }
-    }
-    //Send the request and get the response
-    var req = https.request(options, res => {
-        console.log(`Status: ${res.statusCode}`);
-        console.log(`Headers: ${JSON.stringify(res.headers)}`);
-        res.setEncoding('utf8');
-        res.on('data', (body) => {
-            console.log('Body: ');
-            console.log(body);
-            console.log('resultCode: ');
-            console.log(JSON.parse(body).resultCode);
-        });
-        res.on('end', () => {
-            console.log('No more data in response.');
-        });
-    })
+    };
 
-    req.on('error', (e) => {
-        console.log(`problem with request: ${e.message}`);
+    // Gửi yêu cầu đến MoMo
+    const paymentRequest = https.request(options, momoResponse => {
+        console.log(`Status: ${momoResponse.statusCode}`);
+        let data = '';
+        momoResponse.on('data', chunk => {
+            data += chunk;
+        });
+        momoResponse.on('end', () => {
+            console.log('Response from MoMo: ', data);
+            res.status(200).json(JSON.parse(data)); // Gửi phản hồi về client
+        });
     });
-    // write data to request body
-    console.log("Sending....")
-    req.write(requestBody);
-    req.end();
+
+    paymentRequest.on('error', e => {
+        console.error(`Request error: ${e.message}`);
+        res.status(500).json({ error: e.message });
+    });
+
+    console.log("Sending....");
+    paymentRequest.write(requestBody);
+    paymentRequest.end();
 });
+
+// API nhận thông báo từ MoMo (IPN)
+app.post('/payment-result',async (req, res) => {
+    console.log("call back: ");
+    const { orderId, resultCode, message } = req.body;
+
+    if (!orderId || resultCode === undefined) {
+        return res.status(400).json({ message: "Dữ liệu không hợp lệ." });
+    }
+
+    // Kiểm tra kết quả giao dịch
+    if (resultCode === 0) {
+        console.log(`Thanh toán thành công cho orderId: ${orderId}`);
+        // Cập nhật trạng thái giao dịch vào cơ sở dữ liệu
+        return res.status(200).json({ message: "Giao dịch thành công." });
+    } else {
+        console.log(`Thanh toán thất bại cho orderId: ${orderId}. Lý do: ${message}`);
+        // Xử lý giao dịch thất bại
+        return res.status(200).json({ message: "Giao dịch thất bại." });
+    }
+   
+});
+
+app.post('/check-status-transaction', async (req, res) => {
+    const { orderId } = req.body;
+  
+    // const signature = accessKey=$accessKey&orderId=$orderId&partnerCode=$partnerCode
+    // &requestId=$requestId
+    var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+    var accessKey = 'F8BBA842ECF85';
+    const rawSignature = `accessKey=${accessKey}&orderId=${orderId}&partnerCode=MOMO&requestId=${orderId}`;
+  
+    const signature = crypto
+      .createHmac('sha256', secretKey)
+      .update(rawSignature)
+      .digest('hex');
+  
+    const requestBody = JSON.stringify({
+      partnerCode: 'MOMO',
+      requestId: orderId,
+      orderId: orderId,
+      signature: signature,
+      lang: 'vi',
+    });
+  
+    // options for axios
+    const options = {
+      method: 'POST',
+      url: 'https://test-payment.momo.vn/v2/gateway/api/query',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: requestBody,
+    };
+  
+    const result = await axios(options);
+  
+    return res.status(200).json(result.data);
+  });
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
+

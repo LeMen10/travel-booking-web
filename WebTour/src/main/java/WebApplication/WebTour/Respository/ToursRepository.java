@@ -76,19 +76,19 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	void updateStatusByTourId(@Param("tourId") Long tourId);
 
 	// sắp xếp giá  tour tăng
-	@Query(value = "SELECT t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, i.image_id "
+	@Query(value = "SELECT t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, i.image_id , t.original_price "
 	        + "FROM tours t "
 	        + "LEFT JOIN image i ON t.tour_id = i.tour_id "
 	        + "WHERE t.status = true AND t.original_id IS NULL "
-	        + "GROUP BY t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, t.original_id "
+	        + "GROUP BY t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date "
 	        + "ORDER BY t.price ASC", nativeQuery = true)
 	Page<Object[]> findToursSortedByPriceAsc(Pageable pageable);
 	// sắp xếp giá  tour  giảm
-	@Query(value = "SELECT t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, i.image_id "
+	@Query(value = "SELECT t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, i.image_id, t.original_price "
 	        + "FROM tours t "
 	        + "LEFT JOIN image i ON t.tour_id = i.tour_id "
 	        + "WHERE t.status = true AND t.original_id IS NULL "
-	        + "GROUP BY t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date, t.original_id "
+	        + "GROUP BY t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date "
 	        + "ORDER BY t.price DESC", nativeQuery = true)
 	Page<Object[]> findToursSortedByPriceDesc(Pageable pageable);
 

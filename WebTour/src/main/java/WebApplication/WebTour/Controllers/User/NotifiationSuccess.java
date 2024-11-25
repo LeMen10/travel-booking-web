@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import WebApplication.WebTour.Model.Bookings;
 import WebApplication.WebTour.Model.Guides;
@@ -113,6 +114,21 @@ public class NotifiationSuccess {
 		model.addAttribute("tourNotification", tourtOpt);
 		model.addAttribute("ticketBookingList", ticketBookingList);
 		return "/User/notificationSuccess";
+	}
+	
+	@GetMapping("/notificationSuccess-momo")
+	public String openNotificationSuccessFormM0M0(@RequestParam("bookingId") Long bookingId, 
+			@RequestParam("orderId") String orderId, 
+			@RequestParam("resultCode") int resultCode,
+			Model model) {
+
+		
+		//momo
+		model.addAttribute("resultCode", resultCode);
+		model.addAttribute("bookingId", bookingId);
+		model.addAttribute("orderId", orderId);
+		System.out.println(orderId);
+		return "/User/notificationSuccessMoMo";
 	}
 
 }
