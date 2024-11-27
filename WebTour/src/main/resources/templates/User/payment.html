@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="/css/loading.css">
 </head>
 <body>
-<div class="loading-container" id="loading-content">
+<!-- <div class="loading-container" id="loading-content">
         <div class="center-icon">
             <img src="eiffel-tower-icon.svg" alt="Eiffel Tower">
         </div>
@@ -21,7 +21,7 @@
             <div class="plane plane-blue"></div>
             <div class="plane plane-yellow"></div>
         </div>
-    </div>
+    </div> -->
 <header id="header"></header>
 	<div class="container-content">
 		<div class="left">
@@ -45,7 +45,7 @@
 			</div>
 			<div class="form-group">
 				<label for="optional-address"> Địa chỉ (Số nhà, tên
-					đường...) </label> <input th:value="${user.address.detail}"
+					đường...) </label> <input th:value="${user.address == null ? '' : user.address.detail}"
 					id="optional-address" type="text" name="detail" />
 			</div>
 
@@ -55,7 +55,7 @@
 		            <option th:each="prov : ${province}" 
 		                    th:value="${prov.provinceId}" 
 		                    th:text="${prov.name}"
-		                    th:selected="${prov.provinceId == provinceUser.provinceId}">
+		                    th:selected="${provinceUser == null ? '' :  prov.provinceId == provinceUser.provinceId}">
 		            </option>
 		        </select>
 			</div>
@@ -65,7 +65,7 @@
 		            <option th:each="dist : ${district}" 
 		                    th:value="${dist.districtId}" 
 		                    th:text="${dist.name}"
-		                    th:selected="${dist.districtId == districtUser.districtId}">
+		                    th:selected="${districtUser == null ? '' :  dist.districtId == districtUser.districtId}">
 		            </option>
 		        </select>
 			</div>
@@ -75,7 +75,7 @@
 		            <option th:each="w : ${ward}" 
 		                    th:value="${w.wardId}" 
 		                    th:text="${w.name}"
-		                    th:selected="${w.wardId == wardUser.wardId}">
+		                    th:selected="${wardUser == null ? '' : w.wardId == wardUser.wardId}">
 		            </option>
 		        </select>
 			</div>

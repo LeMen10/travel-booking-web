@@ -105,20 +105,23 @@ public class PaymentController {
 			if (user != null) {
 				model.addAttribute("user", user);
 				Address address = user.getAddress();
-				Province provinceUser = address.getProvince();
-				Ward wardUser = address.getWard();
-				District districtUser = address.getDistrict();
-				
-				model.addAttribute("address", address);
-				model.addAttribute("provinceUser", provinceUser);
-				model.addAttribute("wardUser", wardUser);
-				model.addAttribute("districtUser", districtUser);
+				if (address != null) {
+					Province provinceUser = address.getProvince();
+					Ward wardUser = address.getWard();
+					District districtUser = address.getDistrict();
+
+					model.addAttribute("address", address);
+					model.addAttribute("provinceUser", provinceUser);
+					model.addAttribute("wardUser", wardUser);
+					model.addAttribute("districtUser", districtUser);
+
+				}
 				List<Province> province = provinceRepository.findAll();
 				List<District> district = districtRespository.findAll();
 				List<Ward> ward = wardRepository.findAll();
-				model.addAttribute("province",province);
-				model.addAttribute("district",district);
-				model.addAttribute("ward",ward);
+				model.addAttribute("province", province);
+				model.addAttribute("district", district);
+				model.addAttribute("ward", ward);
 			} else {
 				model.addAttribute("error", "User không tồn tại!");
 			}
@@ -130,11 +133,11 @@ public class PaymentController {
 			} else {
 				model.addAttribute("error", "Payment không tồn tại!");
 			}
-			
+
 			// lấy thông tin của tour từ clone
 			Tours tourPayment = booking.getTour();
 			Tours orginalTour = toursRepository.findById(tourPayment.getOriginalId()).get();
-			
+
 			if (tourPayment != null) {
 				model.addAttribute("tourPayment", tourPayment);
 				// Lấy hình ảnh của tour
@@ -258,8 +261,7 @@ public class PaymentController {
 	public ResponseEntity<Payments> createPayment(@RequestParam("bookingId") Long bookingId,
 			@RequestParam("paymentDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date paymentDate,
 			@RequestParam("amount") float amount, @RequestParam("paymentMethodId") long paymentMethodId,
-			@RequestParam("promotionCode") String promotionCode, 
-			@RequestParam("captureId") String captureId,
+			@RequestParam("promotionCode") String promotionCode, @RequestParam("captureId") String captureId,
 			@RequestParam("totalUSD") float totalPriceUSD) {
 		System.out.println("Amount received from request: " + amount);
 		Optional<Bookings> bookingPayment = bookingsRespository.findById(bookingId);
@@ -293,11 +295,9 @@ public class PaymentController {
 	@PutMapping("/update-status/{bookingId}")
 	public ResponseEntity<String> updatePaymentStatus(@PathVariable Long bookingId) {
 		Optional<Bookings> booking = bookingsRespository.findById(bookingId);
-		if(booking.isPresent())
-		{
+		if (booking.isPresent()) {
 			Payments payment = booking.get().getPayment();
-			if(payment != null)
-			{
+			if (payment != null) {
 				payment.setPaymentStatus(1);
 				paymentsRepository.save(payment);
 			}
@@ -338,13 +338,9 @@ public class PaymentController {
 
 	// tạo address trong trang thanh toán
 	@PostMapping("/api-create-address")
-	public ResponseEntity<?> createAddress(
-			@RequestParam Long userId,
-			@RequestParam String detail, 
-			@RequestParam Long provinceId,
-			@RequestParam Long districtId, 
-			@RequestParam Long wardId) {
-		
+	public ResponseEntity<?> createAddress(@RequestParam Long userId, @RequestParam String detail,
+			@RequestParam Long provinceId, @RequestParam Long districtId, @RequestParam Long wardId) {
+
 		// Tạo address
 		Address address = new Address();
 		address.setDetail(detail);
@@ -369,21 +365,21 @@ public class PaymentController {
 		System.out.println("DistrictId: " + districtId);
 		System.out.println("WardId: " + wardId);
 
-
 		Optional<User> userOpt = userRepository.findById(userId);
 		if (userOpt.isPresent()) {
-	        User user = userOpt.get();
-	        user.setAddress(address);
-	        
-	        // Lưu vào database
-	        addressRespository.save(address);
-	        // Lưu địa chỉ mới cho user
-	        userRepository.save(user); 
+			User user = userOpt.get();
+			user.setAddress(address);
 
-	        return ResponseEntity.ok().body(Collections.singletonMap("message", "Địa chỉ đã được lưu"));
-	    } else {
-	    	 return ResponseEntity.badRequest().body(Collections.singletonMap("error", "User createAddress không tồn tại!"));
-	    }
+			// Lưu vào database
+			addressRespository.save(address);
+			// Lưu địa chỉ mới cho user
+			userRepository.save(user);
+
+			return ResponseEntity.ok().body(Collections.singletonMap("message", "Địa chỉ đã được lưu"));
+		} else {
+			return ResponseEntity.badRequest()
+					.body(Collections.singletonMap("error", "User createAddress không tồn tại!"));
+		}
 	}
 
 	@GetMapping("/refund/{bookingid}")
@@ -395,33 +391,29 @@ public class PaymentController {
 		Bookings booking = bookingOpt.get();
 
 		// Tìm user theo userId của booking
-		User userOpt =  booking.getUser();
-		if (userOpt==null) {
+		User userOpt = booking.getUser();
+		if (userOpt == null) {
 			return "userOpt notificationSuccess không tồn tại!";
 		}
-		
 
 		// Tìm payment theo paymentId của booking
 		Payments paymentOpt = booking.getPayment();
-		if (paymentOpt==null) {
+		if (paymentOpt == null) {
 			return "paymentOpt notificationSuccess không tồn tại!";
 		}
-		
 
 		// Tìm tour theo paymentId của booking
 		Tours tourtOpt = booking.getTour();
-		if (tourtOpt==null) {
+		if (tourtOpt == null) {
 			return "tourtOpt notificationSuccess không tồn tại!";
 		}
-		
-		
-		//hiển thị số lượng người lớn và trẻ em
+
+		// hiển thị số lượng người lớn và trẻ em
 		List<TicketBooking> ticketBookingList = ticketBookingRepository.findTicketBookingById(booking.getBookingId());
-		if(ticketBookingList.isEmpty()) {
+		if (ticketBookingList.isEmpty()) {
 			return "ticketBookingList notificationSuccess không tồn tại!";
 		}
-		
-		
+
 		model.addAttribute("bookingNotification", booking);
 		model.addAttribute("paymentNotification", paymentOpt);
 		model.addAttribute("userNotification", userOpt);
@@ -429,7 +421,5 @@ public class PaymentController {
 		model.addAttribute("ticketBookingList", ticketBookingList);
 		return "/User/refund";
 	}
-	
-	
-	
+
 }

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
 	const loadingScreen = document.getElementById('loading-screen');
 	window.onload = function() {
 		const loadingScreen = document.getElementById("loading-screen");
@@ -8,7 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	const bookingID = sessionStorage.getItem("bookingID");
 	const tourID = sessionStorage.getItem("tourID");
-	const userID = sessionStorage.getItem("userID");
+	const account = await getProfile();
+	if (!account) {
+		window.location.href = `/home`
+		return;
+	}
+	const userID = account.user.user_id;
 	const totalPrice = sessionStorage.getItem("totalPrice");
 	console.log("Booking ID: " + bookingID);
 	console.log("Tour ID: " + tourID);
@@ -106,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (!isPayPalInitialized) {
 				await createPayment();
 				payPal();
+				await createAddress();
 				div_paypal.style.display = "block";
 				isPayPalInitialized = true;
 
@@ -124,81 +130,83 @@ document.addEventListener('DOMContentLoaded', function() {
 	getAllProvince();
 
 
-
 })
 
 async function paymentMoMo() {
-    const orderId = "MOMO_" + new Date().getTime(); // Tạo orderId duy nhất
-    const bookingId = document.getElementById("id-booking").getAttribute("data-id");
-    const totalPriceText = document.getElementById('total-price').innerText;
-    const totalPrice = parseFloat(totalPriceText.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(/,/g, '.'));
+	if (!checkInformationInput()) {
+		return;
+	}
+	const orderId = "MOMO_" + new Date().getTime(); // Tạo orderId duy nhất
+	const bookingId = document.getElementById("id-booking").getAttribute("data-id");
+	const totalPriceText = document.getElementById('total-price').innerText;
+	const totalPrice = parseFloat(totalPriceText.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(/,/g, '.'));
 
-    try {
-        // Gửi yêu cầu tạo thanh toán MoMo
-        const response = await fetch('http://localhost:3000/payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                amount: totalPrice,
-                orderIdSuffix: orderId,
+	try {
+		// Gửi yêu cầu tạo thanh toán MoMo
+		const response = await fetch('http://localhost:3000/payment', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				amount: totalPrice,
+				orderIdSuffix: orderId,
 				bookingId: bookingId
-            }),
-        });
+			}),
+		});
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+		if (!response.ok) {
+			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
 
-        const data = await response.json();
-        if (data.shortLink) {
-            // Chuyển hướng người dùng tới trang thanh toán của MoMo
-            window.location.href = data.shortLink;
-        } else {
-            throw new Error('Không thể tạo giao dịch MoMo.');
-        }
+		const data = await response.json();
+		if (data.shortLink) {
+			// Chuyển hướng người dùng tới trang thanh toán của MoMo
+			window.location.href = data.shortLink;
+		} else {
+			throw new Error('Không thể tạo giao dịch MoMo.');
+		}
 
-        // Sau khi người dùng thanh toán thành công trên MoMo, tiếp tục xử lý
-        // Gọi hàm createPayment để lưu thông tin thanh toán vào database
-        const captureId = orderId; // Đối với MoMo, sử dụng orderId làm captureId
-        const paymentResponse = await createPayment(captureId, totalPrice);
-        
-    } catch (error) {
-        console.error('Error processing payment:', error);
-        alert('Không thể thực hiện giao dịch. Vui lòng thử lại!');
-    }
+		// Sau khi người dùng thanh toán thành công trên MoMo, tiếp tục xử lý
+		// Gọi hàm createPayment để lưu thông tin thanh toán vào database
+		const captureId = orderId; // Đối với MoMo, sử dụng orderId làm captureId
+		const paymentResponse = await createPayment(captureId, totalPrice);
+
+	} catch (error) {
+		console.error('Error processing payment:', error);
+		alert('Không thể thực hiện giao dịch. Vui lòng thử lại!');
+	}
 }
 /*async function handlePaymentReturn() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const resultCode = urlParams.get('resultCode'); // Lấy mã trạng thái giao dịch
-    const orderId = urlParams.get('orderId'); // Lấy mã đơn hàng
-    const transId = urlParams.get('transId'); // Lấy mã giao dịch
-    const message = urlParams.get('message'); // Thông báo về giao dịch
+	const urlParams = new URLSearchParams(window.location.search);
+	const resultCode = urlParams.get('resultCode'); // Lấy mã trạng thái giao dịch
+	const orderId = urlParams.get('orderId'); // Lấy mã đơn hàng
+	const transId = urlParams.get('transId'); // Lấy mã giao dịch
+	const message = urlParams.get('message'); // Thông báo về giao dịch
 
-    if (resultCode === '0') {
-        // Nếu giao dịch thành công
-        console.log(`Thanh toán thành công. Mã giao dịch: ${transId}`);
-        
-        // Tiến hành lưu thông tin thanh toán vào cơ sở dữ liệu
-        const totalPrice = parseFloat(urlParams.get('amount')) / 100; // Ví dụ nếu MoMo gửi số tiền là 3000000 (đơn vị đồng)
-        const paymentResponse = await createPayment(orderId, totalPrice);
+	if (resultCode === '0') {
+		// Nếu giao dịch thành công
+		console.log(`Thanh toán thành công. Mã giao dịch: ${transId}`);
+	    
+		// Tiến hành lưu thông tin thanh toán vào cơ sở dữ liệu
+		const totalPrice = parseFloat(urlParams.get('amount')) / 100; // Ví dụ nếu MoMo gửi số tiền là 3000000 (đơn vị đồng)
+		const paymentResponse = await createPayment(orderId, totalPrice);
 
-        if (paymentResponse) {
-            // Cập nhật trạng thái thanh toán cho booking
-            const bookingId = document.getElementById("id-booking").getAttribute("data-id");
-            await updatePaymentStatus(bookingId);
+		if (paymentResponse) {
+			// Cập nhật trạng thái thanh toán cho booking
+			const bookingId = document.getElementById("id-booking").getAttribute("data-id");
+			await updatePaymentStatus(bookingId);
 
-            // Chuyển hướng tới trang thành công
-            window.location.href = `/notificationSuccess/${bookingId}`;
-        } else {
-            alert("Lưu thông tin thanh toán thất bại!");
-        }
-    } else {
-        // Nếu giao dịch thất bại
-        console.log(`Giao dịch thất bại: ${message}`);
-        alert('Thanh toán không thành công. Vui lòng thử lại!');
-    }
+			// Chuyển hướng tới trang thành công
+			window.location.href = `/notificationSuccess/${bookingId}`;
+		} else {
+			alert("Lưu thông tin thanh toán thất bại!");
+		}
+	} else {
+		// Nếu giao dịch thất bại
+		console.log(`Giao dịch thất bại: ${message}`);
+		alert('Thanh toán không thành công. Vui lòng thử lại!');
+	}
 }*/
 
 
@@ -225,27 +233,27 @@ async function paymentMoMo() {
 		.then(data => {
 			window.location.href = data.shortLink;
 			fetch('http://localhost:3000/payment/success', {
-			    method: 'POST',
-			    headers: {
-			        'Content-Type': 'application/json',
-			    },
-			    body: JSON.stringify({
-			        resultCode: 0,
-			        message: 'Payment successful',
-			        amount: 50000,
-			        orderId: 'MOMO_12345'
-			    })
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					resultCode: 0,
+					message: 'Payment successful',
+					amount: 50000,
+					orderId: 'MOMO_12345'
+				})
 			})
-			    .then(response => response.json())
-			    .then(data => {
-			        if (data.success) {
-			            console.log('Payment success:', data);
-			            // Hiển thị kết quả thanh toán trên giao diện
-			        } else {
-			            console.error('Payment failed:', data);
-			        }
-			    })
-			    .catch(error => console.error('Error:', error));
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						console.log('Payment success:', data);
+						// Hiển thị kết quả thanh toán trên giao diện
+					} else {
+						console.error('Payment failed:', data);
+					}
+				})
+				.catch(error => console.error('Error:', error));
 
 		})
 		.catch(error => console.error('Error:', error));
@@ -705,7 +713,8 @@ async function checkPromotion() {
 
 //tạo address khi ấn thanh toán
 async function createAddress() {
-	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
+	const account = await getProfile();
+	const userId = account == null ? null : account.user.user_id;
 	const detail = document.getElementById('optional-address').value.trim();
 	console.log(detail);
 	console.log(`Detail: ${detail}`);

@@ -323,7 +323,8 @@ async function createBooking() {
 	console.log("Hàm createBooking đã được gọi.");
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
 
-	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
+	const account = await getProfile();
+	const userId = account == null ? null : account.user.user_id;
 
 	const today = new Date().toISOString().split('T')[0]; // lấy định dạng yyyy-MM-dd
 	const bookingDate = today;
@@ -372,7 +373,6 @@ async function createBooking() {
 
 	sessionStorage.setItem("bookingID", bookingID);
 	sessionStorage.setItem("tourID", tourId);
-	sessionStorage.setItem("userID", userId);
 	sessionStorage.setItem("totalPrice", totalPrice);
 	/*mở trang payment với id của booking mới tạo*/
 	window.location.href = `/payment/${bookingID}`;
