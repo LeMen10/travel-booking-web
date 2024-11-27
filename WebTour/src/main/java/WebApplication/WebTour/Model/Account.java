@@ -40,6 +40,9 @@ public class Account implements Serializable{
     @Column(name = "create_on")
     private Date createOn;
     
+    @Column(name = "google_id")
+    private String googleId;
+    
     @Column(name = "status")
     private boolean status = true;
 
@@ -52,6 +55,14 @@ public class Account implements Serializable{
 		this.user = user;
 		this.userName = userName;
 		this.password = password;
+	}
+	
+	public Account(User user, String userName, String password, Date currentDate) {
+		super();
+		this.user = user;
+		this.userName = userName;
+		this.password = password;
+		createOn = currentDate;
 	}
 
 	public Long getAccountId() {
@@ -80,6 +91,23 @@ public class Account implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	
+	public Date getCreateOn() {
+		return createOn;
+	}
+
+	public void setCreateOn(Date createOn) {
+		this.createOn = createOn;
+	}
+
+	public String getGoogleId() {
+		return googleId;
+	}
+
+	public void setGoogleId(String googleId) {
+		this.googleId = googleId;
 	}
 
 	public boolean isStatus() {

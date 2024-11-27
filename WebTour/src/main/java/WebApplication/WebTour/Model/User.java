@@ -34,10 +34,10 @@ public class User {
     @Column(name = "email")
     private String email;
     
-    @Column(name = "phone")
+    @Column(name = "phone", nullable = true)
     private String phone;
     
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = true)
     private String gender;
     
     @Column(name = "status")

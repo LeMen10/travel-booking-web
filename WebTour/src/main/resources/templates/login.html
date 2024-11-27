@@ -35,15 +35,15 @@
 						onClick="showOrHidePassword(this, 'password-register')"></i>
 				</div>
 				<div class="gender-wrapper">
-					<label> <input type="radio" name="gender" value="male"
+					<label> <input type="radio" name="gender" value="Nam"
 						required /> Male
-					</label> <label> <input type="radio" name="gender" value="female"
+					</label> <label> <input type="radio" name="gender" value="Nữ"
 						required /> Female
-					</label> <label> <input type="radio" name="gender" value="other"
+					</label> <label> <input type="radio" name="gender" value="Khác"
 						required /> Other
 					</label>
 				</div>
-				<button onClick="handleRegisterAccont(event)">Sign Up</button>
+				<button class="button-form" onClick="handleRegisterAccont(event)">Sign Up</button>
 			</form>
 		</div>
 		<div class="form-container sign-in-container">
@@ -57,12 +57,12 @@
 						onClick="showOrHidePassword(this, 'password-login')"></i>
 				</div>
 				<a href="/forgot-password">Forgot your password?</a>
-				<button onClick="handleLogin(event)">Sign In</button>
+				<button class="button-form" onClick="handleLogin(event)">Sign In</button>
 				<div id="g_id_onload"
 					data-client_id="512035636874-n6lhcso536fgk9qvrg8v2mtl7s5eght1.apps.googleusercontent.com"
 					data-callback="handleCredentialResponse" data-auto_prompt="false">
 				</div>
-				<button onClick="handleLogin(event)" class="g_id_signin"
+				<button class="g_id_signin button-google"
 					data-text="sign_in_with" data-logo_alignment="center">Login
 					with Google</button>
 			</form>
@@ -73,12 +73,12 @@
 					<h1>Welcome Back!</h1>
 					<p>To keep connected with us please login with your personal
 						info</p>
-					<button class="ghost" id="signIn">Sign In</button>
+					<button class="button-form ghost" id="signIn">Sign In</button>
 				</div>
 				<div class="overlay-panel overlay-right">
 					<h1>Hello, Friend!</h1>
 					<p>Enter your personal details and start journey with us</p>
-					<button class="ghost" id="signUp">Sign Up</button>
+					<button class="button-form ghost" id="signUp">Sign Up</button>
 				</div>
 			</div>
 		</div>

@@ -14,14 +14,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <link rel="shortcut icon" href="/image/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/home_user.css">
-
+	<link rel="stylesheet" href="/css/home_employee.css">
 </head>
 <body>
 <header id="header"></header>
-
+<div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prevMonth">Previous</button>
+            <h2 id="currentMonthYear"></h2>
+            <button id="nextMonth">Next</button>
+        </div>
+        <div class="weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        <div id="calendar" class="calendar"></div>
+    </div>
 
 <div id="notification"></div>
 <script src="/js/notification.js"></script>
 <script src="/js/headerEmployee.js"></script>
+<script src="/js/home_employee.js"></script>
 </body>
 </html>

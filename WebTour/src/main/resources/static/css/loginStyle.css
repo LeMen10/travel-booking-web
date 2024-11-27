@@ -43,11 +43,13 @@ a {
 	text-decoration: none;
 	margin: 15px 0;
 }
-
-button {
+.button-google{
+	color: white;
+}
+.button-form {
+	background: linear-gradient(45deg, #4ad4ead1, #eb57e691);
 	border-radius: 20px;
 	border: 1px solid;
-	background: linear-gradient(45deg, #4ad4ead1, #eb57e691);
 	color: #ffffff;
 	font-size: 12px;
 	font-weight: bold;
@@ -57,15 +59,15 @@ button {
 	transition: transform 80ms ease-in;
 }
 
-button:active {
+.button-form:active {
 	transform: scale(0.95);
 }
 
-button:focus {
+.button-form:focus {
 	outline: none;
 }
 
-button.ghost {
+.button-form.ghost {
 	background-color: transparent;
 	border-color: #ffffff;
 }
@@ -233,19 +235,4 @@ input {
 
 .container.right-panel-active .overlay-right {
 	transform: translateX(20%);
-}
-
-.social-container {
-	margin: 20px 0;
-}
-
-.social-container a {
-	border: 1px solid #dddddd;
-	border-radius: 50%;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	margin: 0 5px;
-	height: 40px;
-	width: 40px;
 }

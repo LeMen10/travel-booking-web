@@ -76,6 +76,7 @@ async function handleLogin(event) {
 		headers: {
 			"Content-Type": "application/json",
 		},
+		credentials: 'include'
 	});
 
 	try {
@@ -89,7 +90,8 @@ async function handleLogin(event) {
 		const encrypted = data.password.split("-");
 		const isCorrect = await verifyPasswordHMAC(passWord, encrypted[0], encrypted[1]);
 		if (isCorrect) {
-			sessionStorage.setItem("userId", data.user.user_id);
+			const loginStatus = await loginInSession(data.userName);
+			if (!loginStatus) openDialogError("Login fail!");
 			const bookingId = sessionStorage.getItem("bookingID");
 			if (bookingId != null && data.user.role.roleId == 3) {
 				const isSuccess = await addUserToBooking(data.user.user_id, bookingId);
@@ -106,6 +108,22 @@ async function handleLogin(event) {
 	}
 }
 
+async function loginInSession(username) {
+	const response = await fetch('http://localhost:8080/login/' + username, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include' // Để gửi cookie session về server
+	});
+
+	if (response.ok) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 async function handleRegisterAccont(event) {
 	if (!checkInputs()) return;
 
@@ -114,7 +132,8 @@ async function handleRegisterAccont(event) {
 	const userName = document.getElementById("user-name-register").value;
 	const Phone = document.getElementById("phone-register").value;
 	const Email = document.getElementById("email-register").value;
-	if (!checkFullName(fullName) || !checkPhone(Phone) || !checkUserName(userName) || !checkEmail(Email) || !checkPass(Password)) return;
+	const gender = document.querySelector('input[name="gender"]:checked');
+	if (!checkFullName(fullName) || !checkPhone(Phone) || !checkUserName(userName) || !checkEmail(Email) || !checkPass(Password) || !gender) return;
 	event.preventDefault();
 	const encrypted = await encryptPasswordHMAC(Password);
 
@@ -136,7 +155,7 @@ async function handleRegisterAccont(event) {
 			"userName": userName,
 			"Phone": Phone,
 			"Email": Email,
-			"Gender": "Male",
+			"Gender": gender,
 			"Password": `${encrypted.storedSalt}-${encrypted.storedHash}`
 		}
 		console.log(JSON.stringify(User));
@@ -214,6 +233,20 @@ async function encryptPasswordHMAC(passwordInput) {
 	return { "storedHash": bufferToHex(hash), "storedSalt": bufferToHex(salt) };
 }
 
+async function getProfile() {
+	const response = await fetch('http://localhost:8080/profile', {
+		method: 'GET',
+		credentials: 'include'
+	});
+
+	if (response.ok) {
+		const profile = await response.json();
+		return profile;
+	} else {
+		console.error('Not logged in');
+	}
+}
+
 
 async function verifyPasswordHMAC(passwordInput, storedSalt, storedHash) {
 	const passwordBuffer = new TextEncoder().encode(passwordInput);
@@ -253,15 +286,36 @@ function hexToBuffer(hex) {
 	return new Uint8Array(bytes);
 }
 
-//---------------------------------login with google
-function handleCredentialResponse(response) {
+//---------------------------------login with google---------------------------------------------------
+async function handleCredentialResponse(response) {
 	const data = jwt_decode(response.credential);
-
-	// Hiển thị thông tin người dùng
-	console.log(data);
-	openDialogSuccess("Welcome " + data.name);
+	console.log("hi")
+	await loginWithGoogle(data.sub, data.name, data.email);
+	const account = await getProfile();
+	console.log(account)
+	const bookingId = sessionStorage.getItem("bookingID");
+	if (bookingId != null && account.user.role.roleId == 3) {
+		const isSuccess = await addUserToBooking(account.user.user_id, bookingId);
+		if (isSuccess) window.location.href = `/payment/${bookingId}`;
+		else openDialogError("Can't found booking ToT");
+	}
+	else window.location.href = linkHomePages[account.user.role.roleId + ""];
+	console.log(data)
 }
 
+async function loginWithGoogle(googleId, userName, email) {
+	console.log("3")
+	const response = await fetch(`http://localhost:8080/login-by-google?googleId=${googleId}&userName=${userName}&email=${email}`, {
+		method: 'POST',
+		credentials: 'include'
+	});
+
+	if (response.ok) {
+
+	} else {
+		console.error('Not logged in');
+	}
+}
 
 const script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js";

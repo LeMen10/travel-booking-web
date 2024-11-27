@@ -1,5 +1,6 @@
 package WebApplication.WebTour.Service;
 
+import java.sql.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,15 +50,42 @@ public class HomeService {
         return null;
     }
     
+    public Account getAccountBygoogleId(String googleId) {
+        Optional<Account> account = accountRespository.findByGoogleId(googleId);
+        
+        if (account.isPresent()) {
+            return account.get();
+        }
+        return null;
+    }
+    
+    public Account addAccoutUserGoogle(String googleId, String userName, String email) {
+    	
+    	Account newAccount = new Account();
+    	newAccount.setGoogleId(googleId);
+    	newAccount.setStatus(true);
+    	newAccount.setCreateOn(new Date(System.currentTimeMillis()));
+    	User newUser = new User();
+    	newUser.setEmail(email);
+    	newUser.setRole(roleRepository.findById(3l).get());
+    	newUser.setFullName(userName);
+    	newAccount.setUser(newUser);
+    	userRepository.save(newUser);
+    	Account accountCreated = accountRespository.save(newAccount);
+    	return accountCreated;
+    
+    }
     public Account addAccoutUser(AccountUserDTO userDTO) {
         
     	System.out.println(userDTO);
         if (userDTO != null) {
         	Role role = roleRepository.findById(3l).get();
         	if(role == null) return null;
+        	Date currentDate = new Date(System.currentTimeMillis());
         	User user = new User(role, userDTO.getFullName(), userDTO.getEmail(),userDTO.getPhone(), userDTO.getGender(), null);
         	User userCreated = userRepository.save(user);
-        	Account accountCreated = accountRespository.save(new Account(userCreated, userDTO.getUserName(), userDTO.getPassword()));
+        	Account newAccount = new Account(userCreated, userDTO.getUserName(), userDTO.getPassword(), currentDate);
+        	Account accountCreated = accountRespository.save(newAccount);
             return accountCreated;
         } else {
             return null;
