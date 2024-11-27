@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		currentPage = 0; // Đặt lại trang về 0
 		searchDeparture();
 	})
-
+	
 	// ấn nút thanh toán trên table
 	const btnPayments = document.querySelectorAll(".btn-payment-status");
 	//dùng for vì có nhiều nút (nhiều hàng)
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	});
 
-
+	fomatPrice();
 	/*const confirmCancelButton = document.getElementById("confirm-cancel");*/
 	const closeModalButton = document.getElementById("cancel-close");
 	const modalOverlay = document.getElementById("cancel-confirm-modal");
@@ -264,7 +264,7 @@ function updateDataTable(dataTable) {
 
 		// Thành tiền (total_price)
 		const totalPriceCell = document.createElement("td");
-		totalPriceCell.className = "table-td";
+		totalPriceCell.className = "table-td price-tour";
 		totalPriceCell.textContent = booking[7];
 		row.appendChild(totalPriceCell);
 
@@ -557,6 +557,25 @@ async function showDetailPayment() {
 	console.log(bookingId);
 	window.location.href = `/notificationSuccess/${bookingId}`;
 }
+function fomatPrice() {
 
+	const priceElements = document.querySelectorAll('.price-tour');
+	console.log(priceElements);
+	priceElements.forEach(function(priceElement) {
+		let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
+		if (!isNaN(price)) {
+			// Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
+			priceElement.textContent = price.toLocaleString('vi-VN');
+		}
+	});
+	const originPriceElements = document.querySelectorAll('.tourOriginalPrice');
+	originPriceElements.forEach(function(priceElement) {
+		let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
+		if (!isNaN(price)) {
+			// Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
+			priceElement.textContent = price.toLocaleString('vi-VN') + '₫';
+		}
+	});
+}
 
 

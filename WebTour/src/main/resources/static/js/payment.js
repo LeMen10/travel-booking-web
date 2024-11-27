@@ -128,8 +128,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 	document.getElementById("paypal-button-container").style.display = "none"; // Ẩn div PayPal ban đầu
 	getAllProvince();
-
-
+	fomatPrice();
 })
 
 async function paymentMoMo() {
@@ -740,5 +739,17 @@ async function createAddress() {
 	console.log("Address được tạo", dataAddress);
 
 }
+function fomatPrice() {
 
+	const priceElements = document.querySelectorAll('.price-tour');
+	console.log(priceElements);
+	priceElements.forEach(function(priceElement) {
+		let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
+		if (!isNaN(price)) {
+			// Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
+			priceElement.textContent = price.toLocaleString('vi-VN') + '₫';
+		}
+	});
+	
+}
 

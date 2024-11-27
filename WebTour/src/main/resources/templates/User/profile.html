@@ -27,7 +27,7 @@
             color: #2c3e50;
         }
         .left p {
-            margin: 5px 0;
+            margin: 22px 0;
         }
         .left p span {
             color: red;
@@ -37,7 +37,7 @@
             text-decoration: none;
         }
         .right p {
-            margin: 5px 0;
+            margin: 22px 0;
         }
         a:hover {
             color: #007bff;
@@ -151,10 +151,10 @@
 		    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
 		    <p><strong>Điện thoại:</strong> <span th:text="${user.phone}"></span></p>
 		    <p><strong>Địa chỉ:</strong> 
-		        <!-- <span th:text="${address.detail}"></span>,  -->
-		        <!-- <span th:text="${wardUser.name}"></span>, 
+		        <span th:text="${address.detail}"></span>, 
+		        <span th:text="${wardUser.name}"></span>, 
 		        <span th:text="${districtUser.name}"></span>, 
-		        <span th:text="${provinceUser.name}"></span> -->
+		        <span th:text="${provinceUser.name}"></span> 
 		    </p>
 		    <button id="btn-fix-info">Sửa thông tin</button>
         </div>
@@ -191,8 +191,7 @@
         
         <!-- Hiển thị địa chỉ người dùng -->
         <label for="address">Địa chỉ:</label>
-        <!-- <input type="text" id="address" name="address" th:value="${address.detail}"> -->
-
+        <input type="text" id="address" name="address" th:value="${address.detail}">
         <!-- Hiển thị tỉnh/thành phố -->
         <label for="province">Tỉnh/Thành phố:</label>
         <select id="province" name="province" onchange="updateDistricts()">

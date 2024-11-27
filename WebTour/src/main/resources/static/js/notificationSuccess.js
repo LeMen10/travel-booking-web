@@ -62,13 +62,32 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error('Phần tử .container-content không tìm thấy!');
 		}
 	});
-
+	fomatPrice();
 });
 
 async function backHomeForm() {
 	window.location.href = '/home';
 }
+function fomatPrice() {
 
+	const priceElements = document.querySelectorAll('.price-tour');
+	console.log(priceElements);
+	priceElements.forEach(function(priceElement) {
+		let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
+		if (!isNaN(price)) {
+			// Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
+			priceElement.textContent = price.toLocaleString('vi-VN');
+		}
+	});
+	const originPriceElements = document.querySelectorAll('.tourOriginalPrice');
+	originPriceElements.forEach(function(priceElement) {
+		let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
+		if (!isNaN(price)) {
+			// Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
+			priceElement.textContent = price.toLocaleString('vi-VN') + '₫';
+		}
+	});
+}
 /*document.addEventListener('DOMContentLoaded', function() {
 	document.getElementById("bt-continuteShop").addEventListener("click", backHomeForm);
 

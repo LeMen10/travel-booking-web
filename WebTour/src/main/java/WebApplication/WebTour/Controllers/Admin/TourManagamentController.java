@@ -154,7 +154,7 @@ public class TourManagamentController {
 	    newTour.setDetail(detail);
 	    newTour.setPeopleMax(peopleMax);
 	    newTour.setPrice(price);
-	    
+	    newTour.setOriginalPrice(price);
 	    newTour.setStatus(true);
 	    newTour.setTransport(transport);
 	    

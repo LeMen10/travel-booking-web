@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 	fomatDay();
 	fomatPrice();
+	loadPage(0);
 })
 function fomatDay() {
 	const tourDurations = document.querySelectorAll('.tour-duration');
@@ -52,11 +53,54 @@ function fomatPrice() {
 		}
 	});
 }
+var  url=""
 async function loadPage(page) {
-
 	const size = 8;
-	const url = `http://localhost:8080/api-get-search-tour?page=${page}&size=${size}`; // Endpoint mới
-	console.log(url)
+	  url = `http://localhost:8080/api-get-search-tour?page=${page}&size=${size}&`; // Endpoint mới
+		const urlParams = new URLSearchParams(window.location.search);
+		const tourName = urlParams.get('tourName');
+		const departure = urlParams.get('departure');
+		const destination = urlParams.get('destination');
+		const startDate = urlParams.get('startDate');
+		const endDate = urlParams.get('endDate');
+		const isDiscounted = urlParams.get('isDiscounted');
+		const minPrice = urlParams.get('minPrice');
+		const maxPrice = urlParams.get('maxPrice');
+		const transportation = urlParams.get('transportation');
+		
+		console.log(startDate)
+		console.log(transportation)
+		if (tourName ) {
+		    url += 'tourName=' + encodeURIComponent(tourName) + '&';
+		}
+		if (startDate) {
+		    url += 'startDate=' + encodeURIComponent(startDate) + '&';
+		}
+		if (endDate) {
+			url += 'endDate=' + encodeURIComponent(endDate) + '&';
+		}
+		if (departure) {
+		    url += 'departure=' + encodeURIComponent(departure) + '&';
+		}
+		if (destination) {
+		    url += 'destination=' + encodeURIComponent(destination) + '&';
+		}
+		if (isDiscounted) {
+			url += 'isDiscounted=' + encodeURIComponent(isDiscounted) + '&';
+		}
+		if (minPrice) {
+			url += 'minPrice=' + encodeURIComponent(minPrice) + '&';
+		}
+		if (maxPrice) {
+			url += 'maxPrice=' + encodeURIComponent(maxPrice) + '&';
+		}
+		if (transportation) {
+			url += 'transportation=' + encodeURIComponent(transportation) + '&';
+		}
+		
+		
+	console.log(url);
+	url = url.slice(0, -1);
 	const request = new Request(url, {
 		method: "GET",
 		headers: {
@@ -73,6 +117,7 @@ async function loadPage(page) {
 			return null;
 		} else {
 			const data = await response.json();
+			console.log(data)
 			const listTour = document.getElementById("list-tour");
 			listTour.innerHTML = ""; // Xóa dữ liệu hiện tại
 			data.content.forEach(tour => {
@@ -95,8 +140,10 @@ async function loadPage(page) {
 								</p>
 
 								<p class="price">
-									<span class="tourPrice">${tour[3]}</span> 
-								    ${tour[3] != tour[7] ? `<span class="tourPrice">${tour[7]}</span> ` : ''}
+								    <span class="tourPrice">${tour[3]}</span>
+								    ${tour[3] !== tour[7] ? 
+								        `<span class="tourOriginalPrice" style="text-decoration: line-through; color: grey;">${tour[7]}</span>` 
+								        : ''}
 								</p>
 				                <p class="time">
 				                    <i class="fas fa-clock icon"></i>
@@ -112,8 +159,8 @@ async function loadPage(page) {
 			});
 			fomatDay();
 			fomatPrice();
-			updatePerPage(data.totalPages, page);
 			console.log(data.totalPages + "aaaa" + page)
+			updatePerPage(data.totalPages, page);
 		}
 	} catch (error) {
 		console.error("Lỗi trong fetchTours:", error);
@@ -133,7 +180,7 @@ function updatePerPage(totalPages, currentPage) {
 	        `;
 		pagination.appendChild(prevButton);
 	}
-
+	
 	// Tạo các nút trang
 	for (let i = 0; i < totalPages; i++) {
 		const pageButton = document.createElement("li");
@@ -317,4 +364,81 @@ function updatePagination(totalPages, currentPage) {
 		pagination.appendChild(nextButton);
 	}
 }
+document.getElementById("main-btn-search").addEventListener("click", function () {
+	// Lấy giá trị từ các trường nhập liệu
+	    const tourName = document.querySelector("#input-tour-name")?.value || null;
+		console.log(tourName)
+		   var startDate = document.getElementById('input-start-date').value;
+		// Chuyển đổi định dạng ngày từ dd-MM-yyyy sang yyyy-MM-dd
+		   var formattedStartDate = "";
+		   if (startDate) {
+		       var dateParts = startDate.split('-'); // Tách ngày, tháng, năm
+		       if (dateParts.length === 3) {
+		           formattedStartDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]; // Chuyển đổi sang yyyy-MM-dd
+		       }
+		   }
+		   var endDate = document.getElementById('input-end-date').value;
+		   		// Chuyển đổi định dạng ngày từ dd-MM-yyyy sang yyyy-MM-dd
+		   		   var formattedStartDate = "";
+		   		   if (startDate) {
+		   		       var dateParts = startDate.split('-'); // Tách ngày, tháng, năm
+		   		       if (dateParts.length === 3) {
+		   		           formattedStartDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]; // Chuyển đổi sang yyyy-MM-dd
+		   		       }
+		   		   }
+		var departureSelect = document.getElementById('departureSelect');
+		var departureText = departureSelect.options[departureSelect.selectedIndex].text; // Lấy text của tùy chọn đã chọn
+		var departure = (departureText === "Chọn điểm đi") ? "" : departureText;
+
+		const checkedInput = document.querySelector('.transportation-filter-box input[name="transport-option"]:checked');
+		    const transportation= checkedInput ? checkedInput.parentElement.textContent.trim() : null;
+	   
+
+	    // Xử lý các tùy chọn giá
+	    let minPrice = null;
+	    let maxPrice = null;
+	    let isDiscounted = false; // Biến để xác định "Đang giảm giá"
+	    const priceOption = document.querySelector('.price-filter-box input[name="option"]:checked')?.value;
+
+		console.log(transportation);
+		console.log(priceOption);
+	    if (priceOption === "0") {
+	        // Đang giảm giá
+	        isDiscounted = true;
+	    } else if (priceOption === "1") {
+	        // Dưới 1 triệu
+	        minPrice = 0;
+	        maxPrice = 1000000;
+	    } else if (priceOption === "2") {
+	        // Từ 1 - 5 triệu
+	        minPrice = 1000000;
+	        maxPrice = 5000000;
+	    } else if (priceOption === "3") {
+	        // Trên 5 triệu
+	        minPrice = 5000000;
+	        maxPrice = null;
+	    } else if (priceOption === "4") {
+	        // Chọn mức giá
+	        minPrice = document.querySelector("#range-min").value || null;
+	        maxPrice = document.querySelector("#range-max").value || null;
+	    }
+
+	    // Xây dựng URL với các tham số
+	    const baseUrl = '/search?';
+	    const urlParams = new URLSearchParams();
+
+	    if (tourName) urlParams.append("tourName", tourName);
+	    if (startDate) urlParams.append("startDate", startDate);
+		if (endDate) urlParams.append("endDate", endDate);
+	    if (departure) urlParams.append("departure", departure);
+	    if (transportation) urlParams.append("transportation", transportation);
+	    if (minPrice) urlParams.append("minPrice", minPrice);
+	    if (maxPrice) urlParams.append("maxPrice", maxPrice);
+	    if (isDiscounted) urlParams.append("isDiscounted", isDiscounted);
+
+	    // Kết hợp URL cơ bản với tham số
+	    const fullUrl = `${baseUrl}&${urlParams.toString()}`;
+		window.location.href = fullUrl;
+});
+
 /*===========================================================================================*/

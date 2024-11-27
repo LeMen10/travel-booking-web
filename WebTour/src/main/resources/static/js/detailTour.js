@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	bt_send_review.addEventListener("click", async function() {
 		await createReview();
 	});
+	fomatPrice();
 })
 
 let scrollPosition = 0; // Vị trí cuộn hiện tại
@@ -517,6 +518,26 @@ async function getTicketData() {
 		return null;
 	}
 	return await response.json();
+}
+function fomatPrice() {
+
+	const priceElements = document.querySelectorAll('.price-tour');
+	console.log(priceElements);
+	priceElements.forEach(function(priceElement) {
+		let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
+		if (!isNaN(price)) {
+			// Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
+			priceElement.textContent = price.toLocaleString('vi-VN');
+		}
+	});
+	const originPriceElements = document.querySelectorAll('.tourOriginalPrice');
+	originPriceElements.forEach(function(priceElement) {
+		let price = parseFloat(priceElement.textContent); // Chuyển đổi sang số
+		if (!isNaN(price)) {
+			// Định dạng và loại bỏ khoảng trắng giữa số và ký tự ₫
+			priceElement.textContent = price.toLocaleString('vi-VN') + '₫';
+		}
+	});
 }
 //-------------------------------------------Manh Here-------------------------------------
 
