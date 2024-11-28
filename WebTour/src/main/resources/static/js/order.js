@@ -55,7 +55,9 @@ let currentPage = 0;
 let pageSize = 5;
 
 async function FilterDataTable() {
-	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
+	//const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
+	const account = await getProfile();
+	const userId = account == null ? 0 : account.user.user_id;
 	const paymentStatus = document.getElementById("payment-status").value;
 	const btnPay = document.getElementById("btn-payment-status");
 	console.log("paymentStatus " + paymentStatus);
@@ -380,7 +382,9 @@ function showInput() {
 let currentPageSearch = 0; // Đặt trang hiện tại
 const pageSizeSearch = 5;
 async function searchDeparture() {
-	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
+	//const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");
+	const account = await getProfile();
+	const userId = account == null ? 0 : account.user.user_id;
 	const searchInput = document.getElementById("add-input").value;
 	console.log("searchInput " + searchInput);
 	const url = `http://localhost:8080/account/search-departure?userId=${userId}&searchInput=${searchInput}&page=${currentPageSearch}&size=${pageSizeSearch}`;

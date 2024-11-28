@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		.then(response => response.text())
 		.then(data => {
 			document.getElementById("header").innerHTML = data;
-			nagvigateHeader();
+			//nagvigateHeader();
 			const searchBox = document.getElementById('searchBox');
 			const emptyBox = document.getElementById('emptyBox');
 			const searchBtn = document.querySelector('.btn-search');
@@ -112,7 +112,7 @@ function openLoading() {
 }
 
 
-async function nagvigateHeader() {
+/*async function nagvigateHeader() {
 	const navigateElement = document.querySelector('.navigate');
 	console.log(navigateElement);  // Kiểm tra xem navigateElement có tồn tại không
 	const currentPageElement = document.getElementById('current-page');
@@ -169,7 +169,7 @@ async function nagvigateHeader() {
 	// Cập nhật phần tử hiện tại của thanh điều hướng
 	currentPageElement.textContent = navigationHistory[navigationHistory.length - 1];
 	console.log('Navigation History:', currentPageElement);
-}
+}*/
 
 
 

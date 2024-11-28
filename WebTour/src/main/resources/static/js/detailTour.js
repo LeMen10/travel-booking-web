@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	//xử lý khi ấn vào hình nhỏ sẽ hiện lên thành ảnh lớn trong detailTour.html
 	const subImage = document.querySelectorAll(".sub-image");
 	//sử dụng for để quét (lấy hết) các ảnh nhỏ và đặt sự kiện click
- 	subImage.forEach(image => {
+	subImage.forEach(image => {
 		image.addEventListener("click", function() {
 			showImage(image);
 		});
 	});
-	
+
 	var plus = document.getElementById("bt-plus");
 	plus.addEventListener("click", function() {
 
@@ -31,16 +31,36 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	var btn_contract = document.querySelector(".btn-contract");
-	btn_contract.addEventListener("click", navigateContractPage) ;
-	
+	btn_contract.addEventListener("click", navigateContractPage);
+
 	var book_now = document.getElementById("book-now");
 	console.log("Book Now button:", book_now);
 	book_now.addEventListener("click", async function(event) {
 		event.preventDefault();
-		showLoading();
+		
 		const isValidQuantity = await checkQuantity();
 		if (!isValidQuantity) {
-			hideLoading();
+			
+			return;
+		}
+		
+		if (! (await(checkTourValid() ) )) {
+			Swal.fire({
+				title: 'Chuyến du lịch này đã được thực hiện. Bạn không thể đặt tour này nữa.',
+				text: 'Hãy chọn chuyến du lịch khác nhé. Chúc bạn một ngày vui.',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'OK',
+				
+				reverseButtons: true
+			}).then((result) => {
+				// xác nhận xóa (isConfirmed nút OK)
+				if (result.isConfirmed) {
+					console.log("Xóa");
+				} else {
+					console.log("Thao tác xóa đã bị hủy.");
+				}
+			});
 			return;
 		}
 		await createBooking();
@@ -56,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		await createReview();
 	});
 	fomatPrice();
+
 })
 
 let scrollPosition = 0; // Vị trí cuộn hiện tại
@@ -64,34 +85,34 @@ const thumbnails = document.querySelector(".image-thumbnails");
 const thumbnailContainer = document.querySelector(".thumbnail-container");
 
 function scrollThumbnails(direction) {
-    // Tổng độ rộng của tất cả các ảnh
-    const thumbnailsWidth = thumbnails.scrollWidth;
-    // Độ rộng hiển thị của container
-    const containerWidth = thumbnailContainer.offsetWidth;
+	// Tổng độ rộng của tất cả các ảnh
+	const thumbnailsWidth = thumbnails.scrollWidth;
+	// Độ rộng hiển thị của container
+	const containerWidth = thumbnailContainer.offsetWidth;
 
-    // Tính vị trí cuộn mới
-    scrollPosition += direction * scrollAmount;
+	// Tính vị trí cuộn mới
+	scrollPosition += direction * scrollAmount;
 
-    // Đảm bảo không cuộn vượt quá giới hạn
-    scrollPosition = Math.max(0, Math.min(scrollPosition, thumbnailsWidth - containerWidth));
+	// Đảm bảo không cuộn vượt quá giới hạn
+	scrollPosition = Math.max(0, Math.min(scrollPosition, thumbnailsWidth - containerWidth));
 
-    // Cập nhật vị trí cuộn bằng CSS transform
-    thumbnails.style.transform = `translateX(-${scrollPosition}px)`;
+	// Cập nhật vị trí cuộn bằng CSS transform
+	thumbnails.style.transform = `translateX(-${scrollPosition}px)`;
 }
 
 
 function navigateContractPage() {
-    window.location.href = `http://localhost:8080/contract`;
+	window.location.href = `http://localhost:8080/contract`;
 }
 
-function showLoading() {
-    document.getElementById('overlay-loading').style.display = 'flex'; // Hiển thị màn hình loading
+/*function showLoading() {
+	document.getElementById('overlay-loading').style.display = 'flex'; // Hiển thị màn hình loading
 }
 
 // Hàm ẩn màn hình loading
 function hideLoading() {
-    document.getElementById('overlay-loading').style.display = 'none'; // Ẩn màn hình loading
-}
+	document.getElementById('overlay-loading').style.display = 'none'; // Ẩn màn hình loading
+}*/
 
 //xử lý dấu cộng
 async function HandleIncrement(inputId) {
@@ -361,7 +382,7 @@ async function createBooking() {
 	const bookingID = dataBooking.bookingId
 	console.log("bookingID " + bookingID);
 	console.log(totalPrice);
-	
+
 	sessionStorage.setItem("bookingID", bookingID);
 	sessionStorage.setItem("tourID", tourId);
 	sessionStorage.setItem("totalPrice", totalPrice);
@@ -454,13 +475,26 @@ async function createReview() {
 	// Load lại trang sau khi gửi đánh giá thành công
 	location.reload();
 }
+async function checkTourValid() {
+	const book_day = document.getElementById("book-day").value;
+	const startDate = new Date(book_day);
+
+	const currentDate = new Date();
+
+	console.log("Ngày đi:", startDate);
+	console.log("Ngày hiện tại:", currentDate);
+	if (startDate < currentDate) {
+		return false;
+	}
+	return true;
+}
 
 //xử lý khi ấn vào hình nhỏ sẽ hiện lên thành ảnh lớn trong detailTour.html
 function showImage(image) {
 	const mainImage = document.getElementById("main-image");
 	//thay đổi ảnh cần thay đổi src và alt
-	mainImage.src = image.src;  
-	mainImage.alt = image.alt;  
+	mainImage.src = image.src;
+	mainImage.alt = image.alt;
 }
 
 //-------------------------------------------Manh Here-------------------------------------
