@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 	sessionStorage.removeItem("bookingID");
 
-	document.getElementById('payment-online').addEventListener("change", function(event) {
+	/*document.getElementById('payment-online').addEventListener("change", function(event) {
 		showMethodPaypal(event.target.checked);
-	});
-	document.getElementById('payment-cash').addEventListener("change", function(event) {
+	});*/
+	/*document.getElementById('payment-cash').addEventListener("change", function(event) {
 		showMethodPaypal(!event.target.checked);
-	});
+	})*/;
 
 	var email = document.getElementById('email').addEventListener('input', validateEmail);
 	var name = document.getElementById('name').addEventListener('input', validateName);
@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	}
 	let isPayPalInitialized = false;
 	var bt_pay = document.getElementById("bt-pay").addEventListener("click", async function() {
+	
 		if (!checkInformationInput()) {
 			return;
 		}
@@ -523,18 +524,13 @@ async function updateTotalPrice() {
 //kiểm tra phương thức thanh toán (người dùng chọn trả online hay cash) trước khi ấn thanh toán
 function checkPaymentMethod() {
 	const paymentOnline = document.getElementById('payment-online');
-	const paymentCash = document.getElementById('payment-cash');
 
 	console.log("Trạng thái paymentOnline: ", paymentOnline.checked);
-	console.log("Trạng thái paymentCash: ", paymentCash.checked);
 
 	if (paymentOnline.checked) {
 
 		console.log("paymentMethod: online");
 		return 2; // Trả về phương thức thanh toán online
-	} else if (paymentCash.checked) {
-		console.log("paymentMethod: cash");
-		return 1; // Trả về phương thức thanh toán bằng tiền mặt
 	} else {
 		console.log("Vui lòng chọn phương thức thanh toán");
 		return null; // Trả về null nếu chưa chọn
@@ -585,8 +581,8 @@ async function createPayment(captureId, totalPriceUSD) {
 }
 
 //cập nhật paymentStatus sau khi thanh toán thành công
-async function updatePaymentStatus(bookingId) {
-	const url = `http://localhost:8080/update-status/${bookingId}`;
+async function updatePaymentStatus(bookingId,PaymentMethodId) {
+	const url = `http://localhost:8080/update-status?bookingId=${bookingId}&PaymentMethodId=${PaymentMethodId}`;
 	const request = new Request(url, {
 		method: "PUT",
 		headers: {
@@ -638,7 +634,7 @@ async function payPal() {
 				console.log('Capture ID:', captureId, totalPriceUSD);
 				//openDialogSuccess('Thanh toán thành công, ' + details.payer.name.given_name);
 				await createPayment(captureId, totalPriceUSD);
-				await updatePaymentStatus(bookingId);
+				await updatePaymentStatus(bookingId,4);
 
 				window.location.href = `/notificationSuccess/${bookingId}`;
 			});
@@ -654,8 +650,7 @@ async function payPal() {
 //ẩn hiện nút paypal
 function showMethodPaypal(isOnline) {
 	if (isOnline) {
-
-		document.getElementById("bt-pay").style.display = "none"; // Ẩn nút thanh toán tiền mặt
+		// Ẩn nút thanh toán tiền mặt
 		var div_paypal = document.getElementById("paypal-button-container");
 		div_paypal.style.display = "block";
 		// Gọi hàm PayPal để hiển thị nút thanh toán

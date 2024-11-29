@@ -33,7 +33,7 @@
 					class="fas fa-edit"> </i> Customer
 			</a></li>
 			<li><a th:href="@{/admin/promotion-management}"> <i
-					class="fas fa-edit"> </i> Promotion
+					class="fas fa-tags"> </i> Promotion
 			</a></li>
 			<li><a th:href="@{/admin/tours-management}"> <i
 					class="fas fa-plane"> </i> Tours
@@ -133,7 +133,7 @@
     <form id="tour-form">
         <label>Tên tour</label>
         <input type="text" id="tourName" required>
-        
+       
         <div class="form-row">
             <div class="form-group">
                 <label>Khởi hành</label>
@@ -148,6 +148,10 @@
 	                	 <option value="" disabled selected>Chọn điểm đến</option>
 						<option th:each="provinces: ${province}" th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn điểm đi</option>
 					</select>
+            </div>
+            <div class="form-group">
+		            <label>Số lượng tour</label>
+		        <input type="number" id="quantity" required>
             </div>
         </div>
 

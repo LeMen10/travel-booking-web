@@ -122,7 +122,6 @@ public class NotifiationSuccess {
 			@RequestParam("resultCode") int resultCode,
 			Model model) {
 
-		
 		//momo
 		model.addAttribute("resultCode", resultCode);
 		model.addAttribute("bookingId", bookingId);

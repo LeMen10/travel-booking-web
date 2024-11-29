@@ -5,10 +5,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	//await checkTransactionStatus(orderId);
 	// Xử lý kết quả giao dịch
 	if (orderId == 0) {
-		
-		const captureId = orderId; // Đối với MoMo, sử dụng orderId làm captureId
-
-		await updatePaymentStatus(bookingId);
+		await updatePaymentStatus(bookingId,3);
 		window.location.href = `/notificationSuccess/${bookingId}`;
 
 	} else {
@@ -40,7 +37,8 @@ async function checkTransactionStatus(orderId) {
 
 		// Xử lý kết quả giao dịch
 		if (data.resultCode === 0) {
-			updatePaymentStatus()
+			const bookingId = document.getElementById("bookingId").getAttribute("data-id");
+			updatePaymentStatus(bookingId,3);
 			alert('Giao dịch thành công!');
 		} else {
 			alert(`Giao dịch thất bại: ${data.message}`);
@@ -53,8 +51,8 @@ async function checkTransactionStatus(orderId) {
 
 
 //cập nhật paymentStatus sau khi thanh toán thành công
-async function updatePaymentStatus(bookingId) {
-	const url = `http://localhost:8080/update-status/${bookingId}`;
+async function updatePaymentStatus(bookingId,PaymentMethodId) {
+	const url = `http://localhost:8080/update-status?bookingId=${bookingId}&PaymentMethodId=${PaymentMethodId}`;
 	const request = new Request(url, {
 		method: "PUT",
 		headers: {

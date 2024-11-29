@@ -292,13 +292,22 @@ public class PaymentController {
 	}
 
 	// dùng để cập nhật paymentStatus sau khi thanh toán thành công
-	@PutMapping("/update-status/{bookingId}")
-	public ResponseEntity<String> updatePaymentStatus(@PathVariable Long bookingId) {
+	@PutMapping("/update-status")
+	public ResponseEntity<String> updatePaymentStatus(
+			@RequestParam("bookingId") Long bookingId,
+			@RequestParam("PaymentMethodId")  Long PaymentMethodId) {
 		Optional<Bookings> booking = bookingsRespository.findById(bookingId);
 		if (booking.isPresent()) {
+			Tours tour = booking.get().getTour();
+			Tours originalTour = toursRepository.findById(tour.getOriginalId()).get();
+			
+			originalTour.setQuantity(tour.getQuantity()-1);
+			toursRepository.save(originalTour);
 			Payments payment = booking.get().getPayment();
 			if (payment != null) {
+				Paymentmethod paymentMethod = paymentmethodRespository.findById(PaymentMethodId).get();
 				payment.setPaymentStatus(1);
+				payment.setPaymentMethod(paymentMethod);
 				paymentsRepository.save(payment);
 			}
 		}

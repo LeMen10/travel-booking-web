@@ -525,7 +525,7 @@ async function loadPage(page) {
 	    const peopleMax = document.getElementById('peopleMax').value;
 	    const price = document.getElementById('price').value;
 		const transport = document.getElementById('transport').value;
-		
+		const quantity = document.getElementById('quantity').value;
 
 	    // Chuyển dữ liệu thành x-www-form-urlencoded
 	    const formData = new URLSearchParams();
@@ -538,6 +538,7 @@ async function loadPage(page) {
 	    formData.append('peopleMax', peopleMax);
 	    formData.append('price', price);
 		formData.append('transport', transport);
+		formData.append('quantity', quantity);
 	    // Gửi dữ liệu qua API
 	    const tourResponse = await fetch('/api-create-tours', {
 	        method: 'POST',

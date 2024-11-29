@@ -37,13 +37,32 @@ document.addEventListener('DOMContentLoaded', function() {
 	console.log("Book Now button:", book_now);
 	book_now.addEventListener("click", async function(event) {
 		event.preventDefault();
-		
+		const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
 		const isValidQuantity = await checkQuantity();
 		if (!isValidQuantity) {
 			
 			return;
 		}
-		
+
+		if (! (await(checkQuantityTour(tourId) ) )) {
+					Swal.fire({
+						title: 'Chuyến du lịch này đã hết. Bạn không thể đặt tour này nữa.',
+						text: 'Hãy chọn chuyến du lịch khác nhé. Chúc bạn một ngày vui.',
+						icon: 'warning',
+						showCancelButton: true,
+						confirmButtonText: 'OK',
+						
+						reverseButtons: true
+					}).then((result) => {
+						// xác nhận xóa (isConfirmed nút OK)
+						if (result.isConfirmed) {
+							window.location.href=`http://localhost:8080/search?s=`;
+						} else {
+							console.log("Thao tác xóa đã bị hủy.");
+						}
+					});
+					return;
+				}
 		if (! (await(checkTourValid() ) )) {
 			Swal.fire({
 				title: 'Chuyến du lịch này đã được thực hiện. Bạn không thể đặt tour này nữa.',
@@ -344,7 +363,7 @@ async function checkQuantity() {
 async function createBooking() {
 	console.log("Hàm createBooking đã được gọi.");
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
-
+	
 	const account = await getProfile();
 	const userId = account == null ? null : account.user.user_id;
 
@@ -448,7 +467,6 @@ function openModalReview() {
 async function createReview() {
 	console.log("Hàm createReview đã được gọi.");
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
-	//const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
 	const account = await getProfile();
 	const userId = account == null ? null : account.user.user_id;
 	const stars = document.querySelectorAll('.stars .fa-star.selected');
@@ -480,7 +498,7 @@ async function createReview() {
 async function checkTourValid() {
 	const book_day = document.getElementById("book-day").value;
 	const startDate = new Date(book_day);
-
+	
 	const currentDate = new Date();
 
 	console.log("Ngày đi:", startDate);
@@ -525,7 +543,7 @@ async function ManhHandleDescrement(elementQuantityId) {
 }
 
 async function getTourData(tourId) {
-	const url = `http://localhost:8080/api-get-detail-tour?id=${id}`;
+	const url = `http://localhost:8080/api-get-detail-tour?id=${tourId}`;
 	const request = new Request(url, {
 		method: "GET",
 		headers: {
@@ -538,6 +556,14 @@ async function getTourData(tourId) {
 		return null;
 	}
 	return await response.json();
+}
+//Kiểm tra số lượng tour >0 trước khi đặt
+async function checkQuantityTour(tourId){
+	const data = await getTourData(tourId);
+			if(data.quantity==0){
+				return false;
+			}
+			return true;
 }
 
 async function getTicketData() {

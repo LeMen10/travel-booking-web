@@ -87,10 +87,10 @@
 					<input  id="payment-online" name="payment" type="radio" value="online" checked />Online 
 					<i class="fas fa-money-bill-wave"> </i>
 				</label> 
-				<label> 
+<!-- 				<label> 
 					<input id="payment-cash" name="payment" type="radio" value="cash" disabled  />Cash 
 					<i class="fas fa-money-bill-wave"></i>
-				</label>
+				</label> -->
 			</div>
 		</div>
 		
@@ -147,7 +147,7 @@
 				</div>
 				<!-- nút thanh toán (dùng paypal) -->
 				<div class="actions">
-					<button  id="bt-pay" class="order-button">Thanh toán Paypal</button>
+					<button  id="bt-pay" class="order-button" onclick="ShowPaypal()">Thanh toán Paypal</button>
 					<button onclick="paymentMoMo()" id="payment-momo" >Thanh toán MoMo</button>
 				</div>
 				

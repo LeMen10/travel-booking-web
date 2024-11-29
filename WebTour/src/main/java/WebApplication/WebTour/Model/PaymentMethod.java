@@ -27,7 +27,8 @@ public class Paymentmethod implements Serializable{
 
     @Column(name = "status")
     private boolean status;
-
+    
+    
 	public String getName() {
 		return name;
 	}

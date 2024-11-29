@@ -72,7 +72,8 @@ public class Tours implements Serializable{
     @Column(name = "status")
     private boolean status;
 
-
+    @Column(name = "quantity")
+    private int quantity;
 	
 	public Tours() {
 		super();
@@ -91,6 +92,7 @@ public class Tours implements Serializable{
 		this.price = t.price;
 		this.peopleMax = t.peopleMax;
 		this.status = t.status;
+		this.quantity = t.quantity;
 	}
 
 
@@ -214,6 +216,14 @@ public class Tours implements Serializable{
 
 	public Long getTourId() {
 		return tourId;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
     
 }

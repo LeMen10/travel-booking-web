@@ -90,6 +90,7 @@ public class DetailTourController {
 			model.addAttribute("reviews", reviews);
 			model.addAttribute("images", images);
 			model.addAttribute("tourId", tourId);
+			model.addAttribute("quantity", tour.getQuantity());
 		} else {
 			model.addAttribute("error", "Tour không tồn tại!");
 		}

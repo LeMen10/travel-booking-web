@@ -146,7 +146,8 @@ public class TourManagamentController {
 	        @RequestParam String detail,
 	        @RequestParam int peopleMax,
 	        @RequestParam float price,
-	        @RequestParam String transport) {
+	        @RequestParam String transport,
+	        @RequestParam int quantity) {
 
 	    // Chuyển đổi String thành Date
 	    Date sqlStartDate = Date.valueOf(startDate);
@@ -165,6 +166,7 @@ public class TourManagamentController {
 	    newTour.setOriginalPrice(price);
 	    newTour.setStatus(true);
 	    newTour.setTransport(transport);
+	    newTour.setQuantity(quantity);
 	    
 	    Optional<Guides> guide = guidesRepository.findById((long) 1);
 	    newTour.setGuides(guide.get());

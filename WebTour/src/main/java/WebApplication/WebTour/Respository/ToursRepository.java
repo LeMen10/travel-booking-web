@@ -35,6 +35,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 			+ "AND (:destination IS NULL OR LOWER(t.destination) LIKE LOWER(CONCAT('%', :destination, '%'))) "
 			+ "AND t.status = true " 
 			+ "AND t.originalId IS NULL " 
+			+ "AND t.quantity > 0 "
 			+ "AND i.isBackground = true " + "GROUP BY t.tourId")
 	Page<Object[]> findTours (@Param("tourName") String tourName, @Param("startDate") Date startDate,
 			@Param("departure") String departure, @Param("destination") String destination, Pageable pageable);
@@ -55,6 +56,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 		       "AND t.status = true " +
 		       "AND t.originalId IS NULL " +
 		       "AND i.isBackground = true " +
+		       "AND t.quantity > 0 " +
 		       "GROUP BY t.tourId")
 		Page<Object[]> findTours2(
 		    @Param("tourName") String tourName, 
@@ -120,5 +122,5 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	        + "GROUP BY t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date "
 	        + "ORDER BY t.price DESC", nativeQuery = true)
 	Page<Object[]> findToursSortedByPriceDesc(Pageable pageable);
-
+	
 }
