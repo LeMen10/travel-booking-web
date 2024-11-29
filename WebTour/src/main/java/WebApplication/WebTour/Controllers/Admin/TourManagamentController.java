@@ -2,10 +2,12 @@ package WebApplication.WebTour.Controllers.Admin;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import WebApplication.WebTour.Model.Account;
+import WebApplication.WebTour.Model.District;
 import WebApplication.WebTour.Model.Guides;
 import WebApplication.WebTour.Model.Image;
 import WebApplication.WebTour.Model.Schedules;
@@ -35,6 +38,7 @@ import WebApplication.WebTour.Model.User;
 import WebApplication.WebTour.Respository.GuidesRepository;
 import WebApplication.WebTour.Respository.ImageRepository;
 import WebApplication.WebTour.Respository.ProvinceRepository;
+import WebApplication.WebTour.Respository.ReviewsRepository;
 import WebApplication.WebTour.Respository.SchedulesRepository;
 import WebApplication.WebTour.Respository.ToursRepository;
 
@@ -54,6 +58,9 @@ public class TourManagamentController {
 	
 	@Autowired
 	GuidesRepository guidesRepository;
+	
+	@Autowired
+	ReviewsRepository reviewsRepository;
 	
 	@GetMapping("/admin/get-tours")
 	public ResponseEntity<Map<String, Object>> getTours(@RequestParam Long promotionId) {
@@ -128,6 +135,7 @@ public class TourManagamentController {
 		Page<Tours> searchResults = toursRepository.findAllByOriginalIdIsNull(pageable);
 		return searchResults; 
 	}
+	 
 	@PostMapping("/api-create-tours")
 	public ResponseEntity<Long> createTour(
 	        @RequestParam String tourName,
@@ -235,4 +243,40 @@ public class TourManagamentController {
         
         return ResponseEntity.ok("Dữ liệu nhận thành công");
     }
+	@GetMapping("/api-get-schedule")
+	@ResponseBody
+	public List<Schedules> getSchedule(@RequestParam("tourId") Long tourId) {
+		System.out.println(tourId+"ádasd");
+		List<Schedules> schedules = schedulesRepository.getScheduleByTourId(tourId);
+	        return schedules;
+	}
+	
+	@GetMapping("/api-get-review")
+	@ResponseBody
+	public ResponseEntity<List<Map<String, Object>>> getReview(@RequestParam("tourId") Long tourId) {
+	    List<Object[]> results = reviewsRepository.getReviewByTourId(tourId).orElse(Collections.emptyList());
+	    
+	    // Chuyển đổi Object[] thành Map để trả về JSON cấu trúc
+	    List<Map<String, Object>> reviews = results.stream().map(row -> {
+	        Map<String, Object> review = new HashMap<>();
+	        review.put("reviewsId", row[0]);
+	        review.put("tourId", row[1]);
+	        review.put("rate", row[2]);
+	        review.put("comment", row[3]);
+	        review.put("reviewDate", row[4]);
+	        review.put("fullName", row[5]);
+	        return review;
+	    }).collect(Collectors.toList());
+
+	    return ResponseEntity.ok(reviews);
+	}
+	@GetMapping("/api-delete-review")
+	public ResponseEntity<?> deleteReview(@RequestParam Long reviewId) {
+	    try {
+	    	reviewsRepository.deleteReviewById(reviewId);
+	        return ResponseEntity.ok("Image deleted successfully");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting image");
+	    }
+	}
 }

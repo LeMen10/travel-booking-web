@@ -421,7 +421,7 @@ th, td {
         text-align: center;
         line-height: 20px;
     }
-    .overlay1 {
+    .overlay1,.overlay2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -432,8 +432,8 @@ th, td {
     display: none;
 }
     
-    #editModal,
-#createModal {
+    #editModal,#editModalSchedule,
+#createModal,#createModalSchedule {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -443,35 +443,42 @@ th, td {
     border-radius: 8px;
     z-index: 1000;
     display: none;
-    width: 22%;
+    width: 50%;
+    height: 85%;
+}
+.area-activity{
+	height: 48%;
 }
 
 .modal-content,
-.modal-content-edit {
+.modal-content-edit,
+.modal-content-edit-schedule,
+.modal-content-schedule {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.btn-cancel,.btn-cancel-edit {
-	margin-top: 10px;
+.btn-cancel,.btn-cancel-edit,.delete-btn-edit {
     padding: 10px;
     width: 100%;
-    background-color: red;
+    background-color: #f63636;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
-.edit-btn,.delete-btn{
+.edit-btn,.delete-btn {
     padding: 10px;
     width: 100%;
     background-color: yellow;
     color: black;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
-    margin: 0 5%;	
+    cursor: pointer;	
+}
+.delete-btn{
+	background-color: #f63636;
 }
 .btn-insert-schedule{
 	margin-top: 10px;
@@ -483,7 +490,18 @@ th, td {
     border-radius: 4px;
     cursor: pointer;
 }
+.btn-insert-schedule-in-update-tour{
+	margin-top: 10px;
+	padding: 10px;
+    width: 20%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 .btn-save-all,.btn-ok{
+	margin-bottom: 10px;
 	margin-top: 10px;
 	padding: 10px;
     width: 100%;
@@ -493,8 +511,9 @@ th, td {
     border-radius: 4px;
     cursor: pointer;
 }
-#location-input,#activity-input,#location-input-edit,
-#activity-input-edit,.location-select,.location-select{
+#location-input,#location-input-schedule,#activity-input,#activity-input-schedule,#location-input-edit,
+#location-input-edit-schedule,
+#activity-input-edit,#activity-input-edit-schedule,.location-select,.location-select{
 	width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -503,6 +522,110 @@ th, td {
 }
 #detail-update{
 	height: 150px;
+}
+		.review {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .review-header .name {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .review-header .date {
+            color: #999;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        .review-header .date i {
+            margin-right: 5px;
+        }
+        .review-header .tags {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+        .review-header .tags .tag {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 5px 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .review-body {
+            font-size: 16px;
+		    flex-grow: 1; /* Để phần nội dung chiếm tối đa không gian */
+		    margin-right: 10px; /* Tạo khoảng cách giữa nội dung và nút */
+        }
+        .stars {
+            color: #f5a623;
+            margin-bottom: 10px;
+        }
+        .review-body-container {
+    display: flex; /* Đặt flexbox để căn chỉnh nội dung */
+    justify-content: space-between; /* Đẩy hai phần tử ra hai đầu */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+
+.btn-cancel-review {
+    background-color: #f63636;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-cancel-review:hover {
+    background-color: #ff4c4c;
+}
+.list-review {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Khoảng cách giữa các review */
+}
+/* Hiệu ứng cho div khi ẩn và hiển thị */
+/* Hiệu ứng cho div khi ẩn và hiển thị */
+.schdule, .list-review {
+    opacity: 0;  /* Mặc định ẩn hoàn toàn */
+    max-height: 0;  /* Ẩn phần tử bằng cách giảm chiều cao */
+    overflow: hidden;  /* Ẩn phần tử vượt ra ngoài */
+    transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;  /* Hiệu ứng chuyển đổi opacity và max-height */
+}
+
+.schdule.show, .list-review.show {
+    opacity: 1;  /* Đặt opacity là 1 khi hiển thị */
+    max-height: 1000px;  /* Tăng chiều cao khi hiển thị (có thể điều chỉnh tùy theo nội dung) */
+}
+
+h3 {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+h3:hover {
+    color: #f5a623; /* Thay đổi màu khi hover */
+}
+
+
+h3 span {
+    font-size: 18px;
+    transition: transform 0.3s ease-in-out;  /* Hiệu ứng cho icon */
+    margin-left: 10px;
+}
+
+/* Hiển thị mũi tên xuống khi ẩn */
+.schdule.show ~ h3 #schedule-toggle-icon,
+.list-review.show ~ h3 #review-toggle-icon {
+    transform: rotate(180deg);  /* Chuyển mũi tên xuống thành mũi tên lên */
 }
 .col-id { width: 5%; }
 .col-tour-name { width: 15%; }
@@ -515,3 +638,9 @@ th, td {
 .col-quantity { width: 5%; }
 .col-price { width: 10%; }
 .col-action { width: 10%; }
+
+.col-step-schedule { width: 5%; }
+.col-activity-schedule { width: 65%; }
+.col-location-schedule { width: 10%; }
+.col-action-schedule { width: 10%; }
+.col-delete-schedule { width: 10%; }

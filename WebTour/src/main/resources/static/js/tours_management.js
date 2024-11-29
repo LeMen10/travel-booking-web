@@ -79,6 +79,10 @@ function editTour(element) {
 	selectedBackgroundCreate=null;
 	const imagePreviewContainer = document.getElementById(`createImagePreviewContainer`);
 	imagePreviewContainer.innerHTML = "";
+	
+	loadSchedule(tourId);
+	loadReview(tourId);
+	
 }
 function deleteTour(element) {
 	const tourId = element.getAttribute("data-tourid");
@@ -134,6 +138,30 @@ function closeForm() {
 function abbreviate(text, maxLength) {
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
 }
+
+async function loadSchedule(tourId) {
+		fetch(`http://localhost:8080/api-get-schedule?tourId=` + tourId)
+	                .then(response => response.json())
+	                .then(data => {
+						var listSchedule = document.getElementById("tour-table");
+						listSchedule.innerHTML = "";
+						data.forEach(schedule => {
+							const row = document.createElement("tr");
+							
+						    	row.innerHTML = `
+								<td class="td-table tour-name">${schedule.step}</td>
+							       <td class="td-table">${schedule.activity}</td>
+							       <td class="td-table">${schedule.location}</td>
+								   <td><button type="button" id="edit-btn-schedule" class="edit-btn" 
+								   onclick="OpenEditModel(${schedule.scheduleId}, '${schedule.step}', '${encodeURIComponent(schedule.activity)}', '${schedule.location}')">Sửa</button></td>
+								   <td><button type="button" class="delete-btn-edit" onclick="deleteSchedule(${schedule.scheduleId})">Xóa</button></td>
+						    `;
+						   listSchedule.appendChild(row);
+						});
+	   	});
+    	
+
+    }
 async function loadPage(page) {
     	const size = 8;
     	const url = `http://localhost:8080/api-get-tour-management?page=${page}&size=${size}`; // Endpoint mới
@@ -541,32 +569,67 @@ async function loadPage(page) {
 	async function creatTour(){
 		submitForm();
 	}
-
+		const okButtonUpdate = document.getElementById("btn-Ok-Insert-Schedule-Update");
+		okButtonUpdate.addEventListener("click", () => {
+			createSchedule(tourID);
+		});
 	    const createButton = document.querySelector(".btn-insert-schedule");
+		const editBtnSchedule = document.getElementById("edit-btn-schedule");
+		const createButtonSchedule = document.querySelector(".btn-insert-schedule-in-update-tour");
 	    const createmodal = document.getElementById("createModal");
+		const createmodalSchedule = document.getElementById("createModalSchedule");
 		const editmodal = document.getElementById("editModal");
+		const editmodalSchedule = document.getElementById("editModalSchedule");
 	    const overlay = document.getElementById("overlay1");
+		const overlay2 = document.getElementById("overlay2");
 	    const cancelButtons = document.querySelectorAll(".btn-cancel");
-
+		const btnOkUpdateSchedule = document.getElementById("btn-Ok-Update-Schedule-Edit");
+		const btnCancleUpdateSchedule = document.querySelectorAll(".btn-cancel-edit");
+		function UpdateScheduleBtn(){
+			const scheduleId = btnOkUpdateSchedule.dataset.scheduleId;
+			console.log(scheduleId);
+			updateSchedule(scheduleId);
+		}
+		
+		function OpenEditModel(scheduleId,step,activityURI, location){
+			const activity = decodeURIComponent(activityURI);
+			editmodalSchedule.style.display = "block";
+			overlay2.style.display = "block";
+			document.getElementById("step-input-edit-schedule").textContent = step; // Gán giá trị cho <span>
+			document.getElementById("activity-input-edit-schedule").value = activity; // Gán giá trị cho <textarea>
+			document.getElementById("location-input-edit-schedule").value = location;
+			btnOkUpdateSchedule.dataset.scheduleId = scheduleId; // Gán giá trị cho <input>
+		}
+		console.log(editBtnSchedule)
 	    // Hiển thị modal và overlay
 	    createButton.addEventListener("click", () => {
 	        createmodal.style.display = "block";
 	        overlay.style.display = "block";
 	    });
+		createButtonSchedule.addEventListener("click", () => {
+		    createmodalSchedule.style.display = "block";
+		    overlay2.style.display = "block";
+		});
 
 	    // Ẩn modal và overlay
 	    const closeModal = () => {
 	        createmodal.style.display = "none";
+			editmodalSchedule.style.display = "none";
+			createmodalSchedule.style.display = "none";
 	        overlay.style.display = "none";
+			overlay2.style.display = "none";
 	    };
 
 	    // Xử lý nút Cancel
 	    cancelButtons.forEach(button => {
 	        button.addEventListener("click", closeModal);
 	    });
-
+		btnCancleUpdateSchedule.forEach(button => {
+			        button.addEventListener("click", closeModal);
+			    });
 	    // Ẩn modal khi click vào overlay
 	    overlay.addEventListener("click", closeModal);
+		overlay2.addEventListener("click", closeModal);
 		
 		//==============================
 		const scheduleTableBody = document.querySelector("#schedule-table tbody");
@@ -604,8 +667,9 @@ async function loadPage(page) {
 		            <td>${step}</td>
 		            <td>${activity}</td>
 		            <td>${location}</td>
-		            <td style="display: flex"><button type="button" class="edit-btn">Sửa</button>
-					<button class="delete-btn">Xóa</button></td>
+					<td style="display: flex"><button type="button" class="edit-btn">Sửa</button></td>
+					<td ><button class="delete-btn">Xóa</button></td>
+				
 		        `;
 		        scheduleTableBody.appendChild(row);
 
@@ -922,8 +986,208 @@ async function loadPage(page) {
 						            await CreateSchedule(tourId);
 						        }*/
 						        alert("Update tour thành công!");
+								loadPage(currentPage);
 						    } catch (error) {
 						        console.error("Lỗi:", error.message);
 						        alert("Đã xảy ra lỗi: " + error.message);
 						    }
 					}
+					// Tạo mới Schedule
+					async function createSchedule(tourId) {
+						///const step = document.querySelector('#step-input').value;
+						const activity = document.getElementById("activity-input-schedule").value.trim();
+						const location = document.getElementById("location-input-schedule").value.trim();
+						console.log("activity"+activity)
+						console.log("location"+location)
+						const url = `http://localhost:8080/create-schedule?tourId=${tourId}&step=${0}&activity=${activity}&location=${location}`;
+
+						try {
+							const response = await fetch(url, {
+								method: 'POST'
+							});
+
+							if (response.status === 409) {
+								alert("Step đã tồn tại cho Tour này.");
+							} else if (response.ok) {
+								alert("Lịch trình đã được tạo thành công.");
+								loadSchedule(tourId);
+							} else {
+								console.error("Có lỗi xảy ra khi tạo lịch trình:", response);
+							}
+
+						} catch (error) {
+							console.error("Lỗi trong createSchedule:", error);
+						}
+					}
+
+
+					// Cập nhật Schedule
+					async function updateSchedule(scheduleId) {
+						
+						/*const scheduleId = document.getElementById("scheduleId").getAttribute("data-id");*/					
+						
+						const activity = encodeURIComponent(document.getElementById("activity-input-edit-schedule").value);
+						const location = encodeURIComponent(document.getElementById("location-input-edit-schedule").value);
+
+						const url = `http://localhost:8080/update-schedule/${scheduleId}?tourId=${tourID}&activity=${activity}&location=${location}`;
+
+						try {
+							const response = await fetch(url, {
+								method: 'PUT'
+							});
+
+							if (response.ok) {
+								alert("Lịch trình đã được cập nhật.");
+								loadSchedule(tourID);
+							
+							} else {
+								console.error("Có lỗi xảy ra khi cập nhật lịch trình:", response);
+							}
+						} catch (error) {
+							console.error("Lỗi trong updateSchedule:", error);
+						}
+					}
+
+
+					// Xóa Schedule
+					async function deleteSchedule(scheduleId) {
+						console.log(scheduleId)
+						const url = `http://localhost:8080/delete-schedule/${scheduleId}?tourId=${tourID}`;
+
+						try {
+							const response = await fetch(url, {
+								method: 'DELETE'
+							});
+
+							if (response.ok) {
+								alert("Lịch trình đã được xóa.");
+								loadSchedule(tourID);
+							} else {
+								console.error("Có lỗi xảy ra khi xóa lịch trình:", response);
+							}
+						} catch (error) {
+							console.error("Lỗi trong deleteSchedule:", error);
+						}
+					}
+					async function loadReview(tourId) {
+					    const url = `http://localhost:8080/api-get-review?tourId=${tourId}`;
+					    try {
+					        const response = await fetch(url);
+					        console.log("Phản hồi từ server:", response);
+
+					        if (!response.ok) {
+					            console.error("Có lỗi xảy ra:", response);
+					            return;
+					        }
+
+					        const data = await response.json();
+					        console.log("Dữ liệu nhận được:", data);
+
+					        const listReview = document.querySelector(".list-review");
+					        listReview.innerHTML = ""; // Xóa nội dung cũ
+
+					        // Lặp qua từng review và thêm vào HTML
+					        data.forEach(review => {
+					            listReview.innerHTML += `
+					                <div class="review">
+					                    <div class="review-header">
+					                        <div class="name">
+					                            <span>${review.fullName}</span>
+					                        </div>
+					                        <div class="date">
+					                            <i class="far fa-clock"></i>
+					                            ${formatDate(review.reviewDate)}
+					                        </div>
+					                    </div>
+					                    <div class="stars">
+					                        ${renderStars(review.rate)}
+					                    </div>
+					                    <div class="review-body-container">
+					                        <div class="review-body">
+					                            <span>${review.comment}</span>
+					                        </div>
+					                        <button type="button" class="btn-cancel-review" onclick="deleteReview(${review.reviewsId})">Xóa</button>
+					                    </div>
+					                </div>
+					            `;
+					        });
+					    } catch (error) {
+					        console.error("Lỗi trong loadReview:", error);
+					    }
+					}
+
+					// Hàm render sao theo số lượng
+					function renderStars(rate) {
+					    const fullStars = Math.floor(rate);
+					    const halfStar = rate % 1 >= 0.5 ? 1 : 0;
+
+					    return (
+					        '<i class="fas fa-star"></i>'.repeat(fullStars) +
+					        (halfStar ? '<i class="fas fa-star-half-alt"></i>' : '') +
+					        '<i class="far fa-star"></i>'.repeat(5 - fullStars - halfStar)
+					    );
+					}
+					function formatDate(isoDateString) {
+					    const date = new Date(isoDateString);
+					    const formatter = new Intl.DateTimeFormat('vi-VN', {
+					        day: '2-digit',
+					        month: '2-digit',
+					        year: 'numeric',
+					    });
+					    return formatter.format(date);
+					}
+					async function deleteReview(reviewId) {
+					    const url = `http://localhost:8080/api-delete-review?reviewId=${reviewId}`;
+					    try {
+					        const response = await fetch(url, {
+					            method: 'GET', // Hoặc 'POST' nếu API được chỉnh sửa để nhận bằng POST
+					        });
+
+					        if (response.ok) {
+					            const message = await response.text();
+					            console.log(message); // Hiển thị phản hồi từ server
+					            alert("Review deleted successfully!");
+					            // Cập nhật giao diện nếu cần
+					           loadReview(tourID);
+					        } else {
+					            console.error("Error deleting review:", response.status);
+					            alert("Failed to delete the review. Please try again.");
+					        }
+					    } catch (error) {
+					        console.error("Error:", error);
+					        alert("An error occurred. Please check the console for details.");
+					    }
+					}
+					function OpenCloseSchedule() {
+					    const scheduleDiv = document.querySelector('.schdule');  // Chọn div có class 'schdule'
+					    const icon = document.getElementById('schedule-toggle-icon');  // Chọn icon trong tiêu đề
+
+					    // Kiểm tra và thay đổi lớp 'show' để kích hoạt hiệu ứng
+					    if (scheduleDiv.classList.contains('show')) {
+					        scheduleDiv.classList.remove('show');  // Ẩn div với hiệu ứng
+					        icon.classList.remove('fa-chevron-up');
+					        icon.classList.add('fa-chevron-down');  // Đổi mũi tên lên thành mũi tên xuống
+					    } else {
+					        scheduleDiv.classList.add('show');  // Hiển thị div với hiệu ứng
+					        icon.classList.remove('fa-chevron-down');
+					        icon.classList.add('fa-chevron-up');  // Đổi mũi tên xuống thành mũi tên lên
+					    }
+					}
+
+					function OpenCloseReview() {
+					    const reviewDiv = document.querySelector('.list-review');  // Chọn div có class 'list-review'
+					    const icon = document.getElementById('review-toggle-icon');  // Chọn icon trong tiêu đề
+
+					    // Kiểm tra và thay đổi lớp 'show' để kích hoạt hiệu ứng
+					    if (reviewDiv.classList.contains('show')) {
+					        reviewDiv.classList.remove('show');  // Ẩn div với hiệu ứng
+					        icon.classList.remove('fa-chevron-up');
+					        icon.classList.add('fa-chevron-down');  // Đổi mũi tên lên thành mũi tên xuống
+					    } else {
+					        reviewDiv.classList.add('show');  // Hiển thị div với hiệu ứng
+					        icon.classList.remove('fa-chevron-down');
+					        icon.classList.add('fa-chevron-up');  // Đổi mũi tên xuống thành mũi tên lên
+					    }
+					}
+
+

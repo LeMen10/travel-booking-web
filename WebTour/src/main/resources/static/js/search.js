@@ -269,8 +269,10 @@ function updatePageWithData(data) {
 										</p>
 
 										<p class="price">
-											<span class="tourPrice">${tour[3]}</span> 
-										    ${tour[3] != tour[7] ? `<span class="tourPrice">${tour[7]}</span> ` : ''}
+										    <span class="tourPrice">${tour[3]}</span>
+										    ${tour[3] !== tour[7] ? 
+										        `<span class="tourOriginalPrice" style="text-decoration: line-through; color: grey;">${tour[7]}</span>` 
+										        : ''}
 										</p>
 						                <p class="time">
 						                    <i class="fas fa-clock icon"></i>

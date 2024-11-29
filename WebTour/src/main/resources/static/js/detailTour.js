@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+	loadReview();
 	//xử lý khi ấn vào hình nhỏ sẽ hiện lên thành ảnh lớn trong detailTour.html
 	const subImage = document.querySelectorAll(".sub-image");
 	//sử dụng for để quét (lấy hết) các ảnh nhỏ và đặt sự kiện click
@@ -574,4 +574,72 @@ function fomatPrice() {
 	});
 }
 //-------------------------------------------Manh Here-------------------------------------
+//----------NamNe-----//
+async function loadReview() {
+	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
+					    const url = `http://localhost:8080/api-get-review?tourId=${tourId}`;
+					    try {
+					        const response = await fetch(url);
+					        console.log("Phản hồi từ server:", response);
 
+					        if (!response.ok) {
+					            console.error("Có lỗi xảy ra:", response);
+					            return;
+					        }
+
+					        const data = await response.json();
+					        console.log("Dữ liệu nhận được:", data);
+
+					        const listReview = document.querySelector(".list-review");
+					        listReview.innerHTML = ""; // Xóa nội dung cũ
+
+					        // Lặp qua từng review và thêm vào HTML
+					        data.forEach(review => {
+					            listReview.innerHTML += `
+					                <div class="review">
+					                    <div class="review-header">
+					                        <div class="name">
+					                            ${review.fullName}
+					                        </div>
+					                        <div class="date">
+					                            <i class="far fa-clock"></i>
+					                            ${formatDate(review.reviewDate)}
+					                        </div>
+					                    </div>
+					                    <div class="stars-review">
+					                        ${renderStars(review.rate)}
+					                    </div>
+					                    <div class="review-body-container">
+					                        <div class="review-body">
+					                            ${review.comment}
+					                        </div>
+					                       
+					                    </div>
+					                </div>
+					            `;
+					        });
+					    } catch (error) {
+					        console.error("Lỗi trong loadReview:", error);
+					    }
+					}
+
+					// Hàm render sao theo số lượng
+					function renderStars(rate) {
+					    const fullStars = Math.floor(rate);
+					    const halfStar = rate % 1 >= 0.5 ? 1 : 0;
+
+					    return (
+					        '<i class="fas fa-star"></i>'.repeat(fullStars) +
+					        (halfStar ? '<i class="fas fa-star-half-alt"></i>' : '') +
+					        '<i class="far fa-star"></i>'.repeat(5 - fullStars - halfStar)
+					    );
+					}
+					function formatDate(isoDateString) {
+					    const date = new Date(isoDateString);
+					    const formatter = new Intl.DateTimeFormat('vi-VN', {
+					        day: '2-digit',
+					        month: '2-digit',
+					        year: 'numeric',
+					    });
+					    return formatter.format(date);
+					}

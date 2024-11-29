@@ -436,8 +436,7 @@ z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
 }
 
 .tour-deals {
-    padding: 40px 0;
-    text-align: center;
+    margin: 3%;
 }
 
 .tour-deals h2 {
@@ -455,6 +454,7 @@ z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
     justify-content: space-between;
     gap: 10px;
     flex-wrap: wrap;
+    padding-top: 2%
 }
 
 .tour-card {
@@ -497,6 +497,8 @@ z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
     margin-top: 20px;
     color: #007BFF;
     text-decoration: none;
+    display: flex;
+    justify-content: center;
 }
 
 .card-tour {
@@ -509,70 +511,73 @@ z-index: 1000; /* Đặt dưới search-top nhưng cao hơn nội dung khác */
 }
 
 .card {
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 1 1 calc(25% - 20px); /* Căn 4 thẻ trên 1 hàng, trừ đi khoảng cách giữa các thẻ */
-    min-width: 280px; /* Chiều rộng tối thiểu để thẻ không quá hẹp */
-    max-width: calc(25% - 20px);
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    height: 100%; /* Giúp card có chiều cao bằng nhau */
-    
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng zoom nhẹ và đổ bóng */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ mặc định */
-    border-radius: 10px;
-    overflow: hidden;
-	}
+	background-color: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	flex: 1 1 calc(25% - 20px);
+	/* Căn 4 thẻ trên 1 hàng, trừ đi khoảng cách giữa các thẻ */
+	min-width: 250px; /* Chiều rộng tối thiểu để thẻ không quá hẹp */
+	max-width: calc(25% - 20px);
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+	height: 100%; /* Giúp card có chiều cao bằng nhau */
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	/* Hiệu ứng zoom nhẹ và đổ bóng */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ mặc định */
+	border-radius: 10px;
+	overflow: hidden;
+}
+
 .card:hover {
-    transform: scale(1.05); /* Zoom nhẹ toàn bộ tour */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Đổ bóng nổi bật hơn khi hover */
-    cursor: pointer;
+	transform: scale(1.05); /* Zoom nhẹ toàn bộ tour */
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+	/* Đổ bóng nổi bật hơn khi hover */
+	cursor: pointer;
 }
 
 .card img {
-    transition: transform 0.3s ease; /* Hiệu ứng chuyển đổi cho ảnh */
-    width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều rộng */
-    height: auto;
-    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+	transition: transform 0.3s ease; /* Hiệu ứng chuyển đổi cho ảnh */
+	width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều rộng */
+	height: 185px;
+	object-fit: cover; /* Đảm bảo ảnh không bị méo */
 }
+
 .card:hover img {
- 			transform: scale(1.1); /* Phóng to nhẹ ảnh khi hover */
+	transform: scale(1.1); /* Phóng to nhẹ ảnh khi hover */
 }
 
 .card-content {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 }
 
 /* Giới hạn chiều cao tên tour và cho phép xuống dòng */
 .card-content h3 {
-    font-size: 16px;
-    margin: 0 0 10px;
-    line-height: 1.2;
-    max-height: 5em; /* Giới hạn chiều cao tối đa cho tên tour, khoảng 2 dòng */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* display: -webkit-box; */
-    
-    -webkit-box-orient: vertical;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;		}
+	font-size: 16px;
+	margin: 0 0 10px;
+	line-height: 1.2;
+	max-height: 3em;
+	/* Giới hạn chiều cao tối đa cho tên tour, khoảng 2 dòng */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	height: 38px;
+}
 
 .card-content p {
-    margin: 5px 0;
-    color: #757575;
-    font-size: 13px;
-    white-space: nowrap; /* Không cho phép xuống dòng ở các thông tin khác */
-    overflow: hidden;
-    text-overflow: ellipsis;
+	margin: 5px 0;
+	color: #757575;
+	font-size: 13px;
+	white-space: nowrap;
+	/* Không cho phép xuống dòng ở các thông tin khác */
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 /* Giá tiền */
@@ -1098,3 +1103,21 @@ body {
 		.user-submenu a:hover {
 		    background-color: #ddd;
 		}
+		.title-text{
+			text-align: center;
+			margin: 10px;
+		}
+.fas.fa-star.full {
+	color: gold; /* Màu vàng cho sao đầy */
+}
+
+.fas.fa-star.empty {
+	color: lightgray; /* Màu xám cho sao rỗng */
+}
+
+.fas.fa-star.half {
+	background: linear-gradient(to right, gold 50%, lightgray 50%);
+	color: transparent; /* Làm cho sao có nửa vàng và nửa xám */
+	-webkit-background-clip: text;
+	background-clip: text;
+	

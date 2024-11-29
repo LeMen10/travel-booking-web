@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import WebApplication.WebTour.Model.Reviews;
 
@@ -28,4 +30,16 @@ public interface ReviewsRepository extends JpaRepository<Reviews, Long>{
 	
 	@Query(value = "SELECT COUNT(r.reviewsId), COALESCE(Round(AVG(r.rate), 1),5) FROM Reviews r WHERE r.tours.tourId = :tourId AND r.status = true")
 	Optional<List<Object[]>> getRateOfTour(@Param("tourId") Long tourId);
+	
+	@Query(value = "SELECT reviewsId, r.tours.tourId, rate, comment,"
+			+ " reviewDate, u.fullName FROM Reviews r "
+			+ "JOIN User u ON u.user_id = r.user.user_id "
+			+ "WHERE r.status = true "
+			+ "AND r.tours.tourId = :tourId")
+	Optional<List<Object[]>> getReviewByTourId(@Param("tourId") Long tourId);
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE Reviews r SET r.status = false WHERE r.reviewsId = :reviewId")
+	void deleteReviewById(@Param("reviewId") Long reviewId);
 }

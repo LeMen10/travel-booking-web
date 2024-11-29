@@ -110,7 +110,23 @@
 	        </div>
     	</div>
 	    </header>
-	    
+	    <section class="tour-deals">
+	        <h2 class="title-text">Tour giá tốt</h2>
+	        <p class="title-text">Hơn 1.000 tour đa dạng giá hời có hạn</p>
+	        <div class="tour-cards" id="tour-cards">
+	            <div th:each="tour : ${tours}" class="tour-card">
+	                <!-- <img th:src="@{${tour.image}}" alt="Tour Image"> -->
+	                <div class="tour-info">
+	                    <p class="departure"><i class="fa-solid fa-location-dot"></i> Khởi hành từ: <span th:text="${tour.departure}"></span></p>
+	                    <h3 th:text="${tour.tourName}"></h3>
+	                    <p class="price" th:text="${tour.price} + ' VNĐ'"></p>
+	                    <p class="duration">Ngày đi: <span th:text="${tour.startDate}"></span></p>
+	                    <p class="duration">Ngày về: <span th:text="${tour.endDate}"></span></p>
+	                </div>
+	            </div>
+	        </div>
+	        <a href="/search?s=" class="see-more" >Xem thêm →</a>
+	    </section>
 	    <section class="why-choose-section">
 	        <h2>Vì sao bạn nên chọn ND Travel</h2>
 	        <div class="features">
@@ -163,23 +179,7 @@
 	            </div>
 	        </div>
 	    </section>
-	    <section class="tour-deals">
-	        <h2>Tour giá tốt</h2>
-	        <p>Hơn 1.000 tour đa dạng giá hời có hạn</p>
-	        <div class="tour-cards">
-	            <div th:each="tour : ${tours}" class="tour-card">
-	                <!-- <img th:src="@{${tour.image}}" alt="Tour Image"> -->
-	                <div class="tour-info">
-	                    <p class="departure"><i class="fa-solid fa-location-dot"></i> Khởi hành từ: <span th:text="${tour.departure}"></span></p>
-	                    <h3 th:text="${tour.tourName}"></h3>
-	                    <p class="price" th:text="${tour.price} + ' VNĐ'"></p>
-	                    <p class="duration">Ngày đi: <span th:text="${tour.startDate}"></span></p>
-	                    <p class="duration">Ngày về: <span th:text="${tour.endDate}"></span></p>
-	                </div>
-	            </div>
-	        </div>
-	        <a href="#" class="see-more">Xem thêm →</a>
-	    </section>
+	    
     
 <div id="footer"></div>
      <script src="/js/home_user.js"></script>

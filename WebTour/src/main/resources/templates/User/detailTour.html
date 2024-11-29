@@ -178,23 +178,8 @@
 								<h3>Đánh giá từ khách hàng</h3>
 							</div>
 
-							<div class="review-list">
-								<div>
-									<th:block th:each="review : ${reviews}">
-										<p class="review-list-p">
-											<strong class="review-list-strong"
-												th:text="${review.user.fullName}">Tên người dùng</strong>
-										</p>
-										<div class="start-review">
-
-											<p class="start-review-p" th:text="${review.rate}"></p>
-											<i class="fa-regular fa-star "></i>
-										</div>
-										<span th:text="${review.comment}">Nội dung đánh giá</span>
-
-									</th:block>
-								</div>
-
+							<div class="list-review">
+         
 							</div>
 
 

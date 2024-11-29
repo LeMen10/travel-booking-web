@@ -239,7 +239,7 @@ public class SearchController {
 	        // Cập nhật lại phần tử trong danh sách
 	        updatedResults.set(i, newTour);
 	    }
-
+	    
 	    // Tạo lại Page từ List sau khi cập nhật
 	    Page<Object[]> updatedPage = new PageImpl<>(updatedResults, pageable, tours.getTotalElements());
 	    // Trả về dữ liệu dưới dạng JSON

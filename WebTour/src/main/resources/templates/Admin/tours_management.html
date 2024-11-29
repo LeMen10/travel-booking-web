@@ -191,7 +191,8 @@
 					<th>Step</th>
 					<th>Activity</th>
 					<th>Location</th>
-					<th>Action</th>
+					<th>Update</th>
+					<th>Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -207,14 +208,12 @@
     </form>
 </div>
 <!-- Modal Tạo Lịch Trình -->
-<div class="overlay1" id="overlay1"></div>
+		<div class="overlay1" id="overlay1"></div>
 		<div id="createModal" style="display: none;">
 			<div class="modal-content">
 				<h3>Tạo Lịch Trình</h3>
-				<!-- <label for="step-input">Step:</label> 
-				<input type="number" id="step-input" name="step">  -->
 				<label for="activity-input">Activity:</label>
-				<textarea type="text" id="activity-input" name="activity"></textarea>
+				<textarea type="text" id="activity-input" class="area-activity" name="activity"></textarea>
 				<label for="location-input">Location:</label> 
 				<input type="text" id="location-input" name="location">
 				<button id="btn-Ok-Insert-Schedule" class="btn-ok">OK</button>
@@ -234,7 +233,7 @@
 				</div>
 				
 				<label for="activity-input-edit">Activity:</label>
-				<textarea type="text" id="activity-input-edit" name="activity"></textarea>
+				<textarea type="text" id="activity-input-edit" class="area-activity" name="activity"></textarea>
 				<label for="location-input-edit">Location:</label> 
 				<input type="text" id="location-input-edit" name="location">
 				
@@ -296,29 +295,76 @@
 		<div id="updateImagePreviewContainer"></div>
 
         
-        <h3>Schedules</h3>
-		<table id="schedule-table" class="table">
-			<thead>
-				<tr>
-					<th>Step</th>
-					<th>Activity</th>
-					<th>Location</th>
-					<th>Action</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				
-			</tbody>
-		</table>
-		<div class="btn-function">
-			<button type="button" class="btn-insert-schedule" >Tạo lịch trình</button>
-	
+        <h3 onclick="OpenCloseSchedule()">
+		    Lịch trình tour <span id="schedule-toggle-icon" class="fas fa-chevron-down"></span>
+		</h3>
+		<div class="schdule">
+		    <table id="schedule-table" class="table">
+		        <thead>
+		            <tr>
+		                <th class="col-step-schedule">Ngày</th>
+		                <th class="col-activity-schedule">Hoạt động</th>
+		                <th class="col-location-schedule">Địa điểm</th>
+		                <th class="col-action-schedule">Sửa</th>
+		                <th class="col-delete-schedule">Xóa</th>
+		            </tr>
+		        </thead>
+		        <tbody id="tour-table">
+		            <!-- Dữ liệu lịch trình sẽ được thêm vào đây -->
+		        </tbody>
+		    </table>
+		    <div class="btn-function">
+		        <button type="button" class="btn-insert-schedule-in-update-tour">Tạo lịch trình</button>
+		    </div>
 		</div>
+
+		<h3 onclick="OpenCloseReview()">
+		    Đánh giá tour <span id="review-toggle-icon" class="fas fa-chevron-down"></span>
+		</h3>
+		<div class="list-review">
+		    <!-- Nội dung đánh giá sẽ được thêm vào đây -->
+		</div>
+
 
         <button type="button" class="btn-save-all" onclick="updateTour()">Lưu</button>
     </form>
+    
+		
+	</div>
 </div>
+
+<div class="overlay2" id="overlay2"></div>
+<div id="createModalSchedule" style="display: none;">
+			<div class="modal-content-schedule">
+				<h3>Tạo Lịch Trình</h3>
+				<label for="activity-input">Activity:</label>
+				<textarea type="text" id="activity-input-schedule" class="area-activity" name="activity"></textarea>
+				<label for="location-input">Location:</label> 
+				<input type="text" id="location-input-schedule" name="location">
+				<button id="btn-Ok-Insert-Schedule-Update" class="btn-ok">OK</button>
+				<button class="btn-cancel">Cancel</button>
+			</div>
+		</div>
+		
+		<!-- sửa lịch trình -->
+		<div id="editModalSchedule" style="display: none;">
+			<div class="modal-content-edit-schedule">
+				<h3>Sửa Lịch Trình</h3>
+					<div class="infor-edit-schedule">
+						<label class="infor-edit-schedule-lable" for="step-input-edit"><b>Step:</b> </label> 
+						<span class="infor-edit-schedule-span" type="text" id="step-input-edit-schedule" name="step-input-edit"></span>
+					</div>
+
+				</div>
+				
+				<label for="activity-input-edit">Activity:</label>
+				<textarea type="text" id="activity-input-edit-schedule" class="area-activity" name="activity"></textarea>
+				<label for="location-input-edit">Location:</label> 
+				<input type="text" id="location-input-edit-schedule" name="location">
+				
+				<button id="btn-Ok-Update-Schedule-Edit" class="btn-ok" onclick="UpdateScheduleBtn()">OK</button>
+				<button type="button" id="btn-Cancel-Update-Schedule-Edit" class="btn-cancel-edit" >Cancel</button>
+			</div>
 	
 	<script src="../js/tours_management.js"></script>
 </body> 
