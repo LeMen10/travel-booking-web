@@ -155,7 +155,8 @@
 												<iconify-icon icon="mdi:message-text" class="icon"></iconify-icon>
 											</span>
 											<div>
-												<span class="mb-2 fw-medium text-secondary-light text-sm" id="statistic-revenue">Revenue (Desire: 4000$)</span>
+												<span class="mb-2 fw-medium text-secondary-light text-sm"
+													id="statistic-revenue">Revenue (Desire: 4000$)</span>
 												<h6 class="fw-semibold" id="total-revenue-value"></h6>
 											</div>
 										</div>
@@ -236,31 +237,41 @@
 
 					</div>
 				</div>
-				<!-- Revenue Growth start -->
+				
+				<!-- Top performance Start -->
 				<div class="col-xxl-4">
-					<div class="card h-100 radius-8 border">
-						<div class="card-body p-24">
+					<div class="card">
+
+						<div class="card-body">
 							<div
 								class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-								<div>
-									<h6 class="mb-2 fw-bold text-lg">Revenue Growth</h6>
-									<span class="text-sm fw-medium text-secondary-light">Weekly
-										Report</span>
-								</div>
-								<div class="text-end">
-									<h6 class="mb-2 fw-bold text-lg">$50,000.00</h6>
-									<span
-										class="bg-success-focus ps-12 pe-12 pt-2 pb-2 rounded-2 fw-medium text-success-main text-sm">$10k</span>
+								<h6 class="mb-2 fw-bold text-lg mb-0">Top tour</h6>
+								<div class="filter-top-tour">
+									<input type="number" id="input-quantity-custome" onchange="filterTopTour()"
+										placeholder="Số lượng khách" class="search-input">
 								</div>
 							</div>
-							<div id="revenue-chart" class="mt-28"></div>
+
+							<div class="mt-32" id="body-chart-top-tour">
+
+								<div class="d-flex align-items-center justify-content-between gap-3 mb-32" th:each="tour : ${listTopTour}">
+									<div class="d-flex align-items-center">
+										<div th:class="'top-level-title-'+${tour[0]}" th:text = "${tour[0]}"></div>
+										<div class="flex-grow-1">
+											<h6 class="text-md mb-0" th:text="${tour[2]}"></h6>
+										</div>
+									</div>
+									<span class="text-primary-light text-md fw-medium" th:text="${tour[3]}"></span>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
-				<!-- Revenue Growth End -->
+				<!-- Top performance End -->
 
 				<!-- Earning Static start -->
-				<div class="col-xxl-8">
+				<div class="col-xxl-12">
 					<div class="card h-100 radius-8 border-0">
 						<div class="card-body p-24">
 							<div
@@ -326,916 +337,258 @@
 				</div>
 				<!-- Earning Static End -->
 
-				<!-- Campaign Static start -->
-				<div class="col-xxl-4">
-					<div class="row gy-4">
-						<div class="col-xxl-12 col-sm-6">
-							<div class="card h-100 radius-8 border-0">
-								<div class="card-body p-24">
-									<div
-										class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-										<h6 class="mb-2 fw-bold text-lg">Campaigns</h6>
-										<div class="">
-											<select
-												class="form-select form-select-sm w-auto bg-base border text-secondary-light">
-												<option>Yearly</option>
-												<option>Monthly</option>
-												<option>Weekly</option>
-												<option>Today</option>
-											</select>
-										</div>
-									</div>
-
-									<div class="mt-3">
-
-										<div
-											class="d-flex align-items-center justify-content-between gap-3 mb-12">
-											<div class="d-flex align-items-center">
-												<span
-													class="text-xxl line-height-1 d-flex align-content-center flex-shrink-0 text-orange">
-													<iconify-icon icon="majesticons:mail" class="icon"></iconify-icon>
-												</span> <span class="text-primary-light fw-medium text-sm ps-12">Email</span>
-											</div>
-											<div class="d-flex align-items-center gap-2 w-100">
-												<div class="w-100 max-w-66 ms-auto">
-													<div class="progress progress-sm rounded-pill"
-														role="progressbar" aria-label="Success example"
-														aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-														<div class="progress-bar bg-orange rounded-pill"
-															style="width: 80%;"></div>
-													</div>
-												</div>
-												<span class="text-secondary-light font-xs fw-semibold">80%</span>
-											</div>
-										</div>
-
-										<div
-											class="d-flex align-items-center justify-content-between gap-3 mb-12">
-											<div class="d-flex align-items-center">
-												<span
-													class="text-xxl line-height-1 d-flex align-content-center flex-shrink-0 text-success-main">
-													<iconify-icon icon="eva:globe-2-fill" class="icon"></iconify-icon>
-												</span> <span class="text-primary-light fw-medium text-sm ps-12">Website</span>
-											</div>
-											<div class="d-flex align-items-center gap-2 w-100">
-												<div class="w-100 max-w-66 ms-auto">
-													<div class="progress progress-sm rounded-pill"
-														role="progressbar" aria-label="Success example"
-														aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-														<div class="progress-bar bg-success-main rounded-pill"
-															style="width: 60%;"></div>
-													</div>
-												</div>
-												<span class="text-secondary-light font-xs fw-semibold">60%</span>
-											</div>
-										</div>
-
-										<div
-											class="d-flex align-items-center justify-content-between gap-3 mb-12">
-											<div class="d-flex align-items-center">
-												<span
-													class="text-xxl line-height-1 d-flex align-content-center flex-shrink-0 text-info-main">
-													<iconify-icon icon="fa6-brands:square-facebook"
-														class="icon"></iconify-icon>
-												</span> <span class="text-primary-light fw-medium text-sm ps-12">Facebook</span>
-											</div>
-											<div class="d-flex align-items-center gap-2 w-100">
-												<div class="w-100 max-w-66 ms-auto">
-													<div class="progress progress-sm rounded-pill"
-														role="progressbar" aria-label="Success example"
-														aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-														<div class="progress-bar bg-info-main rounded-pill"
-															style="width: 49%;"></div>
-													</div>
-												</div>
-												<span class="text-secondary-light font-xs fw-semibold">49%</span>
-											</div>
-										</div>
-
-										<div
-											class="d-flex align-items-center justify-content-between gap-3">
-											<div class="d-flex align-items-center">
-												<span
-													class="text-xxl line-height-1 d-flex align-content-center flex-shrink-0 text-indigo">
-													<iconify-icon icon="fluent:location-off-20-filled"
-														class="icon"></iconify-icon>
-												</span> <span class="text-primary-light fw-medium text-sm ps-12">Email</span>
-											</div>
-											<div class="d-flex align-items-center gap-2 w-100">
-												<div class="w-100 max-w-66 ms-auto">
-													<div class="progress progress-sm rounded-pill"
-														role="progressbar" aria-label="Success example"
-														aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-														<div class="progress-bar bg-indigo rounded-pill"
-															style="width: 70%;"></div>
-													</div>
-												</div>
-												<span class="text-secondary-light font-xs fw-semibold">70%</span>
-											</div>
-										</div>
-
-									</div>
-
-								</div>
-							</div>
-						</div>
-						<div class="col-xxl-12 col-sm-6">
-							<div class="card h-100 radius-8 border-0 overflow-hidden">
-								<div class="card-body p-24">
-									<div
-										class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-										<h6 class="mb-2 fw-bold text-lg">Customer Overview</h6>
-										<div class="">
-											<select
-												class="form-select form-select-sm w-auto bg-base border text-secondary-light">
-												<option>Yearly</option>
-												<option>Monthly</option>
-												<option>Weekly</option>
-												<option>Today</option>
-											</select>
-										</div>
-									</div>
-
-									<div class="d-flex flex-wrap align-items-center mt-3">
-										<ul class="flex-shrink-0">
-											<li class="d-flex align-items-center gap-2 mb-28"><span
-												class="w-12-px h-12-px rounded-circle bg-success-main"></span>
-												<span class="text-secondary-light text-sm fw-medium">Total:
-													500</span></li>
-											<li class="d-flex align-items-center gap-2 mb-28"><span
-												class="w-12-px h-12-px rounded-circle bg-warning-main"></span>
-												<span class="text-secondary-light text-sm fw-medium">New:
-													500</span></li>
-											<li class="d-flex align-items-center gap-2"><span
-												class="w-12-px h-12-px rounded-circle bg-primary-600"></span>
-												<span class="text-secondary-light text-sm fw-medium">Active:
-													1500</span></li>
-										</ul>
-										<div id="donutChart"
-											class="flex-grow-1 apexcharts-tooltip-z-none title-style circle-none"></div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Campaign Static End -->
-
-				<!-- Client Payment Status Start -->
-				<div class="col-xxl-4 col-sm-6">
-					<div class="card h-100 radius-8 border-0">
-						<div class="card-body p-24">
-							<h6 class="mb-2 fw-bold text-lg">Client Payment Status</h6>
-							<span class="text-sm fw-medium text-secondary-light">Weekly
-								Report</span>
-
-							<ul
-								class="d-flex flex-wrap align-items-center justify-content-center mt-32">
-								<li class="d-flex align-items-center gap-2 me-28"><span
-									class="w-12-px h-12-px rounded-circle bg-success-main"></span>
-									<span class="text-secondary-light text-sm fw-medium">Paid:
-										500</span></li>
-								<li class="d-flex align-items-center gap-2 me-28"><span
-									class="w-12-px h-12-px rounded-circle bg-info-main"></span> <span
-									class="text-secondary-light text-sm fw-medium">Pending:
-										500</span></li>
-								<li class="d-flex align-items-center gap-2"><span
-									class="w-12-px h-12-px rounded-circle bg-warning-main"></span>
-									<span class="text-secondary-light text-sm fw-medium">Overdue:
-										1500</span></li>
-							</ul>
-							<div class="mt-40">
-								<div id="paymentStatusChart" class="margin-16-minus"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Client Payment Status End -->
-
-				<!-- Country Status Start -->
-				<div class="col-xxl-4 col-sm-6">
-					<div class="card radius-8 border-0">
-
-						<div class="card-body">
-							<div
-								class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-								<h6 class="mb-2 fw-bold text-lg">Countries Status</h6>
-								<div class="">
-									<select
-										class="form-select form-select-sm w-auto bg-base border text-secondary-light">
-										<option>Yearly</option>
-										<option>Monthly</option>
-										<option>Weekly</option>
-										<option>Today</option>
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<div id="world-map"></div>
-
-						<div class="card-body p-24 max-h-266-px scroll-sm overflow-y-auto">
-							<div class="">
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
-									<div class="d-flex align-items-center w-100">
-										<img src="../image/flags/flag1.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-sm mb-0">USA</h6>
-											<span class="text-xs text-secondary-light fw-medium">1,240
-												Users</span>
-										</div>
-									</div>
-									<div class="d-flex align-items-center gap-2 w-100">
-										<div class="w-100 max-w-66 ms-auto">
-											<div class="progress progress-sm rounded-pill"
-												role="progressbar" aria-label="Success example"
-												aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-												<div class="progress-bar bg-primary-600 rounded-pill"
-													style="width: 80%;"></div>
-											</div>
-										</div>
-										<span class="text-secondary-light font-xs fw-semibold">80%</span>
-									</div>
-								</div>
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
-									<div class="d-flex align-items-center w-100">
-										<img src="../image/flags/flag2.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-sm mb-0">Japan</h6>
-											<span class="text-xs text-secondary-light fw-medium">1,240
-												Users</span>
-										</div>
-									</div>
-									<div class="d-flex align-items-center gap-2 w-100">
-										<div class="w-100 max-w-66 ms-auto">
-											<div class="progress progress-sm rounded-pill"
-												role="progressbar" aria-label="Success example"
-												aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-												<div class="progress-bar bg-orange rounded-pill"
-													style="width: 60%;"></div>
-											</div>
-										</div>
-										<span class="text-secondary-light font-xs fw-semibold">60%</span>
-									</div>
-								</div>
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
-									<div class="d-flex align-items-center w-100">
-										<img src="../image/flags/flag3.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-sm mb-0">France</h6>
-											<span class="text-xs text-secondary-light fw-medium">1,240
-												Users</span>
-										</div>
-									</div>
-									<div class="d-flex align-items-center gap-2 w-100">
-										<div class="w-100 max-w-66 ms-auto">
-											<div class="progress progress-sm rounded-pill"
-												role="progressbar" aria-label="Success example"
-												aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-												<div class="progress-bar bg-yellow rounded-pill"
-													style="width: 49%;"></div>
-											</div>
-										</div>
-										<span class="text-secondary-light font-xs fw-semibold">49%</span>
-									</div>
-								</div>
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3">
-									<div class="d-flex align-items-center w-100">
-										<img src="../image/flags/flag4.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-sm mb-0">Germany</h6>
-											<span class="text-xs text-secondary-light fw-medium">1,240
-												Users</span>
-										</div>
-									</div>
-									<div class="d-flex align-items-center gap-2 w-100">
-										<div class="w-100 max-w-66 ms-auto">
-											<div class="progress progress-sm rounded-pill"
-												role="progressbar" aria-label="Success example"
-												aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-												<div class="progress-bar bg-success-main rounded-pill"
-													style="width: 100%;"></div>
-											</div>
-										</div>
-										<span class="text-secondary-light font-xs fw-semibold">100%</span>
-									</div>
-								</div>
-
-							</div>
-
-						</div>
-					</div>
-				</div>
-				<!-- Country Status End -->
-
-				<!-- Top performance Start -->
-				<div class="col-xxl-4">
-					<div class="card">
-
-						<div class="card-body">
-							<div
-								class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-								<h6 class="mb-2 fw-bold text-lg mb-0">Top Performer</h6>
-								<a href="javascript:void(0)"
-									class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
-									View All <iconify-icon icon="solar:alt-arrow-right-linear"
-										class="icon"></iconify-icon>
-								</a>
-							</div>
-
-							<div class="mt-32">
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3 mb-32">
-									<div class="d-flex align-items-center">
-										<img src="../image/users/user1.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-md mb-0">Dianne Russell</h6>
-											<span class="text-sm text-secondary-light fw-medium">Agent
-												ID: 36254</span>
-										</div>
-									</div>
-									<span class="text-primary-light text-md fw-medium">60/80</span>
-								</div>
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3 mb-32">
-									<div class="d-flex align-items-center">
-										<img src="../image/users/user2.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-md mb-0">Wade Warren</h6>
-											<span class="text-sm text-secondary-light fw-medium">Agent
-												ID: 36254</span>
-										</div>
-									</div>
-									<span class="text-primary-light text-md fw-medium">50/70</span>
-								</div>
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3 mb-32">
-									<div class="d-flex align-items-center">
-										<img src="../image/users/user3.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-md mb-0">Albert Flores</h6>
-											<span class="text-sm text-secondary-light fw-medium">Agent
-												ID: 36254</span>
-										</div>
-									</div>
-									<span class="text-primary-light text-md fw-medium">55/75</span>
-								</div>
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3 mb-32">
-									<div class="d-flex align-items-center">
-										<img src="../image/users/user4.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-md mb-0">Bessie Cooper</h6>
-											<span class="text-sm text-secondary-light fw-medium">Agent
-												ID: 36254</span>
-										</div>
-									</div>
-									<span class="text-primary-light text-md fw-medium">60/80</span>
-								</div>
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3 mb-32">
-									<div class="d-flex align-items-center">
-										<img src="../image/users/user5.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-md mb-0">Arlene McCoy</h6>
-											<span class="text-sm text-secondary-light fw-medium">Agent
-												ID: 36254</span>
-										</div>
-									</div>
-									<span class="text-primary-light text-md fw-medium">55/75</span>
-								</div>
-
-								<div
-									class="d-flex align-items-center justify-content-between gap-3">
-									<div class="d-flex align-items-center">
-										<img src="../image/users/user1.png" alt=""
-											class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
-										<div class="flex-grow-1">
-											<h6 class="text-md mb-0">Arlene McCoy</h6>
-											<span class="text-sm text-secondary-light fw-medium">Agent
-												ID: 36254</span>
-										</div>
-									</div>
-									<span class="text-primary-light text-md fw-medium">50/70</span>
-								</div>
-
-							</div>
-
-						</div>
-					</div>
-				</div>
-				<!-- Top performance End -->
 
 				<!-- Latest Performance Start -->
-				<div class="col-xxl-6">
-					<div class="card h-100">
-						<div
-							class="card-header border-bottom bg-base ps-0 py-0 pe-24 d-flex align-items-center justify-content-between">
-							<ul class="nav bordered-tab nav-pills mb-0" id="pills-tab"
-								role="tablist">
-								<li class="nav-item" role="presentation">
-									<button class="nav-link active" id="pills-to-do-list-tab"
-										data-bs-toggle="pill" data-bs-target="#pills-to-do-list"
-										type="button" role="tab" aria-controls="pills-to-do-list"
-										aria-selected="true">All Item</button>
-								</li>
-								<li class="nav-item" role="presentation">
-									<button class="nav-link" id="pills-recent-leads-tab"
-										data-bs-toggle="pill" data-bs-target="#pills-recent-leads"
-										type="button" role="tab" aria-controls="pills-recent-leads"
-										aria-selected="false" tabindex="-1">Best Match</button>
-								</li>
-							</ul>
-							<a href="javascript:void(0)"
-								class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
-								View All <iconify-icon icon="solar:alt-arrow-right-linear"
-									class="icon"></iconify-icon>
-							</a>
-						</div>
-						<div class="card-body p-24">
-							<div class="tab-content" id="pills-tabContent">
-								<div class="tab-pane fade show active" id="pills-to-do-list"
-									role="tabpanel" aria-labelledby="pills-to-do-list-tab"
-									tabindex="0">
-									<div class="table-responsive scroll-sm">
-										<table class="table bordered-table mb-0">
-											<thead>
-												<tr>
-													<th scope="col">Task Name</th>
-													<th scope="col">Assigned To</th>
-													<th scope="col">Due Date</th>
-													<th scope="col">Status</th>
-													<th scope="col">Action</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Kathryn Murphy</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Darlene Robertson</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Courtney Henry</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Jenny Wilson</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Leslie Alexander</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-								<div class="tab-pane fade" id="pills-recent-leads"
-									role="tabpanel" aria-labelledby="pills-recent-leads-tab"
-									tabindex="0">
-									<div class="table-responsive scroll-sm">
-										<table class="table bordered-table mb-0">
-											<thead>
-												<tr>
-													<th scope="col">Task Name</th>
-													<th scope="col">Assigned To</th>
-													<th scope="col">Due Date</th>
-													<th scope="col">Status</th>
-													<th scope="col">Action</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Kathryn Murphy</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Darlene Robertson</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Courtney Henry</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Jenny Wilson</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div>
-															<span
-																class="text-md d-block line-height-1 fw-medium text-primary-light text-w-200-px">Hotel
-																Management System</span> <span
-																class="text-sm d-block fw-normal text-secondary-light">#5632</span>
-														</div>
-													</td>
-													<td>Leslie Alexander</td>
-													<td>27 Mar 2024</td>
-													<td><span
-														class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Active</span>
-													</td>
-													<td class="text-center text-neutral-700 text-xl">
-														<div class="dropdown">
-															<button type="button" data-bs-toggle="dropdown"
-																aria-expanded="false">
-																<iconify-icon icon="ph:dots-three-outline-vertical-fill"
-																	class="icon"></iconify-icon>
-															</button>
-															<ul class="dropdown-menu p-12 border bg-base shadow">
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Another action</a></li>
-																<li><a
-																	class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900"
-																	href="javascript:void(0)">Something else here</a></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-xxl-6">
+				<div class="col-xxl-12">
 					<div class="card h-100">
 						<div
 							class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
-							<h6 class="text-lg fw-semibold mb-0">Last Transaction</h6>
-							<a href="javascript:void(0)"
-								class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
-								View All <iconify-icon icon="solar:alt-arrow-right-linear"
-									class="icon"></iconify-icon>
-							</a>
+							<h6 class="text-lg fw-semibold mb-0">Tất cả phiên giao dịch
+								Momo</h6>
+							<div class="filter-and-date-container">
+								<div class="date-box">
+									<input type="date" id="input-start-date-momo"
+										onchange="handleFilterMomo(0)" placeholder="Ngày dầu"
+										class="search-input"> <i
+										class="icon-arrow fa-solid fa-arrow-right-long"></i> <input
+										type="date" id="input-end-date-momo" placeholder="Ngày cuối"
+										onchange="handleFilterMomo(0)" class="search-input">
+								</div>
+							</div>
+
+						</div>
+						<div class="card-body p-24">
+							<div class="table-responsive scroll-sm">
+								<table class="table bordered-table mb-0" id="table-momo"
+									th:attr="data-id = ${currentPageMomo}">
+									<thead>
+										<tr>
+											<th class="text-center align-middle" scope="col">Mã giao
+												dịch</th>
+											<th class="text-center align-middle" scope="col">Mã
+												booking
+												<div class="filter-box text-center align-middle">
+													<input type="text" id="booking-id-momo"
+														onchange="handleFilterMomo(0)"
+														placeholder="Nhập mã booking"
+														class="input-fiter search-input">
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">Người
+												thực hiện
+												<div class="filter-box text-center align-middle">
+													<input type="text" id="user-name-momo"
+														onchange="handleFilterMomo(0)" placeholder="Nhập tên"
+														class="search-input input-fiter">
+												</div>
+											</th>
+
+
+											<th class="text-center align-middle" scope="col">Ngày
+												giao dịch
+												<div class="filter-box text-center align-middle">
+													<select id="payment-date-momo"
+														onchange="handleFilterMomo(0)"
+														class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+														<option value=0>Old to New</option>
+														<option value=1>New to Old</option>
+													</select>
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">Số tiền
+												<div class="filter-box text-center align-middle">
+													<select id="payment-amount-momo"
+														onchange="handleFilterMomo(0)"
+														class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+														<option value=0>Tăng dần</option>
+														<option value=1>Giảm dần</option>
+													</select>
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">Loại
+												giao dịch
+												<div class="filter-box text-center align-middle">
+													<select id="payment-status-momo"
+														onchange="handleFilterMomo(0)"
+														class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+														<option value=0>All</option>
+														<option value=1>Paid</option>
+														<option value=2>Unpaid</option>
+														<option value=3>Cancel</option>
+													</select>
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">View</th>
+										</tr>
+									</thead>
+									<tbody id="body-table-momo">
+										<tr th:each="item : ${listMomo}">
+											<td class="text-center align-middle" th:text="${item.momoId}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.bookingId}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.fullName}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.paymentDate}"></td>
+											<td class="text-center align-middle" th:text="${item.amount}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.paymentStatus}"></td>
+											<td class="text-center align-middle"><i
+												class="fa-regular fa-eye"></i></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="pagination-container" th:if="${totalPagesMomo > 1}"
+							id="pagination-container-momo">
+							<ul class="pagination" id="pagination">
+								<li th:if="${currentPageMomo > 0}">
+									<button
+										th:attr="onclick='handleFilterMomo(' + (${currentPageMomo - 1}) + ')'">
+										<i class="fas fa-chevron-left icon"></i>
+									</button>
+								</li>
+
+								<li th:each="i : ${#numbers.sequence(1, totalPagesMomo)}"><a
+									th:attr="onclick='handleFilterMomo(' + (${i - 1}) + ')'"
+									th:text="${i}"
+									th:class="${currentPageMomo == i - 1} ? 'current' : ''"></a></li>
+
+								<li th:if="${currentPageMomo + 1 < totalPagesMomo}">
+									<button
+										th:attr="onclick='handleFilterMomo(' + (${currentPageMomo + 1}) + ')'">
+										<i class="fas fa-chevron-right icon"></i>
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xxl-12">
+					<div class="card h-100">
+						<div
+							class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+							<h6 class="text-lg fw-semibold mb-0">Tất cả phiên giao dịch
+								Paypal</h6>
+							<div class="filter-and-date-container">
+								<div class="date-box">
+									<input type="date" id="input-start-date-paypal"
+										onchange="handleFilterPaypal(0)" placeholder="Ngày dầu"
+										class="search-input"> <i
+										class="icon-arrow fa-solid fa-arrow-right-long"></i> <input
+										type="date" id="input-end-date-paypal" placeholder="Ngày cuối"
+										onchange="handleFilterPaypal(0)" class="search-input">
+								</div>
+							</div>
 						</div>
 						<div class="card-body p-24">
 							<div class="table-responsive scroll-sm">
 								<table class="table bordered-table mb-0">
 									<thead>
 										<tr>
-											<th scope="col">Transaction ID</th>
-											<th scope="col">Date</th>
-											<th scope="col">Status</th>
-											<th scope="col">Amount</th>
+											<th class="text-center align-middle" scope="col">Mã giao
+												dịch</th>
+											<th class="text-center align-middle" scope="col">Mã
+												booking
+												<div class="filter-box text-center align-middle">
+													<input type="number" id="booking-id-paypal"
+														onchange="handleFilterPaypal(0)"
+														placeholder="Nhập mã booking"
+														class="input-fiter search-input">
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">Người
+												thực hiện
+												<div class="filter-box text-center align-middle">
+													<input type="text" id="user-name-paypal"
+														onchange="handleFilterPaypal(0)" placeholder="Nhập tên"
+														class="input-fiter search-input">
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">Ngày
+												giao dịch
+												<div class="filter-box text-center align-middle">
+													<select id="payment-date-paypal"
+														onchange="handleFilterPaypal(0)"
+														class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+														<option value=0>Old to New</option>
+														<option value=1>New to Old</option>
+													</select>
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">Số tiền
+												<div class="filter-box text-center align-middle">
+													<select id="payment-amount-paypal"
+														onchange="handleFilterPaypal(0)"
+														class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+														<option value=0>Tăng dần</option>
+														<option value=1>Giảm dần</option>
+													</select>
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">Loại
+												giao dịch
+												<div class="filter-box text-center align-middle">
+													<select id="payment-status-paypal"
+														onchange="handleFilterPaypal(0)"
+														class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+														<option value=0>All</option>
+														<option value=1>Paid</option>
+														<option value=2>Unpaid</option>
+														<option value=3>Cancel</option>
+													</select>
+												</div>
+											</th>
+											<th class="text-center align-middle" scope="col">View</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr>
-											<td>5986124445445</td>
-											<td>27 Mar 2024</td>
-											<td><span
-												class="bg-warning-focus text-warning-main px-24 py-4 rounded-pill fw-medium text-sm">Pending</span>
-											</td>
-											<td>$20,000.00</td>
-										</tr>
-										<tr>
-											<td>5986124445445</td>
-											<td>27 Mar 2024</td>
-											<td><span
-												class="bg-danger-focus text-danger-main px-24 py-4 rounded-pill fw-medium text-sm">Rejected</span>
-											</td>
-											<td>$20,000.00</td>
-										</tr>
-										<tr>
-											<td>5986124445445</td>
-											<td>27 Mar 2024</td>
-											<td><span
-												class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Completed</span>
-											</td>
-											<td>$20,000.00</td>
-										</tr>
-										<tr>
-											<td>5986124445445</td>
-											<td>27 Mar 2024</td>
-											<td><span
-												class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Completed</span>
-											</td>
-											<td>$20,000.00</td>
-										</tr>
-										<tr>
-											<td>5986124445445</td>
-											<td>27 Mar 2024</td>
-											<td><span
-												class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">Completed</span>
-											</td>
-											<td>$20,000.00</td>
+									<tbody id="body-table-paypal">
+										<tr th:each="item : ${listPaypal}">
+											<td class="text-center align-middle"
+												th:text="${item.captureId}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.bookingId}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.fullName}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.paymentDate}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.totalPriceDolar}"></td>
+											<td class="text-center align-middle"
+												th:text="${item.paymentStatus}"></td>
+											<td class="text-center align-middle"><i
+												class="fa-regular fa-eye"></i></td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
+						</div>
+
+						<div class="pagination-container" id="pagination-container-paypal"
+							th:if="${totalPagesPaypal > 1}">
+							<ul class="pagination" id="pagination">
+								<li th:if="${currentPagePaypal > 0}">
+									<button
+										th:attr="onclick='handleFilterPaypal(' + (${currentPagePaypal - 1}) + ')'">
+										<i class="fas fa-chevron-left icon"></i>
+									</button>
+								</li>
+
+								<li th:each="i : ${#numbers.sequence(1, totalPagesPaypal)}"><a
+									th:attr="onclick='handleFilterPaypal(' + (${i - 1}) + ')'"
+									th:text="${i}"
+									th:class="${currentPagePaypal == i - 1} ? 'current' : ''"></a></li>
+
+								<li th:if="${currentPagePaypal + 1 < totalPagesPaypal}">
+									<button
+										th:attr="onclick='handleFilterPaypal(' + (${currentPagePaypal + 1}) + ')'">
+										<i class="fas fa-chevron-right icon"></i>
+									</button>
+								</li>
+							</ul>
 						</div>
 					</div>
 				</div>

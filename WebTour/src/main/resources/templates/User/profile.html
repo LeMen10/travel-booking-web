@@ -6,146 +6,17 @@
     <title>Trang Tài Khoản</title>
     <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<<<<<<< Updated upstream
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-       
-        .container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .left {
-            width: 30%;
-        }
-        .right {
-            width: 70%;
-        }
-        .left h2, .right h2 {
-            color: #2c3e50;
-        }
-        .left p {
-            margin: 22px 0;
-        }
-        .left p span {
-            color: red;
-        }
-        .left a {
-            color: black;
-            text-decoration: none;
-        }
-        .right p {
-            margin: 22px 0;
-        }
-        a:hover {
-            color: #007bff;
-        }
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0396ff;
-        }
-        /* Modal styles */
-		.modal {
-		    display: none;
-		    position: fixed;
-		    z-index: 1;
-		    left: 0;
-		    top: 0;
-		    width: 100%;
-		    height: 100%;
-		    background-color: rgba(0, 0, 0, 0.5);
-		    justify-content: center;
-		    align-items: center;
-		}
-		
-		.modal-content {
-		     background-color: white;
-		    padding: 20px;
-		    border-radius: 10px;
-		    width: 400px;
-		    max-height: 85%;
-		    overflow-y: auto;
-		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-		    
-		}
-		.modal-content h3 {
-		    margin-top: 0;
-		}
-		
-		.close-btn {
-		    color: #aaa;
-		    float: right;
-		    font-size: 28px;
-		    font-weight: bold;
-		    cursor: pointer;
-		}
-		
-		.close-btn:hover, .close-btn:focus {
-		    color: black;
-		}
-		
-		.modal-content label {
-		    display: block;
-		    margin: 10px 0 5px;
-		}
-		
-		.modal-content input, .modal-content select {
-		    width: 100%;
-		    padding: 8px;
-		    margin-bottom: 10px;
-		    border: 1px solid #ccc;
-		    border-radius: 5px;
-		    box-sizing: border-box;
-		}
-		/* Tùy chỉnh thanh cuộn */
-		.modal-content::-webkit-scrollbar {
-		    width: 6px; /* Độ rộng của thanh cuộn */
-		    background-color: #F5F5F5;
-		}
-		
-		.modal-content::-webkit-scrollbar-track {
-		    background: #fff; /* Màu nền của phần track (phần bên dưới thanh cuộn) */
-		    border-radius: 10px;
-		}
-		
-		.modal-content::-webkit-scrollbar-thumb {
-		    background-color: #ccc; /* Màu của thanh cuộn */
-		    border-radius: 14px; /* Bo góc cho thanh cuộn */
-		}
-		.modal-content-btn{
-		display: flex;
-	    justify-content: flex-end;
-	    margin-top: 10px;
-		}
-		.error-message {
-		    color: red;
-		    font-size: 12px;
-    		margin-left: 2px;
-		}
-    </style>
-=======
     <link rel="stylesheet" href="/css/profile.css">
->>>>>>> Stashed changes
 </head>
 <body>
 <header id="header"></header>
-    <div class="container">
+    <div class="container-profile">
         <div class="left">
             <h2>TRANG TÀI KHOẢN</h2>
             <p><strong>Xin chào, <span th:text="${user.fullName}">Đỗ Nam</span>!</strong></p>
             <p><a th:href="@{/account(userId=${user.user_id})}">Thông tin tài khoản</a></p>
             <p><a th:href="@{/account/get-order(userId=${user.user_id})}">Đơn hàng của bạn</a></p>
-            <p><a href="\account\change-password">Đổi mật khẩu</a></p>
+            <p><a th:href="@{account/change-password(userId=${user.user_id})}">Đổi mật khẩu</a></p>
             <p><a th:href="@{/account/get-vouchers(userId=${user.user_id})}">Mã giảm giá của bạn</a></p>
         </div>
         <div class="right">
@@ -155,10 +26,10 @@
 		    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
 		    <p><strong>Điện thoại:</strong> <span th:text="${user.phone}"></span></p>
 		    <p><strong>Địa chỉ:</strong> 
-		        <span th:text="${address.detail}"></span>, 
-		        <span th:text="${wardUser.name}"></span>, 
-		        <span th:text="${districtUser.name}"></span>, 
-		        <span th:text="${provinceUser.name}"></span> 
+		        <span th:text="${address == null? '':address.detail}"></span>, 
+		        <span th:text="${address == null? '':wardUser.name}"></span>, 
+		        <span th:text="${address == null? '':districtUser.name}"></span>, 
+		        <span th:text="${address == null? '':provinceUser.name}"></span> 
 		    </p>
 		    <button id="btn-fix-info">Sửa thông tin</button>
         </div>
@@ -195,14 +66,14 @@
         
         <!-- Hiển thị địa chỉ người dùng -->
         <label for="address">Địa chỉ:</label>
-        <input type="text" id="address" name="address" th:value="${address.detail}">
+        <input type="text" id="address" name="address" th:value="${address == null? '':address.detail}">
         <!-- Hiển thị tỉnh/thành phố -->
         <label for="province">Tỉnh/Thành phố:</label>
         <select id="province" name="province" onchange="updateDistricts()">
             <option th:each="prov : ${province}" 
                     th:value="${prov.provinceId}" 
                     th:text="${prov.name}"
-                    th:selected="${prov.provinceId == provinceUser.provinceId}">
+                    th:selected="${prov.provinceId == (address == null? '':provinceUser.provinceId)}">
             </option>
         </select>
 
@@ -212,7 +83,7 @@
             <option th:each="dist : ${district}" 
                     th:value="${dist.districtId}" 
                     th:text="${dist.name}"
-                    th:selected="${dist.districtId == districtUser.districtId}">
+                    th:selected="${dist.districtId == (address == null? '':districtUser.districtId)}">
             </option>
         </select>
 
@@ -222,7 +93,7 @@
             <option th:each="w : ${ward}" 
                     th:value="${w.wardId}" 
                     th:text="${w.name}"
-                    th:selected="${w.wardId == wardUser.wardId}">
+                    th:selected="${w.wardId == (address == null? '':wardUser.wardId)}">
             </option>
         </select>
 

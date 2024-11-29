@@ -1,9 +1,10 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
 	fetch("/api-get-header")
 		.then(response => response.text())
 		.then(data => {
 			document.getElementById("header").innerHTML = data;
+			showNavigateHeader();
 			//nagvigateHeader();
 			const searchBox = document.getElementById('searchBox');
 			const emptyBox = document.getElementById('emptyBox');
@@ -34,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			const searchInput = document.getElementById('searchInput');
 			searchIcon.addEventListener('click', redirectToSearch);
-			searchInput.addEventListener('keydown', function (event) {
+			searchInput.addEventListener('keydown', function(event) {
 				if (event.key === 'Enter') {
 					redirectToSearch();
 				}
@@ -54,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			document.getElementById("footer").innerHTML = data;
 		});
 	getUser();
+	updatePrice();
 });
 
 async function getUser() {
@@ -68,7 +70,7 @@ async function getUser() {
 		var register = document.getElementById("register");
 		register.innerHTML = 'Đăng xuất';
 		register.href = "/home";
-		register.addEventListener('click', async function (event) {
+		register.addEventListener('click', async function(event) {
 			await Logout();
 
 		});
@@ -85,6 +87,19 @@ async function getProfile() {
 		const profile = await response.json();
 		console.log(profile);
 		return profile;
+	} else {
+		console.error('Not logged in');
+	}
+}
+
+async function updatePrice() {
+	const response = await fetch('http://localhost:8080/api-update-price', {
+		method: 'POST',
+		credentials: 'include'
+	});
+
+	if (response.ok) {
+		console.log("update success!");
 	} else {
 		console.error('Not logged in');
 	}
@@ -111,7 +126,38 @@ function openLoading() {
 	document.getElementById('loading-content').classList.remove("deactivate");
 }
 
+function showNavigateHeader() {
+	const currentUrl = window.location.href;
+	console.log(currentUrl);
+	if (currentUrl.includes("http://localhost:8080/home")) {
+			const navigateElement = document.getElementById("navigate-header-bar-container");
+			navigateElement.style.display = "none";
+	}
+	else if (currentUrl.includes("http://localhost:8080/search")) {
+		const navigateElement = document.getElementById("navigate-bar-header");
+		navigateElement.innerHTML = `<a href="/home">Home</a> <i class="fa-solid icon-arrow fa-chevron-right"></i>
+				 <a href="${currentUrl}">Danh sách tour </a>`;
+	}
+	else if (currentUrl.includes("http://localhost:8080/detail-tour")) {
+		const navigateElement = document.getElementById("navigate-bar-header");
+		navigateElement.innerHTML = `<a href="/home">Home</a> 
+			<i class="fa-solid icon-arrow fa-chevron-right"></i>
+					 <a href="http://localhost:8080/search?s=">Danh sách tour </a>
+					 <i class="fa-solid icon-arrow fa-chevron-right"></i>
+					 					 <a href="${currentUrl}">Tour</a>`;
+	}
+	else if (currentUrl.includes("http://localhost:8080/payment") || currentUrl.includes("http://localhost:8080/notificationSuccess")) {
+		const navigateElement = document.getElementById("navigate-bar-header");
+		navigateElement.innerHTML = `<a href="/home">Home</a> 
+					<i class="fa-solid icon-arrow fa-chevron-right"></i>
+							 <a href="http://localhost:8080/search?s=">Danh sách tour </a>`;
+	}
+	else {
+		const navigateElement = document.getElementById("navigate-bar-header");
+		navigateElement.innerHTML = `<a href="/home">Home</a>`;
+	}
 
+}
 /*async function nagvigateHeader() {
 	const navigateElement = document.querySelector('.navigate');
 	console.log(navigateElement);  // Kiểm tra xem navigateElement có tồn tại không

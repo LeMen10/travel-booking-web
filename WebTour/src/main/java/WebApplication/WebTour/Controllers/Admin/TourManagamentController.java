@@ -167,6 +167,7 @@ public class TourManagamentController {
 	    newTour.setStatus(true);
 	    newTour.setTransport(transport);
 	    newTour.setQuantity(quantity);
+	    newTour.setOriginalPrice(price);
 	    
 	    Optional<Guides> guide = guidesRepository.findById((long) 1);
 	    newTour.setGuides(guide.get());
@@ -204,7 +205,7 @@ public class TourManagamentController {
 	    newTour.get().setDetail(detail);
 	    newTour.get().setPeopleMax(peopleMax);
 	    newTour.get().setPrice(price);
-	    
+	    newTour.get().setOriginalPrice(price);
 	    newTour.get().setStatus(true);
 	    newTour.get().setTransport(transport);
 	    

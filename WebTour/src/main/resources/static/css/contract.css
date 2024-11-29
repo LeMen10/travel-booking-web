@@ -5,14 +5,14 @@ body {
     padding: 0;
 }
 
-.container {
+.container-contract {
     width: 80%;
     margin: 0 auto;
     text-align: center;
     padding: 50px 0;
 }
 
-.header {
+.header-contract {
     font-size: 24px;
     font-weight: bold;
     padding-bottom: 16px;

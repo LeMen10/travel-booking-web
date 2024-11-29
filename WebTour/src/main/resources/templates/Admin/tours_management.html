@@ -20,26 +20,7 @@
 
 </head>
 <body>
-	<div class="sidebar">
-		<div class="logo">
-			<img alt="" height="50" width="50" src="https://storage.googleapis.com/a1aa/image/IkIPh4GKaG77KZx7nvUG3GOohf7MoegCFbHKFOjpxjycEvjTA.jpg" />
-		</div>
-		<ul class="nav">
-			<li><a th:href="@{/admin}"> <i class="fas fa-home"> </i> Dashboard
-			</a></li>
-			<li><a href="#"> <i class="fas fa-envelope"> </i> Email
-			</a></li>
-			<li><a th:href="@{/admin/customer-management}"> <i
-					class="fas fa-edit"> </i> Customer
-			</a></li>
-			<li><a th:href="@{/admin/promotion-management}"> <i
-					class="fas fa-tags"> </i> Promotion
-			</a></li>
-			<li><a th:href="@{/admin/tours-management}"> <i
-					class="fas fa-plane"> </i> Tours
-			</a></li>
-		</ul>
-	</div>
+		<div class="sidebar"></div>
 	<div class="main-content">
 		<div class="header">
 			<div class="search-bar">
@@ -369,7 +350,7 @@
 				<button id="btn-Ok-Update-Schedule-Edit" class="btn-ok" onclick="UpdateScheduleBtn()">OK</button>
 				<button type="button" id="btn-Cancel-Update-Schedule-Edit" class="btn-cancel-edit" >Cancel</button>
 			</div>
-	
+		<script src="../js/headerAdmin.js"></script>
 	<script src="../js/tours_management.js"></script>
 </body> 
 </html>

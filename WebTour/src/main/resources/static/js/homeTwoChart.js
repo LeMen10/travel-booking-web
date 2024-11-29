@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 	createChart('total-sales-chart', '#f4941e', bookingData != null ? bookingData : chartDefaultValue);
 	createChart('conversion-user-chart', '#8252e9', revenueRateList);
 	createChart('leads-chart', '#de3ace', rateTourData != null ? rateTourData : chartDefaultValue);
-	createChart('total-profit-chart', '#00b8f2', listPrfitData!= null? listPrfitData : chartDefaultValue);
+	createChart('total-profit-chart', '#00b8f2', listPrfitData != null ? listPrfitData : chartDefaultValue);
 });
 
 function setValueToMiniChart(elementId, value) {
@@ -110,7 +110,7 @@ function calculateRateProfitPerMonth(listRevenue, listOriginalPrice, totalEmploy
 	for (let i = 0; i < listRevenue.length; i++) {
 		profit = listRevenue[i] - totalEmployeeSalary - listOriginalPrice[i];
 		console.log(profit);
-		let rate = listRevenue[i] != 0? (profit/listRevenue[i]).toFixed(2):0;
+		let rate = listRevenue[i] != 0 ? (profit / listRevenue[i]).toFixed(2) : 0;
 		listProfit.push(rate);
 	}
 	return listProfit;
@@ -684,3 +684,184 @@ $('#world-map').vectorMap(
 		hoverColor: '#fff',
 	});
 // ================================ J Vector Map End ================================ 
+
+// ================================ J History payment ================================ 
+
+async function filterTopTour() {
+	const total = document.getElementById("input-quantity-custome").value;
+	try {
+		// Gọi API
+		const response = await fetch(`/api-get-statistics-tour-top?top=4&total=${total}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		if (!response.ok) {
+			throw new Error(`Error ${response.status}: ${response.statusText}`);
+		}
+
+		// Chuyển đổi kết quả sang JSON
+		const data = await response.json();
+		if (data.length == 0) {
+			document.getElementById("body-chart-top-tour").innerHTML = "<div class='empty-list-Data'>No data available</div>";
+		}
+		else {
+			const bodyChart = document.getElementById("body-chart-top-tour");
+			var bodyHTML = "";
+			for (let i = 0; i < data.length; i++) {
+				let item = data[i];
+				bodyHTML += `<div class="d-flex align-items-center justify-content-between gap-3 mb-32">
+								<div class="d-flex align-items-center">
+									<div class="top-level-title-${item[0]}"> ${item[0]}</div>
+									<div class="flex-grow-1">
+									<h6 class="text-md mb-0">${item[2]}</h6>
+									</div>
+								</div>
+								<span class="text-primary-light text-md fw-medium">${item[3]}</span>
+							</div>`;
+			}
+			bodyChart.innerHTML = bodyHTML;
+		}
+		console.log(data);
+	} catch (error) {
+		console.error("Error fetching payment history:", error);
+		throw error; // Ném lỗi ra nếu cần xử lý thêm
+	}
+}
+
+async function handleFilterMomo(pageNum) {
+	const apiUrl = '/api-get-history';
+
+	const params = getFilterParams("momo", pageNum);
+
+	// Gọi hàm lấy dữ liệu
+	getHistoryPayment(apiUrl, params)
+		.then(data => {
+			innerTablePaypal("momo", data.content);
+			innerPagePaypal("momo", data.totalPages, pageNum);
+			console.log("Result:", data);
+		})
+		.catch(error => {
+			const bodyTable = document.getElementById("body-table-momo");
+			const pagination = document.getElementById("pagination-container-momo");
+			bodyTable.innerHTML = "";
+			pagination.innerHTML = "<div class='empty-list-Data'>No data available</div>";
+			console.error("Error:", error);
+
+		});
+
+}
+
+async function handleFilterPaypal(pageNum) {
+	const apiUrl = '/api-get-history';
+
+	const params = getFilterParams("paypal", pageNum);
+
+	// Gọi hàm lấy dữ liệu
+	getHistoryPayment(apiUrl, params)
+		.then(data => {
+			innerTablePaypal("paypal", data.content);
+			innerPagePaypal("paypal", data.totalPages, pageNum);
+			console.log("Result:", data);
+		})
+		.catch(error => {
+			const bodyTable = document.getElementById("body-table-paypal");
+			const pagination = document.getElementById("pagination-container-paypal");
+			bodyTable.innerHTML = "";
+			pagination.innerHTML = "<div class='empty-list-Data'>No data available</div>"
+			console.error("Error:", error);
+		});
+
+}
+
+function getFilterParams(nameSystem, pageNum) {
+	const name = document.getElementById(`user-name-${nameSystem}`).value;
+	const bookingId = document.getElementById(`booking-id-${nameSystem}`).value;
+	const paymentStatus = document.getElementById(`payment-status-${nameSystem}`).value;
+	const startDate = document.getElementById(`input-start-date-${nameSystem}`).value;
+	const endDate = document.getElementById(`input-end-date-${nameSystem}`).value;
+	const dateType = document.getElementById(`payment-date-${nameSystem}`).value;
+	const amouttype = document.getElementById(`payment-amount-${nameSystem}`).value;
+	const params = {
+		paymentMethod: nameSystem == "momo" ? 3 : 4,
+		paymentStatus: paymentStatus,
+		dateType: dateType,  			  // ASC = 0, DESC = 1
+		amountType: amouttype,              // ASC = 0, DESC = 1
+		pageNum: pageNum
+	};
+	if (name != null && name.trim() != "") params.name = name;
+	if (bookingId != "") params.bookingId = bookingId;
+	if (startDate != "") params.startDate = startDate;
+	if (endDate != "") params.endDate = endDate
+	return params;
+}
+
+async function getHistoryPayment(apiUrl, params) {
+	try {
+		// Tạo query string từ params
+		const queryString = new URLSearchParams(params).toString();
+		console.log(queryString);
+		// Gọi API
+		const response = await fetch(`${apiUrl}?${queryString}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		// Kiểm tra phản hồi từ API
+		if (!response.ok) {
+			throw new Error(`Error ${response.status}: ${response.statusText}`);
+		}
+
+		// Chuyển đổi kết quả sang JSON
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching payment history:", error);
+		throw error; // Ném lỗi ra nếu cần xử lý thêm
+	}
+}
+
+function innerTablePaypal(nameSystem, listPayment) {
+	const bodyTable = document.getElementById("body-table-" + nameSystem);
+	var bodyHTML = "";
+	for (let i = 0; i < listPayment.length; i++) {
+		let item = listPayment[i];
+		bodyHTML += `<tr>
+						<td class="text-center align-middle" th:text="">${nameSystem == "momo" ? item.momoId : item.captureId}</td>
+						<td class="text-center align-middle">${item.bookingId}</td>
+						<td class="text-center align-middle">${item.fullName}</td>
+						<td class="text-center align-middle">${item.paymentDate}</td>
+						<td class="text-center align-middle">${nameSystem == "momo" ? item.amount : item.totalPriceDolar}</td>
+						<td class="text-center align-middle">${item.paymentStatus}</td>
+						<td class="text-center align-middle"><i class="fa-regular fa-eye"></i></td>
+					</tr>`
+	}
+	bodyTable.innerHTML = bodyHTML;
+}
+
+function innerPagePaypal(nameSystem, totalPage, currentPage) {
+	const nameSystemUpper = nameSystem == "momo" ? "Momo" : "Paypal";
+	const pagination = document.getElementById("pagination-container-" + nameSystem);
+	var bodyHTML = "";
+	if (totalPage > 1) {
+		bodyHTML += `<ul class="pagination" id="pagination">`;
+		if (currentPage > 0) {
+			bodyHTML += `<li><button onclick='handleFilter${nameSystemUpper}(${currentPage - 1})'>
+								<i class="fas fa-chevron-left icon"></i></button></li>`;
+		}
+		for (let i = 0; i < totalPage; i++) {
+			bodyHTML += `<li><a onclick='handleFilter${nameSystemUpper}(${i})' class="${currentPage == i ? 'current' : ''}">${i + 1}</a></li>`;
+		}
+		if (currentPage + 1 < totalPage) {
+			bodyHTML += `<li><button onclick='handleFilter${nameSystemUpper}(${currentPage + 1})'>
+							<i class="fas fa-chevron-right icon"></i></button></li>`;
+		}
+		bodyHTML += `</ul>`;
+	}
+	console.log(bodyHTML);
+	pagination.innerHTML = bodyHTML;
+}

@@ -44,6 +44,9 @@ public class Payments implements Serializable{
     @JoinColumn(name = "capture_id", nullable = true)
     private String captureId ;
     
+    @JoinColumn(name = "momo_id", nullable = true)
+    private String momoId;
+    
     @JoinColumn(name = "total_price_dolar", nullable = true)
     private float totalPriceDolar;
     
@@ -132,4 +135,14 @@ public class Payments implements Serializable{
 		this.totalPriceDolar = totalPriceDolar;
 	}
 
+	public String getMomoId() {
+		return momoId;
+	}
+
+	public void setMomoId(String momoId) {
+		this.momoId = momoId;
+	}
+	
+	
+	
 }

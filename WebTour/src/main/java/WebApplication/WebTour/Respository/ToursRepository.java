@@ -2,6 +2,7 @@ package WebApplication.WebTour.Respository;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -71,7 +72,7 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 		    Pageable pageable
 		);
 	// Get tour for home page
-	@Query(value = "SELECT t FROM Tours t WHERE t.status = true ORDER BY t.price ASC LIMIT 8")
+	@Query(value = "SELECT t FROM Tours t WHERE t.status = true AND t.originalId IS NULL ORDER BY t.price ASC")
 	List<Tours> listOfCheapestTours();
 
 	// lấy ra những tour chưa bắt đầu và những tour đó chưa được áp mã đang xem xét
@@ -122,5 +123,12 @@ public interface ToursRepository extends JpaRepository<Tours, Long> {
 	        + "GROUP BY t.tour_id, t.departure, t.tour_name, t.price, t.end_date, t.start_date "
 	        + "ORDER BY t.price DESC", nativeQuery = true)
 	Page<Object[]> findToursSortedByPriceDesc(Pageable pageable);
+
 	
+	//Thống kê lượng khác tới các tỉnh
+	@Query(value = "SELECT ROW_NUMBER() OVER (ORDER BY total DESC) AS row_number, t.tour_id, t.destination , sum(b.people_nums) AS total FROM tours t "
+			+ "JOIN bookings b ON t.tour_id = b.tour_id "
+			+ "JOIN payments p on p.payment_id = b.payment_id AND p.payment_status = 1 "
+			+ "WHERE t.status = 1 GROUP BY t.destination  HAVING total >= :total ORDER BY total DESC LIMIT :limit ", nativeQuery = true)
+	List<Object[]> getTotalCustomerTour(@Param("total") int total, @Param("limit") int limit);
 }

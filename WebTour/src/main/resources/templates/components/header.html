@@ -10,7 +10,7 @@ body {
 }
 
 header {
-	padding: 15px 0;
+	padding-top: 15px;
 }
 
 .container {
@@ -63,12 +63,15 @@ nav ul li a:hover {
 .icons .hotline i {
 	font-size: 25px;
 }
-.icons{
-	display: flex; 
+
+.icons {
+	display: flex;
 }
+
 .hotline {
 	margin: 0;
 }
+
 .dropdown-content {
 	display: none;
 	position: absolute;
@@ -77,10 +80,12 @@ nav ul li a:hover {
 	min-width: 200px;
 	z-index: 1;
 }
-.nagigate-bar-header{
-    width: 100%;
-    border: solid;
+
+.nagigate-bar-header {
+	width: 100%;
+	border: solid;
 }
+
 .dropdown-content a {
 	display: block;
 	padding: 10px 20px;
@@ -120,7 +125,6 @@ nav ul li a:hover i {
 .column a:hover {
 	color: #00aaff;
 }
-
 
 /* Màn hình lớn (Desktop) */
 @media ( min-width : 992px) {
@@ -463,8 +467,25 @@ nav ul li a {
 	background-color: #ddd;
 }
 
+.navigate-bar-header {
+	height: 100px;
+	background: #50e0eb;
+	padding: 0 5%;
+	display: flex;
+}
 
+.navigate-bar-header a {
+	margin: 10px 0;
+}
 
+#navigate-bar-header {
+	display: flex;
+	align-items: center;
+}
+
+.icon-arrow {
+	margin: 10px;
+}
 </style>
 <div class="container">
 	<div class="container">
@@ -492,19 +513,26 @@ nav ul li a {
 				<a href="#"><i class="fa-regular fa-circle-user"></i></a>
 				<div class="user-submenu">
 					<a id="login" href="/">Đăng nhập</a> <a id="register" href="/">Đăng
-						ký</a> <a href="/account/tour-booking">Giỏ hàng</a>
+						ký</a>
 				</div>
 			</div>
-			<a href="#"><i class="fas fa-shopping-cart"></i></a> <span
+			<a href="#"></a> <span
 				class="hotline"> <i class="fa-solid fa-headset"></i> Hotline
 				1900 9999
 			</span>
 		</div>
 	</div>
-	<!-- <div class="navigate-bar-header">
-		<div class="navigate">
-	        <a href="/home"></a> ; 
-	        <a id="current-page"></a>
-    	</div>
-	</div> -->
+</div>
+<div class="navigate-bar-header" id="navigate-header-bar-container">
+	<div class="navigate" id="navigate-bar-header"></div>
+</div>
+<div class="search-box" id="searchBox">
+	<div class="empty-box" id="emptyBox"></div>
+	<div class="search-top">
+		<div class="search-container">
+			<input type="text" id="searchInput" placeholder="Nhập tên tour...">
+			<i class="fas fa-search" id="searchIcon"></i>
+		</div>
+	</div>
+</div>
 </div>

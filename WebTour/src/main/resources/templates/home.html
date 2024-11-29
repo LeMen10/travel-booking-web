@@ -1,187 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ND Travel</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <link rel="shortcut icon" href="/image/icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="/css/home_user.css">
-    	
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ND Travel</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+	rel="stylesheet" />
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+	rel="stylesheet" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<link rel="shortcut icon" href="/image/icon.png" type="image/x-icon">
+<link rel="stylesheet" href="/css/home_user.css">
+
 </head>
 <body>
-	<header>
-    <div class="container">
-        <div class="container">
-            <div class="logo">
-                <a href="home.html"><img src="/imagess/background_light_v1.jpg" alt="ND Travel Logo"></a>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="/home" id="home-link">Trang chủ</a></li>
-                    <li class="dropdown">
-                        <a href="#" id="aboutLink">Giới thiệu</a>
-	                    <div id="aboutSubmenu" class="submenu">
-					        <a href="/insurance-tour">Bảo hiểm tour</a>
-					        <a href="/visa">Visa</a>
-					    </div>
-                    </li>
-                    <li class="dropdown">
-                        <a href="/search?s=" class="dropbtn" id="tour-link">Tour du lịch</a>
-                    </li>
-                    <li><a href="#" id="news-link">Tin tức</a></li>
-                    <li><a href="#" id="faq-link">FAQs</a></li>
-                    <li><a href="/contract" id="contact-link">Liên hệ</a></li>
-                </ul>
-            </nav>            
-            <div class="icons">
-                <a href="#"><i class="fas fa-search btn-search"></i></a>
-                <div class="user-menu">
-			        <a href="#"><i class="fa-regular fa-circle-user"></i></a>
-			        <div class="user-submenu">
-			            <a id="login" href="/">Đăng nhập</a>
-			            <a id="register" href="/">Đăng ký</a>
-			            <a href="/cart">Giỏ hàng</a>
-			        </div>
-			    </div>      
-                <a href="#"><i class="fas fa-shopping-cart"></i></a>
-                <span class="hotline">
-                    <i class="fa-solid fa-headset"></i>
-                    Hotline 1900 9999
-                </span>
-            </div>         
-        </div>
+	<header id="header"></header>
+	<header class="header-content-home">
+		<div class="overlay">
+			<div class="content">
+				<h1>Du lịch cùng M & N TRAVEL</h1>
+				<p>Vinh hạnh của chúng tôi là mang đến cho bạn những chuyến đi
+					đáng nhớ. Mang đến cho bạn những chuyến đi đầy cảm hứng. Khám phá
+					những vùng đất mới. Tự do khám phá cùng chúng tôi.</p>
+			</div>
+		</div>
+		<div class="search-container-main">
+			<div class="search-box-main">
+				<div>
+					<input id="mainSearchInput" type="text"
+						placeholder="Bạn muốn đi đâu?">
+				</div>
+				<div class="location-and-day">
+					<i class="fas fa-map-marker-alt"></i> <select id="departureSelect"
+						class="location-select" data-type="departure">
+						<option value="" disabled selected>Chọn điểm đi</option>
+						<option th:each="provinces: ${province}"
+							th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn
+							điểm đi</option>
+					</select>
+				</div>
+				<div class="location-and-day">
+					<i class="fas fa-map-marker-alt"></i> <select
+						id="destinationSelect" class="location-select"
+						data-type="destination">
+						<option value="" disabled selected>Chọn điểm đến</option>
+						<option th:each="provinces: ${province}"
+							th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn
+							điểm đi</option>
+					</select>
+				</div>
+				<div class="location-and-day">
+					<i class="fas fa-calendar-alt"></i> <input type="text"
+						id="departureDate" placeholder="Chọn ngày đi">
+				</div>
+				<div>
+					<button id="main-btn-search">Tìm kiếm</button>
+				</div>
 
-        <!-- Div phụ (search-box) -->
-        <div class="search-box" id="searchBox">
-            <div class="empty-box" id="emptyBox"></div>
-            <div class="search-top">
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Nhập tên tour...">
-                    <i class="fas fa-search" id="searchIcon"></i>
-                </div>
-            </div>
-        </div>
-      </div>
-     </header>
-	        <header class="header">
-	        <div class="overlay">
-	            <div class="content">
-	                <h1>Du lịch cùng M & N TRAVEL</h1>
-	                <p>Vinh hạnh của chúng tôi là mang đến cho bạn những chuyến đi đáng nhớ. 
-	                Mang đến cho bạn những chuyến đi đầy cảm hứng. Khám phá những vùng đất mới. Tự do khám phá cùng chúng tôi.</p>
-	            </div>
-	        </div>
-	        <div class="search-container-main">
-	        <div class="search-box-main">
-	            <div >
-	                <input id="mainSearchInput" type="text" placeholder="Bạn muốn đi đâu?">
-	            </div>
-	            <div class="location-and-day">
-	                <i class="fas fa-map-marker-alt"></i>
-	                
-	                <select id="departureSelect" class="location-select" data-type="departure">
-	                	<option value="" disabled selected>Chọn điểm đi</option>
-						<option th:each="provinces: ${province}" th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn điểm đi</option>
-					</select>
-	            </div>
-	            <div class="location-and-day">
-	                <i class="fas fa-map-marker-alt"></i>
-	                <select id="destinationSelect" class="location-select" data-type="destination">
-	                	 <option value="" disabled selected>Chọn điểm đến</option>
-						<option th:each="provinces: ${province}" th:value="${provinces.provinceId}" th:text="${provinces.name}">Chọn điểm đi</option>
-					</select>
-	            </div>
-	            <div class="location-and-day">
-				    <i class="fas fa-calendar-alt"></i>
-				    <input type="text" id="departureDate" placeholder="Chọn ngày đi" >
+			</div>
+		</div>
+	</header>
+	<section class="tour-deals">
+		<h2 class="title-text">Tour giá tốt</h2>
+		<p class="title-text">Hơn 1.000 tour đa dạng giá hời có hạn</p>
+		<div class="tour-cards" id="tour-cards">
+			<div th:each="tour : ${tours}" class="tour-card">
+				<!-- <img th:src="@{${tour.image}}" alt="Tour Image"> -->
+				<div class="tour-info">
+					<p class="departure">
+						<i class="fa-solid fa-location-dot"></i> Khởi hành từ: <span
+							th:text="${tour.departure}"></span>
+					</p>
+					<h3 th:text="${tour.tourName}"></h3>
+					<p class="price" th:text="${tour.price} + ' VNĐ'"></p>
+					<p class="duration">
+						Ngày đi: <span th:text="${tour.startDate}"></span>
+					</p>
+					<p class="duration">
+						Ngày về: <span th:text="${tour.endDate}"></span>
+					</p>
 				</div>
-				<div >
-					<button id="main-btn-search" >Tìm kiếm</button>
+			</div>
+		</div>
+		<a href="/search?s=" class="see-more">Xem thêm →</a>
+	</section>
+	<section class="why-choose-section">
+		<h2>Vì sao bạn nên chọn ND Travel</h2>
+		<div class="features">
+			<div class="feature">
+				<i class="fa-solid fa-filter-circle-dollar"></i>
+				<div class="text">
+					<h3>Giá tốt nhất cho bạn</h3>
+					<p>Có nhiều mức giá đa dạng phù hợp với ngân sách và nhu cầu
+						của bạn.</p>
 				</div>
-	       
-	        </div>
-    	</div>
-	    </header>
-	    <section class="tour-deals">
-	        <h2 class="title-text">Tour giá tốt</h2>
-	        <p class="title-text">Hơn 1.000 tour đa dạng giá hời có hạn</p>
-	        <div class="tour-cards" id="tour-cards">
-	            <div th:each="tour : ${tours}" class="tour-card">
-	                <!-- <img th:src="@{${tour.image}}" alt="Tour Image"> -->
-	                <div class="tour-info">
-	                    <p class="departure"><i class="fa-solid fa-location-dot"></i> Khởi hành từ: <span th:text="${tour.departure}"></span></p>
-	                    <h3 th:text="${tour.tourName}"></h3>
-	                    <p class="price" th:text="${tour.price} + ' VNĐ'"></p>
-	                    <p class="duration">Ngày đi: <span th:text="${tour.startDate}"></span></p>
-	                    <p class="duration">Ngày về: <span th:text="${tour.endDate}"></span></p>
-	                </div>
-	            </div>
-	        </div>
-	        <a href="/search?s=" class="see-more" >Xem thêm →</a>
-	    </section>
-	    <section class="why-choose-section">
-	        <h2>Vì sao bạn nên chọn ND Travel</h2>
-	        <div class="features">
-	            <div class="feature">
-	                <i class="fa-solid fa-filter-circle-dollar"></i>
-	                <div class="text">
-	                    <h3>Giá tốt nhất cho bạn</h3>
-	                    <p>Có nhiều mức giá đa dạng phù hợp với ngân sách và nhu cầu của bạn.</p>
-	                </div>
-	            </div>
-	            <div class="feature">
-	                <i class="fa-solid fa-ticket"></i>
-	                <div class="text">
-	                    <h3>Booking dễ dàng</h3>
-	                    <p>Các bước booking và chăm sóc khách hàng nhanh chóng và thuận tiện.</p>
-	                </div>
-	            </div>
-	            <div class="feature">
-	                <i class="fa-solid fa-suitcase-rolling"></i>
-	                <div class="text">
-	                    <h3>Tour du lịch tối ưu</h3>
-	                    <p>Đa dạng các loại hình tour du lịch với nhiều mức giá khác nhau.</p>
-	                </div>
-	                
-	            </div>
-	        </div>
-	    </section>
-	    
-	    <section class="booking-process-section">
-	        <h2>Booking cùng ND Travel</h2>
-	        <p>Chỉ với 3 bước đơn giản và dễ dàng có ngay trải nghiệm tuyệt vời!</p>
-	        <div class="steps">
-	            <div class="step">
-	                <div class="step-number">1</div>
-	                <img src="/imagess/location.png" alt="Find Destination Icon">
-	                <h3>Tìm nơi muốn đến</h3>
-	                <p>Bất cứ nơi đâu bạn muốn đến, chúng tôi có tất cả những gì bạn cần.</p>
-	            </div>
-	            <div class="step">
-	                <div class="step-number">2</div>
-	                <img src="/imagess/ticket.png" alt="Book Ticket Icon">
-	                <h3>Đặt vé</h3>
-	                <p>ND Travel sẽ hỗ trợ bạn đặt vé trực tiếp nhanh chóng và thuận tiện.</p>
-	            </div>
-	            <div class="step">
-	                <div class="step-number">3</div>
-	                <img src="/imagess/payment.png" alt="Payment Icon">
-	                <h3>Thanh toán</h3>
-	                <p>Hoàn thành bước thanh toán và sẵn sàng cho chuyến đi ngay thôi.</p>
-	            </div>
-	        </div>
-	    </section>
-	    
-    
-<div id="footer"></div>
-     <script src="/js/home_user.js"></script>
+			</div>
+			<div class="feature">
+				<i class="fa-solid fa-ticket"></i>
+				<div class="text">
+					<h3>Booking dễ dàng</h3>
+					<p>Các bước booking và chăm sóc khách hàng nhanh chóng và thuận
+						tiện.</p>
+				</div>
+			</div>
+			<div class="feature">
+				<i class="fa-solid fa-suitcase-rolling"></i>
+				<div class="text">
+					<h3>Tour du lịch tối ưu</h3>
+					<p>Đa dạng các loại hình tour du lịch với nhiều mức giá khác
+						nhau.</p>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+	<section class="booking-process-section">
+		<h2>Booking cùng ND Travel</h2>
+		<p>Chỉ với 3 bước đơn giản và dễ dàng có ngay trải nghiệm tuyệt
+			vời!</p>
+		<div class="steps">
+			<div class="step">
+				<div class="step-number">1</div>
+				<img src="/imagess/location.png" alt="Find Destination Icon">
+				<h3>Tìm nơi muốn đến</h3>
+				<p>Bất cứ nơi đâu bạn muốn đến, chúng tôi có tất cả những gì bạn
+					cần.</p>
+			</div>
+			<div class="step">
+				<div class="step-number">2</div>
+				<img src="/imagess/ticket.png" alt="Book Ticket Icon">
+				<h3>Đặt vé</h3>
+				<p>ND Travel sẽ hỗ trợ bạn đặt vé trực tiếp nhanh chóng và thuận
+					tiện.</p>
+			</div>
+			<div class="step">
+				<div class="step-number">3</div>
+				<img src="/imagess/payment.png" alt="Payment Icon">
+				<h3>Thanh toán</h3>
+				<p>Hoàn thành bước thanh toán và sẵn sàng cho chuyến đi ngay
+					thôi.</p>
+			</div>
+		</div>
+	</section>
+
+
+	<div id="footer"></div>
+
+	<script src="/js/header.js"></script>
+	<script src="/js/home_user.js"></script>
 </body>
 </html>

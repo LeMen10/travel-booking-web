@@ -59,9 +59,9 @@ public class ProfileController {
 		
 		Optional<User> user = userRepository.findById(userId);
 		Address address = user.get().getAddress();
-		Province provinceUser = address.getProvince();
-		Ward wardUser = address.getWard();
-		District districtUser = address.getDistrict();
+		Province provinceUser = address == null? null: address.getProvince();
+		Ward wardUser = address == null? null:address.getWard();
+		District districtUser = address == null? null:address.getDistrict();
 		List<Province> province = provinceRepository.findAll();
 		List<District> district = districtRepository.findAll();
 		List<Ward> ward = wardRepository.findAll();
