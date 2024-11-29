@@ -448,7 +448,9 @@ function openModalReview() {
 async function createReview() {
 	console.log("Hàm createReview đã được gọi.");
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
-	const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
+	//const userId = sessionStorage.getItem("userId") == null ? 0 : sessionStorage.getItem("userId");/*= document.getElementById("userId").value;*/
+	const account = await getProfile();
+	const userId = account == null ? null : account.user.user_id;
 	const stars = document.querySelectorAll('.stars .fa-star.selected');
 	const rate = stars.length;
 	console.log("value của sao đã chọn: " + rate);

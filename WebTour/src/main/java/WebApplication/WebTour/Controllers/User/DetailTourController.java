@@ -189,7 +189,7 @@ public class DetailTourController {
 		review.setRate(rate);
 		review.setComment(comment);
 		review.setReviewDate(reviewDate);
-
+		review.setStatus(true);
 		// JPA đã cung cấp sẵn phương thức "save",sẽ trả về đối tượng vừa chèn, nên
 		// không cần viết hàm insert ở file respository
 		Reviews savedReviews = reviewsRepository.save(review);

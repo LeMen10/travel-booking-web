@@ -171,6 +171,57 @@ app.post('/check-status-transaction', async (req, res) => {
     return res.status(200).json(result.data);
   });
 
+  app.post('/refund-payment', async (req, res) => {
+    const { orderId, amount } = req.body;
+
+    if (!orderId || !amount) {
+        return res.status(400).json({ message: "orderId và amount là bắt buộc." });
+    }
+
+    // Thông tin cố định
+    const partnerCode = 'MOMO';
+    const accessKey = 'F8BBA842ECF85';
+    const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+    const requestId = `${partnerCode}${Date.now()}`;
+    const description = 'Hoàn tiền giao dịch';
+
+    // Tạo raw signature
+    const rawSignature = `accessKey=${accessKey}&amount=${amount}&description=${description}&orderId=${orderId}&partnerCode=${partnerCode}&requestId=${requestId}`;
+    console.log("Raw Signature:", rawSignature);
+
+    // Tạo signature bằng HMAC SHA256
+    const signature = crypto.createHmac('sha256', secretKey)
+        .update(rawSignature)
+        .digest('hex');
+
+    console.log("Signature:", signature);
+
+    // Dữ liệu gửi tới MoMo
+    const requestBody = JSON.stringify({
+        partnerCode: partnerCode,
+        requestId: requestId,
+        orderId: orderId,
+        amount: amount,
+        description: description,
+        lang: 'vi',
+        signature: signature,
+    });
+
+    try {
+        const response = await axios.post('https://test-payment.momo.vn/v2/gateway/api/refund', requestBody, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        console.log("MoMo Refund Response:", response.data);
+        res.status(200).json(response.data);
+    } catch (error) {
+        console.error("Lỗi khi hoàn tiền:", error.response.data);
+        res.status(500).json(error.response.data);
+    }
+});
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });

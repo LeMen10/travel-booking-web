@@ -73,3 +73,28 @@ async function updatePaymentStatus(bookingId) {
 		console.error("Lỗi updatePaymentStatus:", error);
 	}
 }
+
+/*async function refundMoMo(orderId, amount) {
+    try {
+        const response = await fetch('http://localhost:3000/refund-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderId, amount }),
+        });
+
+        const data = await response.json();
+        if (data.resultCode === 0) {
+            console.log('Hoàn tiền thành công:', data);
+            alert('Hoàn tiền thành công!');
+        } else {
+            console.log('Hoàn tiền thất bại:', data.message);
+            alert('Hoàn tiền thất bại!');
+        }
+    } catch (error) {
+        console.error('Lỗi khi gọi API hoàn tiền:', error);
+        alert('Lỗi khi hoàn tiền!');
+    }
+}
+*/

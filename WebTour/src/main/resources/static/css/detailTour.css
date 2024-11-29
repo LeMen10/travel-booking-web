@@ -571,6 +571,9 @@ pre {
     line-height: 1.5; 
     white-space: pre-wrap; /* Cho phép tự động xuống dòng nếu quá dài */
 }
+.fa-clock{
+	margin: 0;
+}
 
 @media (max-width: 768px) {
     .first-main-content {

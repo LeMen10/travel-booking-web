@@ -2,8 +2,18 @@ const CLIENT_ID = "AU2triLtOulok7sB9BuFfWxVK2XlCCu1nnJDYJF-AA2PJmISoEBqtd0DbutWL
 const CLIENT_SECRET = "EC9EpOHMkwhIHZ4so36WAdFhs_HaYUB5APa1UiBolPddVkJFdXu7Wkf_id5m5yujr27_mxkZFs6ASY9p";
 
 document.addEventListener("DOMContentLoaded", function() {
+	window.onload = function() {
+		console.log("CryptoJS has been loaded successfully.");
+		// Giờ bạn có thể gọi refundMoMo()
+	}
 	const refundButton = document.querySelector(".btn-continue");
 	const backButton = document.querySelector(".btn-back");
+	const Button = document.querySelector(".btn");
+
+
+	Button.addEventListener("click", async () => {
+		await handleRefundMoMo();
+	});
 
 	refundButton.addEventListener("click", async () => {
 		await handleRefund();
@@ -92,6 +102,108 @@ async function updateCancelBooking(bookingId) {
 function hideRefundButton() {
 	document.getElementById("button-refund").style.display = "none";
 	document.getElementById("icon-status").classList.remove(...element.classList);
-	document.getElementById("icon-status").classList.add("fa-solid", "fa-ban"); 
+	document.getElementById("icon-status").classList.add("fa-solid", "fa-ban");
 	document.getElementById("icon-status").style.color = "#ff4242";
 }
+
+/*===========================================================================================================================*/
+async function refundMoMo(originalOrderId, amount) {
+    if (!originalOrderId || !amount) {
+        console.error('orderId và amount là bắt buộc.');
+        alert('orderId và amount là bắt buộc.');
+        return false;
+    }
+
+    if (amount < 1000 || amount > 50000000) {
+        console.error('Số tiền không hợp lệ. Phải từ 1000 VND đến 50000000 VND.');
+        alert('Số tiền hoàn tiền không hợp lệ. Vui lòng kiểm tra lại.');
+        return false;
+    }
+
+    const partnerCode = 'MOMO';
+    const accessKey = 'F8BBA842ECF85';
+    const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+    const requestId = `${partnerCode}${Date.now()}`;
+    const orderId = `${originalOrderId}-REFUND-${Date.now()}`; // Đảm bảo orderId duy nhất
+    const description = 'Hoàn tiền giao dịch';
+
+    const rawSignature = `accessKey=${accessKey}&amount=${amount}&description=${description}&orderId=${orderId}&partnerCode=${partnerCode}&requestId=${requestId}`;
+    console.log("Raw Signature:", rawSignature);
+
+    if (typeof CryptoJS === 'undefined') {
+        console.error("CryptoJS không được tải đúng cách.");
+        alert("Lỗi: CryptoJS không được tải đúng cách.");
+        return false;
+    }
+
+    const signature = CryptoJS.HmacSHA256(rawSignature, secretKey).toString(CryptoJS.enc.Hex);
+    console.log("Chữ ký:", signature);
+
+    try {
+        const response = await fetch('http://localhost:3000/refund-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                orderId: orderId,
+                amount: amount,
+                signature: signature,
+            }),
+        });
+
+        const data = await response.json();
+        console.log('Phản hồi từ API:', data);
+
+        if (data.resultCode === 0) {
+            alert('Hoàn tiền thành công!');
+            return true;
+        } else if (data.resultCode === 41) {
+            console.error('Hoàn tiền thất bại: OrderId đã tồn tại.', data.message);
+            alert(`Hoàn tiền thất bại: ${data.message}\nVui lòng kiểm tra hoặc sử dụng một OrderId khác.`);
+            return false;
+        } else {
+            alert(`Hoàn tiền thất bại: ${data.message}`);
+            return false;
+        }
+    } catch (error) {
+        console.error('Lỗi khi gọi API hoàn tiền:', error);
+        alert('Lỗi kết nối! Vui lòng thử lại sau.');
+        return false;
+    }
+}
+
+
+
+
+
+
+async function handleRefundMoMo() {
+	try {
+		const bookingId = document.getElementById("booking-id").getAttribute("data-id");
+		const booking = await getBooking(bookingId);
+		const amount = booking.payment.amount; // Đảm bảo giá trị này là chính xác
+
+		// Gọi hàm refundMoMo để hoàn tiền
+		const refundSuccess = await refundMoMo(bookingId, amount);
+
+		if (refundSuccess) {
+			// Tiến hành hủy booking nếu hoàn tiền thành công
+			const cancelBookingResult = await updateCancelBooking(bookingId);
+			if (cancelBookingResult) {
+				openDialogSuccess('Refund successful!');
+				hideRefundButton();
+			} else {
+				openDialogError('Refund failed!');
+			}
+		}
+	} catch (error) {
+		console.error('Lỗi khi xử lý hoàn tiền:', error);
+		openDialogError('Lỗi khi xử lý hoàn tiền!');
+	}
+}
+
+/*===========================================================================================================================*/
+
+
+

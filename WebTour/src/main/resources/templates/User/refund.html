@@ -5,8 +5,11 @@
 <title>Refund</title>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<link rel="stylesheet" type="text/css" href="../css/refund.css">
 </head>
-<link rel="stylesheet" type="text/css" href="../css/refund.css">
+
 <body>
 	<header id="header"></header>
 	<div class="order-container" id="booking-id" th:attr="data-id=${bookingNotification.bookingId}">
@@ -80,12 +83,16 @@
 			<button class="btn-back">
 				<i class="fa-solid fa-circle-left"></i> Quay lại
 			</button>
+			<button class="btn">
+				<i class="fa-solid fa-circle-left"></i> lại
+			</button>
 		</div>
 	</div>
-<div id="footer"></div>
+	<div id="footer"></div>
 	<div id="notification"></div>
 	<script src="/js/header.js"></script>
 	<script src="/js/notification.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="/js/refund.js"></script>
 </body>
 </html>
