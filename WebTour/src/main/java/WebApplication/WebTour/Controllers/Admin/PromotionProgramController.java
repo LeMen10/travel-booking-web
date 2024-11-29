@@ -1,5 +1,7 @@
 package WebApplication.WebTour.Controllers.Admin;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,4 +56,24 @@ public class PromotionProgramController {
             return ResponseEntity.status(500).body("Lỗi khi tạo chương trình khuyến mãi");
         }
     }
+    
+    @GetMapping("/admin/get-promotion-program-by-date")
+	public ResponseEntity<Page<Object[]>> getPromotionsByDate(
+	        @RequestParam("startDate") String startDateString,
+	        @RequestParam("endDate") String endDateString,
+	        @RequestParam(value = "page", defaultValue = "0") int page,
+	        @RequestParam(value = "size", defaultValue = "2") int size) {
+
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date startDate = dateFormat.parse(startDateString);
+            Date endDate = dateFormat.parse(endDateString);
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Object[]> promotions = promotionProgramService.getPromotionsByDateRange(startDate, endDate, pageable);
+            return ResponseEntity.ok(promotions);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+	}
+	
 }

@@ -50,6 +50,8 @@
 						<th class="large-column">Bắt đầu</th>
 						<th class="large-column">Kết thúc</th>
 					</tr>
+				</thead>
+				<tbody id="promotion-program-table-body">
 					<tr th:each="program : ${promotionPrograms}">
 						<td th:text="${program.title}" class="text-left"></td>
 						<td th:text="${program.promotionType}"></td>
@@ -57,21 +59,18 @@
 						<td th:text="${program.startDate}"></td>
 						<td th:text="${program.endDate}"></td>
 					</tr>
-				</thead>
-
-
+				</tbody>
 			</table>
 			<div class="pagination-container">
 				<ul class="pagination" id="pagination">
 					<!-- Prev Icon -->
 					<li th:if="${currentPage > 0}"><a
-						th:href="@{/admin/promotion-management(page=${currentPage - 1}, size=2)}">
+						th:href="@{/admin/promotion-program(page=${currentPage - 1}, size=2)}">
 							<i class="fas fa-chevron-left icon"></i>
 					</a></li>
 
 					<!-- First Page -->
-					<li><a
-						th:href="@{/admin/promotion-management(page=0, size=2)}"
+					<li><a th:href="@{/admin/promotion-program(page=0, size=2)}"
 						th:class="${currentPage == 0} ? 'active' : ''">1</a></li>
 
 					<!-- Dots before current range -->
@@ -81,7 +80,7 @@
 					<li
 						th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
 						th:if="${i > 0 and i < totalPages - 1}"><a
-						th:href="@{/admin/promotion-management(page=${i}, size=2)}"
+						th:href="@{/admin/promotion-program(page=${i}, size=2)}"
 						th:class="${currentPage == i} ? 'active' : ''" th:text="${i + 1}">
 					</a></li>
 
@@ -90,13 +89,13 @@
 
 					<!-- Last Page -->
 					<li th:if="${totalPages > 1}"><a
-						th:href="@{/admin/promotion-management(page=${totalPages - 1}, size=2)}"
+						th:href="@{/admin/promotion-program(page=${totalPages - 1}, size=2)}"
 						th:class="${currentPage == totalPages - 1} ? 'active' : ''"
 						th:text="${totalPages}"> </a></li>
 
 					<!-- Next Icon -->
 					<li th:if="${currentPage + 1 < totalPages}"><a
-						th:href="@{/admin/promotion-management(page=${currentPage + 1}, size=2)}">
+						th:href="@{/admin/promotion-program(page=${currentPage + 1}, size=2)}">
 							<i class="fas fa-chevron-right icon"></i>
 					</a></li>
 				</ul>
@@ -178,43 +177,7 @@
 		</div>
 	</div>
 
-	<div class="modal" id="promotional-program-modal">
-		<div class="modal__overlay"></div>
-		<div class="modal__body">
-			<!-- Login form  -->
-			<div class="auth-form-program">
-				<div class="auth-form__container">
-					<div class="auth-form__header">
-						<h3 class="auth-form__heading">Dánh sách các tuyến du lịch</h3>
-					</div>
-
-					<div class="auth-form__form">
-						<table class="table">
-							<thead>
-								<tr>
-									<th class="small-column">Chuyến du lịch</th>
-									<th class="mid-column">Giá</th>
-									<th class="large-column">Bắt đầu</th>
-									<th class="large-column">Kết thúc</th>
-									<th class="large-column">Hành động</th>
-								</tr>
-							</thead>
-							<tbody id="tours-body">
-
-							</tbody>
-						</table>
-					</div>
-
-					<div class="auth-form__control">
-						<button class="btn auth-form__control-back btn--normal btn-cancel"
-							id="close-promotional-program-btn">Trở lại</button>
-						<button class="btn btn--primary view-cart btn-confirm"
-							id="savePromotionDetails">Xác nhận</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 	<script src="../js/headerAdmin.js"></script>
 	<script src="../js/promotion_program.js"></script>
 </body>
