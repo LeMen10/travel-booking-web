@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+#filter-customer-asc, #filter-customer-desc {
+	padding: 5px 18px;
+	background-color: #3498db;
+	color: white;
+	border: none;
+	border-radius: 4px;
+}
+
+#filter-customer-asc:hover, #filter-customer-desc:hover {
+	cursor: pointer;
+	background-color: #3288de;
+	padding: 5px 18px;
+	color: white;
+	border: none;
+	border-radius: 3px;
+}
+
+.create-promotion-wr {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.create-promotion-btn {
+	padding: 10px;
+	border-radius: 4px;
+	background-color: #3498db;
+	color: white;
+	font-weight: 500;
+}
+
+.create-promotion-btn:hover {
+	cursor: pointer;
+	background-color: #3288de;
+}

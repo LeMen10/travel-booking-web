@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý nhân viên</title>
+<link rel="stylesheet" href="/css/home_admin.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/pagination.css">
+<link rel="stylesheet" href="/css/user_management.css">
+<link rel="stylesheet" href="/css/modal.css">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+	rel="stylesheet" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap"
+	rel="stylesheet" />
+</head>
+
+</head>
+<body>
+	<div class="sidebar"></div>
+	<div class="main-content">
+		<div class="header"></div>
+		<div class="table-container">
+			<div class="tab-title-promotion mb-20">
+				<div class="create-promotion-wr">
+					<h2 class="">Nhân viên</h2>
+					<p class="create-promotion-btn" id="add-promotion-btn">Tạo nhân
+						viên</p>
+				</div>
+			</div>
+			<table class="mb-50">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Họ và tên</th>
+						<th>Số điện thoại</th>
+						<th>Email</th>
+						<th>Giới tính</th>
+						<th>Hành động</th>
+					</tr>
+				</thead>
+				<tbody id="user-table">
+					<tr th:each="user : ${users}">
+						<td th:text="${user.user_id}"></td>
+						<td th:text="${user.fullName}"></td>
+						<td th:text="${user.phone}"></td>
+						<td th:text="${user.email}"></td>
+						<td th:text="${user.gender}"></td>
+						<td><span id="promotion-edit-btn"
+							onclick="showPromotionById(this)">Sửa</span> <span
+							id="promotion-delete-btn" onclick="deletePromotion(this)">Xóa</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="pagination-container">
+				<ul class="pagination" id="pagination">
+					<!-- Prev Icon -->
+					<li th:if="${currentPage > 0}"><a
+						th:href="@{/admin/employee-management(page=${currentPage - 1}, size=4)}">
+							<i class="fas fa-chevron-left icon"></i>
+					</a></li>
+
+					<!-- First Page -->
+					<li><a th:href="@{/admin/employee-management(page=0, size=4)}"
+						th:class="${currentPage == 0} ? 'active' : ''">1</a></li>
+
+					<!-- Dots before current range -->
+					<li th:if="${currentPage > 2}"><span>...</span></li>
+
+					<!-- Middle Pages -->
+					<li
+						th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+						th:if="${i > 0 and i < totalPages - 1}"><a
+						th:href="@{/admin/employee-management(page=${i}, size=4)}"
+						th:class="${currentPage == i} ? 'active' : ''" th:text="${i + 1}">
+					</a></li>
+
+					<!-- Dots after current range -->
+					<li th:if="${currentPage < totalPages - 3}"><span>...</span></li>
+
+					<!-- Last Page -->
+					<li th:if="${totalPages > 1}"><a
+						th:href="@{/admin/employee-management(page=${totalPages - 1}, size=4)}"
+						th:class="${currentPage == totalPages - 1} ? 'active' : ''"
+						th:text="${totalPages}"> </a></li>
+
+					<!-- Next Icon -->
+					<li th:if="${currentPage + 1 < totalPages}"><a
+						th:href="@{/admin/employee-management(page=${currentPage + 1}, size=4)}">
+							<i class="fas fa-chevron-right icon"></i>
+					</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="modal d-flex" id="add-promotion-program-modal">
+		<div class="modal__overlay"></div>
+		<div class="modal__body">
+			<!-- Login form  -->
+			<div class="auth-form ">
+				<div class="auth-form__container js-modal-container-quen">
+					<div class="auth-form__header">
+						<h3 class="auth-form__heading">Thêm mới nhân viên</h3>
+					</div>
+
+					<div class="auth-form__form">
+						<div class="auth-form__group">
+							<div class="d-flex">
+								<div>
+									<input type="text" placeholder="Họ và tên"
+										class="auth-form__input mt-8" id="program-title">
+									<div class="error"></div>
+								</div>
+								<div>
+									<input type="text" placeholder="Số điện thoại"
+										class="auth-form__input mt-8" id="program-title">
+									<div class="error"></div>
+								</div>
+							</div>
+
+						</div>
+						<div class="auth-form__group">
+							<div class="d-flex">
+								<div>
+									<input type="text" placeholder="Email"
+										class="auth-form__input mt-8" id="program-title">
+									<div class="error"></div>
+								</div>
+								<div>
+									<input type="text" placeholder="Mật khẩu"
+										class="auth-form__input mt-8" id="program-title">
+									<div class="error"></div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="auth-form__group mt-16">
+							<p for="name" class="pro-cate weight-6">Giới tính*</p>
+							<div class="mt-12">
+								<div class="radio-group d-flex space-between">
+									<label> <input type="radio" name="promotion"
+										value="percent" id="promotion-by-percent">Nam
+									</label> <label> <input type="radio" name="promotion"
+										value="money" id="promotion-by-money" checked>Nữ
+									</label>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="auth-form__control">
+						<button class="btn auth-form__control-back btn--normal btn-cancel"
+							id="close-modal-btn">Trở lại</button>
+						<button class="btn btn--primary view-cart btn-confirm"
+							id="create-program-btn">Xác nhận</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../js/headerAdmin.js"></script>
+	<script src="../js/customer_management.js"></script>
+</body>
+</html>

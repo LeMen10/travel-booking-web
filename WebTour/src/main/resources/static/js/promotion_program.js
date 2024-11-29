@@ -134,59 +134,6 @@ savePromotionDetails.addEventListener('click', () => {
 	promotionalProgramModal.classList.remove('d-flex')
 })
 
-
-filterPromotionByDate.addEventListener("click", async (event) => {
-	event.preventDefault();
-
-	const params = new URLSearchParams({
-		startDate: datetimeStartFilter.value,
-		endDate: datetimeEndFilter.value,
-	});
-
-	try {
-		const res = await fetch(`/admin/get-promotion-by-date?${params.toString()}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
-
-		console.log(res)
-
-		if (res.ok) {
-			const data = await res.json();
-			loadPromotions(data.promotions)
-			console.log("Promotions:", data.promotions);
-		} else alert('Có lỗi xảy ra khi áp dụng khuyến mãi');
-
-	} catch (error) {
-		console.error('Error:', error);
-		alert('Đã xảy ra lỗi khi gửi dữ liệu');
-	}
-
-});
-
-const loadPromotions = (promotions) => {
-	const tableBody = document.getElementById('promotion-table-body');
-	tableBody.innerHTML = '';
-
-	promotions.forEach(promotion => {
-		const row = document.createElement('tr');
-		row.setAttribute('data-id', promotion.promotionId);
-		row.setAttribute('onclick', 'getPromotionId(this)');
-
-		row.innerHTML = `
-					<td>${promotion.code}</td>
-					<td class="text-left">${promotion.description}</td>
-					<td>${promotion.discount}%</td>
-					<td>${promotion.startDate}</td>
-					<td>${promotion.endDate}</td>
-				`;
-
-		tableBody.appendChild(row);
-	});
-};
-
 const promotionByPercent = document.getElementById('promotion-by-percent');
 const promotionByMoney = document.getElementById('promotion-by-money');
 const promotionValueIcon = document.querySelector('.promotion-value-icon');
@@ -200,56 +147,56 @@ promotionByPercent.addEventListener('change', updatePromotionIcon);
 promotionByMoney.addEventListener('change', updatePromotionIcon);
 
 const createProgramBtn = document.getElementById('create-program-btn');
-createProgramBtn.addEventListener('click', createNewPromotion)
+createProgramBtn.addEventListener('click', createPromotion)
 
-async function createNewPromotion() {
-    // Lấy dữ liệu từ form
-    const programTitle = document.getElementById('program-title').value;
-    const promotionType = document.querySelector('input[name="promotion"]:checked').value;
-    const promotionValue = parseInt(document.getElementById('discount').value);
-    const startDate = document.getElementById('datetime-start').value;
-    const endDate = document.getElementById('datetime-end').value;
-	
-    if (!programTitle || !promotionValue || !startDate || !endDate) {
-        alert('Vui lòng nhập đầy đủ thông tin!');
-        return;
-    }
+async function createPromotion() {
+	// Lấy dữ liệu từ form
+	const programTitle = document.getElementById('program-title').value;
+	const promotionType = document.querySelector('input[name="promotion"]:checked').value;
+	const promotionValue = parseInt(document.getElementById('discount').value);
+	const startDate = document.getElementById('datetime-start').value;
+	const endDate = document.getElementById('datetime-end').value;
 
-    const programData = {
-        title: programTitle,
-        promotionType: promotionType,
-        promotionValue: promotionValue,
-        startDate: startDate,
-        endDate: endDate
-    };
+	if (!programTitle || !promotionValue || !startDate || !endDate) {
+		alert('Vui lòng nhập đầy đủ thông tin!');
+		return;
+	}
 
-    try {
-        const res = await fetch(`/admin/create-promotion-program`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(programData)
-        });
+	const programData = {
+		title: programTitle,
+		promotionType: promotionType,
+		promotionValue: promotionValue,
+		startDate: startDate,
+		endDate: endDate
+	};
 
-        if (res.ok) {
-            const rs = await res.json();
+	try {
+		const res = await fetch(`/admin/create-promotion-program`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(programData)
+		});
+
+		if (res.ok) {
+			const rs = await res.json();
 			promotionalProgramModal.classList.remove('d-flex');
 			if (rs.status == 200) location.reload();
-        } else {
-            alert('Có lỗi xảy ra khi áp dụng khuyến mãi');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Đã xảy ra lỗi khi gửi dữ liệu');
-    }
+		} else {
+			alert('Có lỗi xảy ra khi áp dụng khuyến mãi');
+		}
+	} catch (error) {
+		console.error('Error:', error);
+		alert('Đã xảy ra lỗi khi gửi dữ liệu');
+	}
 }
 
 let currentPage = 0;
 let pageSize = 2;
 
 const filterDataByDate = async (event) => {
-/*	event.preventDefault();*/
+	/*	event.preventDefault();*/
 
 	const params = new URLSearchParams({
 		startDate: datetimeStartFilter.value,
@@ -257,7 +204,7 @@ const filterDataByDate = async (event) => {
 	});
 
 	try {
-		const res = await fetch(`/admin/get-promotion-by-date?${params.toString()}&page=${currentPage}&size=${pageSize}`, {
+		const res = await fetch(`/admin/get-promotion-program-by-date?${params.toString()}&page=${currentPage}&size=${pageSize}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json"
@@ -270,7 +217,7 @@ const filterDataByDate = async (event) => {
 		}
 		const data = await res.json();
 		console.log(data.content)
-		
+
 		const totalPages = data.totalPages;
 
 		updateDataTable(data.content);
@@ -283,23 +230,28 @@ const filterDataByDate = async (event) => {
 
 };
 
-filterPromotionByDate.addEventListener("click",  filterDataByDate);
+filterPromotionByDate.addEventListener("click", () => {
+	filterDataByDate();
+	const fullUrl = window.location.href;
+	const baseUrl = fullUrl.split('?')[0];
+	window.history.replaceState({}, document.title, baseUrl);
+});
 
-const updateDataTable = (promotions) => {
-	const tableBody = document.getElementById('promotion-table-body');
+const updateDataTable = (programs) => {
+	const tableBody = document.getElementById('promotion-program-table-body');
 	tableBody.innerHTML = '';
 
-	promotions.forEach(promotion => {
+	programs.forEach(program => {
 		const row = document.createElement('tr');
-		row.setAttribute('data-id', promotion.promotionId);
+		row.setAttribute('data-id', program.promotionId);
 		row.setAttribute('onclick', 'getPromotionId(this)');
 
 		row.innerHTML = `
-					<td>${promotion.code}</td>
-					<td class="text-left">${promotion.description}</td>
-					<td>${promotion.discount}%</td>
-					<td>${promotion.startDate}</td>
-					<td>${promotion.endDate}</td>
+					<td class="text-left">${program.title}</td>
+					<td>${program.promotionType}</td>
+					<td>${program.promotionValue}</td>
+					<td>${program.startDate}</td>
+					<td>${program.endDate}</td>
 				`;
 
 		tableBody.appendChild(row);
@@ -397,7 +349,7 @@ const renderPaginationControls = (totalPages) => {
 		nextButton.addEventListener("click", () => {
 
 			currentPage++;
-			filterDataByDate(); 
+			filterDataByDate();
 		});
 		paginationContainer.appendChild(nextButton);
 	}

@@ -37,4 +37,15 @@ public class UserManagementController {
 	public List<Object[]> getUsersBookingCounts(@RequestParam(defaultValue = "asc") String sort) {
 		return userService.getUsersOrderedByBookings(sort);
 	}
+	
+	@GetMapping("/admin/employee-management")
+	public String employeeManagementPage(@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "4") int size, Model model) {
+		Page<Object[]> users = userService.getUsersByRoleId(2, PageRequest.of(page, size));
+
+		model.addAttribute("users", users.getContent());
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", users.getTotalPages());
+		return "/Admin/employee_management";
+	}
 }

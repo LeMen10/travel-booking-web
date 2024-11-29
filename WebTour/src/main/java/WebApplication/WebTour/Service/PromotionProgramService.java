@@ -1,5 +1,6 @@
 package WebApplication.WebTour.Service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,9 @@ public class PromotionProgramService {
     
     public Page<Object[]> getPromotionPrograms(Pageable pageable) {
         return promotionProgramRepository.getPromotionProgramsActive(pageable);
+    }
+    
+    public Page<Object[]> getPromotionsByDateRange(Date startDate, Date endDate, Pageable pageable) {
+        return promotionProgramRepository.findPromotionProgramByDateRange(startDate, endDate, pageable);
     }
 }
