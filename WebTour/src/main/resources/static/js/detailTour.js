@@ -39,38 +39,41 @@ document.addEventListener('DOMContentLoaded', function() {
 		event.preventDefault();
 		const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
 		const isValidQuantity = await checkQuantity();
+		const account = await getProfile();
+		const userId = account == null ? null : account.user.user_id;
+		
 		if (!isValidQuantity) {
-			
+
 			return;
 		}
 
-		if (! (await(checkQuantityTour(tourId) ) )) {
-					Swal.fire({
-						title: 'Chuyến du lịch này đã hết. Bạn không thể đặt tour này nữa.',
-						text: 'Hãy chọn chuyến du lịch khác nhé. Chúc bạn một ngày vui.',
-						icon: 'warning',
-						showCancelButton: true,
-						confirmButtonText: 'OK',
-						
-						reverseButtons: true
-					}).then((result) => {
-						// xác nhận xóa (isConfirmed nút OK)
-						if (result.isConfirmed) {
-							window.location.href=`http://localhost:8080/search?s=`;
-						} else {
-							console.log("Thao tác xóa đã bị hủy.");
-						}
-					});
-					return;
+		if (!(await (checkQuantityTour(tourId)))) {
+			Swal.fire({
+				title: 'Chuyến du lịch này đã hết. Bạn không thể đặt tour này nữa.',
+				text: 'Hãy chọn chuyến du lịch khác nhé. Chúc bạn một ngày vui.',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'OK',
+
+				reverseButtons: true
+			}).then((result) => {
+				// xác nhận xóa (isConfirmed nút OK)
+				if (result.isConfirmed) {
+					window.location.href = `http://localhost:8080/search?s=`;
+				} else {
+					console.log("Thao tác xóa đã bị hủy.");
 				}
-		if (! (await(checkTourValid() ) )) {
+			});
+			return;
+		}
+		if (!(await (checkTourValid()))) {
 			Swal.fire({
 				title: 'Chuyến du lịch này đã được thực hiện. Bạn không thể đặt tour này nữa.',
 				text: 'Hãy chọn chuyến du lịch khác nhé. Chúc bạn một ngày vui.',
 				icon: 'warning',
 				showCancelButton: true,
 				confirmButtonText: 'OK',
-				
+
 				reverseButtons: true
 			}).then((result) => {
 				// xác nhận xóa (isConfirmed nút OK)
@@ -84,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		await createBooking();
 		console.log("Booking created");
-		hideLoading();
+		
 	});
 
 	HandleGetDay();
@@ -363,9 +366,10 @@ async function checkQuantity() {
 async function createBooking() {
 	console.log("Hàm createBooking đã được gọi.");
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
-	
+
 	const account = await getProfile();
 	const userId = account == null ? null : account.user.user_id;
+
 
 	const today = new Date().toISOString().split('T')[0]; // lấy định dạng yyyy-MM-dd
 	const bookingDate = today;
@@ -382,7 +386,7 @@ async function createBooking() {
 	console.log("Tổng giá sau khi chuyển đổi:", totalPrice);
 
 	/*tạo booking khi ấn nút đặt ngay*/
-	const url = `http://localhost:8080/create-booking?tourId=${tourId}&userId=${userId}&bookingDate=${bookingDate}&peopleNums=${peopleNums}&quantityAdult=${adult}&quantityChild=${child}&totalPrice=${totalPrice}`;
+	const url = `http://localhost:8080/create-booking?tourId=${tourId}&userId=${userId==null ? 0 : userId}&bookingDate=${bookingDate}&peopleNums=${peopleNums}&quantityAdult=${adult}&quantityChild=${child}&totalPrice=${totalPrice}`;
 	const request = new Request(url, {
 		method: "POST",
 		headers: {
@@ -406,7 +410,7 @@ async function createBooking() {
 	sessionStorage.setItem("tourID", tourId);
 	sessionStorage.setItem("totalPrice", totalPrice);
 	//kiểm tra đăng nhập
-	if (!userId) {
+	if (userId == null) {
 		sessionStorage.setItem("bookingID", bookingID);
 		window.location.href = `/`;
 		return;
@@ -498,7 +502,7 @@ async function createReview() {
 async function checkTourValid() {
 	const book_day = document.getElementById("book-day").value;
 	const startDate = new Date(book_day);
-	
+
 	const currentDate = new Date();
 
 	console.log("Ngày đi:", startDate);
@@ -558,12 +562,12 @@ async function getTourData(tourId) {
 	return await response.json();
 }
 //Kiểm tra số lượng tour >0 trước khi đặt
-async function checkQuantityTour(tourId){
+async function checkQuantityTour(tourId) {
 	const data = await getTourData(tourId);
-			if(data.quantity==0){
-				return false;
-			}
-			return true;
+	if (data.quantity == 0) {
+		return false;
+	}
+	return true;
 }
 
 async function getTicketData() {
@@ -605,25 +609,25 @@ function fomatPrice() {
 //----------NamNe-----//
 async function loadReview() {
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
-					    const url = `http://localhost:8080/api-get-review?tourId=${tourId}`;
-					    try {
-					        const response = await fetch(url);
-					        console.log("Phản hồi từ server:", response);
+	const url = `http://localhost:8080/api-get-review?tourId=${tourId}`;
+	try {
+		const response = await fetch(url);
+		console.log("Phản hồi từ server:", response);
 
-					        if (!response.ok) {
-					            console.error("Có lỗi xảy ra:", response);
-					            return;
-					        }
+		if (!response.ok) {
+			console.error("Có lỗi xảy ra:", response);
+			return;
+		}
 
-					        const data = await response.json();
-					        console.log("Dữ liệu nhận được:", data);
+		const data = await response.json();
+		console.log("Dữ liệu nhận được:", data);
 
-					        const listReview = document.querySelector(".list-review");
-					        listReview.innerHTML = ""; // Xóa nội dung cũ
+		const listReview = document.querySelector(".list-review");
+		listReview.innerHTML = ""; // Xóa nội dung cũ
 
-					        // Lặp qua từng review và thêm vào HTML
-					        data.forEach(review => {
-					            listReview.innerHTML += `
+		// Lặp qua từng review và thêm vào HTML
+		data.forEach(review => {
+			listReview.innerHTML += `
 					                <div class="review">
 					                    <div class="review-header">
 					                        <div class="name">
@@ -645,29 +649,29 @@ async function loadReview() {
 					                    </div>
 					                </div>
 					            `;
-					        });
-					    } catch (error) {
-					        console.error("Lỗi trong loadReview:", error);
-					    }
-					}
+		});
+	} catch (error) {
+		console.error("Lỗi trong loadReview:", error);
+	}
+}
 
-					// Hàm render sao theo số lượng
-					function renderStars(rate) {
-					    const fullStars = Math.floor(rate);
-					    const halfStar = rate % 1 >= 0.5 ? 1 : 0;
+// Hàm render sao theo số lượng
+function renderStars(rate) {
+	const fullStars = Math.floor(rate);
+	const halfStar = rate % 1 >= 0.5 ? 1 : 0;
 
-					    return (
-					        '<i class="fas fa-star"></i>'.repeat(fullStars) +
-					        (halfStar ? '<i class="fas fa-star-half-alt"></i>' : '') +
-					        '<i class="far fa-star"></i>'.repeat(5 - fullStars - halfStar)
-					    );
-					}
-					function formatDate(isoDateString) {
-					    const date = new Date(isoDateString);
-					    const formatter = new Intl.DateTimeFormat('vi-VN', {
-					        day: '2-digit',
-					        month: '2-digit',
-					        year: 'numeric',
-					    });
-					    return formatter.format(date);
-					}
+	return (
+		'<i class="fas fa-star"></i>'.repeat(fullStars) +
+		(halfStar ? '<i class="fas fa-star-half-alt"></i>' : '') +
+		'<i class="far fa-star"></i>'.repeat(5 - fullStars - halfStar)
+	);
+}
+function formatDate(isoDateString) {
+	const date = new Date(isoDateString);
+	const formatter = new Intl.DateTimeFormat('vi-VN', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+	});
+	return formatter.format(date);
+}
