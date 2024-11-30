@@ -32,6 +32,7 @@ async function loadTourById(tourId) {
 		document.getElementById("transport-update").value = data.transport || "";
 		document.getElementById("peopleMax-update").value = data.peopleMax || "";
 		document.getElementById("price-update").value = data.price || "";
+		document.getElementById("quantity-update").value = data.quantity;
 		
 		const departureSelect = document.getElementById("departureSelect-update");
 		const departureValue = data.departure || "";
@@ -526,7 +527,16 @@ async function loadPage(page) {
 	    const price = document.getElementById('price').value;
 		const transport = document.getElementById('transport').value;
 		const quantity = document.getElementById('quantity').value;
-
+		if(!validateInput(quantity)){
+			alert("Số lượng phải lớn hơn 0.");
+			return;
+		}else if(!validateInput(price)){
+			alert("Giá phải lớn hơn 0.");
+			return;
+		}else if(!validateInput(peopleMax)){
+			alert("Số người phải lớn hơn 0.");
+			return;
+		}
 	    // Chuyển dữ liệu thành x-www-form-urlencoded
 	    const formData = new URLSearchParams();
 	    formData.append('tourName', tourName);
@@ -566,6 +576,12 @@ async function loadPage(page) {
 		        console.error("Lỗi:", error.message);
 		        alert("Đã xảy ra lỗi: " + error.message);
 		    }
+	}
+	function validateInput(value) {
+	    if (value < 0) {
+	        return false;
+	    }
+	    return true;
 	}
 	async function creatTour(){
 		submitForm();
@@ -952,7 +968,7 @@ async function loadPage(page) {
 					    const peopleMax = document.getElementById('peopleMax-update').value;
 					    const price = document.getElementById('price-update').value;
 						const transport = document.getElementById('transport-update').value;
-						
+						const quantity = document.getElementById('quantity-update').value;
 
 					    // Chuyển dữ liệu thành x-www-form-urlencoded
 					    const formData = new URLSearchParams();
@@ -965,6 +981,7 @@ async function loadPage(page) {
 					    formData.append('peopleMax', peopleMax);
 					    formData.append('price', price);
 						formData.append('transport', transport);
+						formData.append('quantity', quantity);
 					    // Gửi dữ liệu qua API
 					    const tourResponse = await fetch(`/api-update-tours/${tourID}`, {
 					        method: 'POST',
