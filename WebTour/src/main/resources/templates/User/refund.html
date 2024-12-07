@@ -11,6 +11,9 @@
 </head>
 
 <body>
+<div id="loading-overlay" class="hidden">
+    <div class="spinner"></div>
+</div>
 	<header id="header"></header>
 	<div class="order-container" id="booking-id" th:attr="data-id=${bookingNotification.bookingId}">
 		<div class="order-header">
@@ -72,7 +75,7 @@
 				</div>
 			</div>
 			<div class="order-total">
-				<b>Thành tiền</b> <b class="total-price"
+				<b>Thành tiền</b> <b id="total-price-number" class="total-price"
 					th:text="${bookingNotification.totalPrice}">0đ</b>
 			</div>
 		</div>
@@ -82,9 +85,6 @@
 			</button>
 			<button class="btn-back">
 				<i class="fa-solid fa-circle-left"></i> Quay lại
-			</button>
-			<button class="btn">
-				<i class="fa-solid fa-circle-left"></i> lại
 			</button>
 		</div>
 	</div>

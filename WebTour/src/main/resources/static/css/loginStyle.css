@@ -43,8 +43,15 @@ a {
 	text-decoration: none;
 	margin: 15px 0;
 }
+#g_id_onload
+{
+	    margin-top: 10px;
+}
 .button-google{
 	color: white;
+	padding: 0;
+    border: 0;
+    border-radius: 10px;
 }
 .button-form {
 	background: linear-gradient(45deg, #4ad4ead1, #eb57e691);

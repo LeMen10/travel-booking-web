@@ -43,9 +43,10 @@ public interface PaymentsRepository extends JpaRepository<Payments, Long>{
 	
 	@Query(value = "SELECT b.bookingId AS bookingId, p.momoId AS momoId, p.captureId AS captureId, " +
             "b.user.fullName AS fullName, p.paymentDate AS paymentDate, p.totalPriceDolar AS totalPriceDolar, " +
-            "p.amount AS amount, p.paymentMethod.name AS paymentStatus" +
+            "p.amount AS amount, pt.name AS paymentStatus" +
             " FROM Payments p " +
             " JOIN Bookings b ON b.payment.paymentId = p.paymentId " +
+            " JOIN Paymentstatus pt ON p.paymentStatus = pt.paymentStatusId " +
             " WHERE p.paymentMethod.paymethodId = :method" +
             " AND (:name IS NULL OR LOWER(b.user.fullName) LIKE LOWER(CONCAT('%', :name, '%'))) " +
             " AND (:bookingId IS NULL OR b.bookingId = :bookingId) " +
@@ -59,9 +60,10 @@ public interface PaymentsRepository extends JpaRepository<Payments, Long>{
 	
 	@Query(value = "SELECT b.bookingId AS bookingId, p.momoId AS momoId, p.captureId AS captureId, " +
             "b.user.fullName AS fullName, p.paymentDate AS paymentDate, p.totalPriceDolar AS totalPriceDolar, " +
-            "p.amount AS amount, p.paymentMethod.name AS paymentStatus" +
+            "p.amount AS amount, pt.name AS paymentStatus" +
             " FROM Payments p " +
             " JOIN Bookings b ON b.payment.paymentId = p.paymentId " +
+            " JOIN Paymentstatus pt ON p.paymentStatus = pt.paymentStatusId " +
             " WHERE p.paymentMethod.paymethodId = :method" +
             " AND (:name IS NULL OR LOWER(b.user.fullName) LIKE LOWER(CONCAT('%', :name, '%'))) " +
             " AND (:bookingId IS NULL OR b.bookingId = :bookingId) " +
@@ -75,9 +77,10 @@ public interface PaymentsRepository extends JpaRepository<Payments, Long>{
 	
 	@Query(value = "SELECT b.bookingId AS bookingId, p.momoId AS momoId, p.captureId AS captureId, " +
             "b.user.fullName AS fullName, p.paymentDate AS paymentDate, p.totalPriceDolar AS totalPriceDolar, " +
-            "p.amount AS amount, p.paymentMethod.name AS paymentStatus" +
+            "p.amount AS amount, pt.name AS paymentStatus" +
             " FROM Payments p " +
             " JOIN Bookings b ON b.payment.paymentId = p.paymentId " +
+            " JOIN Paymentstatus pt ON p.paymentStatus = pt.paymentStatusId " +
             " WHERE p.paymentMethod.paymethodId = :method" +
             " AND (:name IS NULL OR LOWER(b.user.fullName) LIKE LOWER(CONCAT('%', :name, '%'))) " +
             " AND (:bookingId IS NULL OR b.bookingId = :bookingId) " +
@@ -91,9 +94,10 @@ public interface PaymentsRepository extends JpaRepository<Payments, Long>{
 
 	@Query(value = "SELECT b.bookingId AS bookingId, p.momoId AS momoId, p.captureId AS captureId, " +
             "b.user.fullName AS fullName, p.paymentDate AS paymentDate, p.totalPriceDolar AS totalPriceDolar, " +
-            "p.amount AS amount, p.paymentMethod.name AS paymentStatus" +
+            "p.amount AS amount, pt.name AS paymentStatus" +
             " FROM Payments p " +
             " JOIN Bookings b ON b.payment.paymentId = p.paymentId " +
+            " JOIN Paymentstatus pt ON p.paymentStatus = pt.paymentStatusId " +
             " WHERE p.paymentMethod.paymethodId = :method" +
             " AND (:name IS NULL OR LOWER(b.user.fullName) LIKE LOWER(CONCAT('%', :name, '%'))) " +
             " AND (:bookingId IS NULL OR b.bookingId = :bookingId) " +

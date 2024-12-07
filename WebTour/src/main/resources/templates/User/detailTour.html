@@ -166,15 +166,13 @@
 						
 						<div id="reviews" class="tab-content">
 							<div class="container4">
-								<div class="message">Đánh giá tour theo cảm nhận của bạn
-									để giúp chúng tôi cải thiện thiếu sót. Niềm vui của bạn là hạnh
-									phúc của chúng tôi.</div>
+								
 								<button class="button" id="openReviewModal">Gửi đánh
 									giá của bạn</button>
 
 							</div>
 							<!--các review của người dùng  -->
-							<div>
+							<div class="review-box">
 								<h3>Đánh giá từ khách hàng</h3>
 							</div>
 
@@ -200,8 +198,8 @@
 										class="fa-regular fa-star" data-value="4"></i> <i
 										class="fa-regular fa-star" data-value="5"></i>
 								</div>
-								<input type="text" placeholder="Nhập họ tên của bạn"> <input
-									type="email" placeholder="Nhập email của bạn">
+								<input type="text" placeholder="Nhập họ tên của bạn" class="hidden"> <input
+									type="email" placeholder="Nhập email của bạn" class="hidden">
 								<textarea id="textarea-review"
 									placeholder="Nhập nội dung đánh giá của bạn về sản phẩm này"></textarea>
 								<button id="bt-send-review" class="submit-btn">Gửi đánh
@@ -219,7 +217,9 @@
 		
 	</div>
 	<div id="footer"></div>
+	<div id="notification"></div>
 	<script src="/js/header.js"></script>
+	<script src="/js/notification.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="../js/detailTour.js"></script>
 	

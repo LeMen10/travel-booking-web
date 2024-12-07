@@ -4,6 +4,12 @@ body {
 	margin: 0;
 }
 
+#price-sort {
+	border: 1px solid #dbdbdb;
+	border-radius: 6px;
+	padding: 4px;
+}
+
 .container {
 	max-width: 1200px;
 	margin: 0 auto;
@@ -142,12 +148,12 @@ body {
 	color: transparent; /* Làm cho sao có nửa vàng và nửa xám */
 	-webkit-background-clip: text;
 	background-clip: text;
-	
 }
-.filter{
+
+.filter {
 	background-color: #f8f8f8;
-    display: flex;
-    justify-content: end;
-    padding-right: 8%;
-    padding-top: 20px;
+	display: flex;
+	justify-content: end;
+	padding-right: 8%;
+	padding-top: 20px;
 }

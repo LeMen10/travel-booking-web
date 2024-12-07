@@ -88,6 +88,7 @@ async function FilterDataTable() {
 function navigateRefundPage(bookingId) {
 	//const departureDate = document.getElementById("bt-cancel-order").getAttribute("data-departure-date");
 	//checkCancelOrderDate(bookingId, departureDate);
+	sessionStorage.setItem("previousPage", window.location.href);
 	window.location.href = "/refund/" + bookingId;
 }
 
@@ -273,7 +274,7 @@ function updateDataTable(dataTable) {
 		// Thanh toán (payment_method)
 		const paymentMethodCell = document.createElement("td");
 		paymentMethodCell.className = "table-td";
-		paymentMethodCell.textContent = booking[2] === 1 ? "Cash" : "Online";
+		paymentMethodCell.textContent = booking[2] === 1 ? "Cash" : booking[2] === 2 ? "Online" : booking[2] === 3 ?"Online - Momo":"Online - Paypal";
 		row.appendChild(paymentMethodCell);
 
 		// Trạng thái (payment_status)
@@ -506,7 +507,7 @@ function renderPaginationControlsSearch(totalPages) {
 async function navigateToPaymentPage(button) {
 	const bookingId = button.getAttribute("data-booking-id");
 	const totalPrice = button.getAttribute("data-total-price");
-	window.location.href = `/payment/${bookingId}?totalPrice=${totalPrice}`;
+	window.location.href = `/payment/${bookingId}`;
 	/*window.location.href = `/payment/${bookingId}`;*/
 }
 
@@ -543,7 +544,7 @@ async function checkCancelOrderDate(bookingId, startDate) {
 	} else {
 		console.log("gọi modal");
 		// Hiển thị modal xác nhận
-		openCancelModal(bookingId);
+		//openCancelModal(bookingId);
 		navigateRefundPage(bookingId);
 	}
 }

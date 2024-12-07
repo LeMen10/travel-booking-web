@@ -80,25 +80,37 @@ public class PromotionProgramController {
 
 	@PostMapping("/api-update-price")
 	public ResponseEntity<?> checkAndUpdatePrice() {
+		List<Tours> listTour = toursRepository.listOfCheapestTours();
+		if (listTour.isEmpty()) {
+            return ResponseEntity.status(404).body("Không có tour nào để cập nhật");
+        }
 	    try {
 	        // Lấy chương trình khuyến mãi hiện tại
 	        PromotionProgram promotionProgram = promotionProgramService.getPromotionProgramsCurrent();
+	        System.out.println(promotionProgram);
 	        if (promotionProgram == null) {
+	        	listTour.forEach(tour -> tour.setPrice(tour.getOriginalPrice()));
+		        toursRepository.saveAll(listTour);
 	            return ResponseEntity.status(400).body("Không có chương trình khuyến mãi hiện tại");
 	        }
-
+	        
 	        // Tính tỷ lệ khuyến mãi
 	        int rate = promotionProgram.getPromotionValue();
-
-	        // Lấy danh sách tour rẻ nhất và áp dụng khuyến mãi
-	        List<Tours> listTour = toursRepository.listOfCheapestTours();
-	        if (listTour.isEmpty()) {
-	            return ResponseEntity.status(404).body("Không có tour nào để cập nhật");
+	        
+	        String type = promotionProgram.getPromotionType();
+	        
+	        if(type.equals("money"))
+	        {
+	        	listTour.forEach(tour -> tour.setPrice(tour.getOriginalPrice() - rate));
+		        toursRepository.saveAll(listTour); // Lưu toàn bộ danh sách
 	        }
-
-	        // Tính toán giá khuyến mãi và lưu hàng loạt
-	        listTour.forEach(tour -> tour.setPrice(calculateDiscountedPrice(tour.getOriginalPrice(), rate)));
-	        toursRepository.saveAll(listTour); // Lưu toàn bộ danh sách
+	        else
+	        {
+	        	// Tính toán giá khuyến mãi và lưu hàng loạt
+		        listTour.forEach(tour -> tour.setPrice(calculateDiscountedPrice(tour.getOriginalPrice(), rate)));
+		        toursRepository.saveAll(listTour); // Lưu toàn bộ danh sách
+	        }
+	        
 
 	        return ResponseEntity.ok("Cập nhật giá thành công");
 	    } catch (Exception e) {

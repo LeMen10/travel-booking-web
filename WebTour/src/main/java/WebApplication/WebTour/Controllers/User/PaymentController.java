@@ -306,6 +306,7 @@ public class PaymentController {
 			Payments payment = booking.get().getPayment();
 			if (payment != null) {
 				Paymentmethod paymentMethod = paymentmethodRespository.findById(PaymentMethodId).get();
+				
 				payment.setPaymentStatus(1);
 				payment.setPaymentMethod(paymentMethod);
 				paymentsRepository.save(payment);

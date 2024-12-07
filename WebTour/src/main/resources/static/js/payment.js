@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	console.log("totalPriceOrder", totalPriceOrder);
 	if (totalPriceOrder) { // Kiểm tra biến totalPriceOrder
 		// Định dạng totalPrice thành tiền tệ VND
-		const formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPriceOrder);
+		const formattedPrice = new totalPriceOrder.toLocaleString('vi-VN') + '₫';;
 		console.log("formattedPrice", formattedPrice);
 		// Cập nhật vào các phần tử HTML
 		document.getElementById("temp-price").innerText = formattedPrice;
@@ -443,7 +443,7 @@ async function paymentByDiscount(code) {
 			if (today >= startDate && today <= endDate) {
 				const discount = tempPrice * (data.discount / 100);
 				const total = totalPrice - discount;
-				document.getElementById("total-price").innerHTML = total.toLocaleString() + "₫";
+				document.getElementById("total-price").innerHTML = total.toLocaleString('vi-VN') + '₫';;
 
 				//updateTotalPrice();
 			}
@@ -674,7 +674,8 @@ async function removePaypalButtons() {
 //kiểm tra mã giảm giá có thuộc về tour, có dùng chưa
 async function checkPromotion() {
 	let promotionCode = document.getElementById("discount-code").value;
-	let userId = sessionStorage.getItem("userId");
+	var account = await getProfile();
+	let userId = account.user.user_id;
 	//th:attr="data-id=${tourPayment.originalId}" sử dụng originalId để lưu khi thực hiện kiểm tra mã giảm giá vì bảng promotonDetail lưu tourId gốc là originalId 
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
 	console.log("tourId ", tourId);
@@ -699,7 +700,7 @@ async function checkPromotion() {
 		alert(data.message);
 		return true; // Mã đúng
 	} catch (error) {
-		console.error("Lỗi checkPromotion:", error);
+		//console.error("Lỗi checkPromotion:", error);
 		alert("Có lỗi xảy ra trong quá trình kiểm tra mã giảm giá."); // Thông báo lỗi chung
 		return false;
 	}

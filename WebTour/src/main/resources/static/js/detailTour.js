@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const isValidQuantity = await checkQuantity();
 		const account = await getProfile();
 		const userId = account == null ? null : account.user.user_id;
-		
+
 		if (!isValidQuantity) {
 
 			return;
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		await createBooking();
 		console.log("Booking created");
-		
+
 	});
 
 	HandleGetDay();
@@ -386,7 +386,7 @@ async function createBooking() {
 	console.log("Tổng giá sau khi chuyển đổi:", totalPrice);
 
 	/*tạo booking khi ấn nút đặt ngay*/
-	const url = `http://localhost:8080/create-booking?tourId=${tourId}&userId=${userId==null ? 0 : userId}&bookingDate=${bookingDate}&peopleNums=${peopleNums}&quantityAdult=${adult}&quantityChild=${child}&totalPrice=${totalPrice}`;
+	const url = `http://localhost:8080/create-booking?tourId=${tourId}&userId=${userId == null ? 0 : userId}&bookingDate=${bookingDate}&peopleNums=${peopleNums}&quantityAdult=${adult}&quantityChild=${child}&totalPrice=${totalPrice}`;
 	const request = new Request(url, {
 		method: "POST",
 		headers: {
@@ -473,6 +473,10 @@ async function createReview() {
 	const tourId = document.getElementById("id-booking-info").getAttribute("data-id");
 	const account = await getProfile();
 	const userId = account == null ? null : account.user.user_id;
+	if (userId == null) {
+		openDialogError("Vui lòng đăng nhập");
+		return;
+	}
 	const stars = document.querySelectorAll('.stars .fa-star.selected');
 	const rate = stars.length;
 	console.log("value của sao đã chọn: " + rate);

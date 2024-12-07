@@ -229,7 +229,9 @@
 		    var provinceId = document.getElementById("province").value;
 		    var districtId = document.getElementById("district").value;
 		    var wardId = document.getElementById("ward").value;
-		    var userId = sessionStorage.getItem("userId");
+		    var account = await getProfile();
+		    
+		    var userId = account.user.user_id;
 		    
 		    if (!fullName || !email || !phone || !address || !provinceId || !districtId || !wardId) {
         		alert("Vui lòng nhập đầy đủ thông tin!");

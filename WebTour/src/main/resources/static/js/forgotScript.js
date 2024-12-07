@@ -37,8 +37,8 @@ async function handleSendMailPassword(event) {
 		
 	const emailData = {
 	    to: data.user.email,
-	    subject: "Test Email",
-	    body: `Dear ${data.user.fullName}, \nNew password for account ${data.userName} is <strong>${newPassword}</strong>.`
+	    subject: "NOTIFICATIONS FROM M AND N TRAVEL WEBSITE",
+	    body: `Dear ${data.user.fullName}, \n\nNew password for account ${data.userName} is ${newPassword}.\n\n[THIS IS AN AUTOMATED MESSAGE - PLEASE DO NOT REPLY DIRECTLY TO THIS EMAIL]`
 	};
 
 	const responseSendMail = await fetch('http://localhost:8080/send-mail', {

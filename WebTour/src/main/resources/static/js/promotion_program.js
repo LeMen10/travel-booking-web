@@ -19,19 +19,20 @@ document.getElementById("add-promotion-program-btn").addEventListener("click", (
 	promotionalProgramModal.classList.add('d-flex');
 });
 
-promotionalProgramCloseBtn.addEventListener("click", (event) => {
-	event.preventDefault();
-	promotionalProgramModal.classList.remove('d-flex')
-});
 
 close.addEventListener("click", (event) => {
 	event.preventDefault();
 	promotionalProgramModal.classList.remove('d-flex');
-	promotionCode.value = '',
-		discount.value = '',
-		startTime.value = '',
-		endTime.value = '',
-		description.value = ''
+	const programTitle = document.getElementById('program-title');
+	const promotionType = document.querySelector('input[name="promotion"]:checked');
+	const promotionValue = document.getElementById('discount');
+	const startDate = document.getElementById('datetime-start');
+	const endDate = document.getElementById('datetime-end');
+	programTitle.value = '';
+	promotionType.value = '';
+	promotionValue.value = '';
+	startDate.value = '';
+	endDate.value = '';
 });
 
 var selectedPromotionId;
@@ -87,52 +88,6 @@ const getPromotionId = (row) => {
 };
 
 let selectedTourId;
-
-const applyPromotion = async (tourId, event) => {
-	event.preventDefault();
-	selectedTourId = tourId;
-	console.log("Selected Tour ID:", selectedTourId);
-	console.log("Selected promotion ID:", selectedPromotionId);
-
-	const data = {
-		promotions: {
-			promotionId: selectedPromotionId
-		},
-		tourId: selectedTourId,
-		status: true
-	};
-
-	try {
-		const res = await fetch("/admin/add-promotion-detail", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(data)
-		});
-
-		console.log(res)
-
-		if (res.ok) {
-			alert('Đã áp dụng khuyến mãi cho tour thành công!');
-			const button = event.target;
-			button.disabled = true;
-			button.innerText = 'Đã áp dụng';
-			button.classList.add('applied');
-		} else {
-			alert('Có lỗi xảy ra khi áp dụng khuyến mãi');
-		}
-	} catch (error) {
-		console.error('Error:', error);
-		alert('Đã xảy ra lỗi khi gửi dữ liệu');
-	}
-
-
-};
-
-savePromotionDetails.addEventListener('click', () => {
-	promotionalProgramModal.classList.remove('d-flex')
-})
 
 const promotionByPercent = document.getElementById('promotion-by-percent');
 const promotionByMoney = document.getElementById('promotion-by-money');

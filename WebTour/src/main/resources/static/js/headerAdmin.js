@@ -28,7 +28,12 @@ async function getProfile() {
 	if (response.ok) {
 		const profile = await response.json();
 		console.log(profile);
-		return profile;
+		if(profile.user.role.roleId == 1) return profile;
+		else 
+		{
+			Logout();
+			return null;
+		}
 	} else {
 		console.error('Not logged in');
 	}

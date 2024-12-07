@@ -142,6 +142,10 @@ public class Payments implements Serializable{
 	public void setMomoId(String momoId) {
 		this.momoId = momoId;
 	}
+
+	public void setPaymentId(Long paymentId) {
+		this.paymentId = paymentId;
+	}
 	
 	
 	

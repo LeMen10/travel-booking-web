@@ -1,5 +1,6 @@
 package WebApplication.WebTour.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import WebApplication.WebTour.Model.Bookings;
+import WebApplication.WebTour.Model.Tours;
 import WebApplication.WebTour.Model.User;
 import WebApplication.WebTour.Respository.BookingsRespository;
 import WebApplication.WebTour.Respository.PaymentsRepository;
@@ -34,7 +36,10 @@ public class BookingService {
 		Optional<Bookings> booking = bookingsRespository.findById(bookingId);
         if (booking != null) {
         	Bookings bookingEntity = booking.get();
+   
         	bookingEntity.getPayment().setPaymentStatus(3);
+        	bookingEntity.getPayment().setPaymentDate(new Date(System.currentTimeMillis()));
+        	
         	return paymentsRepository.save(bookingEntity.getPayment()) != null;
         }
         return false;

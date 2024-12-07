@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
-
 	fetch("/api-get-header")
 		.then(response => response.text())
 		.then(data => {
 			document.getElementById("header").innerHTML = data;
 			showNavigateHeader();
+			getUser();
 			//nagvigateHeader();
 			const searchBox = document.getElementById('searchBox');
 			const emptyBox = document.getElementById('emptyBox');
@@ -43,9 +43,10 @@ document.addEventListener("DOMContentLoaded", function() {
 			function redirectToSearch() {
 				const query = searchInput.value.trim();
 				if (query) {
-					window.location.href = `http://localhost:8080/search?s=${encodeURIComponent(query)}`;
+					window.location.href = `http://localhost:8080/search?tourName=${encodeURIComponent(query)}`;
 				}
 			}
+			closeLoading();
 		});
 
 
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		.then(data => {
 			document.getElementById("footer").innerHTML = data;
 		});
-	getUser();
+
 	updatePrice();
 });
 
@@ -85,8 +86,11 @@ async function getProfile() {
 
 	if (response.ok) {
 		const profile = await response.json();
-		console.log(profile);
-		return profile;
+		if (profile.user.role.roleId == 3) return profile;
+		else {
+			Logout();
+			return null;
+		}
 	} else {
 		console.error('Not logged in');
 	}
@@ -125,13 +129,26 @@ function closeLoading() {
 function openLoading() {
 	document.getElementById('loading-content').classList.remove("deactivate");
 }
+// Hàm bật overlay
+function showLoading() {
+	document.body.classList.add('loading'); // Thêm hiệu ứng mờ
+	const overlay = document.getElementById('loading-overlay');
+	overlay.classList.remove('hidden'); // Hiển thị overlay
+}
 
+// Hàm tắt overlay
+function hideLoading() {
+	const overlay = document.getElementById('loading-overlay');
+
+	document.body.classList.remove('loading'); // Loại bỏ hiệu ứng mờ
+	overlay.classList.add('hidden'); // Ẩn overlay
+}
 function showNavigateHeader() {
 	const currentUrl = window.location.href;
 	console.log(currentUrl);
 	if (currentUrl.includes("http://localhost:8080/home")) {
-			const navigateElement = document.getElementById("navigate-header-bar-container");
-			navigateElement.style.display = "none";
+		const navigateElement = document.getElementById("navigate-header-bar-container");
+		navigateElement.style.display = "none";
 	}
 	else if (currentUrl.includes("http://localhost:8080/search")) {
 		const navigateElement = document.getElementById("navigate-bar-header");

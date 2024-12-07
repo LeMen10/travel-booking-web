@@ -456,6 +456,7 @@ const deletePromotion = async (element) => {
 			});
 
 			const rs = await res.json();
+			if(rs.status === 500) return alert("Không được phép xóa");
 			if (rs.status === 200) location.reload();
 			else alert(rs.message || "Không thể xóa khuyến mãi.");
 

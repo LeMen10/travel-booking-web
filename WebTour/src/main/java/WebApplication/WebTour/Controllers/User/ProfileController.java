@@ -80,7 +80,9 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/account/change-password")
-	public String showPageChangePassword(Model model) {
+	public String showPageChangePassword(@RequestParam(value = "userId", required = false) Long userId,Model model) {
+		Optional<User> user = userRepository.findById(userId);
+		model.addAttribute("user", user.get());
 		return "/User/change-password";
 	}
 	

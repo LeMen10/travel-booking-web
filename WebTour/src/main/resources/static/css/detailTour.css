@@ -354,9 +354,15 @@ body {
 .second-main-content {
 	margin-top: 2%;
 }
-
+.hidden
+{
+	display: none;
+}
+.review-box
+{
+	margin-top: 20px;
+}
 .container4 {
-	
 	background-color: #f5fdf4;
 	border: 1px solid #e0e0e0;
 	padding: 20px;
